@@ -6,9 +6,9 @@ public class UIComponentViewModel
 {
     public string DisplayName => this.UIComponent.DisplayName;
 
-    public AppUIComponent UIComponent { get; }
+    public UIComponentReflection UIComponent { get; }
 
-    public UIComponentViewModel(AppUIComponent uiComponent)
+    public UIComponentViewModel(UIComponentReflection uiComponent)
     {
         this.UIComponent = uiComponent;
     }

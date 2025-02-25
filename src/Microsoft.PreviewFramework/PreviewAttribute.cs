@@ -1,4 +1,6 @@
-﻿namespace Microsoft.PreviewFramework;
+﻿using System;
+
+namespace Microsoft.PreviewFramework;
 
 /// <summary>
 /// An attribute that specifies this is an preview, for a control or other UI.

@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.PreviewFramework\Microsoft.PreviewFramework.csproj" />
-    <ProjectReference Include="..\visual-test-utils\VisualTestUtils.AppConnector\VisualTestUtils.AppConnector.csproj" />
-    <ProjectReference Include="..\visual-test-utils\VisualTestUtils\VisualTestUtils.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 using Microsoft.PreviewFramework.App;
-using VisualTestUtils;
 
 namespace Microsoft.PreviewFramework.Maui.Views;
 
@@ -10,7 +9,7 @@ public partial class RemoteControlMainPage : ContentPage
         this.InitializeComponent();
     }
 
-    public async Task SetPreviewAsync(AppPreview preview)
+    public async Task SetPreviewAsync(UIPreviewReflection preview)
     {
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
@@ -33,7 +32,8 @@ public partial class RemoteControlMainPage : ContentPage
         });
     }
 
-    public async Task<ImageSnapshot> GetPreviewSnapshotAsync(AppPreview preview)
+#if LATER
+    public async Task<ImageSnapshot> GetPreviewSnapshotAsync(UIPreviewReflection preview)
     {
         return await MainThread.InvokeOnMainThreadAsync<ImageSnapshot>(async () =>
         {
@@ -74,4 +74,5 @@ public partial class RemoteControlMainPage : ContentPage
 
         return new ImageSnapshot(data, ImageSnapshotFormat.PNG);
     }
+#endif
 }

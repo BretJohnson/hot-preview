@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.PreviewFramework.App\Microsoft.PreviewFramework.App.csproj" />
     <ProjectReference Include="..\Microsoft.PreviewFramework\Microsoft.PreviewFramework.csproj" />
   </ItemGroup>
 

@@ -1,16 +1,18 @@
-﻿namespace Microsoft.PreviewFramework.App;
+﻿using System;
 
-public abstract class AppPreview : Preview
+namespace Microsoft.PreviewFramework.App;
+
+public abstract class UIPreviewReflection : UIPreviewBase
 {
     private readonly Type? uiComponentType;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
-    public AppPreview(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
+    public UIPreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
     {
-        this.uiComponentType = previewAttribute.UIComponentType;
+        uiComponentType = previewAttribute.UIComponentType;
     }
 
-    public AppPreview(Type uiComponentType) : base(null)
+    public UIPreviewReflection(Type uiComponentType) : base(null)
     {
         this.uiComponentType = uiComponentType;
     }
@@ -26,14 +28,14 @@ public abstract class AppPreview : Preview
     {
         get
         {
-            if (this.uiComponentType != null)
+            if (uiComponentType != null)
             {
-                return this.uiComponentType;
+                return uiComponentType;
             }
 
-            Type? defaultUIComponentType = this.DefaultUIComponentType;
+            Type? defaultUIComponentType = DefaultUIComponentType;
             if (defaultUIComponentType == null)
-                throw new InvalidOperationException($"No DefaultUIComponentType specified for example: {this.Name}");
+                throw new InvalidOperationException($"No DefaultUIComponentType specified for example: {Name}");
             else return defaultUIComponentType;
         }
     }

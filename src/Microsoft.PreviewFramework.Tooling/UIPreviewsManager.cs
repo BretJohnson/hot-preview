@@ -2,13 +2,13 @@
 
 namespace Microsoft.PreviewFramework.Tooling;
 
-public class PreviewsManager
+public class UIPreviewsManager
 {
-    private ToolingUIComponents uiComponents = new ToolingUIComponents();
+    private UIComponents uiComponents = new UIComponents();
 
-    public PreviewsManager(Compilation compilation)
+    public UIPreviewsManager(Compilation compilation)
     {
-        this.uiComponents = new ToolingUIComponents();
+        this.uiComponents = new UIComponents();
 
 #if false
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -19,5 +19,5 @@ public class PreviewsManager
 #endif
     }
 
-    public ToolingUIComponents UIComponents => this.uiComponents;
+    public UIComponents UIComponents => this.uiComponents;
 }

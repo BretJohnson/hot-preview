@@ -1,4 +1,4 @@
-﻿namespace Microsoft.PreviewFramework.App;
+﻿namespace Microsoft.PreviewFramework;
 
 public enum PreviewMode
 {

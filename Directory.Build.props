@@ -27,7 +27,10 @@
     <!-- Local builds should embed PDBs so we never lose them when a subsequent build occurs. -->
     <DebugType Condition=" '$(CI)' != 'true' and '$(TF_BUILD)' != 'true' ">embedded</DebugType>
 
-    <PackageProjectUrl>https://github.com/BretJohnson/example-framework</PackageProjectUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)strongname.snk</AssemblyOriginatorKeyFile>
+
+    <PackageProjectUrl>https://github.com/BretJohnson/preview-framework</PackageProjectUrl>
     <Company>Bret Johnson</Company>
     <Authors>Bret Johnson</Authors>
     <Copyright>© Bret Johnson. All rights reserved.</Copyright>

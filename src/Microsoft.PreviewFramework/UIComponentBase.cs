@@ -1,12 +1,16 @@
-﻿namespace Microsoft.PreviewFramework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public abstract class UIComponent<TPreview> where TPreview : Preview
+namespace Microsoft.PreviewFramework;
+
+public abstract class UIComponentBase<TPreview> where TPreview : UIPreviewBase
 {
     private UIComponentCategory? category;
     private readonly string? displayName;
     private readonly List<TPreview> previews = new();
 
-    public UIComponent(string? displayName)
+    public UIComponentBase(string? displayName)
     {
         this.displayName = displayName;
     }

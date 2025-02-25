@@ -1,10 +1,10 @@
 ﻿namespace Microsoft.PreviewFramework.Tooling;
 
-public abstract class ToolingPreview : Preview
+public abstract class UIPreview : UIPreviewBase
 {
     private readonly string name;
 
-    public ToolingPreview(string name, string? displayName) : base(displayName)
+    public UIPreview(string name, string? displayName) : base(displayName)
     {
         this.name = name;
     }

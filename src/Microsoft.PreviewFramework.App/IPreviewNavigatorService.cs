@@ -2,5 +2,5 @@
 
 public interface IPreviewNavigatorService
 {
-    public Task NavigateToPreviewAsync(AppPreview preview);
+    public Task NavigateToPreviewAsync(UIPreviewReflection preview);
 }

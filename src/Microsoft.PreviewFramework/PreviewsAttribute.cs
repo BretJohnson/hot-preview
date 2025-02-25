@@ -1,4 +1,6 @@
-﻿namespace Microsoft.PreviewFramework;
+﻿using System;
+
+namespace Microsoft.PreviewFramework;
 
 /// <summary>
 /// An attribute that specifies metadata for UI component that has previews.

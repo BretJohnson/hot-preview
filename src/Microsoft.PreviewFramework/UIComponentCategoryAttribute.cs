@@ -1,4 +1,6 @@
-﻿namespace Microsoft.PreviewFramework;
+﻿using System;
+
+namespace Microsoft.PreviewFramework;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 public sealed class UIComponentCategoryAttribute : Attribute

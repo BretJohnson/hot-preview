@@ -7,11 +7,11 @@ namespace Microsoft.PreviewFramework.Maui.ViewModels
     {
         public string Title => this.Preview.DisplayName;
 
-        public AppPreview Preview { get; }
+        public UIPreviewReflection Preview { get; }
 
         public ICommand TapCommand { get; }
 
-        public PreviewViewModel(AppPreview preview)
+        public PreviewViewModel(UIPreviewReflection preview)
         {
             this.Preview = preview;
 
