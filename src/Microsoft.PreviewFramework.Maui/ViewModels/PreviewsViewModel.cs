@@ -11,7 +11,7 @@ public class PreviewsViewModel : INotifyPropertyChanged
 
     private static readonly Lazy<PreviewsViewModel> _lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
 
-    public IPreviewNavigatorService PreviewNavigatorService { get; }
+    public IUIPreviewNavigatorService PreviewNavigatorService { get; }
 
     private List<UIComponentCategory> categories;
     private List<UIComponentCategoryViewModel> uiComponentCategoryViewModels;
@@ -23,13 +23,13 @@ public class PreviewsViewModel : INotifyPropertyChanged
         this.PreviewNavigatorService = new MauiPreviewNavigatorService();
 
         this.categories = new List<UIComponentCategory>();
-        Dictionary<UIComponentCategory, List<AppUIComponent>> uiComponentsByCategory = [];
+        Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
-        AppUIComponents uiComponents = PreviewsManager.Instance.UIComponents;
+        UIComponentsReflection uiComponents = UIPreviewsManagerReflection.Instance.UIComponents;
 
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
         // Also save off the list of categories that are used, for sorting.
-        foreach (AppUIComponent uiComponent in uiComponents.Components)
+        foreach (UIComponentReflection uiComponent in uiComponents.Components)
         {
             UIComponentCategory? category = uiComponent.Category;
 
@@ -38,7 +38,7 @@ public class PreviewsViewModel : INotifyPropertyChanged
                 category = UncategorizedCategory;
             }
 
-            if (!uiComponentsByCategory.TryGetValue(category, out List<AppUIComponent>? uiComponentsForCategory))
+            if (!uiComponentsByCategory.TryGetValue(category, out List<UIComponentReflection>? uiComponentsForCategory))
             {
                 this.categories.Add(category);
                 uiComponentsForCategory = [];
@@ -50,7 +50,7 @@ public class PreviewsViewModel : INotifyPropertyChanged
 
         // Sort the categories and components
         this.categories.Sort((category1, category2) => string.Compare(category1.Name, category2.Name, StringComparison.CurrentCultureIgnoreCase));
-        foreach (List<AppUIComponent> componentsForCategory in uiComponentsByCategory.Values)
+        foreach (List<UIComponentReflection> componentsForCategory in uiComponentsByCategory.Values)
         {
             componentsForCategory.Sort((component1, component2) => string.Compare(component1.DisplayName, component2.DisplayName, StringComparison.CurrentCultureIgnoreCase));
         }

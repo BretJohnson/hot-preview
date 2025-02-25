@@ -1,6 +1,9 @@
-﻿namespace Microsoft.PreviewFramework;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-public abstract class UIComponents<TUIComponent, TPreview> where TUIComponent : UIComponent<TPreview> where TPreview : Preview
+namespace Microsoft.PreviewFramework;
+
+public abstract class UIComponentsBase<TUIComponent, TPreview> where TUIComponent : UIComponentBase<TPreview> where TPreview : UIPreviewBase
 {
     protected readonly Dictionary<string, UIComponentCategory> categories = new();
     protected readonly Dictionary<string, TUIComponent> componentsByName = new();

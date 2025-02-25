@@ -2,9 +2,9 @@
 
 namespace Microsoft.PreviewFramework.Maui;
 
-public class MauiPreviewNavigatorService : IPreviewNavigatorService
+public class MauiPreviewNavigatorService : IUIPreviewNavigatorService
 {
-    public async Task NavigateToPreviewAsync(AppPreview preview)
+    public async Task NavigateToPreviewAsync(UIPreviewReflection preview)
     {
         await MainThread.InvokeOnMainThreadAsync(async () =>
         {

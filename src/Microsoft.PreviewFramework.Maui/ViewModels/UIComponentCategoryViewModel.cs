@@ -6,14 +6,14 @@ public class UIComponentCategoryViewModel : List<object>
 {
     public string Name { get; }
 
-    public UIComponentCategoryViewModel(UIComponentCategory category, List<AppUIComponent> uiComponents)
+    public UIComponentCategoryViewModel(UIComponentCategory category, List<UIComponentReflection> uiComponents)
     {
         this.Name = category.Name;
-        foreach (AppUIComponent uiComponent in uiComponents)
+        foreach (UIComponentReflection uiComponent in uiComponents)
         {
             this.Add(new UIComponentViewModel(uiComponent));
 
-            foreach (AppPreview preview in uiComponent.Previews)
+            foreach (UIPreviewReflection preview in uiComponent.Previews)
             {
                 this.Add(new PreviewViewModel(preview));
             }

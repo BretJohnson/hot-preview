@@ -1,11 +1,11 @@
 ﻿namespace Microsoft.PreviewFramework;
 
-public abstract class Preview
+public abstract class UIPreviewBase
 {
     private readonly string? displayName;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
-    public Preview(string? displayName)
+    public UIPreviewBase(string? displayName)
     {
         this.displayName = displayName;
     }

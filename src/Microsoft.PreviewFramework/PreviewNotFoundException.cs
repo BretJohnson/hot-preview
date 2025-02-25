@@ -1,4 +1,6 @@
-﻿namespace Microsoft.PreviewFramework.App;
+﻿using System;
+
+namespace Microsoft.PreviewFramework.App;
 
 public class PreviewNotFoundException : Exception
 {

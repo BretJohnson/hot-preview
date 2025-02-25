@@ -1,31 +1,34 @@
-﻿using Microsoft.PreviewFramework.App;
-using Microsoft.PreviewFramework.Maui.Views;
-using VisualTestUtils;
+﻿using Microsoft.PreviewFramework;
+using Microsoft.PreviewFramework.App;
+using Microsoft.PreviewFramework.Maui;
+[assembly: PreviewAppService(typeof(MauiPreviewAppService))]
 
 namespace Microsoft.PreviewFramework.Maui;
 
-public class MauiPreviewAppService : PreviewAppService
+public class MauiPreviewAppService : UIPreviewAppService
 {
     public MauiPreviewAppService()
     {
-        this.PreviewNavigatorService = new MauiPreviewNavigatorService();
+        PreviewNavigatorService = new MauiPreviewNavigatorService();
     }
 
     public async override Task NavigateToPreviewAsync(string uiComponentName, string previewName)
     {
-        AppPreview preview = GetPreview(uiComponentName, previewName);
-        await this.PreviewNavigatorService.NavigateToPreviewAsync(preview).ConfigureAwait(false);
+        UIPreviewReflection preview = GetPreview(uiComponentName, previewName);
+        await PreviewNavigatorService.NavigateToPreviewAsync(preview).ConfigureAwait(false);
     }
 
-    public IPreviewNavigatorService PreviewNavigatorService { get; }
+    public IUIPreviewNavigatorService PreviewNavigatorService { get; }
 
+#if LATER
     public async override Task<ImageSnapshot> GetPreviewSnapshotAsync(string uiComponentName, string previewName)
     {
-        AppPreview preview = GetPreview(uiComponentName, previewName);
+        PreviewReflection preview = GetPreview(uiComponentName, previewName);
 
         if (Application.Current?.MainPage is not RemoteControlMainPage remoteControlMainPage)
             throw new InvalidOperationException("MainPage isn't a RemoteControlMainPage");
 
         return await remoteControlMainPage.GetPreviewSnapshotAsync(preview);
     }
+#endif
 }

@@ -1,10 +1,10 @@
 ﻿namespace Microsoft.PreviewFramework.Tooling;
 
-public class ToolingUIComponent : UIComponent<ToolingPreview>
+public class UIComponent : UIComponentBase<UIPreview>
 {
     private readonly string typeName;
 
-    internal ToolingUIComponent(string typeName, string? displayName = null) : base(displayName)
+    internal UIComponent(string typeName, string? displayName = null) : base(displayName)
     {
         this.typeName = typeName;
     }
