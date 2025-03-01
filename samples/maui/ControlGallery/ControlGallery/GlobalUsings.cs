@@ -1,4 +1,4 @@
 ﻿#if EXAMPLES
-global using Microsoft.PreviewFramework;
-global using Microsoft.PreviewFramework.Maui;
+global using Microsoft.UIPreview;
+global using Microsoft.UIPreview.Maui;
 #endif

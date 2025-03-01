@@ -12,5 +12,5 @@ global using System.Threading.Tasks;
 global using Microsoft.Maui.Devices;
 global using Microsoft.Maui.ApplicationModel;
 #if EXAMPLES
-global using Microsoft.PreviewFramework;
+global using Microsoft.UIPreview;
 #endif

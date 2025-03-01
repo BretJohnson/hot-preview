@@ -1,0 +1,14 @@
+{
+  "solution": {
+    "path": "PreviewFramework.sln",
+    "projects": [
+      "src\\Microsoft.UIPreview.Tooling.Maui\\Microsoft.UIPreview.Tooling.Maui.csproj",
+      "src\\Microsoft.UIPreview.Tooling\\Microsoft.UIPreview.Tooling.csproj",
+      "src\\Microsoft.UIPreview\\Microsoft.UIPreview.csproj",
+      "src\\visual-test-utils\\VisualTestUtils.AppConnector\\VisualTestUtils.AppConnector.csproj",
+      "src\\visual-test-utils\\VisualTestUtils.ImageHash\\VisualTestUtils.ImageHash.csproj",
+      "src\\visual-test-utils\\VisualTestUtils.MagickNet\\VisualTestUtils.MagickNet.csproj",
+      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj"
+    ]
+  }
+}

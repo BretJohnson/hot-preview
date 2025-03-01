@@ -78,7 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\..\src\Microsoft.PreviewFramework.Tooling.Maui\Microsoft.PreviewFramework.Tooling.Maui.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\src\Microsoft.UIPreview.Tooling.Maui\Microsoft.UIPreview.Tooling.Maui.csproj" />
 	</ItemGroup>
 
 </Project>
