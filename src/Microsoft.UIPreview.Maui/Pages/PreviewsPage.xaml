@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Microsoft.UIPreview.Maui.ViewModels"
+             xmlns:pages="clr-namespace:Microsoft.UIPreview.Maui.Pages"
+             x:Class="Microsoft.UIPreview.Maui.Pages.PreviewsPage"
+             Title="PreviewsPage">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="uiComponentTemplate">
+            <HorizontalStackLayout Margin="0,4,0,0">
+                <Image WidthRequest="20" Source="ic_fluent_slide_grid_24_regular.png"/>
+                <Label Text="{Binding Title}" Margin="4,0,0,0" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+        </DataTemplate>
+        <DataTemplate x:Key="previewTemplate">
+            <Label Text="{Binding Title}" Margin="30,2,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TapCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </DataTemplate>
+        <pages:PreviewItemDataTemplateSelector x:Key="previewItemDataTemplateSelector"
+                                          UIComponentTemplate="{StaticResource uiComponentTemplate}"
+                                          PreviewTemplate="{StaticResource previewTemplate}" />
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+        <Label
+            Text="Previews"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            FontSize="20" Margin="0,0,0,-5"/>
+
+        <SearchBar Placeholder="Search" />
+
+        <CollectionView ItemsSource="{Binding PreviewsData}" IsGrouped="true" ItemTemplate="{StaticResource previewItemDataTemplateSelector}" Margin="10,5,0,0">
+            <!--
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}"
+                        BackgroundColor="LightGray"
+                        FontSize="18"
+                        FontAttributes="Bold" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            -->
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

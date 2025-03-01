@@ -1,3 +1,3 @@
 ﻿#if EXAMPLES
-global using Microsoft.PreviewFramework;
+global using Microsoft.UIPreview;
 #endif

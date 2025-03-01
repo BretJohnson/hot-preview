@@ -86,7 +86,7 @@
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadGenericExceptionInfoBarWeatherTwentyOneHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\..\src\Microsoft.PreviewFramework.Maui\Microsoft.PreviewFramework.Maui.csproj" />
+		<ProjectReference Include="..\..\..\..\..\src\Microsoft.UIPreview.Maui\Microsoft.UIPreview.Maui.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
