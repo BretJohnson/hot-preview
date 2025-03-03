@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace EcommerceMAUI.Views
 {
-#if EXAMPLES
+#if PREVIEWS
     public static class PreviewData
     {
         public static ObservableCollection<ProductListModel> GetBluetoothSpeakerProducts()

@@ -11,7 +11,7 @@ public partial class App : Application
         Current.UserAppTheme = AppTheme.Light;
         MainPage = new LoginView();
 
-#if EXAMPLES
+#if PREVIEWS
         this.EnablePreviewMode();
 #endif
     }

@@ -33,7 +33,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<DefineConstants>$(DefineConstants);EXAMPLES</DefineConstants>
+		<DefineConstants>$(DefineConstants);PREVIEWS</DefineConstants>
 	</PropertyGroup>
 
 	<!-- To generate MSIX as part of dotnet publish -->

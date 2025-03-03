@@ -10,7 +10,7 @@ public partial class OrderDetailsView : ContentPage
         BindingContext = new OrderDetailsViewModel();
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview()]
     public static OrderDetailsView Default() => new();
 #endif

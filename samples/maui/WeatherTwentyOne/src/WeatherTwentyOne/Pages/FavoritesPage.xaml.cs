@@ -40,7 +40,7 @@ public partial class FavoritesPage : ContentPage
         tileCount++;
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("Empty favorites", typeof(FavoritesPage))]
     public static ShellPreview NoFavorites() => new("///favorites", nameof(FavoritesViewModel.FavoriteLocations), new List<Location>()
         {

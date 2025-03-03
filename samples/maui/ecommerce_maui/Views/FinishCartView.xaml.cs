@@ -12,7 +12,7 @@ public partial class FinishCartView : ContentPage
 		BindingContext = new FinishCartViewModel(products, deliveryType, address, card);
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview()]
     public static FinishCartView Default() => new(
 		new ObservableCollection<ProductListModel>(ProductListModel.GetPreviewProducts()),

@@ -13,7 +13,7 @@ public partial class App : Application
 
         MainPage = new AppShell();
 
-#if EXAMPLES
+#if PREVIEWS
         this.EnablePreviewMode();
 #endif
 

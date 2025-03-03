@@ -10,7 +10,7 @@ public partial class HomePageView : ContentPage
         BindingContext = new HomePageViewModel();
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview]
     public static LoginView Preview() => new();
 #endif

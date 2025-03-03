@@ -11,7 +11,7 @@ namespace ControlGallery.Views.XAML
         {
             InitializeComponent();
 
-#if EXAMPLES
+#if PREVIEWS
 
             timer = Dispatcher.CreateTimer();
             timer.Interval = TimeSpan.FromSeconds(0.1);

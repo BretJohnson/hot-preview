@@ -12,7 +12,7 @@ public partial class CartView : ContentPage
         BindingContext = new CartViewModel(products);
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("Single Item Cart")]
     public static CartView BluetoothSpeaker() => new(PreviewData.GetBluetoothSpeakerProducts());
 

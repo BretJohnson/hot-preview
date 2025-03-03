@@ -11,6 +11,6 @@ global using System.Net.Http;
 global using System.Threading.Tasks;
 global using Microsoft.Maui.Devices;
 global using Microsoft.Maui.ApplicationModel;
-#if EXAMPLES
+#if PREVIEWS
 global using Microsoft.UIPreview;
 #endif

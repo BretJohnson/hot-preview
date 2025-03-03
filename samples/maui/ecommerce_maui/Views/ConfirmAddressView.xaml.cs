@@ -12,7 +12,7 @@ public partial class ConfirmAddressView : ContentPage
         BindingContext = new ConfirmAddressViewModel(products, deliveryType, primaryAddress);
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview]
     public static ConfirmAddressView Preview() => new ConfirmAddressView(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
         new AddressModel()

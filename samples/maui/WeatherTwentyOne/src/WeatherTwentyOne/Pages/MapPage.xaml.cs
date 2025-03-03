@@ -7,7 +7,7 @@ public partial class MapPage : ContentPage
         InitializeComponent();
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("Seattle")]
     public static MapPage Seattle() => new();
 

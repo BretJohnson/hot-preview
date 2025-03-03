@@ -59,7 +59,7 @@ public partial class HomePage : ContentPage
         }
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("Thunderstorms", typeof(HomePage))]
     public static ShellPreview Thunderstorms() => new("///home", nameof(HomeViewModel.Current),
         new Current

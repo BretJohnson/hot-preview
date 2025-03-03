@@ -12,7 +12,7 @@ public partial class CardView : ContentPage
 		BindingContext = new CardViewModel(cards);
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("No Cards")]
     public static CardView NoCards() => new(PreviewData.GetPreviewCards(0));
 
@@ -24,6 +24,5 @@ public partial class CardView : ContentPage
 
     [Preview("Six Cards")]
     public static CardView SixCards() => new(PreviewData.GetPreviewCards(6));
-
 #endif
 }

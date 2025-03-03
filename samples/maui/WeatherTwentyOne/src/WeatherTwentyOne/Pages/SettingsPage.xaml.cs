@@ -31,7 +31,7 @@ public partial class SettingsPage : ContentPage
         App.Current.UserAppTheme = val;
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview("Imperial")]
     public static SettingsPage ImperialSettings() => new();
 

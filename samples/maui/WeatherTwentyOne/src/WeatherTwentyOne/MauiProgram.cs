@@ -18,7 +18,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-SemiBold.ttf", "OpenSansSemiBold");
             });
 
-#if EXAMPLES
+#if PREVIEWS
         builder.UsePreviewsOverlay(Colors.Orange);
 #endif
 

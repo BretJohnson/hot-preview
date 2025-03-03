@@ -12,7 +12,7 @@ public partial class DeliveryTypeView : ContentPage
         BindingContext = new DeliveryTypeViewModel(products);
     }
 
-#if EXAMPLES
+#if PREVIEWS
     [Preview()]
     public static DeliveryTypeView Default() => new(ProductListModel.GetPreviewProducts());
 #endif

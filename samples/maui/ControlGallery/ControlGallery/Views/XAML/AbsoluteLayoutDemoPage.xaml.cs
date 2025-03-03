@@ -13,7 +13,7 @@ namespace ControlGallery.Views.XAML
         {
             InitializeComponent();
 
-#if EXAMPLES
+#if PREVIEWS
             DateTime beginTime = DateTime.Now;
 
             timer = new Timer(new TimerCallback((s) =>
