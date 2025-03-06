@@ -22,6 +22,10 @@ public static class MauiProgram
                 fonts.AddFont("FontAwesome6-Regular.otf", "FA6Regular");
             });
 
+#if PREVIEWS
+        builder.UsePreviewsOverlay(Colors.Orange);
+#endif
+
         return builder.Build();
     }
 }

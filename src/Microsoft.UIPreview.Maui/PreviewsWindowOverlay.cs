@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-
-namespace Microsoft.UIPreview.Maui;
+﻿namespace Microsoft.UIPreview.Maui;
 
 public class PreviewsWindowOverlay : WindowOverlay
 {
     private PreviewsWindowOverlayElement _overlayElement;
 
-    private Color? _badgeColor;
+    private readonly Color? _badgeColor;
 
     public PreviewsWindowOverlay(IWindow window, Color? badgeColor = null) : base(window)
     {
