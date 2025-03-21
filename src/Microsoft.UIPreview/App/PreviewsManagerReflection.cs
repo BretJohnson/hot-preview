@@ -5,21 +5,20 @@ namespace Microsoft.UIPreview.App;
 
 public class PreviewsManagerReflection
 {
-    private readonly static Lazy<PreviewsManagerReflection> s_instance = new Lazy<PreviewsManagerReflection> (() =>  new PreviewsManagerReflection());
-    private readonly UIComponentsReflection _uiComponents;
+    private static readonly Lazy<PreviewsManagerReflection> s_instance = new Lazy<PreviewsManagerReflection>(() => new PreviewsManagerReflection());
 
     public static PreviewsManagerReflection Instance => s_instance.Value;
 
+    public UIComponentsReflection UIComponents { get; }
+
     private PreviewsManagerReflection()
     {
-        _uiComponents = new UIComponentsReflection();
+        UIComponents = new UIComponentsReflection();
 
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
         foreach (Assembly assembly in assemblies)
         {
-            _uiComponents.AddFromAssembly(assembly);
+            UIComponents.AddFromAssembly(assembly);
         }
     }
-
-    public UIComponentsReflection UIComponents => _uiComponents;
 }

@@ -1,46 +1,38 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.UIPreview.App;
 
 namespace Microsoft.UIPreview.Maui.ViewModels;
 
-public class PreviewsViewModel : INotifyPropertyChanged
+public class PreviewsViewModel // : INotifyPropertyChanged
 {
-    public static PreviewsViewModel Instance => _lazyInstance.Value;
+    public static readonly UIComponentCategory UncategorizedCategory = new("Uncategorized");
+    private static readonly Lazy<PreviewsViewModel> s_lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
 
-    public static readonly UIComponentCategory UncategorizedCategory = new UIComponentCategory("Uncategorized");
+    public static PreviewsViewModel Instance => s_lazyInstance.Value;
 
-    private static readonly Lazy<PreviewsViewModel> _lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
-
-    public IPreviewNavigatorService PreviewNavigatorService { get; }
-
-    private List<UIComponentCategory> categories;
-    private List<UIComponentCategoryViewModel> uiComponentCategoryViewModels;
-
-    public List<UIComponentCategoryViewModel> PreviewsData => this.uiComponentCategoryViewModels;
+    public IReadOnlyList<PreviewsItemViewModel> PreviewsItems { get; }
+    public bool HasCategories { get; }
+    //public event PropertyChangedEventHandler? PropertyChanged = null;
 
     private PreviewsViewModel()
     {
-        this.PreviewNavigatorService = new MauiPreviewNavigatorService();
-
-        this.categories = new List<UIComponentCategory>();
+        var categories = new List<UIComponentCategory>();
         Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
         UIComponentsReflection uiComponents = PreviewsManagerReflection.Instance.UIComponents;
 
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
-        // Also save off the list of categories that are used, for sorting.
         foreach (UIComponentReflection uiComponent in uiComponents.Components)
         {
             UIComponentCategory? category = uiComponent.Category;
 
-            if (category == null)
-            {
-                category = UncategorizedCategory;
-            }
+            category ??= UncategorizedCategory;
 
             if (!uiComponentsByCategory.TryGetValue(category, out List<UIComponentReflection>? uiComponentsForCategory))
             {
-                this.categories.Add(category);
+                categories.Add(category);
                 uiComponentsForCategory = [];
                 uiComponentsByCategory.Add(category, uiComponentsForCategory);
             }
@@ -49,18 +41,42 @@ public class PreviewsViewModel : INotifyPropertyChanged
         }
 
         // Sort the categories and components
-        this.categories.Sort((category1, category2) => string.Compare(category1.Name, category2.Name, StringComparison.CurrentCultureIgnoreCase));
+        categories.Sort((category1, category2) => string.Compare(category1.Name, category2.Name, StringComparison.CurrentCultureIgnoreCase));
         foreach (List<UIComponentReflection> componentsForCategory in uiComponentsByCategory.Values)
         {
             componentsForCategory.Sort((component1, component2) => string.Compare(component1.DisplayName, component2.DisplayName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        this.uiComponentCategoryViewModels = new List<UIComponentCategoryViewModel>();
-        foreach (UIComponentCategory category in this.categories)
+        var previewsItems = new List<PreviewsItemViewModel>();
+
+        HasCategories = categories.Count > 1;
+
+        foreach (UIComponentCategory category in categories)
         {
-            this.uiComponentCategoryViewModels.Add(new UIComponentCategoryViewModel(category, uiComponentsByCategory[category]));
+            if (HasCategories)
+            {
+                previewsItems.Add(new UIComponentCategoryViewModel(category));
+            }
+
+            foreach (UIComponentReflection uiComponent in uiComponentsByCategory[category])
+            {
+                previewsItems.Add(new UIComponentViewModel(uiComponent));
+
+                if (uiComponent.HasMultiplePreviews)
+                {
+                    foreach (PreviewReflection preview in uiComponent.Previews)
+                    {
+                        previewsItems.Add(new PreviewViewModel(preview));
+                    }
+                }
+            }
         }
+
+        PreviewsItems = previewsItems;
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged = null;
+    public void NavigateToPreview(PreviewReflection preview)
+    {
+        MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreview(preview);
+    }
 }

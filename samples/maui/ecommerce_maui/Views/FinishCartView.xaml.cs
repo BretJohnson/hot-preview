@@ -13,8 +13,8 @@ public partial class FinishCartView : ContentPage
     }
 
 #if PREVIEWS
-    [Preview()]
-    public static FinishCartView Default() => new(
+    [Preview]
+    public static FinishCartView Preview() => new(
 		new ObservableCollection<ProductListModel>(ProductListModel.GetPreviewProducts()),
 		new DeliveryTypeModel(), new AddressModel(), new CardInfoModel());
 #endif

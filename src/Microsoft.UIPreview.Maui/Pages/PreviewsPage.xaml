@@ -4,24 +4,29 @@
              xmlns:local="clr-namespace:Microsoft.UIPreview.Maui.ViewModels"
              xmlns:pages="clr-namespace:Microsoft.UIPreview.Maui.Pages"
              x:Class="Microsoft.UIPreview.Maui.Pages.PreviewsPage"
+             x:DataType="local:PreviewsViewModel"
              Title="PreviewsPage">
     <ContentPage.Resources>
-        <DataTemplate x:Key="uiComponentTemplate">
+        <DataTemplate x:Key="uiComponentTemplate" x:DataType="local:UIComponentViewModel">
             <HorizontalStackLayout Margin="0,4,0,0">
                 <Image WidthRequest="20" Source="ic_fluent_slide_grid_24_regular.png"/>
-                <Label Text="{Binding Title}" Margin="4,0,0,0" FontAttributes="Bold"/>
+                <Label Text="{Binding DisplayName}" Margin="4,0,0,0" FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
             </HorizontalStackLayout>
         </DataTemplate>
-        <DataTemplate x:Key="previewTemplate">
-            <Label Text="{Binding Title}" Margin="30,2,0,0">
+        <DataTemplate x:Key="previewTemplate" x:DataType="local:PreviewViewModel">
+            <Label Text="{Binding DisplayName}" Margin="30,2,0,0">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding TapCommand}" />
                 </Label.GestureRecognizers>
             </Label>
         </DataTemplate>
         <pages:PreviewItemDataTemplateSelector x:Key="previewItemDataTemplateSelector"
-                                          UIComponentTemplate="{StaticResource uiComponentTemplate}"
-                                          PreviewTemplate="{StaticResource previewTemplate}" />
+            UIComponentTemplate="{StaticResource uiComponentTemplate}"
+            PreviewTemplate="{StaticResource previewTemplate}" />
     </ContentPage.Resources>
 
     <VerticalStackLayout>
@@ -30,20 +35,6 @@
             VerticalOptions="Center"
             HorizontalOptions="Center"
             FontSize="20" Margin="0,0,0,-5"/>
-
-        <SearchBar Placeholder="Search" />
-
-        <CollectionView ItemsSource="{Binding PreviewsData}" IsGrouped="true" ItemTemplate="{StaticResource previewItemDataTemplateSelector}" Margin="10,5,0,0">
-            <!--
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Name}"
-                        BackgroundColor="LightGray"
-                        FontSize="18"
-                        FontAttributes="Bold" />
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            -->
-        </CollectionView>
+        <CollectionView ItemsSource="{Binding PreviewsItems}" ItemTemplate="{StaticResource previewItemDataTemplateSelector}" Margin="10,5,0,0"/>
     </VerticalStackLayout>
 </ContentPage>

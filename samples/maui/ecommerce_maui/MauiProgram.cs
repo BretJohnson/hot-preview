@@ -1,6 +1,6 @@
-﻿
-using Camera.MAUI;
+﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
+using Plugin.Maui.DebugOverlay;
 
 namespace EcommerceMAUI;
 
@@ -12,7 +12,8 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
-             .UseMauiCameraView()
+            .UseMauiCameraView()
+            .UseDebugRibbon(Color.FromArgb("#FF3300"))
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -21,10 +22,6 @@ public static class MauiProgram
                 fonts.AddFont("FontAwesome6-Brands.otf", "FA6Brands");
                 fonts.AddFont("FontAwesome6-Regular.otf", "FA6Regular");
             });
-
-#if PREVIEWS
-        builder.UsePreviewsOverlay(Colors.Orange);
-#endif
 
         return builder.Build();
     }

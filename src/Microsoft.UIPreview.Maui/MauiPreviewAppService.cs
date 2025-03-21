@@ -1,24 +1,15 @@
-﻿using Microsoft.UIPreview;
+﻿using System.Threading.Tasks;
 using Microsoft.UIPreview.App;
-using Microsoft.UIPreview.Maui;
-[assembly: PreviewAppService(typeof(MauiPreviewAppService))]
 
 namespace Microsoft.UIPreview.Maui;
 
 public class MauiPreviewAppService : PreviewAppService
 {
-    public MauiPreviewAppService()
-    {
-        PreviewNavigatorService = new MauiPreviewNavigatorService();
-    }
-
-    public async override Task NavigateToPreviewAsync(string uiComponentName, string previewName)
+    public override async Task NavigateToPreviewAsync(string uiComponentName, string previewName)
     {
         PreviewReflection preview = GetPreview(uiComponentName, previewName);
-        await PreviewNavigatorService.NavigateToPreviewAsync(preview).ConfigureAwait(false);
+        await MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreviewAsync(preview).ConfigureAwait(false);
     }
-
-    public IPreviewNavigatorService PreviewNavigatorService { get; }
 
 #if LATER
     public async override Task<ImageSnapshot> GetPreviewSnapshotAsync(string uiComponentName, string previewName)

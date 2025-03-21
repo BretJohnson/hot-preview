@@ -1,16 +1,11 @@
+using Microsoft.Maui;
+using Microsoft.Maui.Graphics;
+
 namespace Microsoft.UIPreview.Maui;
 
-public class PreviewsWindowOverlayElement : IWindowOverlayElement
+public class PreviewUIWindowOverlayElement : IWindowOverlayElement
 {
-    readonly WindowOverlay overlay;
-    private readonly Color badgeColor;
     private RectF badgeRect;
-
-    public PreviewsWindowOverlayElement(WindowOverlay overlay, Color? badgeColor = null)
-    {
-        this.overlay = overlay;
-        this.badgeColor = badgeColor ?? Colors.MediumPurple;
-    }
 
     public bool Contains(Point point)
     {
@@ -22,14 +17,18 @@ public class PreviewsWindowOverlayElement : IWindowOverlayElement
 
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
-        float badgeWidth = 20;
+        Color? badgeColor = MauiPreviewApplication.Instance.PreviewUIBadgeColor;
+        if (badgeColor == null)
+        {
+            return;
+        }
 
-        badgeRect = new RectF(dirtyRect.Right - 10 - badgeWidth, dirtyRect.Top + 10, badgeWidth, badgeWidth);
+        float badgeWidth = 10;
+        badgeRect = new RectF(dirtyRect.Right - 5 - badgeWidth, dirtyRect.Top + 5, badgeWidth, badgeWidth);
 
         canvas.SaveState();
 
         // Draw the badge
-        canvas.FillColor = badgeColor.WithAlpha((float)0.1);
         canvas.FillCircle(badgeRect.Center, badgeRect.Width / 2);
 
         /*

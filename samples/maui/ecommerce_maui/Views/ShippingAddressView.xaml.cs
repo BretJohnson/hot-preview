@@ -8,6 +8,5 @@ public partial class ShippingAddressView : ContentPage
 	{
 		InitializeComponent();
         BindingContext = new ShippingAddressViewModel();
-
     }
 }

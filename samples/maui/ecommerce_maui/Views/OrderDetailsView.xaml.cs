@@ -9,9 +9,4 @@ public partial class OrderDetailsView : ContentPage
         InitializeComponent();
         BindingContext = new OrderDetailsViewModel();
     }
-
-#if PREVIEWS
-    [Preview()]
-    public static OrderDetailsView Default() => new();
-#endif
 }

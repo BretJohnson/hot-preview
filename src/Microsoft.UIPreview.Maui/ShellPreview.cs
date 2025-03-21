@@ -1,4 +1,6 @@
-﻿namespace Microsoft.UIPreview.Maui;
+﻿using System.Collections.Generic;
+
+namespace Microsoft.UIPreview.Maui;
 
 public class ShellPreview
 {

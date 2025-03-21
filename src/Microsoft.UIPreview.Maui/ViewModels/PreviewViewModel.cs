@@ -1,26 +1,26 @@
 using System.Windows.Input;
+using Microsoft.Maui.Controls;
 using Microsoft.UIPreview.App;
 
 namespace Microsoft.UIPreview.Maui.ViewModels
 {
-    public class PreviewViewModel
+    public class PreviewViewModel : PreviewsItemViewModel
     {
-        public string Title => this.Preview.DisplayName;
-
         public PreviewReflection Preview { get; }
-
         public ICommand TapCommand { get; }
 
         public PreviewViewModel(PreviewReflection preview)
         {
-            this.Preview = preview;
+            Preview = preview;
 
-            this.TapCommand = new Command(
+            TapCommand = new Command(
                 execute: () =>
                 {
-                    _ = PreviewsViewModel.Instance.PreviewNavigatorService.NavigateToPreviewAsync(this.Preview).ConfigureAwait(false);
+                    PreviewsViewModel.Instance.NavigateToPreview(Preview);
                 }
             );
         }
+
+        public string DisplayName => Preview.DisplayName;
     }
 }

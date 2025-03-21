@@ -48,7 +48,7 @@
                 Grid.Column="2"
                 Padding="16"
                 Background="{DynamicResource Primary}"
-                Command="{Binding AddNewCommand}}"
+                Command="{Binding AddNewCommand}"
                 CornerRadius="4"
                 IsVisible="{Binding IsLoaded}"
                 Text="NEW"
