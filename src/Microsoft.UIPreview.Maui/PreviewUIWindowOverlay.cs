@@ -1,15 +1,14 @@
-﻿namespace Microsoft.UIPreview.Maui;
+﻿using Microsoft.Maui;
 
-public class PreviewsWindowOverlay : WindowOverlay
+namespace Microsoft.UIPreview.Maui;
+
+public class PreviewUIWindowOverlay : WindowOverlay
 {
-    private PreviewsWindowOverlayElement _overlayElement;
+    private PreviewUIWindowOverlayElement _overlayElement;
 
-    private readonly Color? _badgeColor;
-
-    public PreviewsWindowOverlay(IWindow window, Color? badgeColor = null) : base(window)
+    public PreviewUIWindowOverlay(IWindow window) : base(window)
     {
-        _badgeColor = badgeColor;
-        _overlayElement = new PreviewsWindowOverlayElement(this, badgeColor: badgeColor);
+        _overlayElement = new PreviewUIWindowOverlayElement();
         AddWindowElement(_overlayElement);
         Tapped += PreviewsOverlay_Tapped;
     }
@@ -18,7 +17,7 @@ public class PreviewsWindowOverlay : WindowOverlay
     {
         if (_overlayElement.Contains(e.Point))
         {
-            _ = MauiPreviewsApplication.Instance.ShowPreviewsAsync();
+            _ = MauiPreviewApplication.Instance.ShowPreviewUIAsync();
 
             /*
             // The tap is on the overlayElement

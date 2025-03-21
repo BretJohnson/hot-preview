@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls;
 using Microsoft.UIPreview.Maui.ViewModels;
 
 namespace Microsoft.UIPreview.Maui.Pages;
@@ -8,5 +9,5 @@ public class PreviewItemDataTemplateSelector : DataTemplateSelector
     public DataTemplate? PreviewTemplate { get; set; }
 
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container) =>
-        (item is UIComponentViewModel) ? this.UIComponentTemplate! : this.PreviewTemplate!;
+        (item is UIComponentViewModel) ? UIComponentTemplate! : PreviewTemplate!;
 }
