@@ -18,10 +18,6 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-SemiBold.ttf", "OpenSansSemiBold");
             });
 
-#if PREVIEWS
-        builder.UsePreviewsOverlay(Colors.Orange);
-#endif
-
         builder.ConfigureLifecycleEvents(lifecycle => {
 #if WINDOWS
         //lifecycle

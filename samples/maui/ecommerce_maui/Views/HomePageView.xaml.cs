@@ -9,9 +9,4 @@ public partial class HomePageView : ContentPage
         InitializeComponent();
         BindingContext = new HomePageViewModel();
     }
-
-#if PREVIEWS
-    [Preview]
-    public static LoginView Preview() => new();
-#endif
 }

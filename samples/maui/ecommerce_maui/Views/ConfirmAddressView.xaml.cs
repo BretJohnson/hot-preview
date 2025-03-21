@@ -14,7 +14,7 @@ public partial class ConfirmAddressView : ContentPage
 
 #if PREVIEWS
     [Preview]
-    public static ConfirmAddressView Preview() => new ConfirmAddressView(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
         new AddressModel()
         {
             StreetOne = "21, Alex Davidson Avenue",

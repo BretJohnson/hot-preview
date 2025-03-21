@@ -7,6 +7,5 @@ public partial class WishListView : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new WishListViewModel();
-
     }
 }

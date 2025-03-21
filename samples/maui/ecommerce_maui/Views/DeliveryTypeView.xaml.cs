@@ -13,7 +13,7 @@ public partial class DeliveryTypeView : ContentPage
     }
 
 #if PREVIEWS
-    [Preview()]
-    public static DeliveryTypeView Default() => new(ProductListModel.GetPreviewProducts());
+    [Preview]
+    public static DeliveryTypeView Preview() => new(ProductListModel.GetPreviewProducts());
 #endif
 }

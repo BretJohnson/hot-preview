@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.UIPreview.Maui;
+using System.Diagnostics;
 
 namespace WeatherTwentyOne;
 
@@ -12,6 +13,10 @@ public partial class AppShell : Shell
 
         if (DeviceInfo.Idiom == DeviceIdiom.Phone)
             CurrentItem = PhoneTabs;
+
+#if PREVIEWS
+        this.EnablePreviewUI();
+#endif
 
         //MainPage = new PreviewsPage();
 

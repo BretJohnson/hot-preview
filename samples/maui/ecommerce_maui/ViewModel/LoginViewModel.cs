@@ -46,7 +46,6 @@ namespace EcommerceMAUI.ViewModel
 
         private void ForgotPassword()
         {
-           
         }
 
         private async void SignUp()
@@ -55,10 +54,9 @@ namespace EcommerceMAUI.ViewModel
         }
 
         private async void Login()
-        {           
+        {
             Application.Current.MainPage = new AppShell();
             await ToastHelper.ShowToast("Welcome");
-
         }
     }
 }
