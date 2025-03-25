@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EcommerceMAUI.Views.CartView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:EcommerceMAUI.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:EcommerceMAUI.ViewModel"
+    x:Name="CartPage"
+    Title="My Cart">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView
+            Margin="0,12"
+            IsVisible="{Binding IsLoaded}"
+            ItemsSource="{Binding Products}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    Orientation="Vertical"
+                    Span="1"
+                    VerticalItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItemView
+                                    BackgroundColor="#FFC107"
+                                    Command="{Binding Source={x:Reference CartPage}, Path=BindingContext.FavoriteCommand}"
+                                    CommandParameter="{Binding .}">
+                                    <StackLayout
+                                        Spacing="8"
+                                        VerticalOptions="Center"
+                                        WidthRequest="92">
+                                        <Label
+                                            FontFamily="MaterialIcon"
+                                            FontSize="32"
+                                            HorizontalOptions="CenterAndExpand"
+                                            Text="&#xf4ce;"
+                                            TextColor="White"
+                                            VerticalOptions="CenterAndExpand" />
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            HorizontalOptions="Center"
+                                            Text="Favorite"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItemView
+                                    BackgroundColor="#FF3D00"
+                                    Command="{Binding Source={x:Reference CartPage}, Path=BindingContext.DeleteCommand}"
+                                    CommandParameter="{Binding .}">
+                                    <StackLayout
+                                        Spacing="8"
+                                        VerticalOptions="Center"
+                                        WidthRequest="92">
+                                        <Label
+                                            FontFamily="MaterialIcon"
+                                            FontSize="32"
+                                            HorizontalOptions="CenterAndExpand"
+                                            Text="&#xf9e6;"
+                                            TextColor="White"
+                                            VerticalOptions="CenterAndExpand" />
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            HorizontalOptions="Center"
+                                            Text="Delete"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <StackLayout Orientation="Horizontal" Spacing="32">
+                            <Image
+                                Aspect="AspectFit"
+                                HeightRequest="120"
+                                Source="{Binding ImageUrl}"
+                                WidthRequest="120" />
+                            <StackLayout Spacing="6">
+                                <Label
+                                    FontSize="16"
+                                    HorizontalOptions="StartAndExpand"
+                                    Text="{Binding Name}"
+                                    TextColor="Black" />
+                                <StackLayout Orientation="Horizontal">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="{Binding Source={x:Reference _stepper}, Path=Value, StringFormat='QTY: {0}'}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontSize="16"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="{Binding Price, StringFormat='${0:F2}'}"
+                                        TextColor="{StaticResource Primary}" />
+                                </StackLayout>
+                                <Stepper
+                                    x:Name="_stepper"
+                                    HorizontalOptions="Center"
+                                    Increment="1"
+                                    Maximum="10"
+                                    Minimum="1"
+                                    Value="{Binding Qty}">
+                                    <Stepper.Behaviors>
+                                        <toolkit:EventToCommandBehavior
+                                            Command="{Binding Source={x:Reference CartPage}, Path=BindingContext.QtyChangeCommand}"
+                                            CommandParameter="{Binding .}"
+                                            EventName="ValueChanged" />
+                                    </Stepper.Behaviors>
+                                </Stepper>
+                            </StackLayout>
+                        </StackLayout>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <ActivityIndicator
+            HeightRequest="45"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsLoaded, Converter={StaticResource InverseBoolConverter}}"
+            VerticalOptions="Center"
+            WidthRequest="45"
+            Color="{StaticResource Primary}" />
+        <Grid
+            Grid.Row="1"
+            Margin="0,4"
+            ColumnDefinitions="32,Auto,*,Auto,16"
+            IsVisible="{Binding IsLoaded}">
+            <StackLayout Grid.Column="1">
+                <Label
+                    FontSize="12"
+                    HorizontalOptions="StartAndExpand"
+                    Text="TOTAL"
+                    TextColor="{StaticResource SecondaryTextColor}" />
+                <Label
+                    FontSize="18"
+                    HorizontalOptions="StartAndExpand"
+                    Text="{Binding SubTotal, StringFormat='${0:F2}'}"
+                    TextColor="{StaticResource Primary}" />
+            </StackLayout>
+
+            <Button
+                Grid.Column="3"
+                Padding="16"
+                Background="{DynamicResource Primary}"
+                Command="{Binding CheckoutCommand}"
+                CornerRadius="4"
+                Text="CHECKOUT"
+                TextColor="{DynamicResource White}" />
+        </Grid>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EcommerceMAUI.Views.ConfirmAddressView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:EcommerceMAUI.Converters"
+    Title="Address">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView>
+            <Grid>
+                <StackLayout Margin="16">
+                    <Grid Margin="8,42" RowDefinitions="Auto,12,Auto">
+                        <Grid ColumnDefinitions="8,Auto,*,Auto,*,Auto,8">
+                            <Border
+                                Grid.Column="1"
+                                Padding="4"
+                                Background="Transparent"
+                                HeightRequest="32"
+                                HorizontalOptions="FillAndExpand"
+                                Stroke="{StaticResource Gray200}"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="1"
+                                WidthRequest="32">
+                                <Border
+                                    Padding="4"
+                                    Background="{StaticResource Primary}"
+                                    HeightRequest="16"
+                                    Stroke="{StaticResource Primary}"
+                                    StrokeShape="RoundRectangle 16"
+                                    StrokeThickness="1"
+                                    WidthRequest="16" />
+                            </Border>
+
+                            <Border
+                                Grid.Column="2"
+                                Background="{StaticResource Primary}"
+                                HeightRequest="2"
+                                HorizontalOptions="FillAndExpand"
+                                Stroke="{StaticResource Primary}"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="1"
+                                VerticalOptions="CenterAndExpand" />
+
+                            <Border
+                                Grid.Column="3"
+                                Padding="4"
+                                Background="Transparent"
+                                HeightRequest="32"
+                                HorizontalOptions="CenterAndExpand"
+                                Stroke="{StaticResource Primary}"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="1"
+                                WidthRequest="32">
+                                <Border
+                                    Padding="4"
+                                    Background="{StaticResource Primary}"
+                                    HeightRequest="16"
+                                    Stroke="{StaticResource Primary}"
+                                    StrokeShape="RoundRectangle 16"
+                                    StrokeThickness="1"
+                                    WidthRequest="16" />
+                            </Border>
+
+                            <Border
+                                Grid.Column="4"
+                                Background="{StaticResource Gray200}"
+                                HeightRequest="2"
+                                HorizontalOptions="FillAndExpand"
+                                Stroke="{StaticResource Gray200}"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="1"
+                                VerticalOptions="CenterAndExpand" />
+
+                            <Border
+                                Grid.Column="5"
+                                Padding="4"
+                                Background="Transparent"
+                                HeightRequest="32"
+                                HorizontalOptions="CenterAndExpand"
+                                Stroke="{StaticResource Gray200}"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="1"
+                                WidthRequest="32">
+                                <Border
+                                    Padding="4"
+                                    Background="{StaticResource Gray200}"
+                                    HeightRequest="16"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeShape="RoundRectangle 16"
+                                    StrokeThickness="1"
+                                    WidthRequest="16" />
+                            </Border>
+
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="2"
+                            ColumnDefinitions="Auto,*,Auto,*,Auto"
+                            HorizontalOptions="FillAndExpand">
+                            <Label
+                                Grid.Column="0"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                Text="Delivery"
+                                TextColor="Black" />
+
+                            <Label
+                                Grid.Column="2"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                Text="Address"
+                                TextColor="Black" />
+
+                            <Label
+                                Grid.Column="4"
+                                FontSize="14"
+                                HorizontalOptions="Center"
+                                Text="Payments"
+                                TextColor="{StaticResource Gray200}" />
+
+                        </Grid>
+                    </Grid>
+                    <StackLayout IsVisible="{Binding IsLoaded}" Spacing="24">
+                        <StackLayout Orientation="Horizontal" Spacing="16">
+                            <Label
+                                FontFamily="MaterialIcon"
+                                FontSize="24"
+                                HorizontalOptions="Start"
+                                Text="&#xf133;"
+                                TextColor="{DynamicResource Primary}"
+                                VerticalOptions="Center" />
+                            <Label
+                                FontSize="14"
+                                HorizontalOptions="FillAndExpand"
+                                Text="{Binding DeliveryType.Description}"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                        </StackLayout>
+
+                        <StackLayout Spacing="0">
+                            <Label
+                                FontSize="14"
+                                HorizontalOptions="Start"
+                                Text="Street 1"
+                                TextColor="{StaticResource SecondaryTextColor}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                FontSize="18"
+                                Placeholder="Enter Street 1"
+                                Text="{Binding PrimaryAddress.StreetOne}" />
+                        </StackLayout>
+
+                        <StackLayout Spacing="0">
+                            <Label
+                                FontSize="14"
+                                HorizontalOptions="Start"
+                                Text="Street 2"
+                                TextColor="{StaticResource SecondaryTextColor}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                FontSize="18"
+                                Placeholder="Enter Street 2"
+                                Text="{Binding PrimaryAddress.StreetTwo}" />
+                        </StackLayout>
+
+                        <StackLayout Spacing="0">
+                            <Label
+                                FontSize="14"
+                                HorizontalOptions="Start"
+                                Text="City"
+                                TextColor="{StaticResource SecondaryTextColor}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                FontSize="18"
+                                Placeholder="Enter city"
+                                Text="{Binding PrimaryAddress.City}" />
+                        </StackLayout>
+                        <StackLayout Spacing="0">
+                            <Label
+                                FontSize="14"
+                                HorizontalOptions="Start"
+                                Text="State"
+                                TextColor="{StaticResource SecondaryTextColor}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                FontSize="18"
+                                Placeholder="Enter State"
+                                Text="{Binding PrimaryAddress.State}" />
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+
+                <ActivityIndicator
+                    HeightRequest="45"
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsLoaded, Converter={StaticResource InverseBoolConverter}}"
+                    VerticalOptions="Center"
+                    WidthRequest="45"
+                    Color="{StaticResource Primary}" />
+            </Grid>
+        </ScrollView>
+        <Grid
+            Grid.Row="1"
+            Margin="16"
+            ColumnDefinitions="*,24,*">
+            <Button
+                Grid.Column="0"
+                Padding="16"
+                Background="Transparent"
+                BorderColor="{DynamicResource Primary}"
+                Command="{Binding BackCommand}"
+                CornerRadius="4"
+                IsVisible="{Binding IsLoaded}"
+                Text="BACK"
+                TextColor="{DynamicResource Black}" />
+            <Button
+                Grid.Column="2"
+                Padding="16"
+                Background="{DynamicResource Primary}"
+                Command="{Binding NextCommand}"
+                CornerRadius="4"
+                IsVisible="{Binding IsLoaded}"
+                Text="NEXT"
+                TextColor="{DynamicResource White}" />
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
