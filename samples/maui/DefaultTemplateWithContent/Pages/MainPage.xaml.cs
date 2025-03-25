@@ -9,4 +9,11 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BindingContext = model;
     }
+
+    /*
+#if PREVIEWS
+    [Preview]
+    public static MainPageModel Preview() => new(new MainPageModel(null));
+#endif
+    */
 }

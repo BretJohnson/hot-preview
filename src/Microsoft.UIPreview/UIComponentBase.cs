@@ -12,9 +12,10 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
     /// </summary>
     public abstract string Name { get; }
 
-    private UIComponentCategory? _category;
+    public UIComponentCategory? Category { get; private set; }
+
     private readonly string? _displayName;
-    private readonly List<TPreview> _previews = new();
+    private readonly List<TPreview> _previews = [];
 
     public UIComponentBase(string? displayName)
     {
@@ -28,21 +29,21 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
     /// </summary>
     public string DisplayName => _displayName ?? NameUtilities.GetUnqualifiedName(Name);
 
+    public bool HasPreview => _previews.Count >= 0;
+
     public bool HasNoPreviews => _previews.Count == 0;
 
     public bool HasSinglePreview => _previews.Count == 1;
 
     public bool HasMultiplePreviews => _previews.Count > 1;
 
-    public UIComponentCategory? Category => _category;
-
     public void InitCategory(UIComponentCategory category)
     {
-        if (_category != null && string.Compare(_category.Name, category.Name, StringComparison.OrdinalIgnoreCase) != 0)
+        if (Category != null && string.Compare(this.Category.Name, category.Name, StringComparison.OrdinalIgnoreCase) != 0)
         {
-            throw new InvalidOperationException($"Component '{Name}' can't be set to category '{category.Name}' since it already has category '{_category.Name}' set");
+            throw new InvalidOperationException($"Component '{Name}' can't be set to category '{category.Name}' since it already has category '{this.Category.Name}' set");
         }
-        _category = category;
+        Category = category;
     }
 
     public IReadOnlyList<TPreview> Previews => _previews;
@@ -58,6 +59,21 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
         }
 
         return null;
+    }
+
+    public TPreview DefaultPreview
+    {
+        get
+        {
+            if (_previews.Count == 0)
+            {
+                throw new InvalidOperationException($"Component '{Name}' has no previews");
+            }
+
+            // Currently, the default preview is always the first one, though we may allow
+            // it to be set explicitly in the future
+            return _previews[0];
+        }
     }
 
     public void AddPreview(TPreview preview)

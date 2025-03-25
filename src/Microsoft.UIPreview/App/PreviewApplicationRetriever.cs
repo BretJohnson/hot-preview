@@ -25,13 +25,11 @@ public static class PreviewApplicationRetriever
     /// </summary>
     public static PreviewApplication? GetPreviewApplication()
     {
-        string previewApplicationAttributeName = typeof(PreviewApplicationAttribute).FullName;
-
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             foreach (CustomAttributeData attr in assembly.GetCustomAttributesData())
             {
-                if (attr.AttributeType.FullName != previewApplicationAttributeName)
+                if (attr.AttributeType.FullName != PreviewApplicationClassAttribute.TypeFullName)
                 {
                     continue;
                 }
@@ -40,7 +38,7 @@ public static class PreviewApplicationRetriever
                 if (constructorArguments.Count != 1 ||
                     constructorArguments[0].Value is not Type previewApplicationType)
                 {
-                    throw new InvalidOperationException($"{previewApplicationAttributeName} assembly attribute in assembly {assembly.FullName} doesn't provide a single Type parameter");
+                    throw new InvalidOperationException($"{PreviewApplicationClassAttribute.TypeFullName} assembly attribute in assembly {assembly.FullName} doesn't provide a single Type parameter");
                 }
 
                 PropertyInfo instanceProperty = previewApplicationType.GetProperty("Instance", BindingFlags.Static | BindingFlags.Public) ??

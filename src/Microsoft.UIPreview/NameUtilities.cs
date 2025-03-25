@@ -1,4 +1,6 @@
-﻿namespace Microsoft.UIPreview;
+﻿using System;
+
+namespace Microsoft.UIPreview;
 
 public class NameUtilities
 {
@@ -6,5 +8,10 @@ public class NameUtilities
     {
         int index = name.LastIndexOf('.');
         return index >= 0 ? name.Substring(index + 1) : name;
+    }
+
+    public static string NormalizeTypeFullName(Type type)
+    {
+        return type.FullName.Replace(".VisualStudio", "");
     }
 }

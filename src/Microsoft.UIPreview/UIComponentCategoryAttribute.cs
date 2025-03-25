@@ -14,7 +14,7 @@ public sealed class UIComponentCategoryAttribute : Attribute
 
     public UIComponentCategoryAttribute(string name, params Type[] uiComponents)
     {
-        this.Name = name;
-        this.UIComponentTypes = uiComponents;
+        Name = name;
+        UIComponentTypes = uiComponents;
     }
 }

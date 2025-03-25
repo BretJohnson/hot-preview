@@ -6,4 +6,9 @@ public partial class AddButton
     {
         InitializeComponent();
     }
+
+#if PREVIEWS
+    [Preview]
+    public static AddButton Preview() => new();
+#endif
 }
