@@ -4,17 +4,17 @@ namespace Microsoft.UIPreview.App;
 
 public abstract class PreviewReflection : PreviewBase
 {
-    private readonly Type? uiComponentType;
+    private readonly Type? _uiComponentType;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
     public PreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
     {
-        uiComponentType = previewAttribute.UIComponentType;
+        _uiComponentType = previewAttribute.UIComponentType;
     }
 
     public PreviewReflection(Type uiComponentType) : base(null)
     {
-        this.uiComponentType = uiComponentType;
+        _uiComponentType = uiComponentType;
     }
 
     /// <summary>
@@ -28,9 +28,9 @@ public abstract class PreviewReflection : PreviewBase
     {
         get
         {
-            if (uiComponentType != null)
+            if (_uiComponentType != null)
             {
-                return uiComponentType;
+                return _uiComponentType;
             }
 
             Type? defaultUIComponentType = DefaultUIComponentType;

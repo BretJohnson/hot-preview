@@ -21,10 +21,8 @@ public class PreviewsViewModel // : INotifyPropertyChanged
         var categories = new List<UIComponentCategory>();
         Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
-        UIComponentsReflection uiComponents = PreviewsManagerReflection.Instance.UIComponents;
-
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
-        foreach (UIComponentReflection uiComponent in uiComponents.Components)
+        foreach (UIComponentReflection uiComponent in UIComponentsManagerReflection.Instance.UIComponents)
         {
             UIComponentCategory? category = uiComponent.Category;
 

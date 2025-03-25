@@ -10,8 +10,8 @@ public abstract class PreviewAppService : IPreviewAppService
 
     protected static UIComponentReflection GetUIComponent(string uiComponentName)
     {
-        UIComponentsReflection uiComponents = PreviewsManagerReflection.Instance.UIComponents;
-        return uiComponents.GetUIComponent(uiComponentName) ?? throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
+        UIComponentsManagerReflection uiComponentsManager = UIComponentsManagerReflection.Instance;
+        return uiComponentsManager.GetUIComponent(uiComponentName) ?? throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
     }
 
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)

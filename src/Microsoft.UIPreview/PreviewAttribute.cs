@@ -9,6 +9,8 @@ namespace Microsoft.UIPreview;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class PreviewAttribute : Attribute
 {
+    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(PreviewAttribute));
+
     /// <summary>
     /// Optional title for the preview, determining how it appears in navigation UI.
     /// "/" delimiters can be used to indicate hierarchy.
@@ -23,12 +25,12 @@ public sealed class PreviewAttribute : Attribute
 
     public PreviewAttribute(string? displayName = null, Type? uiComponent = null)
     {
-        this.DisplayName = displayName;
-        this.UIComponentType = uiComponent;
+        DisplayName = displayName;
+        UIComponentType = uiComponent;
     }
 
     public PreviewAttribute(Type uiComponent)
     {
-        this.UIComponentType = uiComponent;
+        UIComponentType = uiComponent;
     }
 }

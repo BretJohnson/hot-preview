@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 
 using Microsoft.UIPreview;
 using Microsoft.UIPreview.App;
 using Microsoft.UIPreview.Maui;
 using Microsoft.UIPreview.Maui.Pages;
 using System.Threading.Tasks;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Controls;
 
 
 #if ANDROID
@@ -15,24 +15,21 @@ using Android.Views;
 #endif
 
 #if !MICROSOFT_PREVIEW_IN_TAP
-[assembly: PreviewApplication(typeof(MauiPreviewApplication))]
+[assembly: PreviewApplicationClass(typeof(MauiPreviewApplication))]
+
+[assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
+//[assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
 
 namespace Microsoft.UIPreview.Maui;
 
 public class MauiPreviewApplication : PreviewApplication
 {
-    public static MauiPreviewApplication Instance
-    {
-        get
-        {
-            if (s_instance == null)
-                throw new InvalidOperationException("MauiPreviewsApplication.Init hasn't been called");
-            else return s_instance;
-        }
-    }
+    private static readonly Lazy<MauiPreviewApplication> s_lazyInstance = new Lazy<MauiPreviewApplication>(() => new MauiPreviewApplication());
 
-    private static MauiPreviewApplication? s_instance;
+    public static MauiPreviewApplication Instance => s_lazyInstance.Value;
+
+    public const string MauiPlatformType = "MAUI";
 
     public MauiPreviewAppService PreviewAppService { get; set; } = new MauiPreviewAppService();
 
@@ -40,21 +37,6 @@ public class MauiPreviewApplication : PreviewApplication
 
     private bool _navigatingToPreview = false;
     private int _savedNavigationStackCount = 0;
-
-    internal static void Init(Application application)
-    {
-        if (s_instance != null)
-            throw new InvalidOperationException("MauiPreviewsApplication.Init has already been called");
-
-        s_instance = new MauiPreviewApplication(application);
-    }
-
-    private MauiPreviewApplication(Application application)
-    {
-        Application = application;
-    }
-
-    public Application Application { get; }
 
 #if ANDROID
     public bool OnKeyDownForPreviewUI([GeneratedEnum] Keycode keyCode, KeyEvent e)
@@ -80,13 +62,13 @@ public class MauiPreviewApplication : PreviewApplication
         {
             // The user may navigate around while inside a preview. If they do that, pop the navigation
             // stack back to where it was before they navigated to the preview.
-            int currentNavigationStackCount = Application.MainPage!.Navigation.NavigationStack.Count;
+            int currentNavigationStackCount = Application.Current!.MainPage!.Navigation.NavigationStack.Count;
             if (currentNavigationStackCount > _savedNavigationStackCount)
             {
                 int amountToPop = currentNavigationStackCount - _savedNavigationStackCount;
                 for (int i = 0; i < amountToPop; i++)
                 {
-                    _ = Application.MainPage!.Navigation.PopAsync();
+                    _ = Application.Current!.MainPage!.Navigation.PopAsync();
                 }
             }
 
@@ -94,18 +76,18 @@ public class MauiPreviewApplication : PreviewApplication
             _savedNavigationStackCount = 0;
         }
 
-        await Application.MainPage!.Navigation.PushModalAsync(new PreviewsPage());
+        await Application.Current!.MainPage!.Navigation.PushModalAsync(new PreviewsPage());
     }
 
-    public void NavigateToPageAsync(Page page)
+    public void NavigateToPageAsync(Microsoft.Maui.Controls.Page page)
     {
-        _ = Application.MainPage!.Navigation.PopModalAsync();
+        _ = Application.Current!.MainPage!.Navigation.PopModalAsync();
     }
 
     public void PrepareToNavigateToPreview()
     {
         _navigatingToPreview = true;
-        _savedNavigationStackCount = Application.MainPage!.Navigation.NavigationStack.Count - 1;
-        _ = Application.MainPage!.Navigation.PopModalAsync();
+        _savedNavigationStackCount = Application.Current!.MainPage!.Navigation.NavigationStack.Count - 1;
+        _ = Application.Current!.MainPage!.Navigation.PopModalAsync();
     }
 }

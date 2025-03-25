@@ -2,12 +2,12 @@
 
 public class UIComponent : UIComponentBase<Preview>
 {
-    private readonly string typeName;
+    private readonly string _typeName;
 
     internal UIComponent(string typeName, string? displayName = null) : base(displayName)
     {
-        this.typeName = typeName;
+        _typeName = typeName;
     }
 
-    public override string Name => this.typeName;
+    public override string Name => _typeName;
 }
