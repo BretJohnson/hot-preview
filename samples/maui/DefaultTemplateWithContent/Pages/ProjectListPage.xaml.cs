@@ -7,4 +7,9 @@ public partial class ProjectListPage : ContentPage
         BindingContext = model;
         InitializeComponent();
     }
+
+#if PREVIEWS
+    [Preview]
+    public static ProjectListPage Preview() => new ProjectListPage(new ProjectListPageModel(null));
+#endif
 }
