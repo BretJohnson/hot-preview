@@ -1,24 +1,82 @@
-# Example Framework and Visual Test Utils
+# Overview
 
-***Define UI examples and easily add visual regression testing to your test process***
+The UI Preview Framework lets you easily work on pages/controls in your app
+in isolation, without the need to run the app, navigate to the page, and
+supply any test data.
 
-[![Build Status](https://dev.azure.com/bretjohn-public/example-framework/_apis/build/status%2Fexample-framework?branchName=main)](https://dev.azure.com/bretjohn-public/example-framework/_build/latest?definitionId=3&branchName=main)
+It's similar to Preview in [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode) and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews), for .NET UI, especially
+when coupled with tooling support like what we're looking to bring to Visual Studio.
 
-| Package | Version |
-| ------- | ------- |
-| VisualTestUtils | [![NuGet Version](https://img.shields.io/nuget/v/VisualTestUtils.svg)](https://nuget.org/packages/VisualTestUtils) |
-| VisualTestUtils.AppConnector | [![NuGet Version](https://img.shields.io/nuget/v/VisualTestUtils.AppConnector.svg)](https://nuget.org/packages/VisualTestUtils.AppConnector) |
-| VisualTestUtils.ImageHash| [![NuGet Version](https://img.shields.io/nuget/v/VisualTestUtils.ImageHash.svg)](https://nuget.org/packages/VisualTestUtils.ImageHash) |
-| VisualTestUtils.MagickNet| [![NuGet Version](https://img.shields.io/nuget/v/VisualTestUtils.MagickNet.svg)](https://nuget.org/packages/VisualTestUtils.MagickNet) |
-| ExampleFramework| [![NuGet Version](https://img.shields.io/nuget/v/ExampleFramework.svg)](https://nuget.org/packages/ExampleFramework) |
-| ExampleFramework.Tooling| [![NuGet Version](https://img.shields.io/nuget/v/ExampleFramework.Tooling.svg)](https://nuget.org/packages/ExampleFramework.Tooling) |
-| ExampleFramework.Tooling.Maui| [![NuGet Version](https://img.shields.io/nuget/v/ExampleFramework.Tooling.Maui.svg)](https://nuget.org/packages/ExampleFramework.Tooling.Maui) |
+The framework itself is cross platform, indended to work with (most) any .NET UI platform -
+it has a platform agnostic piece and platform specific piece, with the platform piece pluggable. Initial support is for .NET MAUI.
 
-## Overview
+## How to use (MAUI version)
 
-This repo contains shared code for UI examples and visual testing.
+Add a reference to the `Microsoft.UIPreview.Maui` NuGet to your app (once that NuGet is published - it isn't yet so you'll need to use this repo instead).
 
-Current/intended clients include .NET MAUI SDK visual tests and Example Framework example visual tests.
+Add this line to your `App` constructor (needed for now):
+
+```
+#if PREVIEWS
+    MauiPreviewApplication.EnsureInitialized();
+#endif
+```
+
+With just that, if you open your app in a tool that supports it (like what we're addning to Visual Studio) you we'll see previews automatically created for some of pages/controls.
+Previews are automatically created for:
+
+- Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required).,
+- Controls: Dervies from `Microsoft.Maui.Controls.View` (and isn't a page), again with
+a constructor that takes no parameters.
+
+That should get you started. Beyond that, you'll probably want to define previews yourself,
+which lets you:
+
+- Support any UI component (not just with zero argument constructors)
+- Provide sample data
+- Define multiple previews for a single UI component
+
+Defining your own previews isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model
+with sample data or whatever the constructor requires.
+
+```C#
+#if PREVIEWS
+    [Preview]
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
+        new AddressModel()
+        {
+            StreetOne = "21, Alex Davidson Avenue",
+            StreetTwo = "Opposite Omegatron, Vicent Quarters",
+            City = "Victoria Island",
+            State = "Lagos State"
+        });
+#endif
+```
+
+You can define multiple methods for multiple previews, like:
+
+```C#
+#if PREVIEWS
+    [Preview("0 cards")]
+    public static CardView NoCards() => new(PreviewData.GetPreviewCards(0));
+
+    [Preview("1 card")]
+    public static CardView SingleCard() => new(PreviewData.GetPreviewCards(1));
+
+    [Preview("2 cards")]
+    public static CardView TwoCards() => new(PreviewData.GetPreviewCards(2));
+
+    [Preview("6 cards")]
+    public static CardView SixCards() => new(PreviewData.GetPreviewCards(6));
+#endif
+```
+
+The `[Preview]` argument is the optional display name - without that, the name
+is method name.
+
+Names really just matter when you have a multiple previews. If there's just one,
+then by convention it's named `Preview`, but it doesn't matter as the tooling
+displays the UI component name instead.
 
 ## How to build
 
