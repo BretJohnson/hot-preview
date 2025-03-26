@@ -8,9 +8,9 @@ public partial class App : Application
 {
     public App()
     {
-        var inst = MauiPreviewApplication.Instance;
-        var inst2 = PreviewApplicationRetriever.GetPreviewAppService();
-
+#if PREVIEWS
+        MauiPreviewApplication.EnsureInitialized();
+#endif
 
         InitializeComponent();
         Current.UserAppTheme = AppTheme.Light;

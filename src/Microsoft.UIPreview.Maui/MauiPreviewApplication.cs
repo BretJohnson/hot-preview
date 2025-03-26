@@ -29,6 +29,11 @@ public class MauiPreviewApplication : PreviewApplication
 
     public static MauiPreviewApplication Instance => s_lazyInstance.Value;
 
+    public static void EnsureInitialized()
+    {
+        _ = Instance;
+    }
+
     public const string MauiPlatformType = "MAUI";
 
     public MauiPreviewAppService PreviewAppService { get; set; } = new MauiPreviewAppService();
