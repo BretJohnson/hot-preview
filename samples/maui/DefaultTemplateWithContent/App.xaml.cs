@@ -1,7 +1,4 @@
-﻿using Microsoft.UIPreview.App;
-using Microsoft.UIPreview.Maui;
-
-namespace DefaultTemplateWithContent;
+﻿namespace DefaultTemplateWithContent;
 
 public partial class App : Application
 {

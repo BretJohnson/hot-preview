@@ -73,7 +73,7 @@ namespace EcommerceMAUI.ViewModel
 
         async Task PopulateDataAsync()
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API
             ProductDetail.Price = 1500;
             ProductDetail.Name = "Nike Dri-FIT Long Sleeve";

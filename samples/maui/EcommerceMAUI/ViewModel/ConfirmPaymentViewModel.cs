@@ -50,7 +50,7 @@ namespace EcommerceMAUI.ViewModel
         async Task PopulateDataAsync()
         {
             // Delay added to display loading, remove during api call
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API
             Cards.Add(new CardInfoModel() { CardNumber = "371449635398431", CardValidationCode = "123", ExpirationDate = "2024-12-01",IsSelected = true });
             Cards.Add(new CardInfoModel() { CardNumber = "38520000023237", CardValidationCode = "456", ExpirationDate = "2025-12-01" });

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Microsoft.UIPreview.App;
@@ -12,7 +13,7 @@ public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponent
 
     private UIComponentsManagerReflection()
     {
-        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(p => !p.IsDynamic).ToArray();
 
         foreach (Assembly assembly in assemblies)
         {

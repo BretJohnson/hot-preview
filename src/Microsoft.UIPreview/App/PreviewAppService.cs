@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Microsoft.UIPreview.App;
@@ -14,11 +15,20 @@ public abstract class PreviewAppService : IPreviewAppService
         return uiComponentsManager.GetUIComponent(uiComponentName) ?? throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
     }
 
+    protected static UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
+    {
+        UIComponentsManagerReflection uiComponentsManager = UIComponentsManagerReflection.Instance;
+        return uiComponentsManager.GetUIComponent(uiComponentName);
+    }
+
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
     {
-        UIComponentReflection component = GetUIComponent(componentName);
-        string[] previewNames = component.Previews.Select(preview => preview.Name).ToArray();
+        UIComponentReflection? component = GetUIComponentIfExists(componentName);
+        if (component is null) {
+            return Task.FromResult(Array.Empty<string>());
+        }
 
+        string[] previewNames = component.Previews.Select(preview => preview.Name).ToArray();
         return Task.FromResult(previewNames);
     }
 

@@ -43,7 +43,7 @@ namespace EcommerceMAUI.ViewModel
         }
         async Task PopulateDataAsync()
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API if needed
             TrackStatus.Add(new DeliveryStepsModel() { Id = 1, DeliveryStatusDate = DateTime.Now.AddDays(-4), IsComplete = true, Name = "Order Placed", Location = "Lagos State, Nigeria" });
             TrackStatus.Add(new DeliveryStepsModel() { Id = 2, DeliveryStatusDate = DateTime.Now.AddDays(-3), IsComplete = true, Name = "Order Confirmed", Location = "Lagos State, Nigeria" });

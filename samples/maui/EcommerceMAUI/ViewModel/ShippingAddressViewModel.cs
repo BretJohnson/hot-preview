@@ -50,7 +50,7 @@ namespace EcommerceMAUI.ViewModel
         async Task PopulateDataAsync()
         {
             // Delay added to display loading, remove during api call
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API
             Addressess.Add(new AddressModel() { AddressType= "Home Address", FullAddress= "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria", IsSelected = true });
             Addressess.Add(new AddressModel() { AddressType= "Work Address", FullAddress= "9, Martins Crescent, Bank of Nigeria, Abuja, Nigeria" });

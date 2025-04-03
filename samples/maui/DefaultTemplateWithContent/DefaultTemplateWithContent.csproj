@@ -79,9 +79,11 @@
 		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.2" />
 	</ItemGroup>
 
+  <!--
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview.Maui\Microsoft.UIPreview.Maui.csproj" />
 	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview\Microsoft.UIPreview.csproj" />
 	</ItemGroup>
+  -->
 	
 </Project>

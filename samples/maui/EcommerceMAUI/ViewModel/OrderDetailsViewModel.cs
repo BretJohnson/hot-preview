@@ -43,7 +43,7 @@ namespace EcommerceMAUI.ViewModel
         }
         async Task PopulateDataAsync()
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API
             TrackData.Add(new TrackOrderModel("Sept 23, 2018",
             [

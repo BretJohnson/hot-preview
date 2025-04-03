@@ -58,7 +58,7 @@ namespace EcommerceMAUI.ViewModel
             }
             else
             {
-                await Task.Delay(500);
+                //await Task.Delay(500);
                 //TODO: Remove Delay here and call API if needed
                 PrimaryAddress = new AddressModel()
                 {

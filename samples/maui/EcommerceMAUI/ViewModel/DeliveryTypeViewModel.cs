@@ -48,7 +48,7 @@ namespace EcommerceMAUI.ViewModel
 
         async Task PopulateDataAsync()
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API
             DeliveryTypes.Clear();
             DeliveryTypes.Add(new DeliveryTypeModel() { Name = "Standard Delivery",Description= "Order will be delivered between 3 - 5 business days",IsSelected = true });

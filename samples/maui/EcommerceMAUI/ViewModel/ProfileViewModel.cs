@@ -36,7 +36,7 @@ namespace EcommerceMAUI.ViewModel
         }
         async Task PopulateDataAsync()
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
             //TODO: Remove Delay here and call API if needed
             MenuItems.Clear();
             //MenuItems.Add(new MenuItems() { Title = "Edit Profile", Body = "\uf3eb" });

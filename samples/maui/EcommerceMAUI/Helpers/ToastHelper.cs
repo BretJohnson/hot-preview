@@ -12,8 +12,17 @@ namespace EcommerceMAUI.Helpers
             ToastDuration duration = ToastDuration.Short;
             double fontSize = 14;
             var toast = Toast.Make(text, duration, fontSize);
-            await toast.Show(cancellationTokenSource.Token);
-            cancellationTokenSource.Dispose();
+            try
+            {
+                await toast.Show(cancellationTokenSource.Token);
+            }
+            catch (Exception _)
+            {
+            }
+            finally
+            {
+                cancellationTokenSource.Dispose();
+            }
         }
     }
 }
