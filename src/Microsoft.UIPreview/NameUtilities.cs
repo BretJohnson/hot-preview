@@ -12,6 +12,6 @@ public class NameUtilities
 
     public static string NormalizeTypeFullName(Type type)
     {
-        return type.FullName.Replace(".VisualStudio.", "");
+        return type.FullName.Replace(".VisualStudio.", ".");
     }
 }

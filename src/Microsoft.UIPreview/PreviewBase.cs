@@ -3,7 +3,6 @@
 public abstract class PreviewBase 
 {
     private readonly string? _displayName;
-    //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
     public PreviewBase(string? displayName)
     {

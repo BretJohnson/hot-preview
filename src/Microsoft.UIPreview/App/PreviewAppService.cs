@@ -7,7 +7,6 @@ namespace Microsoft.UIPreview.App;
 public abstract class PreviewAppService : IPreviewAppService
 {
     public abstract Task NavigateToPreviewAsync(string uiComponentName, string previewName);
-    //public abstract Task<ImageSnapshot> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
 
     protected static UIComponentReflection GetUIComponent(string uiComponentName)
     {
