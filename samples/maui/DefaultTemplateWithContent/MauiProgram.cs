@@ -28,6 +28,7 @@ public static class MauiProgram
 		builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
+        builder.Services.AddSingleton<DatabaseManager>();
         builder.Services.AddSingleton<ProjectRepository>();
         builder.Services.AddSingleton<TaskRepository>();
         builder.Services.AddSingleton<CategoryRepository>();

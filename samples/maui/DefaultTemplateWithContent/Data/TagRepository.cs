@@ -6,31 +6,18 @@ namespace DefaultTemplateWithContent.Data;
 /// <summary>
 /// Repository class for managing tags in the database.
 /// </summary>
-public class TagRepository
+public class TagRepository : Repository
 {
-    private bool _hasBeenInitialized = false;
-    private readonly ILogger _logger;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="TagRepository"/> class.
     /// </summary>
     /// <param name="logger">The logger instance.</param>
-    public TagRepository(ILogger<TagRepository> logger)
+    public TagRepository(DatabaseManager databaseManager, ILogger<TagRepository> logger) : base(databaseManager, logger)
     {
-        _logger = logger;
     }
 
-    /// <summary>
-    /// Initializes the database connection and creates the Tag and ProjectsTags tables if they do not exist.
-    /// </summary>
-    private async Task Init()
+    public override async Task CreateTableAsync(SqliteConnection connection)
     {
-        if (_hasBeenInitialized)
-            return;
-
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         try
         {
             var createTableCmd = connection.CreateCommand();
@@ -52,11 +39,9 @@ public class TagRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error creating tables");
+            Logger.LogError(e, "Error creating tables");
             throw;
         }
-
-        _hasBeenInitialized = true;
     }
 
     /// <summary>
@@ -65,9 +50,7 @@ public class TagRepository
     /// <returns>A list of <see cref="Tag"/> objects.</returns>
     public async Task<List<Tag>> ListAsync()
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Tag";
@@ -94,9 +77,7 @@ public class TagRepository
     /// <returns>A list of <see cref="Tag"/> objects.</returns>
     public async Task<List<Tag>> ListAsync(int projectID)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = @"
@@ -129,9 +110,7 @@ public class TagRepository
     /// <returns>A <see cref="Tag"/> object if found; otherwise, null.</returns>
     public async Task<Tag?> GetAsync(int id)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Tag WHERE ID = @id";
@@ -158,9 +137,7 @@ public class TagRepository
     /// <returns>The ID of the saved tag.</returns>
     public async Task<int> SaveItemAsync(Tag item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var saveCmd = connection.CreateCommand();
         if (item.ID == 0)
@@ -196,7 +173,6 @@ public class TagRepository
     /// <returns>The number of rows affected.</returns>
     public async Task<int> SaveItemAsync(Tag item, int projectID)
     {
-        await Init();
         await SaveItemAsync(item);
 
         await using var connection = new SqliteConnection(Constants.DatabasePath);
@@ -218,9 +194,7 @@ public class TagRepository
     /// <returns>The number of rows affected.</returns>
     public async Task<int> DeleteItemAsync(Tag item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var deleteCmd = connection.CreateCommand();
         deleteCmd.CommandText = "DELETE FROM Tag WHERE ID = @id";
@@ -237,9 +211,7 @@ public class TagRepository
     /// <returns>The number of rows affected.</returns>
     public async Task<int> DeleteItemAsync(Tag item, int projectID)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var deleteCmd = connection.CreateCommand();
         deleteCmd.CommandText = "DELETE FROM ProjectsTags WHERE ProjectID = @projectID AND TagID = @tagID";
@@ -252,19 +224,13 @@ public class TagRepository
     /// <summary>
     /// Drops the Tag and ProjectsTags tables from the database.
     /// </summary>
-    public async Task DropTableAsync()
+    public override async Task DropTableAsync(SqliteConnection connection)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         var dropTableCmd = connection.CreateCommand();
         dropTableCmd.CommandText = "DROP TABLE IF EXISTS Tag";
         await dropTableCmd.ExecuteNonQueryAsync();
 
         dropTableCmd.CommandText = "DROP TABLE IF EXISTS ProjectsTags";
         await dropTableCmd.ExecuteNonQueryAsync();
-
-        _hasBeenInitialized = false;
     }
 }

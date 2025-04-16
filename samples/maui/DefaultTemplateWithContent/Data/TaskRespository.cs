@@ -6,31 +6,18 @@ namespace DefaultTemplateWithContent.Data;
 /// <summary>
 /// Repository class for managing tasks in the database.
 /// </summary>
-public class TaskRepository
+public class TaskRepository : Repository
 {
-    private bool _hasBeenInitialized = false;
-    private readonly ILogger _logger;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="TaskRepository"/> class.
     /// </summary>
     /// <param name="logger">The logger instance.</param>
-    public TaskRepository(ILogger<TaskRepository> logger)
+    public TaskRepository(DatabaseManager databaseManager, ILogger<TaskRepository> logger) : base(databaseManager, logger)
     {
-        _logger = logger;
     }
 
-    /// <summary>
-    /// Initializes the database connection and creates the Task table if it does not exist.
-    /// </summary>
-    private async Task Init()
+    public override async Task CreateTableAsync(SqliteConnection connection)
     {
-        if (_hasBeenInitialized)
-            return;
-
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         try
         {
             var createTableCmd = connection.CreateCommand();
@@ -41,15 +28,14 @@ public class TaskRepository
                 IsCompleted INTEGER NOT NULL,
                 ProjectID INTEGER NOT NULL
             );";
+
             await createTableCmd.ExecuteNonQueryAsync();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error creating Task table");
+            Logger.LogError(e, "Error creating Task table");
             throw;
         }
-
-        _hasBeenInitialized = true;
     }
 
     /// <summary>
@@ -58,9 +44,7 @@ public class TaskRepository
     /// <returns>A list of <see cref="ProjectTask"/> objects.</returns>
     public async Task<List<ProjectTask>> ListAsync()
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        await using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Task";
@@ -88,9 +72,7 @@ public class TaskRepository
     /// <returns>A list of <see cref="ProjectTask"/> objects.</returns>
     public async Task<List<ProjectTask>> ListAsync(int projectId)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        await using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Task WHERE ProjectID = @projectId";
@@ -119,9 +101,7 @@ public class TaskRepository
     /// <returns>A <see cref="ProjectTask"/> object if found; otherwise, null.</returns>
     public async Task<ProjectTask?> GetAsync(int id)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        await using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Task WHERE ID = @id";
@@ -149,9 +129,7 @@ public class TaskRepository
     /// <returns>The ID of the saved task.</returns>
     public async Task<int> SaveItemAsync(ProjectTask item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        await using var connection = await OpenConnectionAsync();
 
         var saveCmd = connection.CreateCommand();
         if (item.ID == 0)
@@ -187,9 +165,7 @@ public class TaskRepository
     /// <returns>The number of rows affected.</returns>
     public async Task<int> DeleteItemAsync(ProjectTask item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        await using var connection = await OpenConnectionAsync();
 
         var deleteCmd = connection.CreateCommand();
         deleteCmd.CommandText = "DELETE FROM Task WHERE ID = @id";
@@ -201,15 +177,10 @@ public class TaskRepository
     /// <summary>
     /// Drops the Task table from the database.
     /// </summary>
-    public async Task DropTableAsync()
+    public override async Task DropTableAsync(SqliteConnection connection)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         var dropTableCmd = connection.CreateCommand();
         dropTableCmd.CommandText = "DROP TABLE IF EXISTS Task";
         await dropTableCmd.ExecuteNonQueryAsync();
-        _hasBeenInitialized = false;
     }
 }

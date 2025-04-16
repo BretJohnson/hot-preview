@@ -6,31 +6,21 @@ namespace DefaultTemplateWithContent.Data;
 /// <summary>
 /// Repository class for managing categories in the database.
 /// </summary>
-public class CategoryRepository
+public class CategoryRepository : Repository
 {
-    private bool _hasBeenInitialized = false;
-    private readonly ILogger _logger;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CategoryRepository"/> class.
     /// </summary>
     /// <param name="logger">The logger instance.</param>
-    public CategoryRepository(ILogger<CategoryRepository> logger)
+    public CategoryRepository(DatabaseManager databaseManager, ILogger<CategoryRepository> logger) : base(databaseManager, logger)
     {
-        _logger = logger;
     }
 
     /// <summary>
     /// Initializes the database connection and creates the Category table if it does not exist.
     /// </summary>
-    private async Task Init()
+    public override async Task CreateTableAsync(SqliteConnection connection)
     {
-        if (_hasBeenInitialized)
-            return;
-
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         try
         {
             var createTableCmd = connection.CreateCommand();
@@ -44,11 +34,9 @@ public class CategoryRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error creating Category table");
+            Logger.LogError(e, "Error creating Category table");
             throw;
         }
-
-        _hasBeenInitialized = true;
     }
 
     /// <summary>
@@ -57,9 +45,7 @@ public class CategoryRepository
     /// <returns>A list of <see cref="Category"/> objects.</returns>
     public async Task<List<Category>> ListAsync()
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Category";
@@ -86,9 +72,7 @@ public class CategoryRepository
     /// <returns>A <see cref="Category"/> object if found; otherwise, null.</returns>
     public async Task<Category?> GetAsync(int id)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var selectCmd = connection.CreateCommand();
         selectCmd.CommandText = "SELECT * FROM Category WHERE ID = @id";
@@ -115,9 +99,7 @@ public class CategoryRepository
     /// <returns>The ID of the saved category.</returns>
     public async Task<int> SaveItemAsync(Category item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var saveCmd = connection.CreateCommand();
         if (item.ID == 0)
@@ -154,9 +136,7 @@ public class CategoryRepository
     /// <returns>The number of rows affected.</returns>
     public async Task<int> DeleteItemAsync(Category item)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var deleteCmd = connection.CreateCommand();
         deleteCmd.CommandText = "DELETE FROM Category WHERE ID = @id";
@@ -168,16 +148,11 @@ public class CategoryRepository
     /// <summary>
     /// Drops the Category table from the database.
     /// </summary>
-    public async Task DropTableAsync()
+    public override async Task DropTableAsync(SqliteConnection connection)
     {
-        await Init();
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
-
         var dropTableCmd = connection.CreateCommand();
         dropTableCmd.CommandText = "DROP TABLE IF EXISTS Category";
 
         await dropTableCmd.ExecuteNonQueryAsync();
-        _hasBeenInitialized = false;
     }
 }

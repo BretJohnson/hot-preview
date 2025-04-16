@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace DefaultTemplateWithContent.Data;
 public class SeedDataService
 {
+    private readonly DatabaseManager _databaseManager;
     private readonly ProjectRepository _projectRepository;
     private readonly TaskRepository _taskRepository;
     private readonly TagRepository _tagRepository;
@@ -12,8 +13,9 @@ public class SeedDataService
     private readonly string _seedDataFilePath = "SeedData.json";
     private readonly ILogger<SeedDataService> _logger;
 
-    public SeedDataService(ProjectRepository projectRepository, TaskRepository taskRepository, TagRepository tagRepository, CategoryRepository categoryRepository, ILogger<SeedDataService> logger)
+    public SeedDataService(DatabaseManager databaseManager, ProjectRepository projectRepository, TaskRepository taskRepository, TagRepository tagRepository, CategoryRepository categoryRepository, ILogger<SeedDataService> logger)
     {
+        _databaseManager = databaseManager;
         _projectRepository = projectRepository;
         _taskRepository = taskRepository;
         _tagRepository = tagRepository;
@@ -86,11 +88,7 @@ public class SeedDataService
     {
         try
         {
-            await Task.WhenAll(
-                _projectRepository.DropTableAsync(),
-                _taskRepository.DropTableAsync(),
-                _tagRepository.DropTableAsync(),
-                _categoryRepository.DropTableAsync());
+            await _databaseManager.ClearTablesAsync();
         }
         catch (Exception e)
         {
