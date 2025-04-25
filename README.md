@@ -7,7 +7,7 @@ supply any test data.
 It's similar to Preview in [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode) and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews), for .NET UI, especially
 when coupled with tooling support like what we're looking to bring to Visual Studio.
 
-The framework itself is cross platform, indended to work with (most) any .NET UI platform -
+The framework itself is cross platform, intended to work with (most) any .NET UI platform -
 it has a platform agnostic piece and platform specific piece, with the platform piece pluggable. Initial support is for .NET MAUI.
 
 ## How to use (MAUI version)
