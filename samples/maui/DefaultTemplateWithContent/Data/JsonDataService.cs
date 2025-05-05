@@ -3,17 +3,17 @@ using DefaultTemplateWithContent.Models;
 using Microsoft.Extensions.Logging;
 
 namespace DefaultTemplateWithContent.Data;
-public class SeedDataService
+public class JsonDataService
 {
     private readonly DatabaseManager _databaseManager;
     private readonly ProjectRepository _projectRepository;
     private readonly TaskRepository _taskRepository;
     private readonly TagRepository _tagRepository;
     private readonly CategoryRepository _categoryRepository;
-    private readonly string _seedDataFilePath = "SeedData.json";
-    private readonly ILogger<SeedDataService> _logger;
+    private readonly ILogger<JsonDataService> _logger;
 
-    public SeedDataService(DatabaseManager databaseManager, ProjectRepository projectRepository, TaskRepository taskRepository, TagRepository tagRepository, CategoryRepository categoryRepository, ILogger<SeedDataService> logger)
+    public JsonDataService(DatabaseManager databaseManager, ProjectRepository projectRepository, TaskRepository taskRepository, TagRepository tagRepository,
+        CategoryRepository categoryRepository, ILogger<JsonDataService> logger)
     {
         _databaseManager = databaseManager;
         _projectRepository = projectRepository;
@@ -23,11 +23,9 @@ public class SeedDataService
         _logger = logger;
     }
 
-    public async Task LoadSeedDataAsync()
+    public async Task LoadJsonDataAsync(string jsonFilePath)
     {
-        ClearTables();
-
-        await using Stream templateStream = await FileSystem.OpenAppPackageFileAsync(_seedDataFilePath);
+        await using Stream templateStream = await FileSystem.OpenAppPackageFileAsync(jsonFilePath);
 
         ProjectsJson? payload = null;
         try

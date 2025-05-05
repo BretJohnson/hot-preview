@@ -8,7 +8,7 @@ namespace DefaultTemplateWithContent.Data;
 /// </summary>
 public abstract class Repository
 {
-    private DatabaseManager _databaseManager;
+    private readonly DatabaseManager _databaseManager;
     private bool _hasBeenInitialized = false;
 
     /// <summary>

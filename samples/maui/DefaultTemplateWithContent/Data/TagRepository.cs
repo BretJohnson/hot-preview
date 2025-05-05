@@ -175,8 +175,7 @@ public class TagRepository : Repository
     {
         await SaveItemAsync(item);
 
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
-        await connection.OpenAsync();
+        using var connection = await OpenConnectionAsync();
 
         var saveCmd = connection.CreateCommand();
         saveCmd.CommandText = @"

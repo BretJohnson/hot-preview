@@ -6,7 +6,7 @@ public class DatabaseManager
 {
     private List<Repository> _repositories = new List<Repository>();
     private string _connectionString = Constants.DatabasePath;
-    private SqliteConnection? _testDatabaseConnection;
+    private SqliteConnection? _mockDataDatabaseConnection;
 
     public void RegisterRepository(Repository repository)
     {
@@ -33,22 +33,26 @@ public class DatabaseManager
         }
     }
 
-    public async Task SwitchToTestDatabase()
+    public async Task SwitchToMockDataDatabaseAsync()
     {
-        if (_testDatabaseConnection is not null)
+        if (_mockDataDatabaseConnection is not null)
         {
             await ClearTablesAsync();
 
-            _testDatabaseConnection.Dispose();
-            _testDatabaseConnection = null;
+            _mockDataDatabaseConnection.Dispose();
+            _mockDataDatabaseConnection = null;
         }
 
-        _connectionString = $"Data Source=TestDatabase;Mode=Memory;Cache=Shared";
-        _testDatabaseConnection = new SqliteConnection(_connectionString);
+        _connectionString = $"Data Source=MockDataDatabase;Mode=Memory;Cache=Shared";
+        _mockDataDatabaseConnection = new SqliteConnection(_connectionString);
+
+        // This connection remains open for the lifetime of the database, keeping it around.
+        // When all connections are closed the in-memory database goes away
+        await _mockDataDatabaseConnection.OpenAsync();
 
         foreach (var repository in _repositories)
         {
-            await repository.CreateTableAsync(_testDatabaseConnection);
+            await repository.CreateTableAsync(_mockDataDatabaseConnection);
         }
     }
 
@@ -64,8 +68,8 @@ public class DatabaseManager
 
     public void SwitchToNormalDatabase()
     {
-        _testDatabaseConnection?.Dispose();
-        _testDatabaseConnection = null;
+        _mockDataDatabaseConnection?.Dispose();
+        _mockDataDatabaseConnection = null;
 
         _connectionString = Constants.DatabasePath;
     }

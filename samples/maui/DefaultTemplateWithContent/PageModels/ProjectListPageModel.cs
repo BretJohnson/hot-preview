@@ -1,9 +1,7 @@
 #nullable disable
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DefaultTemplateWithContent.Data;
 using DefaultTemplateWithContent.Models;
-using DefaultTemplateWithContent.Services;
 
 namespace DefaultTemplateWithContent.PageModels;
 public partial class ProjectListPageModel : ObservableObject

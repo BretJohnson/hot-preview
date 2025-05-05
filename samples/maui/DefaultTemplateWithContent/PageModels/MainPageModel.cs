@@ -11,7 +11,7 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
     private readonly TaskRepository _taskRepository;
     private readonly CategoryRepository _categoryRepository;
     private readonly ModalErrorHandler _errorHandler;
-    private readonly SeedDataService _seedDataService;
+    private readonly JsonDataService _seedDataService;
 
     [ObservableProperty]
     private List<CategoryChartData> _todoCategoryData = [];
@@ -37,7 +37,7 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
     public bool HasCompletedTasks
         => Tasks?.Any(t => t.IsCompleted) ?? false;
 
-    public MainPageModel(SeedDataService seedDataService, ProjectRepository projectRepository,
+    public MainPageModel(JsonDataService seedDataService, ProjectRepository projectRepository,
         TaskRepository taskRepository, CategoryRepository categoryRepository, ModalErrorHandler errorHandler)
     {
         _projectRepository = projectRepository;
@@ -81,13 +81,13 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
         }
     }
 
-    private async Task InitData(SeedDataService seedDataService)
+    private async Task InitData(JsonDataService jsonDataService)
     {
         bool isSeeded = Preferences.Default.ContainsKey("is_seeded");
 
         if (!isSeeded)
         {
-            await seedDataService.LoadSeedDataAsync();
+            await jsonDataService.LoadJsonDataAsync("SeedData.json");
         }
 
         Preferences.Default.Set("is_seeded", true);
@@ -149,11 +149,11 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 
     [RelayCommand]
     private Task NavigateToProject(Project project)
-        => Shell.Current.GoToAsync($"project?id={project.ID}");
+        => Shell.Current.GoToAsync($"project?id={project.ID}", false);
 
     [RelayCommand]
     private Task NavigateToTask(ProjectTask task)
-        => Shell.Current.GoToAsync($"task?id={task.ID}");
+        => Shell.Current.GoToAsync($"task?id={task.ID}", false);
 
     [RelayCommand]
     private async Task CleanTasks()
