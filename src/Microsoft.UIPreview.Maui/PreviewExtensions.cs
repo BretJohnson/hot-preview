@@ -1,88 +1,31 @@
-using Microsoft.Maui.Controls;
-using System;
-using Microsoft.Maui.ApplicationModel;
-
-#if ANDROID
-using Android.Runtime;
-using Android.Views;
-#endif
+﻿using Microsoft.Maui.Controls;
 
 namespace Microsoft.UIPreview.Maui;
 
 public static class PreviewExtensions
 {
-#if false
-    public static MauiAppBuilder UsePreviewsOverlay(this MauiAppBuilder builder, Color? ribbonColor = null)
-	{
-		builder.ConfigureMauiHandlers(handlers =>
-		{
-			WindowHandler.Mapper.AppendToMapping("AddDebugOverlay", (handler, view) =>
-            {
-                Debug.WriteLine("Adding DebugOverlay");
-                var overlay = new PreviewUIWindowOverlay(handler.VirtualView, ribbonColor);
-                handler.VirtualView.AddOverlay(overlay);
-            });
-		});
-
-		return builder;
-	}
-#endif
-
-    public static void EnablePreviewUI(this Shell shell)
+    /// <summary>
+    /// Creates a new instance of a view of type <typeparamref name="TView"/> and sets its binding context
+    /// </summary>
+    /// <typeparam name="TView">The type of the view to create. Must inherit from <see cref="View"/> and have a parameterless constructor.</typeparam>
+    /// <param name="bindingContext">The binding context to assign to the created view.</param>
+    /// <returns>A new instance of the view with the specified binding context.</returns>
+    /// <remarks>
+    /// This method simplifies the creation of control/page previews, setting the binding context as appropriate
+    /// for the preview data.
+    /// </remarks>
+    public static TView CreateViewWithBinding<TView>(object bindingContext) where TView : View, new()
     {
-        shell.Navigated += Shell_Navigated;
+        TView view = new TView();
+        view.BindingContext = bindingContext;
+        return view;
     }
 
-    private static void Shell_Navigated(object? sender, ShellNavigatedEventArgs e)
+    public static TView CreateViewWithBindingToService<TView, TService>()
+        where TView : View, new()
+        where TService : class
     {
-        // This fires when any page navigation completes
-        Console.WriteLine($"Navigated to: {e.Current.Location}");
-
-        // Get reference to the displayed page
-        Shell.Current.CurrentPage.EnablePreviewUI();
+        TService service = MauiPreviewApplication.Instance.GetRequiredService<TService>();
+        return CreateViewWithBinding<TView>(service);
     }
-
-    public static void EnablePreviewUI(this Page page)
-    {
-        //EnablePreviewUI(page.Window);
-        AddKeyListener(page);
-    }
-
-#if false
-    public static void EnablePreviewUI(this Window window)
-    {
-        // Add the window overlay if it doesn't already exist
-        if (!window.Overlays.Any(o => o is PreviewUIWindowOverlay))
-        {
-            var overlay = new PreviewUIWindowOverlay(window);
-            window.AddOverlay(overlay);
-        }
-    }
-#endif
-
-    public static void AddKeyListener(this Page page)
-    {
-#if ANDROID
-        Android.App.Activity? currentActivity = Platform.CurrentActivity;
-#endif
-
-#if false
-        Microsoft.Maui.Handlers.PageHandler.Mapper.AppendToMapping("KeyboardListener", (handler, view) =>
-        {
-#if ANDROID
-            if (handler.PlatformView is Android.Views.View platformView)
-            {
-                platformView.KeyPress += AndroidOnKeyPress;
-            }
-#endif
-        });
-#endif
-    }
-
-#if ANDROID
-    private static void AndroidOnKeyPress(object? sender, Android.Views.View.KeyEventArgs e)
-    {
-        // Handle key event here
-    }
-#endif
 }

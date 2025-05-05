@@ -20,7 +20,20 @@ public class UIPreviewStaticMethodReflection : PreviewReflection
         return MethodInfo.Invoke(null, null);
     }
 
-    public override Type? DefaultUIComponentType => MethodInfo.ReturnType;
+    public override Type? DefaultUIComponentType
+    {
+        get
+        {
+            Type type = MethodInfo.ReturnType;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RoutePreview<>))
+            {
+                return type.GetGenericArguments()[0];
+            }
+
+            return type;
+        }
+    }
 
     /// <summary>
     /// FullName is intended to be what's used by the code to identify the preview. It's the preview's

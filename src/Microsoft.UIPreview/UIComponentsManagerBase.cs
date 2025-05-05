@@ -16,7 +16,7 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIC
         // Certain known platform type are hardcoded here, so they are available by default in more scenarios.
         // Other types can added via the [PageUIComponentBaseType] and [ControlUIComponentBaseType] assembly attributes.
         _pageUIComponentBaseTypes.AddBaseType("MAUI", "Microsoft.Maui.Controls.Page");
-        //_controlUIComponentBaseTypes.AddBaseType("MAUI", "Microsoft.Maui.Controls.View");
+        _controlUIComponentBaseTypes.AddBaseType("MAUI", "Microsoft.Maui.Controls.View");
     }
 
     public IEnumerable<UIComponentCategory> Categories => _categories.Values;
@@ -58,7 +58,7 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIC
         return category;
     }
 
-    public bool IsUIComponentBaseType(string typeName, out string? platform, out UIComponentKind kind)
+    public bool IsUIComponentBaseType(string typeName, out UIComponentKind kind, out string? platform)
     {
         platform = _pageUIComponentBaseTypes.IsUIComponentBaseType(typeName);
         if (platform != null)
@@ -78,9 +78,6 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIC
         return false;
     }
 
-    public bool IsUIComponentBaseType(string typeName)
-    {
-        return _pageUIComponentBaseTypes.IsUIComponentBaseType(typeName) != null ||
-            _controlUIComponentBaseTypes.IsUIComponentBaseType(typeName) != null;
-    }
+    public bool IsUIComponentBaseType(string typeName, out UIComponentKind kind) =>
+        IsUIComponentBaseType(typeName, out kind, out _);
 }

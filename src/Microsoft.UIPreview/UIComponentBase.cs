@@ -6,6 +6,15 @@ namespace Microsoft.UIPreview;
 
 public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 {
+    private readonly string? _displayName;
+    private readonly List<TPreview> _previews = [];
+
+    public UIComponentBase(UIComponentKind kind, string? displayName)
+    {
+        _displayName = displayName;
+        Kind = kind;
+    }
+
     /// <summary>
     /// Name is intended to be what's used by the code to identify the component. It's the component's
     /// full qualified type name and is unique.
@@ -14,13 +23,7 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 
     public UIComponentCategory? Category { get; private set; }
 
-    private readonly string? _displayName;
-    private readonly List<TPreview> _previews = [];
-
-    public UIComponentBase(string? displayName)
-    {
-        _displayName = displayName;
-    }
+    public UIComponentKind Kind { get; }
 
     /// <summary>
     /// DisplayName is intended to be what's shown in the UI to identify the component. It can contain spaces and

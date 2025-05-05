@@ -4,20 +4,19 @@ using System.Threading.Tasks;
 
 namespace Microsoft.UIPreview.App;
 
-public abstract class PreviewAppService : IPreviewAppService
+public abstract class PreviewAppService(PreviewApplication previewApplication) : IPreviewAppService
 {
     public abstract Task NavigateToPreviewAsync(string uiComponentName, string previewName);
 
-    protected static UIComponentReflection GetUIComponent(string uiComponentName)
+    protected UIComponentReflection GetUIComponent(string uiComponentName)
     {
-        UIComponentsManagerReflection uiComponentsManager = UIComponentsManagerReflection.Instance;
-        return uiComponentsManager.GetUIComponent(uiComponentName) ?? throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
+        return previewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName) ??
+            throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
     }
 
-    protected static UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
+    protected UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
     {
-        UIComponentsManagerReflection uiComponentsManager = UIComponentsManagerReflection.Instance;
-        return uiComponentsManager.GetUIComponent(uiComponentName);
+        return previewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName);
     }
 
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
@@ -31,9 +30,10 @@ public abstract class PreviewAppService : IPreviewAppService
         return Task.FromResult(previewNames);
     }
 
-    protected static PreviewReflection GetPreview(string uiComponentName, string previewName)
+    protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)
     {
         UIComponentReflection uiComponent = GetUIComponent(uiComponentName);
-        return uiComponent.GetPreview(previewName) ?? throw new PreviewNotFoundException($"Preview {previewName} not found for UIComponent {uiComponentName}");
+        PreviewReflection preview = uiComponent.GetPreview(previewName) ?? throw new PreviewNotFoundException($"Preview {previewName} not found for UIComponent {uiComponentName}");
+        return new UIComponentPreviewPairReflection(uiComponent, preview);
     }
 }

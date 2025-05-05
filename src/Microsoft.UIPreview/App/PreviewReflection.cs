@@ -35,7 +35,7 @@ public abstract class PreviewReflection : PreviewBase
 
             Type? defaultUIComponentType = DefaultUIComponentType;
             if (defaultUIComponentType == null)
-                throw new InvalidOperationException($"No DefaultUIComponentType specified for example: {Name}");
+                throw new InvalidOperationException($"No DefaultUIComponentType specified for preview: {Name}");
             else return defaultUIComponentType;
         }
     }

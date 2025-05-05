@@ -128,7 +128,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         UIComponent? component = GetUIComponent(name);
         if (component == null)
         {
-            component = new UIComponent(name);
+            component = new UIComponent(UIComponentKind.Page, name);
             AddUIComponent(component);
         }
 
@@ -258,7 +258,8 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
         private void CheckForApparentUIComponent(ClassDeclarationSyntax classDeclaration)
         {
-            if (!IsApparentUIComponentClass(classDeclaration))
+            UIComponentKind uiComponentKind = InferUIComponentKind(classDeclaration);
+            if (uiComponentKind == UIComponentKind.Unknown)
             {
                 return;
             }
@@ -309,17 +310,17 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             return hasDefaultConstructor;
         }
 
-        private bool IsApparentUIComponentClass(ClassDeclarationSyntax classDeclaration)
+        private UIComponentKind InferUIComponentKind(ClassDeclarationSyntax classDeclaration)
         {
             string fullTypeName = GetFullClassName(classDeclaration);
 
             INamedTypeSymbol? typeSymbol = _compilation.GetTypeByMetadataName(fullTypeName);
             if (typeSymbol is null)
             {
-                return false;
+                return UIComponentKind.Unknown;
             }
 
-            return HasUIComponentBaseType(typeSymbol);
+            return InferUIComponentKind(typeSymbol);
         }
 
         /// <summary>
@@ -354,7 +355,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             return classDeclaration.Identifier.Text;
         }
 
-        public bool HasUIComponentBaseType(ITypeSymbol from, bool checkImplicitOperator = true)
+        public UIComponentKind InferUIComponentKind(ITypeSymbol from, bool checkImplicitOperator = true)
         {
             // Later check for interfaces, but for now it's not important
 #if LATER
@@ -383,14 +384,14 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             {
                 if (baseType is INamedTypeSymbol namedBaseType)
                 {
-                    if (_uiComponentsManager.IsUIComponentBaseType(namedBaseType.ToDisplayString()))
+                    if (_uiComponentsManager.IsUIComponentBaseType(namedBaseType.ToDisplayString(), out UIComponentKind kind))
                     {
-                        return true;
+                        return kind;
                     }
                 }
             }
 
-            return false;
+            return UIComponentKind.Unknown;
         }
     }
 }

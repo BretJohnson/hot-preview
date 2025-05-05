@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.UIPreview.App;
 
@@ -21,7 +22,15 @@ public class PreviewClassReflection : PreviewReflection
 
     public override object Create()
     {
-        return Activator.CreateInstance(Type);
+        IServiceProvider? serviceProvider = PreviewApplication.GetInstance().ServiceProvider;
+        if (serviceProvider is not null)
+        {
+            return ActivatorUtilities.CreateInstance(serviceProvider, Type);
+        }
+        else
+        {
+            return Activator.CreateInstance(Type);
+        }
     }
 
     public override Type? DefaultUIComponentType => null;

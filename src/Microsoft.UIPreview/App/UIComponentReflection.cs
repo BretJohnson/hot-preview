@@ -4,14 +4,13 @@ namespace Microsoft.UIPreview.App;
 
 public class UIComponentReflection : UIComponentBase<PreviewReflection>
 {
-    private readonly Type type;
-
-    internal UIComponentReflection(Type type, string? displayName) : base(displayName)
+    internal UIComponentReflection(Type type, UIComponentKind kind, string? displayName) : base(kind, displayName)
     {
-        this.type = type;
+        Type = type;
     }
 
-    public override string Name => type.FullName;
+    public Type Type { get; }
 
-    public Type Type => type;
+    public override string Name => Type.FullName;
+
 }
