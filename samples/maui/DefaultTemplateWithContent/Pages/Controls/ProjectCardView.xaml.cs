@@ -6,4 +6,9 @@ public partial class ProjectCardView
     {
         InitializeComponent();
     }
+
+#if PREVIEWS
+    [Preview]
+    public static ProjectCardView Preview() => CreateViewWithBinding<ProjectCardView>(MockData.Activate().Project);
+#endif
 }

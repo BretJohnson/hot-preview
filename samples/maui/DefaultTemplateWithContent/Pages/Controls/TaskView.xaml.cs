@@ -34,4 +34,9 @@ public partial class TaskView
         task.IsCompleted = e.Value;
         TaskCompletedCommand?.Execute(task);
     }
+
+#if PREVIEWS
+    [Preview]
+    public static TaskView Preview() => CreateViewWithBinding<TaskView>(MockData.Activate().ProjectTask);
+#endif
 }
