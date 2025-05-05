@@ -14,15 +14,16 @@ public class PreviewsViewModel // : INotifyPropertyChanged
 
     public IReadOnlyList<PreviewsItemViewModel> PreviewsItems { get; }
     public bool HasCategories { get; }
-    //public event PropertyChangedEventHandler? PropertyChanged = null;
 
     private PreviewsViewModel()
     {
         var categories = new List<UIComponentCategory>();
         Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
+        UIComponentsManagerReflection uiComponentsManager = MauiPreviewApplication.Instance.GetUIComponentsManager();
+
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
-        foreach (UIComponentReflection uiComponent in UIComponentsManagerReflection.Instance.UIComponents)
+        foreach (UIComponentReflection uiComponent in uiComponentsManager.UIComponents)
         {
             UIComponentCategory? category = uiComponent.Category;
 
@@ -64,7 +65,7 @@ public class PreviewsViewModel // : INotifyPropertyChanged
                 {
                     foreach (PreviewReflection preview in uiComponent.Previews)
                     {
-                        previewsItems.Add(new PreviewViewModel(preview));
+                        previewsItems.Add(new PreviewViewModel(uiComponent, preview));
                     }
                 }
             }
@@ -73,8 +74,8 @@ public class PreviewsViewModel // : INotifyPropertyChanged
         PreviewsItems = previewsItems;
     }
 
-    public void NavigateToPreview(PreviewReflection preview)
+    public void NavigateToPreview(UIComponentReflection uiComponent, PreviewReflection preview)
     {
-        MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreview(preview);
+        MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreview(uiComponent, preview);
     }
 }

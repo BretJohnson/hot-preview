@@ -5,12 +5,14 @@
              xmlns:pages="clr-namespace:Microsoft.UIPreview.Maui.Pages"
              x:Class="Microsoft.UIPreview.Maui.Pages.PreviewsPage"
              x:DataType="local:PreviewsViewModel"
-             Title="PreviewsPage">
+             Shell.PresentationMode="NotAnimated"
+             Title="UI Previews">
+    
     <ContentPage.Resources>
         <DataTemplate x:Key="uiComponentTemplate" x:DataType="local:UIComponentViewModel">
             <HorizontalStackLayout Margin="0,4,0,0">
-                <Image WidthRequest="20" Source="ic_fluent_slide_grid_24_regular.png"/>
-                <Label Text="{Binding DisplayName}" Margin="4,0,0,0" FontAttributes="Bold">
+                <Image WidthRequest="20" Source="{Binding Icon}" />
+                <Label Text="{Binding DisplayName}" Margin="4,0,0,0">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding TapCommand}" />
                     </Label.GestureRecognizers>
@@ -29,12 +31,16 @@
             PreviewTemplate="{StaticResource previewTemplate}" />
     </ContentPage.Resources>
 
-    <VerticalStackLayout>
-        <Label
-            Text="Previews"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            FontSize="20" Margin="0,0,0,-5"/>
-        <CollectionView ItemsSource="{Binding PreviewsItems}" ItemTemplate="{StaticResource previewItemDataTemplateSelector}" Margin="10,5,0,0"/>
-    </VerticalStackLayout>
+    <ScrollView Orientation="Vertical">
+        <VerticalStackLayout>
+            <Label
+                Text="Previews"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                FontSize="20" Margin="0,0,0,-5"/>
+            <CollectionView Margin="10,5,0,0" 
+                ItemsSource="{Binding PreviewsItems}"
+                ItemTemplate="{StaticResource previewItemDataTemplateSelector}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
