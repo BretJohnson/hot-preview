@@ -29,12 +29,43 @@
 
   <ItemGroup>
     <!-- Images -->
-    <MauiImage Include="Resources\Images\*" />
+    <MauiImage Include="Resources\IconsLight\*" />
+    <MauiImage Include="Resources\IconsDark\*" TintColor="#66B3FF" />
 
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
   </ItemGroup>
 
+  <!-- Android -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-android')) != true">
+    <Compile Remove="**\*.Android.cs" />
+    <None Include="**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
+
+  <!-- Both iOS and Mac Catalyst -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-ios')) != true AND $(TargetFramework.StartsWith('net8.0-maccatalyst')) != true">
+    <Compile Remove="**\*.MaciOS.cs" />
+    <None Include="**\*.MaciOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
+
+  <!-- iOS -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-ios')) != true">
+    <Compile Remove="**\*.iOS.cs" />
+    <None Include="**\*.iOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
+
+  <!-- Mac Catalyst -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-maccatalyst')) != true">
+    <Compile Remove="**\*.MacCatalyst.cs" />
+    <None Include="**\*.MacCatalyst.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
+
+  <!-- Windows -->
+  <ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true">
+    <Compile Remove="**\*.Windows.cs" />
+    <None Include="**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>  
+  
   <ItemGroup>
 	  <Compile Update="App.xaml.cs">
 	    <DependentUpon>App.xaml</DependentUpon>
@@ -57,6 +88,15 @@
 	  <MauiXaml Update="Resources\Styles\Styles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Update="Resources\IconsLight\ic_preview_control__light.svg">
+	    <TintColor>#66B3FF</TintColor>
+	  </MauiImage>
+	  <MauiImage Update="Resources\IconsLight\ic_preview_page__light.svg">
+	    <TintColor>#66B3FF</TintColor>
+	  </MauiImage>
 	</ItemGroup>
 
 </Project>
