@@ -14,12 +14,12 @@ public partial class CartView : ContentPage
 
 #if EXAMPLES
     [Example("empty")]
-    public static CartView SingleItemCart() => new(PreviewData.GetBluetoothSpeakerProducts());
+    public static CartView SingleItemCart() => new(ExampleData.GetBluetoothSpeakerProducts());
 
     [Example("3 items")]
-    public static CartView MediumCart() => new(PreviewData.GetPreviewProducts(3));
+    public static CartView MediumCart() => new(ExampleData.GetExampleProducts(3));
 
     [Example("8 items")]
-    public static CartView LargeCart() => new(PreviewData.GetPreviewProducts(8));
+    public static CartView LargeCart() => new(ExampleData.GetExampleProducts(8));
 #endif
 }

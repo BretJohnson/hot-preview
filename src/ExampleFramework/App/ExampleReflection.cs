@@ -7,9 +7,9 @@ public abstract class ExampleReflection : ExampleBase
     private readonly Type? _uiComponentType;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
-    public ExampleReflection(ExampleAttribute previewAttribute) : base(previewAttribute.DisplayName)
+    public ExampleReflection(ExampleAttribute exampleAttribute) : base(exampleAttribute.DisplayName)
     {
-        _uiComponentType = previewAttribute.UIComponentType;
+        _uiComponentType = exampleAttribute.UIComponentType;
     }
 
     public ExampleReflection(Type uiComponentType) : base(null)
@@ -18,10 +18,10 @@ public abstract class ExampleReflection : ExampleBase
     }
 
     /// <summary>
-    /// Create an instance of the preview. Normally this returns an instance of a UI framework control/page, suitable
+    /// Create an instance of the example. Normally this returns an instance of a UI framework control/page, suitable
     /// for display.
     /// </summary>
-    /// <returns>instantiated preview</returns>
+    /// <returns>instantiated example</returns>
     public abstract object Create();
 
     public Type UIComponentType
@@ -35,7 +35,7 @@ public abstract class ExampleReflection : ExampleBase
 
             Type? defaultUIComponentType = DefaultUIComponentType;
             if (defaultUIComponentType == null)
-                throw new InvalidOperationException($"No DefaultUIComponentType specified for preview: {Name}");
+                throw new InvalidOperationException($"No DefaultUIComponentType specified for example: {Name}");
             else return defaultUIComponentType;
         }
     }

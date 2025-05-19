@@ -1,6 +1,6 @@
 ﻿namespace ExampleFramework;
 
-public enum PreviewMode
+public enum ExampleMode
 {
     None,
     Gallery,

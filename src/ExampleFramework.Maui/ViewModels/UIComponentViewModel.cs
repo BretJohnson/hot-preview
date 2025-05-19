@@ -5,7 +5,7 @@ using ExampleFramework.Maui.Utilities;
 
 namespace ExampleFramework.Maui.ViewModels;
 
-public class UIComponentViewModel : PreviewsItemViewModel
+public class UIComponentViewModel : ExamplesItemViewModel
 {
     public UIComponentViewModel(UIComponentReflection uiComponent)
     {
@@ -14,10 +14,10 @@ public class UIComponentViewModel : PreviewsItemViewModel
         TapCommand = new Command(
             execute: () =>
             {
-                if (UIComponent.HasSinglePreview)
+                if (UIComponent.HasSingleExample)
                 {
-                    ExampleReflection preview = UIComponent.Previews[0];
-                    PreviewsViewModel.Instance.NavigateToPreview(UIComponent, preview);
+                    ExampleReflection example = UIComponent.Examples[0];
+                    ExamplesViewModel.Instance.NavigateToExample(UIComponent, example);
                 }
             }
         );

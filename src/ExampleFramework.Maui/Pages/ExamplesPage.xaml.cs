@@ -3,12 +3,12 @@ using ExampleFramework.Maui.ViewModels;
 
 namespace ExampleFramework.Maui.Pages;
 
-public partial class PreviewsPage : ContentPage
+public partial class ExamplesPage : ContentPage
 {
-	public PreviewsPage()
+	public ExamplesPage()
 	{
 		InitializeComponent();
-        BindingContext = PreviewsViewModel.Instance;
+        BindingContext = ExamplesViewModel.Instance;
     }
 
     // Currently, when this source is embedded in the Visual Studio tap assemblies, then the MAUI .xaml source generator

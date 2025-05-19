@@ -7,7 +7,7 @@ using ExampleFramework.Maui;
 using ExampleFramework.Maui.Pages;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
-[assembly: PreviewApplicationClass(typeof(MauiExampleApplication))]
+[assembly: ExampleApplicationClass(typeof(MauiExampleApplication))]
 
 [assembly: PageUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
 [assembly: ControlUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
@@ -41,18 +41,18 @@ public partial class MauiExampleApplication : ExampleApplication
             () => new UIComponentsManagerReflection(ServiceProvider, AdditionalAppAssemblies,
             new MauiUIComponentExclusionFilter()));
 
-        PreviewAppService = new MauiPreviewAppService(this);
+        ExampleAppService = new MauiExampleAppService(this);
 
 #if WINDOWS
         AddKeyboardHandling();
 #endif
     }
 
-    public MauiPreviewAppService PreviewAppService { get; }
+    public MauiExampleAppService ExampleAppService { get; }
 
-    public MauiPreviewNavigatorService PreviewNavigatorService { get; set; } = new MauiPreviewNavigatorService();
+    public MauiExampleNavigatorService ExampleNavigatorService { get; set; } = new MauiExampleNavigatorService();
 
-    public Window? PreviewUIWindow { get; private set; }
+    public Window? ExampleUIWindow { get; private set; }
 
     public static void EnsureInitialized()
     {
@@ -61,47 +61,47 @@ public partial class MauiExampleApplication : ExampleApplication
 
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
-    public override ExampleAppService GetPreviewAppService() => PreviewAppService;
+    public override ExampleAppService GetExampleAppService() => ExampleAppService;
 
-    public void AddPreviewUIShellItem(Shell shell, string title = "Previews", string? icon = null)
+    public void AddExampleUIShellItem(Shell shell, string title = "Examples", string? icon = null)
     {
-        var previewsShellContent = new ShellContent
+        var examplesShellContent = new ShellContent
         {
             Title = title,
             Icon = icon,
-            Route = "UIPreviews",
-            ContentTemplate = new DataTemplate(typeof(PreviewsPage))
+            Route = "UIExamples",
+            ContentTemplate = new DataTemplate(typeof(ExamplesPage))
         };
 
-        shell.Items.Add(previewsShellContent);
+        shell.Items.Add(examplesShellContent);
     }
 
-    public void ShowPreviewUIWindow()
+    public void ShowExampleUIWindow()
     {
-        if (PreviewUIWindow is null)
+        if (ExampleUIWindow is null)
         {
-            PreviewUIWindow = new Window(new PreviewsPage());
-            PreviewUIWindow.Title = "UI Previews";
-            PreviewUIWindow.Destroying += PreviewUIWindow_Destroying;
+            ExampleUIWindow = new Window(new ExamplesPage());
+            ExampleUIWindow.Title = "UI Examples";
+            ExampleUIWindow.Destroying += ExampleUIWindow_Destroying;
 
-            PreviewUIWindow.Width = 320;
-            PreviewUIWindow.Height = 500;
+            ExampleUIWindow.Width = 320;
+            ExampleUIWindow.Height = 500;
 
             Window mainWindow = Application.Current!.Windows[0];
             if (mainWindow is not null)
             {
                 // Position the window just left of the top left corner of the app window, but ensuring
                 // it's fully on the screen
-                PreviewUIWindow.X = double.Max(mainWindow.X - PreviewUIWindow.Width - 5, 0);
-                PreviewUIWindow.Y = double.Max(mainWindow.Y, 0);
+                ExampleUIWindow.X = double.Max(mainWindow.X - ExampleUIWindow.Width - 5, 0);
+                ExampleUIWindow.Y = double.Max(mainWindow.Y, 0);
             }
 
-            Application.Current?.OpenWindow(PreviewUIWindow);
+            Application.Current?.OpenWindow(ExampleUIWindow);
         }
     }
 
-    private void PreviewUIWindow_Destroying(object? sender, EventArgs e)
+    private void ExampleUIWindow_Destroying(object? sender, EventArgs e)
     {
-        PreviewUIWindow = null;
+        ExampleUIWindow = null;
     }
 }

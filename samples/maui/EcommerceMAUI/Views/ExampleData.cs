@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 namespace EcommerceMAUI.Views
 {
 #if EXAMPLES
-    public static class PreviewData
+    public static class ExampleData
     {
         public static ObservableCollection<ProductListModel> GetBluetoothSpeakerProducts()
         {
@@ -13,7 +13,7 @@ namespace EcommerceMAUI.Views
             return products;
         }
 
-        public static ObservableCollection<ProductListModel> GetPreviewProducts(int count)
+        public static ObservableCollection<ProductListModel> GetExampleProducts(int count)
         {
             var products = new ObservableCollection<ProductListModel>();
             products.AddIfLessThanMax(count, new ProductListModel() { Name = "BeoPlay Speaker", BrandName = "Bang and Olufsen", Qty = 1, Price = 755, ImageUrl = "https://raw.githubusercontent.com/exendahal/ecommerceXF/master/eCommerce/eCommerce.Android/Resources/drawable/Image1.png" });
@@ -27,7 +27,7 @@ namespace EcommerceMAUI.Views
             return products;
         }
 
-        public static ObservableCollection<CardInfoModel> GetPreviewCards(int count)
+        public static ObservableCollection<CardInfoModel> GetExampleCards(int count)
         {
             var cards = new ObservableCollection<CardInfoModel>();
             cards.AddIfLessThanMax(count, new CardInfoModel() { CardNumber = "371449635398431", CardValidationCode = "123", ExpirationDate = "2024-12-01" });

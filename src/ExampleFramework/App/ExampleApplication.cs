@@ -13,7 +13,7 @@ public abstract class ExampleApplication
 
     public abstract UIComponentsManagerReflection GetUIComponentsManager();
 
-    public abstract ExampleAppService GetPreviewAppService();
+    public abstract ExampleAppService GetExampleAppService();
 
     /// <summary>
     /// The app's service provider, which when present can be used to instantiate

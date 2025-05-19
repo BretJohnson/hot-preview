@@ -32,7 +32,7 @@ public partial class MauiExampleApplication
         // Handle global keyboard shortcuts
         if (e.Key == VirtualKey.Z && isCtrlDown && isShiftDown)
         {
-            Instance.ShowPreviewUIWindow();
+            Instance.ShowExampleUIWindow();
             e.Handled = true;
         }
     }

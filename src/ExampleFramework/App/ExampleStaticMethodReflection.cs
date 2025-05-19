@@ -7,7 +7,7 @@ public class ExampleStaticMethodReflection : ExampleReflection
 {
     public MethodInfo MethodInfo { get; }
 
-    public ExampleStaticMethodReflection(ExampleAttribute previewAttribute, MethodInfo methodInfo) : base(previewAttribute)
+    public ExampleStaticMethodReflection(ExampleAttribute exampleAttribute, MethodInfo methodInfo) : base(exampleAttribute)
     {
         MethodInfo = methodInfo;
     }
@@ -15,7 +15,7 @@ public class ExampleStaticMethodReflection : ExampleReflection
     public override object Create()
     {
         if (MethodInfo.GetParameters().Length != 0)
-            throw new InvalidOperationException($"Previews that take parameters aren't yet supported: {Name}");
+            throw new InvalidOperationException($"Examples that take parameters aren't yet supported: {Name}");
 
         return MethodInfo.Invoke(null, null);
     }
@@ -26,7 +26,7 @@ public class ExampleStaticMethodReflection : ExampleReflection
         {
             Type type = MethodInfo.ReturnType;
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RoutePreview<>))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RouteExample<>))
             {
                 return type.GetGenericArguments()[0];
             }
@@ -36,7 +36,7 @@ public class ExampleStaticMethodReflection : ExampleReflection
     }
 
     /// <summary>
-    /// FullName is intended to be what's used by the code to identify the preview. It's the preview's
+    /// FullName is intended to be what's used by the code to identify the example. It's the example's
     /// full qualified method name.
     /// </summary>
     public override string Name => MethodInfo.DeclaringType.FullName + "." + MethodInfo.Name;

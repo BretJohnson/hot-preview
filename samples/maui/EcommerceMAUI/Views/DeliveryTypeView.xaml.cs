@@ -14,6 +14,6 @@ public partial class DeliveryTypeView : ContentPage
 
 #if EXAMPLES
     [Example]
-    public static DeliveryTypeView Example() => new(ProductListModel.GetPreviewProducts());
+    public static DeliveryTypeView Example() => new(ProductListModel.GetExampleProducts());
 #endif
 }

@@ -70,11 +70,11 @@
 	  <Compile Update="App.xaml.cs">
 	    <DependentUpon>App.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\PreviewItemDataTemplateSelector.cs">
+	  <Compile Update="Pages\ExampleItemDataTemplateSelector.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\PreviewsPage.xaml.cs">
-	    <DependentUpon>PreviewsPage.xaml</DependentUpon>
+	  <Compile Update="Pages\ExamplesPage.xaml.cs">
+	    <DependentUpon>ExamplesPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 

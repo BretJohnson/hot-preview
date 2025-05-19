@@ -12,7 +12,7 @@ public sealed class ExampleAttribute : Attribute
     public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(ExampleAttribute));
 
     /// <summary>
-    /// Optional title for the preview, determining how it appears in navigation UI.
+    /// Optional title for the example, determining how it appears in navigation UI.
     /// "/" delimiters can be used to indicate hierarchy.
     /// </summary>
     public string? DisplayName { get; }

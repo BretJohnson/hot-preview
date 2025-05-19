@@ -11,8 +11,8 @@ public static class ExampleExtensions
     /// <param name="bindingContext">The binding context to assign to the created view.</param>
     /// <returns>A new instance of the view with the specified binding context.</returns>
     /// <remarks>
-    /// This method simplifies the creation of control/page previews, setting the binding context as appropriate
-    /// for the preview data.
+    /// This method simplifies the creation of control/page examples, setting the binding context as appropriate
+    /// for the example data.
     /// </remarks>
     public static TView CreateViewWithBinding<TView>(object bindingContext) where TView : View, new()
     {
