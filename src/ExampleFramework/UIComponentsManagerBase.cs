@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
-public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIComponent : UIComponentBase<TPreview> where TPreview : PreviewBase
+public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIComponent : UIComponentBase<TPreview> where TPreview : ExampleBase
 {
     protected readonly UIComponentBaseTypes _pageUIComponentBaseTypes = new();
     protected readonly UIComponentBaseTypes _controlUIComponentBaseTypes = new();

@@ -1,5 +1,5 @@
-﻿namespace Microsoft.UIPreview.Tooling;
+﻿namespace ExampleFramework.Tooling;
 
-public class UIComponentPreviewPair(UIComponent uiComponent, Preview preview) : UIComponentPreviewPair<UIComponent, Preview>(uiComponent, preview)
+public class UIComponentPreviewPair(UIComponent uiComponent, Example preview) : UIComponentPreviewPair<UIComponent, Example>(uiComponent, preview)
 {
 }

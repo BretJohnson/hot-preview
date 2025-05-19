@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
 [AttributeUsage(AttributeTargets.Assembly)]
 public sealed class PreviewApplicationClassAttribute(Type previewApplicationClass) : Attribute

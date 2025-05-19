@@ -1,9 +1,9 @@
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview.App;
-using Microsoft.UIPreview.Maui.Utilities;
+using ExampleFramework.App;
+using ExampleFramework.Maui.Utilities;
 
-namespace Microsoft.UIPreview.Maui.ViewModels;
+namespace ExampleFramework.Maui.ViewModels;
 
 public class UIComponentViewModel : PreviewsItemViewModel
 {
@@ -16,7 +16,7 @@ public class UIComponentViewModel : PreviewsItemViewModel
             {
                 if (UIComponent.HasSinglePreview)
                 {
-                    PreviewReflection preview = UIComponent.Previews[0];
+                    ExampleReflection preview = UIComponent.Previews[0];
                     PreviewsViewModel.Instance.NavigateToPreview(UIComponent, preview);
                 }
             }

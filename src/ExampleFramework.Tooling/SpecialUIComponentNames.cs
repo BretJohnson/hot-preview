@@ -1,4 +1,4 @@
-﻿namespace Microsoft.UIPreview.Tooling;
+﻿namespace ExampleFramework.Tooling;
 
 public static class SpecialUIComponentNames
 {

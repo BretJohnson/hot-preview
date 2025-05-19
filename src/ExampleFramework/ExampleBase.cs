@@ -1,10 +1,10 @@
-﻿namespace Microsoft.UIPreview;
+﻿namespace ExampleFramework;
 
-public abstract class PreviewBase 
+public abstract class ExampleBase 
 {
     private readonly string? _displayName;
 
-    public PreviewBase(string? displayName)
+    public ExampleBase(string? displayName)
     {
         _displayName = displayName;
     }

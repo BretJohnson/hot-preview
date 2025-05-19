@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Microsoft.UIPreview.Tooling;
+namespace ExampleFramework.Tooling;
 
-public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
+public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 {
     /// <summary>
     /// Instantiate a UIComponentsManager instance, processing metadata from the provided compilation and its references
@@ -31,8 +31,8 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         if (requireUIPreviewAssemblyPresent)
         {
             ReferencesUIPreviewAssembly = references.Any(reference =>
-                (reference is PortableExecutableReference peReference && peReference.FilePath?.EndsWith("Microsoft.UIPreview.dll", StringComparison.OrdinalIgnoreCase) == true) ||
-                (reference is CompilationReference compilationReference && compilationReference.Compilation.AssemblyName?.Equals("Microsoft.UIPreview", StringComparison.OrdinalIgnoreCase) == true)
+                (reference is PortableExecutableReference peReference && peReference.FilePath?.EndsWith("ExampleFramework.dll", StringComparison.OrdinalIgnoreCase) == true) ||
+                (reference is CompilationReference compilationReference && compilationReference.Compilation.AssemblyName?.Equals("ExampleFramework", StringComparison.OrdinalIgnoreCase) == true)
                 );
 
             if (!ReferencesUIPreviewAssembly)
@@ -88,7 +88,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
     /// <summary>
     /// IF requireUIPreviewAssemblyPresent was set to true in the constructor, then this
-    /// property indicates if the Microsoft.UIPreview assembly was indeed found. If
+    /// property indicates if the ExampleFramework assembly was indeed found. If
     /// requireUIPreviewAssemblyPresent was set to false in the constructor, then this
     /// then this is always false (as we didn't if the assembly was there or not).
     /// </summary>
@@ -135,7 +135,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         return component;
     }
 
-    public void AddPreview(string uiComponentName, Preview preview)
+    public void AddPreview(string uiComponentName, Example preview)
     {
         UIComponent component = GetOrAddComponent(uiComponentName);
         component.AddPreview(preview);
@@ -166,7 +166,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         {
             AttributeSyntax previewAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
-                .FirstOrDefault(attr => attr.Name.ToString() == "Preview");
+                .FirstOrDefault(attr => attr.Name.ToString() == "Example");
 
             if (previewAttribute is null)
             {
@@ -181,7 +181,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != PreviewAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != ExampleAttribute.TypeFullName)
             {
                 return;
             }

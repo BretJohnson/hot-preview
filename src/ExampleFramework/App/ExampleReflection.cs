@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
-public abstract class PreviewReflection : PreviewBase
+public abstract class ExampleReflection : ExampleBase
 {
     private readonly Type? _uiComponentType;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
-    public PreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
+    public ExampleReflection(ExampleAttribute previewAttribute) : base(previewAttribute.DisplayName)
     {
         _uiComponentType = previewAttribute.UIComponentType;
     }
 
-    public PreviewReflection(Type uiComponentType) : base(null)
+    public ExampleReflection(Type uiComponentType) : base(null)
     {
         _uiComponentType = uiComponentType;
     }

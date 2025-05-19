@@ -4,9 +4,9 @@ using Microsoft.UI.Input;
 using Microsoft.Maui;
 using System;
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
-public partial class MauiPreviewApplication
+public partial class MauiExampleApplication
 {
     private void AddKeyboardHandling()
     {

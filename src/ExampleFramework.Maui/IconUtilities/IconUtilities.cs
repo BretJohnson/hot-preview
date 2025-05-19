@@ -1,7 +1,7 @@
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 
-namespace Microsoft.UIPreview.Maui.Utilities;
+namespace ExampleFramework.Maui.Utilities;
 
 public static class IconUtilities
 {

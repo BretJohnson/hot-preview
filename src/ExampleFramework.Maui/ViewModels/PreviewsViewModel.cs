@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Microsoft.UIPreview.App;
+using ExampleFramework.App;
 
-namespace Microsoft.UIPreview.Maui.ViewModels;
+namespace ExampleFramework.Maui.ViewModels;
 
 public class PreviewsViewModel // : INotifyPropertyChanged
 {
@@ -20,7 +20,7 @@ public class PreviewsViewModel // : INotifyPropertyChanged
         var categories = new List<UIComponentCategory>();
         Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
-        UIComponentsManagerReflection uiComponentsManager = MauiPreviewApplication.Instance.GetUIComponentsManager();
+        UIComponentsManagerReflection uiComponentsManager = MauiExampleApplication.Instance.GetUIComponentsManager();
 
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
         foreach (UIComponentReflection uiComponent in uiComponentsManager.UIComponents)
@@ -63,7 +63,7 @@ public class PreviewsViewModel // : INotifyPropertyChanged
 
                 if (uiComponent.HasMultiplePreviews)
                 {
-                    foreach (PreviewReflection preview in uiComponent.Previews)
+                    foreach (ExampleReflection preview in uiComponent.Previews)
                     {
                         previewsItems.Add(new PreviewViewModel(uiComponent, preview));
                     }
@@ -74,8 +74,8 @@ public class PreviewsViewModel // : INotifyPropertyChanged
         PreviewsItems = previewsItems;
     }
 
-    public void NavigateToPreview(UIComponentReflection uiComponent, PreviewReflection preview)
+    public void NavigateToPreview(UIComponentReflection uiComponent, ExampleReflection preview)
     {
-        MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreview(uiComponent, preview);
+        MauiExampleApplication.Instance.PreviewNavigatorService.NavigateToPreview(uiComponent, preview);
     }
 }

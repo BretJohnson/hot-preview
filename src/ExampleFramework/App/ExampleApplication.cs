@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
-public abstract class PreviewApplication
+public abstract class ExampleApplication
 {
-    private static PreviewApplication? s_instance;
+    private static ExampleApplication? s_instance;
 
     private readonly List<string> _additionalAppAssemblies = [];
 
-    public static PreviewApplication GetInstance() => s_instance ?? throw new InvalidOperationException($"{nameof(PreviewApplication)} not initialized");
+    public static ExampleApplication GetInstance() => s_instance ?? throw new InvalidOperationException($"{nameof(ExampleApplication)} not initialized");
 
     public abstract UIComponentsManagerReflection GetUIComponentsManager();
 
-    public abstract PreviewAppService GetPreviewAppService();
+    public abstract ExampleAppService GetPreviewAppService();
 
     /// <summary>
     /// The app's service provider, which when present can be used to instantiate
@@ -42,7 +42,7 @@ public abstract class PreviewApplication
 
     public IEnumerable<string> AdditionalAppAssemblies => _additionalAppAssemblies;
 
-    protected static void InitInstance(PreviewApplication instance)
+    protected static void InitInstance(ExampleApplication instance)
     {
         s_instance = instance;
     }

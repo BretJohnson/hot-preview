@@ -1,10 +1,10 @@
-﻿namespace Microsoft.UIPreview;
+﻿namespace ExampleFramework;
 
 public class UIComponentPreviewPair<TUIComponent, TPreview>(TUIComponent uiComponent, TPreview preview)
-    where TPreview : PreviewBase
+    where TPreview : ExampleBase
     where TUIComponent : UIComponentBase<TPreview>
 {
     public TUIComponent UIComponent => uiComponent;
 
-    public TPreview Preview => preview;
+    public TPreview Example => preview;
 }

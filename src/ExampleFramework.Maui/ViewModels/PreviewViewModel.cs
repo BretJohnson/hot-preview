@@ -1,28 +1,28 @@
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview.App;
+using ExampleFramework.App;
 
-namespace Microsoft.UIPreview.Maui.ViewModels
+namespace ExampleFramework.Maui.ViewModels
 {
     public class PreviewViewModel : PreviewsItemViewModel
     {
         public UIComponentReflection UIComponent { get; }
-        public PreviewReflection Preview { get; }
+        public ExampleReflection Example { get; }
         public ICommand TapCommand { get; }
 
-        public PreviewViewModel(UIComponentReflection uiComponent, PreviewReflection preview)
+        public PreviewViewModel(UIComponentReflection uiComponent, ExampleReflection preview)
         {
             UIComponent = uiComponent;
-            Preview = preview;
+            Example = preview;
 
             TapCommand = new Command(
                 execute: () =>
                 {
-                    PreviewsViewModel.Instance.NavigateToPreview(UIComponent, Preview);
+                    PreviewsViewModel.Instance.NavigateToPreview(UIComponent, Example);
                 }
             );
         }
 
-        public string DisplayName => Preview.DisplayName;
+        public string DisplayName => Example.DisplayName;
     }
 }

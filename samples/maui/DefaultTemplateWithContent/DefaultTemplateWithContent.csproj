@@ -45,7 +45,7 @@
 	</PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>$(DefineConstants);PREVIEWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);EXAMPLES</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -80,15 +80,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview.Maui\Microsoft.UIPreview.Maui.csproj" />
-	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview\Microsoft.UIPreview.csproj" />
+	  <ProjectReference Include="..\..\..\src\ExampleFramework.Maui\ExampleFramework.Maui.csproj" />
+	  <ProjectReference Include="..\..\..\src\ExampleFramework\ExampleFramework.csproj" />
 	</ItemGroup>
 
-  <!--
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview.Maui\Microsoft.UIPreview.Maui.csproj" />
-	  <ProjectReference Include="..\..\..\src\Microsoft.UIPreview\Microsoft.UIPreview.csproj" />
-	</ItemGroup>
-  -->
-	
 </Project>

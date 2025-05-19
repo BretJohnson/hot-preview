@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
-public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
+public abstract class UIComponentBase<TPreview> where TPreview : ExampleBase
 {
     private readonly string? _displayName;
     private readonly List<TPreview> _previews = [];

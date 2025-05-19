@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
-public class UIPreviewStaticMethodReflection : PreviewReflection
+public class ExampleStaticMethodReflection : ExampleReflection
 {
     public MethodInfo MethodInfo { get; }
 
-    public UIPreviewStaticMethodReflection(PreviewAttribute previewAttribute, MethodInfo methodInfo) : base(previewAttribute)
+    public ExampleStaticMethodReflection(ExampleAttribute previewAttribute, MethodInfo methodInfo) : base(previewAttribute)
     {
         MethodInfo = methodInfo;
     }

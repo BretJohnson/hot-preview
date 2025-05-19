@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
-public abstract class PreviewAppService(PreviewApplication previewApplication) : IPreviewAppService
+public abstract class ExampleAppService(ExampleApplication previewApplication) : IPreviewAppService
 {
     public abstract Task NavigateToPreviewAsync(string uiComponentName, string previewName);
 
@@ -30,10 +30,10 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return Task.FromResult(previewNames);
     }
 
-    protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)
+    protected UIComponentPreviewPairReflection GetUIComponentExamplePair(string uiComponentName, string previewName)
     {
         UIComponentReflection uiComponent = GetUIComponent(uiComponentName);
-        PreviewReflection preview = uiComponent.GetPreview(previewName) ?? throw new PreviewNotFoundException($"Preview {previewName} not found for UIComponent {uiComponentName}");
+        ExampleReflection preview = uiComponent.GetPreview(previewName) ?? throw new ExampleNotFoundException($"Example {previewName} not found for UIComponent {uiComponentName}");
         return new UIComponentPreviewPairReflection(uiComponent, preview);
     }
 }

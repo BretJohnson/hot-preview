@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using Microsoft.UIPreview.Maui;
+using ExampleFramework.Maui;
 using Font = Microsoft.Maui.Font;
 
 namespace DefaultTemplateWithContent;
@@ -12,8 +12,8 @@ public partial class AppShell : Shell
         var currentTheme = Application.Current!.UserAppTheme;
         ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
 
-#if PREVIEWS
-        MauiPreviewApplication.Instance.AddPreviewUIShellItem(this);
+#if EXAMPLES
+        MauiExampleApplication.Instance.AddPreviewUIShellItem(this);
 #endif
     }
 

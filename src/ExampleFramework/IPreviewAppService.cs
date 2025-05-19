@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
 public interface IPreviewAppService
 {

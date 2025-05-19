@@ -1,28 +1,28 @@
 ﻿using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview;
-using Microsoft.UIPreview.App;
-using Microsoft.UIPreview.Maui;
-using Microsoft.UIPreview.Maui.Pages;
+using ExampleFramework;
+using ExampleFramework.App;
+using ExampleFramework.Maui;
+using ExampleFramework.Maui.Pages;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
-[assembly: PreviewApplicationClass(typeof(MauiPreviewApplication))]
+[assembly: PreviewApplicationClass(typeof(MauiExampleApplication))]
 
-[assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
-[assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
+[assembly: PageUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
+[assembly: ControlUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
-public partial class MauiPreviewApplication : PreviewApplication
+public partial class MauiExampleApplication : ExampleApplication
 {
-    public static MauiPreviewApplication Instance => s_instance.Value;
+    public static MauiExampleApplication Instance => s_instance.Value;
 
-    private static readonly Lazy<MauiPreviewApplication> s_instance =
+    private static readonly Lazy<MauiExampleApplication> s_instance =
         new(() =>
         {
-            var instance = new MauiPreviewApplication();
+            var instance = new MauiExampleApplication();
             InitInstance(instance);
             return instance;
         });
@@ -31,7 +31,7 @@ public partial class MauiPreviewApplication : PreviewApplication
 
     private readonly Lazy<UIComponentsManagerReflection> _uiComponentsManager;
 
-    private MauiPreviewApplication()
+    private MauiExampleApplication()
     {
         // Use application default IServiceProvider, if available
         IElement? applicationElement = Application.Current;
@@ -61,7 +61,7 @@ public partial class MauiPreviewApplication : PreviewApplication
 
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
-    public override PreviewAppService GetPreviewAppService() => PreviewAppService;
+    public override ExampleAppService GetPreviewAppService() => PreviewAppService;
 
     public void AddPreviewUIShellItem(Shell shell, string title = "Previews", string? icon = null)
     {

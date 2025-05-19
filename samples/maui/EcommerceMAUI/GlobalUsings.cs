@@ -1,3 +1,3 @@
-﻿#if PREVIEWS
-global using Microsoft.UIPreview;
+﻿#if EXAMPLES
+global using ExampleFramework;
 #endif

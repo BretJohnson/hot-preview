@@ -1,4 +1,4 @@
-﻿namespace Microsoft.UIPreview;
+﻿namespace ExampleFramework;
 
 public class RoutePreview(string route)
 {

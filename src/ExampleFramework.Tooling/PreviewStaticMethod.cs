@@ -1,6 +1,6 @@
-﻿namespace Microsoft.UIPreview.Tooling;
+﻿namespace ExampleFramework.Tooling;
 
-public class PreviewStaticMethod : Preview
+public class PreviewStaticMethod : Example
 {
     public PreviewStaticMethod(string methodFullName, string? displayName) : base(methodFullName, displayName)
     {

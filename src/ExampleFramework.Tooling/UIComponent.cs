@@ -1,6 +1,6 @@
-﻿namespace Microsoft.UIPreview.Tooling;
+﻿namespace ExampleFramework.Tooling;
 
-public class UIComponent : UIComponentBase<Preview>
+public class UIComponent : UIComponentBase<Example>
 {
     private readonly string _typeName;
 

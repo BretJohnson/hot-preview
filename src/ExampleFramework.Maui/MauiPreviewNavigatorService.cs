@@ -2,20 +2,20 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview.App;
+using ExampleFramework.App;
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
 public class MauiPreviewNavigatorService
 {
     public bool NavigateAnimationsEnabled { get; set; } = false;
 
-    public virtual void NavigateToPreview(UIComponentReflection uiComponent, PreviewReflection preview)
+    public virtual void NavigateToPreview(UIComponentReflection uiComponent, ExampleReflection preview)
     {
         _ = NavigateToPreviewAsync(uiComponent, preview);
     }
 
-    public virtual async Task NavigateToPreviewAsync(UIComponentReflection uiComponent, PreviewReflection preview)
+    public virtual async Task NavigateToPreviewAsync(UIComponentReflection uiComponent, ExampleReflection preview)
     {
         await MainThread.InvokeOnMainThreadAsync(async () =>
         {

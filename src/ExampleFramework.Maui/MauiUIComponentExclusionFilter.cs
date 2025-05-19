@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Microsoft.UIPreview.App;
+using ExampleFramework.App;
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
 public class MauiUIComponentExclusionFilter : IUIComponentExclusionFilter
 {

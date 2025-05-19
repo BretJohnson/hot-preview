@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
 public class UIComponentBaseTypes
 {
