@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.UIPreview\Microsoft.UIPreview.csproj" />
+    <ProjectReference Include="..\ExampleFramework\ExampleFramework.csproj" />
   </ItemGroup>
 
 </Project>
