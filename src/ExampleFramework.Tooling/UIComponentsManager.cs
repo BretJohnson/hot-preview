@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Microsoft.UIPreview.Tooling;
+namespace ExampleFramework.Tooling;
 
-public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
+public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 {
     /// <summary>
     /// Instantiate a UIComponentsManager instance, processing metadata from the provided compilation and its references
@@ -17,25 +17,25 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// to read the new compilation.
     /// </summary>
     /// <param name="compilation">Roslyn compilation</param>
-    /// <param name="includeApparentUIComponentsWithNoPreviews">Determines whether to include types that COULD be UIComponents,
-    /// because they derive from a UI component class, but don't actually define any previews nor can a preview be constructed
-    /// automatically. Can be set by tooling that flags these for the user, to direct them to add a preview.</param>
-    /// <param name="requireUIPreviewAssemblyPresent">If true, only process the compilation if the UIPreview assembly
+    /// <param name="includeApparentUIComponentsWithNoExamples">Determines whether to include types that COULD be UIComponents,
+    /// because they derive from a UI component class, but don't actually define any examples nor can a example be constructed
+    /// automatically. Can be set by tooling that flags these for the user, to direct them to add a example.</param>
+    /// <param name="requireExampleFrameworkAssemblyPresent">If true, only process the compilation if the ExampleFramework assembly
     /// is present in the app references, leaving the components empty otherwise. Used currently by VS to check if an app
-    /// has opt-ed in previews tooling.</param>
-    public UIComponentsManager(Compilation compilation, bool requireUIPreviewAssemblyPresent = false,
-        bool includeApparentUIComponentsWithNoPreviews = false)
+    /// has opt-ed in examples tooling.</param>
+    public UIComponentsManager(Compilation compilation, bool requireExampleFrameworkAssemblyPresent = false,
+        bool includeApparentUIComponentsWithNoExamples = false)
     {
         IEnumerable<MetadataReference> references = compilation.References;
 
-        if (requireUIPreviewAssemblyPresent)
+        if (requireExampleFrameworkAssemblyPresent)
         {
-            ReferencesUIPreviewAssembly = references.Any(reference =>
-                (reference is PortableExecutableReference peReference && peReference.FilePath?.EndsWith("Microsoft.UIPreview.dll", StringComparison.OrdinalIgnoreCase) == true) ||
-                (reference is CompilationReference compilationReference && compilationReference.Compilation.AssemblyName?.Equals("Microsoft.UIPreview", StringComparison.OrdinalIgnoreCase) == true)
+            ReferencesExampleFrameworkAssembly = references.Any(reference =>
+                (reference is PortableExecutableReference peReference && peReference.FilePath?.EndsWith("ExampleFramework.dll", StringComparison.OrdinalIgnoreCase) == true) ||
+                (reference is CompilationReference compilationReference && compilationReference.Compilation.AssemblyName?.Equals("ExampleFramework", StringComparison.OrdinalIgnoreCase) == true)
                 );
 
-            if (!ReferencesUIPreviewAssembly)
+            if (!ReferencesExampleFrameworkAssembly)
             {
                 return;
             }
@@ -79,20 +79,20 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         {
             SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            var previewWalker = new PreviewWalker(compilation, semanticModel, this, includeApparentUIComponentsWithNoPreviews);
+            var exampleWalker = new ExampleWalker(compilation, semanticModel, this, includeApparentUIComponentsWithNoExamples);
 
             SyntaxNode root = syntaxTree.GetRoot();
-            previewWalker.Visit(root);
+            exampleWalker.Visit(root);
         }
     }
 
     /// <summary>
-    /// IF requireUIPreviewAssemblyPresent was set to true in the constructor, then this
-    /// property indicates if the Microsoft.UIPreview assembly was indeed found. If
-    /// requireUIPreviewAssemblyPresent was set to false in the constructor, then this
+    /// IF requireExampleFrameworkAssemblyPresent was set to true in the constructor, then this
+    /// property indicates if the ExampleFramework assembly was indeed found. If
+    /// requireExampleFrameworkAssemblyPresent was set to false in the constructor, then this
     /// then this is always false (as we didn't if the assembly was there or not).
     /// </summary>
-    public bool ReferencesUIPreviewAssembly { get; }
+    public bool ReferencesExampleFrameworkAssembly { get; }
 
     public void AddFromAssemblyAttributes(IAssemblySymbol assemblySymbol)
     {
@@ -135,45 +135,45 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         return component;
     }
 
-    public void AddPreview(string uiComponentName, Preview preview)
+    public void AddExample(string uiComponentName, Example example)
     {
         UIComponent component = GetOrAddComponent(uiComponentName);
-        component.AddPreview(preview);
+        component.AddExample(example);
     }
 
-    private class PreviewWalker : CSharpSyntaxWalker
+    private class ExampleWalker : CSharpSyntaxWalker
     {
         private readonly UIComponentsManager _uiComponentsManager;
         private readonly Compilation _compilation;
         private readonly SemanticModel _semanticModel;
-        private readonly bool _includeApparentUIComponentsWithNoPreviews;
+        private readonly bool _includeApparentUIComponentsWithNoExamples;
 
-        public PreviewWalker(Compilation compilation, SemanticModel semanticModel, UIComponentsManager uiComponents, bool includeUIComponentsWithNoPreviews)
+        public ExampleWalker(Compilation compilation, SemanticModel semanticModel, UIComponentsManager uiComponents, bool includeUIComponentsWithNoExamples)
         {
             _compilation = compilation;
             _semanticModel = semanticModel;
             _uiComponentsManager = uiComponents;
-            _includeApparentUIComponentsWithNoPreviews = includeUIComponentsWithNoPreviews;
+            _includeApparentUIComponentsWithNoExamples = includeUIComponentsWithNoExamples;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
         {
-            CheckForPreviewMethod(methodDeclaration);
+            CheckForExampleMethod(methodDeclaration);
             base.VisitMethodDeclaration(methodDeclaration);
         }
 
-        private void CheckForPreviewMethod(MethodDeclarationSyntax methodDeclaration)
+        private void CheckForExampleMethod(MethodDeclarationSyntax methodDeclaration)
         {
-            AttributeSyntax previewAttribute = methodDeclaration.AttributeLists
+            AttributeSyntax exampleAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
-                .FirstOrDefault(attr => attr.Name.ToString() == "Preview");
+                .FirstOrDefault(attr => attr.Name.ToString() == "Example");
 
-            if (previewAttribute is null)
+            if (exampleAttribute is null)
             {
                 return;
             }
 
-            IMethodSymbol? attributeSymbol = _semanticModel.GetSymbolInfo(previewAttribute).Symbol as IMethodSymbol;
+            IMethodSymbol? attributeSymbol = _semanticModel.GetSymbolInfo(exampleAttribute).Symbol as IMethodSymbol;
             if (attributeSymbol is null)
             {
                 return;
@@ -181,18 +181,18 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != PreviewAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != ExampleAttribute.TypeFullName)
             {
                 return;
             }
 
             string? uiComponentName = null;
             string? title = null;
-            if (previewAttribute.ArgumentList != null)
+            if (exampleAttribute.ArgumentList != null)
             {
-                SeparatedSyntaxList<AttributeArgumentSyntax> attributeArgs = previewAttribute.ArgumentList.Arguments;
+                SeparatedSyntaxList<AttributeArgumentSyntax> attributeArgs = exampleAttribute.ArgumentList.Arguments;
 
-                // If the attribute specifies a preview title (1st argument), use it. Otherwise,
+                // If the attribute specifies a example title (1st argument), use it. Otherwise,
                 // the title defaults to the method name.
                 if (attributeArgs.Count >= 1)
                 {
@@ -244,10 +244,10 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 return;
             }
 
-            string previewFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
+            string exampleFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
 
-            var preview = new PreviewStaticMethod(previewFullName, title);
-            _uiComponentsManager.AddPreview(uiComponentName, preview);
+            var example = new ExampleStaticMethod(exampleFullName, title);
+            _uiComponentsManager.AddExample(uiComponentName, example);
         }
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax classDeclaration)
@@ -264,7 +264,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 return;
             }
 
-            if (CanHaveAutoGeneratedPreview(classDeclaration))
+            if (CanHaveAutoGeneratedExample(classDeclaration))
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
                 if (classTypeSymbol == null)
@@ -275,15 +275,15 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 string uiComponentName = classTypeSymbol.ToDisplayString();
 
                 UIComponent? uiComponent = _uiComponentsManager.GetUIComponent(uiComponentName);
-                if (uiComponent == null || uiComponent.Previews.Count == 0)
+                if (uiComponent == null || uiComponent.Examples.Count == 0)
                 {
                     uiComponent ??= _uiComponentsManager.GetOrAddComponent(uiComponentName);
 
-                    var preview = new PreviewClass(uiComponentName, isAutoGenerated: true);
-                    _uiComponentsManager.AddPreview(uiComponentName, preview);
+                    var example = new ExampleClass(uiComponentName, isAutoGenerated: true);
+                    _uiComponentsManager.AddExample(uiComponentName, example);
                 }
             }
-            else if (_includeApparentUIComponentsWithNoPreviews)
+            else if (_includeApparentUIComponentsWithNoExamples)
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
                 if (classTypeSymbol == null)
@@ -296,7 +296,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             }
         }
 
-        private bool CanHaveAutoGeneratedPreview(ClassDeclarationSyntax classDeclaration)
+        private bool CanHaveAutoGeneratedExample(ClassDeclarationSyntax classDeclaration)
         {
             if (classDeclaration.Modifiers.Any(SyntaxKind.AbstractKeyword))
             {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Microsoft.UIPreview.Maui.ViewModels"
-             xmlns:pages="clr-namespace:Microsoft.UIPreview.Maui.Pages"
-             x:Class="Microsoft.UIPreview.Maui.Pages.PreviewsPage"
-             x:DataType="local:PreviewsViewModel"
+             xmlns:local="clr-namespace:ExampleFramework.Maui.ViewModels"
+             xmlns:pages="clr-namespace:ExampleFramework.Maui.Pages"
+             x:Class="ExampleFramework.Maui.Pages.ExamplesPage"
+             x:DataType="local:ExamplesViewModel"
              Shell.PresentationMode="NotAnimated"
-             Title="UI Previews">
+             Title="UI Examples">
     
     <ContentPage.Resources>
         <DataTemplate x:Key="uiComponentTemplate" x:DataType="local:UIComponentViewModel">
@@ -19,28 +19,28 @@
                 </Label>
             </HorizontalStackLayout>
         </DataTemplate>
-        <DataTemplate x:Key="previewTemplate" x:DataType="local:PreviewViewModel">
+        <DataTemplate x:Key="exampleTemplate" x:DataType="local:ExampleViewModel">
             <Label Text="{Binding DisplayName}" Margin="30,2,0,0">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding TapCommand}" />
                 </Label.GestureRecognizers>
             </Label>
         </DataTemplate>
-        <pages:PreviewItemDataTemplateSelector x:Key="previewItemDataTemplateSelector"
+        <pages:ExampleItemDataTemplateSelector x:Key="exampleItemDataTemplateSelector"
             UIComponentTemplate="{StaticResource uiComponentTemplate}"
-            PreviewTemplate="{StaticResource previewTemplate}" />
+            ExampleTemplate="{StaticResource exampleTemplate}" />
     </ContentPage.Resources>
 
     <ScrollView Orientation="Vertical">
         <VerticalStackLayout>
             <Label
-                Text="Previews"
+                Text="Examples"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
                 FontSize="20" Margin="0,0,0,-5"/>
             <CollectionView Margin="10,5,0,0" 
-                ItemsSource="{Binding PreviewsItems}"
-                ItemTemplate="{StaticResource previewItemDataTemplateSelector}" />
+                ItemsSource="{Binding ExamplesItems}"
+                ItemTemplate="{StaticResource exampleItemDataTemplateSelector}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

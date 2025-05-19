@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
 public class UIComponentNotFoundException : Exception
 {

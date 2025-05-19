@@ -1,11 +1,11 @@
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview.App;
-using Microsoft.UIPreview.Maui.Utilities;
+using ExampleFramework.App;
+using ExampleFramework.Maui.Utilities;
 
-namespace Microsoft.UIPreview.Maui.ViewModels;
+namespace ExampleFramework.Maui.ViewModels;
 
-public class UIComponentViewModel : PreviewsItemViewModel
+public class UIComponentViewModel : ExamplesItemViewModel
 {
     public UIComponentViewModel(UIComponentReflection uiComponent)
     {
@@ -14,10 +14,10 @@ public class UIComponentViewModel : PreviewsItemViewModel
         TapCommand = new Command(
             execute: () =>
             {
-                if (UIComponent.HasSinglePreview)
+                if (UIComponent.HasSingleExample)
                 {
-                    PreviewReflection preview = UIComponent.Previews[0];
-                    PreviewsViewModel.Instance.NavigateToPreview(UIComponent, preview);
+                    ExampleReflection example = UIComponent.Examples[0];
+                    ExamplesViewModel.Instance.NavigateToExample(UIComponent, example);
                 }
             }
         );

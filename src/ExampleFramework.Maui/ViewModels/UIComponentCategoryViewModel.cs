@@ -1,6 +1,6 @@
-namespace Microsoft.UIPreview.Maui.ViewModels;
+namespace ExampleFramework.Maui.ViewModels;
 
-public class UIComponentCategoryViewModel : PreviewsItemViewModel
+public class UIComponentCategoryViewModel : ExamplesItemViewModel
 {
     public string Name { get; }
 

@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 public sealed class UIComponentCategoryAttribute : Attribute
 {
     /// <summary>
-    /// Optional title for the preview, determining how it appears in navigation UI.
+    /// Optional title for the example, determining how it appears in navigation UI.
     /// "/" delimiters can be used to indicate hierarchy.
     /// </summary>
     public string Name { get; }

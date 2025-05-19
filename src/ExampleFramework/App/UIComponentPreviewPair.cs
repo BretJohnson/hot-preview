@@ -1,6 +1,6 @@
-﻿namespace Microsoft.UIPreview.App;
+﻿namespace ExampleFramework.App;
 
-public class UIComponentPreviewPairReflection(UIComponentReflection uiComponent, PreviewReflection preview) :
-    UIComponentPreviewPair<UIComponentReflection, PreviewReflection>(uiComponent, preview)
+public class UIComponentExamplePairReflection(UIComponentReflection uiComponent, ExampleReflection example) :
+    UIComponentExamplePair<UIComponentReflection, ExampleReflection>(uiComponent, example)
 {
 }

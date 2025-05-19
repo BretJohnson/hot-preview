@@ -1,8 +1,8 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
-public static class PreviewExtensions
+public static class ExampleExtensions
 {
     /// <summary>
     /// Creates a new instance of a view of type <typeparamref name="TView"/> and sets its binding context
@@ -11,8 +11,8 @@ public static class PreviewExtensions
     /// <param name="bindingContext">The binding context to assign to the created view.</param>
     /// <returns>A new instance of the view with the specified binding context.</returns>
     /// <remarks>
-    /// This method simplifies the creation of control/page previews, setting the binding context as appropriate
-    /// for the preview data.
+    /// This method simplifies the creation of control/page examples, setting the binding context as appropriate
+    /// for the example data.
     /// </remarks>
     public static TView CreateViewWithBinding<TView>(object bindingContext) where TView : View, new()
     {
@@ -25,7 +25,7 @@ public static class PreviewExtensions
         where TView : View, new()
         where TService : class
     {
-        TService service = MauiPreviewApplication.Instance.GetRequiredService<TService>();
+        TService service = MauiExampleApplication.Instance.GetRequiredService<TService>();
         return CreateViewWithBinding<TView>(service);
     }
 }

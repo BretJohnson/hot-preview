@@ -1,4 +1,4 @@
-﻿namespace Microsoft.UIPreview;
+﻿namespace ExampleFramework;
 
 public static class SpecialUIComponentNames
 {

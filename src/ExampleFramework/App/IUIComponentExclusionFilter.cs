@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
 public interface IUIComponentExclusionFilter
 {

@@ -2,37 +2,37 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.UIPreview.App;
+using ExampleFramework.App;
 
-namespace Microsoft.UIPreview.Maui;
+namespace ExampleFramework.Maui;
 
-public class MauiPreviewNavigatorService
+public class MauiExampleNavigatorService
 {
     public bool NavigateAnimationsEnabled { get; set; } = false;
 
-    public virtual void NavigateToPreview(UIComponentReflection uiComponent, PreviewReflection preview)
+    public virtual void NavigateToExample(UIComponentReflection uiComponent, ExampleReflection example)
     {
-        _ = NavigateToPreviewAsync(uiComponent, preview);
+        _ = NavigateToExampleAsync(uiComponent, example);
     }
 
-    public virtual async Task NavigateToPreviewAsync(UIComponentReflection uiComponent, PreviewReflection preview)
+    public virtual async Task NavigateToExampleAsync(UIComponentReflection uiComponent, ExampleReflection example)
     {
         await MainThread.InvokeOnMainThreadAsync(async () =>
         {
-            object? previewUI = preview.Create();
+            object? exampleUI = example.Create();
 
             if (uiComponent.Kind == UIComponentKind.Control)
             {
                 ContentPage controlsPage = new ContentPage
                 {
-                    Content = (View)previewUI
+                    Content = (View)exampleUI
                 };
 
                 await Application.Current!.MainPage!.Navigation.PushAsync(controlsPage, NavigateAnimationsEnabled);
             }
             else
             {
-                if (previewUI is RoutePreview shellPreview)
+                if (exampleUI is RouteExample routeExample)
                 {
                     Window? mainWindow = Application.Current!.Windows[0];
                     Shell? shell = mainWindow?.Page as Shell;
@@ -42,11 +42,11 @@ public class MauiPreviewNavigatorService
                         throw new InvalidOperationException("Main window doesn't use Shell");
                     }
 
-                    await shell.GoToAsync(shellPreview.Route, NavigateAnimationsEnabled);
+                    await shell.GoToAsync(routeExample.Route, NavigateAnimationsEnabled);
                 }
-                else if (previewUI is ContentPage contentPage)
+                else if (exampleUI is ContentPage contentPage)
                 {
-                    //MauiPreviewsApplication.Instance.Application.MainPage = contentPage;
+                    //MauiExamplesApplication.Instance.Application.MainPage = contentPage;
                     await Application.Current!.MainPage!.Navigation.PushAsync(contentPage, NavigateAnimationsEnabled);
                 }
             }

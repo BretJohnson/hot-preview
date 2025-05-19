@@ -1,5 +1,3 @@
-using static Microsoft.UIPreview.Maui.PreviewExtensions;
-
 namespace DefaultTemplateWithContent.Pages.Controls;
 
 public partial class CategoryChart
@@ -9,8 +7,8 @@ public partial class CategoryChart
         InitializeComponent();
     }
 
-#if PREVIEWS
-    [Preview]
-    public static CategoryChart Preview() => CreateViewWithBindingToService<CategoryChart, MainPageModel>();
+#if EXAMPLES
+    [Example]
+    public static CategoryChart Example() => CreateViewWithBindingToService<CategoryChart, MainPageModel>();
 #endif
 }

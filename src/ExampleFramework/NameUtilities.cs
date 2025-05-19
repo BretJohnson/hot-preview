@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview;
+namespace ExampleFramework;
 
 public class NameUtilities
 {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.UIPreview", "src\Microsoft.UIPreview\Microsoft.UIPreview.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleFramework", "src\ExampleFramework\ExampleFramework.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D2D79087-63DE-48DA-A903-D915B1FAE013}"
 EndProject
@@ -19,11 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.ImageHash",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.MagickNet", "src\visual-test-utils\VisualTestUtils.MagickNet\VisualTestUtils.MagickNet.csproj", "{21CE0B2C-F8A4-4952-A305-F88403ACBF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.UIPreview.App", "src\Microsoft.UIPreview.App\Microsoft.UIPreview.App.csproj", "{6D157948-B362-4BC6-975C-EBCCAE2BF706}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Maui", "src\ExampleFramework.Maui\ExampleFramework.Maui.csproj", "{70FC4263-9C01-46E6-B884-CF39E170A9EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.UIPreview.Maui", "src\Microsoft.UIPreview.Maui\Microsoft.UIPreview.Maui.csproj", "{70FC4263-9C01-46E6-B884-CF39E170A9EF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.UIPreview.Tooling", "src\Microsoft.UIPreview.Tooling\Microsoft.UIPreview.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Tooling", "src\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTemplateWithContent", "samples\maui\DefaultTemplateWithContent\DefaultTemplateWithContent.csproj", "{CC0F1259-82DC-4437-AC2D-946A8B5F5746}"
 EndProject

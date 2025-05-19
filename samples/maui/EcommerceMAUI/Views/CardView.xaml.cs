@@ -12,17 +12,17 @@ public partial class CardView : ContentPage
 		BindingContext = new CardViewModel(cards);
     }
 
-#if PREVIEWS
-    [Preview("0 cards")]
-    public static CardView NoCards() => new(PreviewData.GetPreviewCards(0));
+#if EXAMPLES
+    [Example("0 cards")]
+    public static CardView NoCards() => new(ExampleData.GetExampleCards(0));
 
-    [Preview("1 card")]
-    public static CardView SingleCard() => new(PreviewData.GetPreviewCards(1));
+    [Example("1 card")]
+    public static CardView SingleCard() => new(ExampleData.GetExampleCards(1));
 
-    [Preview("2 cards")]
-    public static CardView TwoCards() => new(PreviewData.GetPreviewCards(2));
+    [Example("2 cards")]
+    public static CardView TwoCards() => new(ExampleData.GetExampleCards(2));
 
-    [Preview("6 cards")]
-    public static CardView SixCards() => new(PreviewData.GetPreviewCards(6));
+    [Example("6 cards")]
+    public static CardView SixCards() => new(ExampleData.GetExampleCards(6));
 #endif
 }

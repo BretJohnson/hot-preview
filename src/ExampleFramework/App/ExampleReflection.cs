@@ -1,27 +1,27 @@
 ﻿using System;
 
-namespace Microsoft.UIPreview.App;
+namespace ExampleFramework.App;
 
-public abstract class PreviewReflection : PreviewBase
+public abstract class ExampleReflection : ExampleBase
 {
     private readonly Type? _uiComponentType;
     //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
-    public PreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
+    public ExampleReflection(ExampleAttribute exampleAttribute) : base(exampleAttribute.DisplayName)
     {
-        _uiComponentType = previewAttribute.UIComponentType;
+        _uiComponentType = exampleAttribute.UIComponentType;
     }
 
-    public PreviewReflection(Type uiComponentType) : base(null)
+    public ExampleReflection(Type uiComponentType) : base(null)
     {
         _uiComponentType = uiComponentType;
     }
 
     /// <summary>
-    /// Create an instance of the preview. Normally this returns an instance of a UI framework control/page, suitable
+    /// Create an instance of the example. Normally this returns an instance of a UI framework control/page, suitable
     /// for display.
     /// </summary>
-    /// <returns>instantiated preview</returns>
+    /// <returns>instantiated example</returns>
     public abstract object Create();
 
     public Type UIComponentType
@@ -35,7 +35,7 @@ public abstract class PreviewReflection : PreviewBase
 
             Type? defaultUIComponentType = DefaultUIComponentType;
             if (defaultUIComponentType == null)
-                throw new InvalidOperationException($"No DefaultUIComponentType specified for preview: {Name}");
+                throw new InvalidOperationException($"No DefaultUIComponentType specified for example: {Name}");
             else return defaultUIComponentType;
         }
     }
