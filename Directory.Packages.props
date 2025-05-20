@@ -20,6 +20,5 @@
     <!-- The condition works around https://github.com/dotnet/sdk/issues/44951 -->
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115" Condition="!('$(TF_BUILD)'=='true' and '$(dotnetformat)'=='true')" />
     <PackageReference Include="PolySharp" Version="1.15.0" />
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
   </ItemGroup>
 </Project>
