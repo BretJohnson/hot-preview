@@ -22,7 +22,8 @@ public abstract class ExampleAppService(ExampleApplication exampleApplication) :
     public Task<string[]> GetUIComponentExamplesAsync(string componentName)
     {
         UIComponentReflection? component = GetUIComponentIfExists(componentName);
-        if (component is null) {
+        if (component is null)
+        {
             return Task.FromResult(Array.Empty<string>());
         }
 
