@@ -45,10 +45,6 @@
     <LangVersion Condition="'$(MSBuildProjectExtension)'=='.vbproj'">16.9</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
-  </ItemGroup>
-
   <ItemDefinitionGroup>
     <!-- We always want MSBuild properties generated that point at the restored location of each package. -->
     <PackageReference GeneratePathProperty="true" />
