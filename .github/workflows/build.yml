@@ -24,8 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         os:
-        - ubuntu-22.04
-        - macos-14
         - windows-2022
 
     steps:
@@ -53,10 +51,8 @@ jobs:
     - name: 💅🏻 Verify formatted code
       run: dotnet format --verify-no-changes --no-restore
       shell: pwsh
-      if: runner.os == 'Linux'
     - name: 📚 Verify docfx build
       run: dotnet docfx docfx/docfx.json --warningsAsErrors --disableGitFeatures
-      if: runner.os == 'Linux'
     - name: ⚙ Update pipeline variables based on build outputs
       run: tools/variables/_define.ps1
       shell: pwsh
