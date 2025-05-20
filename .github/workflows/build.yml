@@ -49,7 +49,7 @@ jobs:
       run: tools/dotnet-test-cloud.ps1 -Configuration ${{ env.BUILDCONFIGURATION }} -Agent ${{ runner.os }}
       shell: pwsh
     - name: 💅🏻 Verify formatted code
-      run: dotnet format --verify-no-changes --no-restore
+      run: dotnet format ExampleFramework-CI.slnf --verify-no-changes --no-restore
       shell: pwsh
     - name: 📚 Verify docfx build
       run: dotnet docfx docfx/docfx.json --warningsAsErrors --disableGitFeatures
