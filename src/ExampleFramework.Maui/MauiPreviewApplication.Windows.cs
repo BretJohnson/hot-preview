@@ -1,8 +1,8 @@
-﻿using Windows.System;
-using Windows.UI.Core;
-using Microsoft.UI.Input;
+﻿using System;
 using Microsoft.Maui;
-using System;
+using Microsoft.UI.Input;
+using Windows.System;
+using Windows.UI.Core;
 
 namespace ExampleFramework.Maui;
 

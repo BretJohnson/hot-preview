@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
 using ExampleFramework;
 using ExampleFramework.App;
 using ExampleFramework.Maui;
 using ExampleFramework.Maui.Pages;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: ExampleApplicationClass(typeof(MauiExampleApplication))]
