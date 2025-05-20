@@ -19,15 +19,7 @@ steps:
     }
   displayName: ⚙ Install prerequisites
 
-# Install Java SDK explicitly since we still build for .NET7; see https://stackoverflow.com/questions/77519046/maui-xamarin-build-failing-with-microsoft-android-sdk-tooling-targets20-5/77519051#77519051
-- task: JavaToolInstaller@0
-  displayName: 'Use Java 17'
-  inputs:
-    versionSpec: 17
-    jdkArchitectureOption: x64
-    jdkSourceOption: PreInstalled
-
-- powershell: azure-pipelines/variables/_pipelines.ps1
+- powershell: tools/variables/_define.ps1
   failOnStderr: true
   displayName: ⚙ Set pipeline variables based on source
   name: SetPipelineVariables
