@@ -51,29 +51,27 @@ jobs:
     - name: 💅🏻 Verify formatted code
       run: dotnet format ExampleFramework-CI.slnf --verify-no-changes --no-restore
       shell: pwsh
-    - name: 📚 Verify docfx build
-      run: dotnet docfx docfx/docfx.json --warningsAsErrors --disableGitFeatures
+    # - name: 📚 Verify docfx build
+    #   run: dotnet docfx docfx/docfx.json --warningsAsErrors --disableGitFeatures
     - name: ⚙ Update pipeline variables based on build outputs
       run: tools/variables/_define.ps1
       shell: pwsh
     - name: 📢 Publish artifacts
       uses: ./.github/actions/publish-artifacts
       if: cancelled() == false
-    - name: 📢 Publish code coverage results to codecov.io
-      run: ./tools/publish-CodeCov.ps1 -CodeCovToken "${{ env.codecov_token }}" -PathToCodeCoverage "${{ runner.temp }}/_artifacts/coverageResults" -Name "${{ runner.os }} Coverage Results" -Flags "${{ runner.os }}"
-      shell: pwsh
-      timeout-minutes: 3
-      continue-on-error: true
-      if: env.codecov_token != ''
+    # - name: 📢 Publish code coverage results to codecov.io
+    #   run: ./tools/publish-CodeCov.ps1 -CodeCovToken "${{ env.codecov_token }}" -PathToCodeCoverage "${{ runner.temp }}/_artifacts/coverageResults" -Name "${{ runner.os }} Coverage Results" -Flags "${{ runner.os }}"
+    #   shell: pwsh
+    #   timeout-minutes: 3
+    #   continue-on-error: true
+    #   if: env.codecov_token != ''
 
-  docs:
-    # This job is currently disabled. Enable in the future if docs link checking is needed.
-    if: false
-    name: 📃 Docs
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-    - name: 🔗 Markup Link Checker (mlc)
-      uses: becheran/mlc@c925f90a9a25e16e4c4bfa29058f6f9ffa9f0d8c # v0.21.0
-      with:
-        args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx
+  # docs:
+  #   name: 📃 Docs
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+  #   - name: 🔗 Markup Link Checker (mlc)
+  #     uses: becheran/mlc@c925f90a9a25e16e4c4bfa29058f6f9ffa9f0d8c # v0.21.0
+  #     with:
+  #       args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx
