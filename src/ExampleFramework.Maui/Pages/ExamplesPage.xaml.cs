@@ -1,13 +1,13 @@
-using Microsoft.Maui.Controls;
 using ExampleFramework.Maui.ViewModels;
+using Microsoft.Maui.Controls;
 
 namespace ExampleFramework.Maui.Pages;
 
 public partial class ExamplesPage : ContentPage
 {
-	public ExamplesPage()
-	{
-		InitializeComponent();
+    public ExamplesPage()
+    {
+        InitializeComponent();
         BindingContext = ExamplesViewModel.Instance;
     }
 

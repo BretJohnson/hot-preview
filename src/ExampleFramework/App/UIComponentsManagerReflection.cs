@@ -15,7 +15,7 @@ public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponent
     /// UI component / examples can be defined explicitly, using the [Example] attribute, or
     /// implicitly auto-generated, when there's for a default constructor or a constructor that can
     /// be resolved via Dependency Injection.
-    /// <param name="serviceProvider">An optional <see cref="IServiceProvider"/> instance for dependency injection.</param>
+    /// <paramref name="serviceProvider">An optional <see cref="IServiceProvider"/> instance for dependency injection.</paramref>
     public UIComponentsManagerReflection(IServiceProvider? serviceProvider, IEnumerable<string> additionalAppAssemblies,
         IUIComponentExclusionFilter? exclusionFilter)
     {

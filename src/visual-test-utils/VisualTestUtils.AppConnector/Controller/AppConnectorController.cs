@@ -1,5 +1,5 @@
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using StreamJsonRpc;
 
@@ -38,7 +38,7 @@ public class AppConnectorController : IDisposable
     /// <param name="timeout">The maximum time to wait for a client connection.</param>
     /// <param name="token">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A task representing the asynchronous operation that, when completed, contains a TcpClient instance representing the accepted client connection.</returns>
-    public Task WaitForConnectionAsync(TimeSpan timeout, CancellationToken token = default(CancellationToken))
+    public Task WaitForConnectionAsync(TimeSpan timeout, CancellationToken token = default)
     {
         //this.Port = ((IPEndPoint)listener.LocalEndpoint).Port;
         //this.IP = ((IPEndPoint)listener.LocalEndpoint).Address.ToString();
@@ -122,7 +122,7 @@ public class AppConnectorController : IDisposable
         }
     }
 
-    public bool IsConnected => _rpc != null;
+    public bool IsConnected => _rpc is not null;
 
     /// <summary>
     /// Closes the TCP network stream.

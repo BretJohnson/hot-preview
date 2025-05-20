@@ -173,12 +173,6 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
-# SA1130: Use lambda syntax
-dotnet_diagnostic.SA1130.severity = silent
-
-# IDE1006: Naming Styles - StyleCop handles these for us
-dotnet_diagnostic.IDE1006.severity = none
-
 dotnet_diagnostic.DOC100.severity = silent
 dotnet_diagnostic.DOC104.severity = warning
 dotnet_diagnostic.DOC105.severity = warning
@@ -188,29 +182,16 @@ dotnet_diagnostic.DOC108.severity = warning
 dotnet_diagnostic.DOC200.severity = warning
 dotnet_diagnostic.DOC202.severity = warning
 
+# CA2016: Forward the CancellationToken parameter
+dotnet_diagnostic.CA2016.severity = warning
+
+dotnet_diagnostic.IDE0055.severity = warning
+
 [*.sln]
 indent_style = tab
 
 # Disable doc warnings for now
 [*.cs]
 
-# SA1600: Elements should be documented
-dotnet_diagnostic.SA1600.severity = silent
-
-# SA1601: Partial elements should be documented
-dotnet_diagnostic.SA1601.severity = silent
-
-# SA1602: Enumeration items should be documented
-dotnet_diagnostic.SA1602.severity = silent
-
-# SA1615: Element return value should be documented
-dotnet_diagnostic.SA1615.severity = silent
-
 # CS1591: Missing XML comment for publicly visible type or member
 dotnet_diagnostic.CS1591.severity = silent
-
-# SA1130: The file header is missing or not located at the top of the file.
-dotnet_diagnostic.SA1633.severity = silent
-
-# SA1117: The parameters should all be placed on the same line or each parameter should be placed on its own line
-dotnet_diagnostic.SA1117.severity = silent

@@ -1,7 +1,7 @@
 using System.Windows.Input;
-using Microsoft.Maui.Controls;
 using ExampleFramework.App;
 using ExampleFramework.Maui.Utilities;
+using Microsoft.Maui.Controls;
 
 namespace ExampleFramework.Maui.ViewModels;
 

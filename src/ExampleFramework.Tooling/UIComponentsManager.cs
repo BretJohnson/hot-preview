@@ -12,9 +12,9 @@ namespace ExampleFramework.Tooling;
 public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 {
     /// <summary>
-    /// Instantiate a UIComponentsManager instance, processing metadata from the provided compilation and its references
-    /// to gather UI component information. If/when the compilation changes, create a new instance of this class
-    /// to read the new compilation.
+    /// Initializes a new instance of the <see cref="UIComponentsManager"/> class, processing metadata from the
+    /// provided compilation and its references to gather UI component information. If/when the compilation
+    /// changes, create a new instance of this class to read the new compilation.
     /// </summary>
     /// <param name="compilation">Roslyn compilation</param>
     /// <param name="includeApparentUIComponentsWithNoExamples">Determines whether to include types that COULD be UIComponents,

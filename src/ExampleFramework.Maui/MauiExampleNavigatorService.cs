@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ExampleFramework.App;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using ExampleFramework.App;
 
 namespace ExampleFramework.Maui;
 

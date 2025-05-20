@@ -1,5 +1,5 @@
-using Microsoft.Maui.Controls;
 using ExampleFramework.Maui.ViewModels;
+using Microsoft.Maui.Controls;
 
 namespace ExampleFramework.Maui.Pages;
 

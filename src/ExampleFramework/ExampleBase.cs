@@ -1,6 +1,6 @@
 ﻿namespace ExampleFramework;
 
-public abstract class ExampleBase 
+public abstract class ExampleBase
 {
     private readonly string? _displayName;
 

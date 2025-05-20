@@ -65,7 +65,7 @@ namespace VisualTestUtils
 
                 string copyCommand = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "copy" : "cp";
 
-                if (! _isCI)
+                if (!_isCI)
                 {
                     this.Fail(
                         $"Baseline snapshot not yet created: {baselineImagePath}\n" +
@@ -106,7 +106,7 @@ namespace VisualTestUtils
                 testContext?.AddTestAttachment(diffDirectoryImagePath);
                 testContext?.AddTestAttachment(diffDirectoryDiffImagePath);
 
-                if (! _isCI)
+                if (!_isCI)
                 {
                     this.Fail(
                         $"Snapshot different than baseline: {imageFileName} ({imageDifference.Description})\n" +
