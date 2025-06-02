@@ -187,9 +187,6 @@ dotnet_diagnostic.CA2016.severity = warning
 
 dotnet_diagnostic.IDE0055.severity = warning
 
-# CA2016: Forward the CancellationToken parameter
-dotnet_diagnostic.CA2016.severity = warning
-
 [*.sln]
 indent_style = tab
 
