@@ -59,19 +59,13 @@ jobs:
     - name: 📢 Publish artifacts
       uses: ./.github/actions/publish-artifacts
       if: cancelled() == false
-    # - name: 📢 Publish code coverage results to codecov.io
-    #   run: ./tools/publish-CodeCov.ps1 -CodeCovToken "${{ env.codecov_token }}" -PathToCodeCoverage "${{ runner.temp }}/_artifacts/coverageResults" -Name "${{ runner.os }} Coverage Results" -Flags "${{ runner.os }}"
-    #   shell: pwsh
-    #   timeout-minutes: 3
-    #   continue-on-error: true
-    #   if: env.codecov_token != ''
-
-  # docs:
-  #   name: 📃 Docs
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-  #   - name: 🔗 Markup Link Checker (mlc)
-  #     uses: becheran/mlc@c925f90a9a25e16e4c4bfa29058f6f9ffa9f0d8c # v0.21.0
-  #     with:
-  #       args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx
+  docs:
+    name: 📃 Docs
+    if: false   # Disable docs for now
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - name: 🔗 Markup Link Checker (mlc)
+      uses: becheran/mlc@88c9db09b8dabab813a2edd13f955b36aa73657a # v0.22.0
+      with:
+        args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx
