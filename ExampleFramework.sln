@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.ImageHash",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.MagickNet", "src\visual-test-utils\VisualTestUtils.MagickNet\VisualTestUtils.MagickNet.csproj", "{21CE0B2C-F8A4-4952-A305-F88403ACBF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Maui", "src\ExampleFramework.Maui\ExampleFramework.Maui.csproj", "{70FC4263-9C01-46E6-B884-CF39E170A9EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Maui", "src\platforms\ExampleFramework.Maui\ExampleFramework.Maui.csproj", "{70FC4263-9C01-46E6-B884-CF39E170A9EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Tooling", "src\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
 EndProject
@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTemplateWithContent"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceMAUI", "samples\maui\EcommerceMAUI\EcommerceMAUI.csproj", "{E62416C2-7DFE-DFAC-8E0C-34860B1ED88F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Wpf", "src\ExampleFramework.Wpf\ExampleFramework.Wpf.csproj", "{D557CE7D-B7FA-4CBA-96A3-55B5634EAB94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Wpf", "src\platforms\ExampleFramework.Wpf\ExampleFramework.Wpf.csproj", "{D557CE7D-B7FA-4CBA-96A3-55B5634EAB94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -80,7 +80,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\ExampleFramework.Maui\ExampleFramework.Maui.csproj" />
+	  <ProjectReference Include="..\..\..\src\platforms\ExampleFramework.Maui\ExampleFramework.Maui.csproj" />
 	  <ProjectReference Include="..\..\..\src\ExampleFramework\ExampleFramework.csproj" />
 	</ItemGroup>
 
