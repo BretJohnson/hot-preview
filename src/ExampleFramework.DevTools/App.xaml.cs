@@ -81,8 +81,7 @@ public partial class App : Application
     {
         views.Register(
             new ViewMap(ViewModel: typeof(ShellViewModel)),
-            new ViewMap<MainPage, MainViewModel>(),
-            new DataViewMap<SecondPage, SecondViewModel, Entity>()
+            new ViewMap<MainPage, MainViewModel>()
         );
 
         routes.Register(
@@ -90,7 +89,6 @@ public partial class App : Application
                 Nested:
                 [
                     new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault:true),
-                    new ("Second", View: views.FindByViewModel<SecondViewModel>()),
                 ]
             )
         );
