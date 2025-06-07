@@ -1,5 +1,8 @@
-namespace ExampleFramework.DevTools.Presentation;
+using Microsoft.UI.Xaml.Data;
 
+namespace ExampleFramework.DevTools.ViewModels;
+
+[Bindable]
 public class ShellViewModel
 {
     private readonly INavigator _navigator;

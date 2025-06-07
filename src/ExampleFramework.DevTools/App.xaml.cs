@@ -1,3 +1,4 @@
+using ExampleFramework.DevTools.ViewModels;
 using Uno.Resizetizer;
 
 namespace ExampleFramework.DevTools;
@@ -75,20 +76,23 @@ public partial class App : Application
         MainWindow.SetWindowIcon();
 
         Host = await builder.NavigateAsync<Shell>();
+
+        // Initialize DevToolsManager with the application service provider
+        DevToolsManager.Instance.Initialize(Host.Services);
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
     {
         views.Register(
             new ViewMap(ViewModel: typeof(ShellViewModel)),
-            new ViewMap<MainPage, MainViewModel>()
+            new ViewMap<MainPage, MainPageViewModel>()
         );
 
         routes.Register(
             new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
                 Nested:
                 [
-                    new ("Main", View: views.FindByViewModel<MainViewModel>(), IsDefault:true),
+                    new ("Main", View: views.FindByViewModel<MainPageViewModel>(), IsDefault:true),
                 ]
             )
         );
