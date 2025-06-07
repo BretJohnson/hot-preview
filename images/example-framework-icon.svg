@@ -1,0 +1,26 @@
+<!-- filepath: q:/src/example-framework/icon.svg -->
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pastelGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB3BA" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFDFBA" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="pastelGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BAE1FF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#BFFCC6" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="pastelGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFBA" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#E0BBE4" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rectangle 1 -->
+  <rect x="20" y="15" width="75" height="65" fill="url(#pastelGrad1)" rx="10"/>
+
+  <!-- Rectangle 2 -->
+  <rect x="35" y="40" width="70" height="60" fill="url(#pastelGrad2)" rx="10"/>
+
+  <!-- Rectangle 3 -->
+  <rect x="10" y="50" width="80" height="55" fill="url(#pastelGrad3)" rx="10"/>
+</svg>
