@@ -1,3 +1,5 @@
+using ExampleFramework.Tooling;
+
 namespace ExampleFramework.DevTools;
 
 /// <summary>
@@ -8,11 +10,17 @@ public class DevToolsManager
     private static readonly Lazy<DevToolsManager> _instance = new(() => new DevToolsManager());
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
+    private readonly UIComponentsManager _uiComponentsManager;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
     /// </summary>
     public static DevToolsManager Instance => _instance.Value;
+
+    /// <summary>
+    /// Gets the UIComponentsManager instance.
+    /// </summary>
+    public UIComponentsManager UIComponentsManager => _uiComponentsManager;
 
     /// <summary>
     /// Private constructor to enforce singleton pattern.
@@ -22,6 +30,11 @@ public class DevToolsManager
         // Create a default logger if not provided through Initialize
         _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
         _logger.LogInformation("DevToolsManager instance created");
+
+        // Initialize UIComponentsManager with a hardcoded csproj path
+        // Update the path as needed for your environment
+        var csprojPath = @"Q:\\src\\example-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
+        _uiComponentsManager = UIComponentsManager.CreateFromProjectAsync(csprojPath).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -34,7 +47,7 @@ public class DevToolsManager
     /// <summary>
     /// Gets the service provider for dependency resolution.
     /// </summary>
-    public IServiceProvider ServiceProvider => _serviceProvider ?? 
+    public IServiceProvider ServiceProvider => _serviceProvider ??
         throw new InvalidOperationException("DevToolsManager has not been initialized. Call Initialize before using.");
 
     /// <summary>
