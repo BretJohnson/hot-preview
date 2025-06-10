@@ -1,5 +1,6 @@
 using ExampleFramework.DevTools.ViewModels;
 using ExampleFramework.DevTools.ViewModels.NavTree;
+using ExampleFramework.Tooling;
 using Microsoft.UI.Xaml.Data;
 
 namespace ExampleFramework.DevTools.Presentation;
@@ -40,32 +41,43 @@ public partial class MainPageViewModel : ObservableObject
     {
         NavTreeItems.Clear();
 
+        foreach (UIComponent uiComponent in DevToolsManager.Instance.UIComponentsManager.UIComponents)
+        {
+            NavTreeItems.Add(new UIComponentViewModel(uiComponent));
+        }
+    }
+
+#if LATER
+    private void InitializeNavTreeItemsWithSampleData()
+    {
+        NavTreeItems.Clear();
+
         // Introduction item
-        NavTreeItems.Add(new UIComponentItemViewModel("Introduction", "📄"));
+        NavTreeItems.Add(new UIComponentViewModel("Introduction", "📄"));
 
         // APPLICATION section
         var applicationSection = new SectionItemViewModel("APPLICATION", "");
         applicationSection.IsExpanded = true;
 
         // ProductCard
-        applicationSection.Children.Add(new UIComponentItemViewModel("ProductCard", "🧩"));
+        applicationSection.Children.Add(new UIComponentViewModel("ProductCard", "🧩"));
 
         // Documentation with sub-items
-        var documentationItem = new UIComponentItemViewModel("Documentation", "📋", new ObservableCollection<NavTreeItemViewModel>
+        var documentationItem = new UIComponentViewModel("Documentation", "📋", new ObservableCollection<NavTreeItemViewModel>
         {
-            new ExampleItemViewModel("Default", "📄"),
-            new ExampleItemViewModel("Expanded", "📄"),
-            new ExampleItemViewModel("Added to cart", "📄")
+            new ExampleViewModel("Default", "📄"),
+            new ExampleViewModel("Expanded", "📄"),
+            new ExampleViewModel("Added to cart", "📄")
         });
         documentationItem.IsExpanded = true;
         documentationItem.IsSelected = true; // This matches the blue highlight in screenshot
         applicationSection.Children.Add(documentationItem);
 
         // Other application items
-        applicationSection.Children.Add(new UIComponentItemViewModel("Dashboard", "🧩"));
-        applicationSection.Children.Add(new UIComponentItemViewModel("Homepage", "🧩"));
-        applicationSection.Children.Add(new UIComponentItemViewModel("User Profile", "🧩"));
-        applicationSection.Children.Add(new UIComponentItemViewModel("Sign In", "🧩"));
+        applicationSection.Children.Add(new UIComponentViewModel("Dashboard", "🧩"));
+        applicationSection.Children.Add(new UIComponentViewModel("Homepage", "🧩"));
+        applicationSection.Children.Add(new UIComponentViewModel("User Profile", "🧩"));
+        applicationSection.Children.Add(new UIComponentViewModel("Sign In", "🧩"));
 
         NavTreeItems.Add(applicationSection);
 
@@ -73,16 +85,17 @@ public partial class MainPageViewModel : ObservableObject
         var designSystemSection = new SectionItemViewModel("DESIGN SYSTEM", "");
         designSystemSection.IsExpanded = true;
 
-        designSystemSection.Children.Add(new UIComponentItemViewModel("ActivityList", "📁"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Form", "☐"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Avatar", "🧩"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Button", "🧩"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Footer", "🧩"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Header", "🧩"));
-        designSystemSection.Children.Add(new UIComponentItemViewModel("Pagination", "🧩"));
+        designSystemSection.Children.Add(new UIComponentViewModel("ActivityList", "📁"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Form", "☐"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Avatar", "🧩"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Button", "🧩"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Footer", "🧩"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Header", "🧩"));
+        designSystemSection.Children.Add(new UIComponentViewModel("Pagination", "🧩"));
 
         NavTreeItems.Add(designSystemSection);
     }
+#endif
 
     private void Play()
     {

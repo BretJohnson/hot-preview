@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
+﻿using System.Collections.Immutable;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.Build.Locator;
 
 namespace ExampleFramework.Tooling;
 
@@ -20,26 +19,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
     /// <param name="includeApparentUIComponentsWithNoExamples">Determines whether to include types that COULD be UIComponents,
     /// because they derive from a UI component class, but don't actually define any examples nor can a example be constructed
     /// automatically. Can be set by tooling that flags these for the user, to direct them to add a example.</param>
-    /// <param name="requireExampleFrameworkAssemblyPresent">If true, only process the compilation if the ExampleFramework assembly
-    /// is present in the app references, leaving the components empty otherwise. Used currently by VS to check if an app
-    /// has opt-ed in examples tooling.</param>
-    public UIComponentsManager(Compilation compilation, bool requireExampleFrameworkAssemblyPresent = false,
-        bool includeApparentUIComponentsWithNoExamples = false)
+    public UIComponentsManager(Compilation compilation, bool includeApparentUIComponentsWithNoExamples = false)
     {
         IEnumerable<MetadataReference> references = compilation.References;
-
-        if (requireExampleFrameworkAssemblyPresent)
-        {
-            ReferencesExampleFrameworkAssembly = references.Any(reference =>
-                (reference is PortableExecutableReference peReference && peReference.FilePath?.EndsWith("ExampleFramework.dll", StringComparison.OrdinalIgnoreCase) == true) ||
-                (reference is CompilationReference compilationReference && compilationReference.Compilation.AssemblyName?.Equals("ExampleFramework", StringComparison.OrdinalIgnoreCase) == true)
-                );
-
-            if (!ReferencesExampleFrameworkAssembly)
-            {
-                return;
-            }
-        }
 
         // Add the metadata based on assembly attributes -- platform UI component base types and (later) component categories
         foreach (MetadataReference reference in references)
@@ -73,6 +55,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
                 component.SetCategoryFailIfAlreadySet(category);
             }
         }
+        */
 #endif
 
         foreach (SyntaxTree syntaxTree in compilation.SyntaxTrees)
@@ -87,12 +70,236 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
     }
 
     /// <summary>
-    /// IF requireExampleFrameworkAssemblyPresent was set to true in the constructor, then this
-    /// property indicates if the ExampleFramework assembly was indeed found. If
-    /// requireExampleFrameworkAssemblyPresent was set to false in the constructor, then this
-    /// then this is always false (as we didn't if the assembly was there or not).
+    /// Creates a UIComponentsManager from a solution file (.sln) by loading all projects in the solution
+    /// and analyzing them for UI components and examples.
     /// </summary>
-    public bool ReferencesExampleFrameworkAssembly { get; }
+    /// <param name="solutionPath">Path to the solution file (.sln)</param>
+    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <returns>A UIComponentsManager instance with components from all projects in the solution</returns>
+    /// <exception cref="ArgumentException">Thrown when the solution path is invalid</exception>
+    /// <exception cref="FileNotFoundException">Thrown when the solution file is not found</exception>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or solution cannot be loaded</exception>
+    public static async Task<UIComponentsManager> CreateFromSolutionAsync(string solutionPath,
+        bool includeApparentUIComponentsWithNoExamples = false)
+    {
+        if (string.IsNullOrWhiteSpace(solutionPath))
+            throw new ArgumentException("Solution path cannot be null or empty", nameof(solutionPath));
+
+        if (!File.Exists(solutionPath))
+            throw new FileNotFoundException($"Solution file not found: {solutionPath}");
+
+        EnsureMSBuildLocated();
+
+        using MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+
+        try
+        {
+            var solution = await workspace.OpenSolutionAsync(solutionPath);
+
+            // Combine all compilations from all projects in the solution
+            var allCompilations = new List<Compilation>();
+
+            foreach (var project in solution.Projects)
+            {
+                var compilation = await project.GetCompilationAsync();
+                if (compilation != null)
+                {
+                    allCompilations.Add(compilation);
+                }
+            }
+
+            // Create a combined manager by processing each compilation
+            var manager = new UIComponentsManager(allCompilations.FirstOrDefault() ?? throw new InvalidOperationException("No valid compilations found in solution"),
+                includeApparentUIComponentsWithNoExamples);
+
+            // Process additional compilations and merge their components
+            foreach (Compilation? compilation in allCompilations.Skip(1))
+            {
+                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+
+                // Merge components from temp manager into main manager
+                foreach (var component in tempManager.UIComponents)
+                {
+                    var existingComponent = manager.GetUIComponent(component.Name);
+                    if (existingComponent == null)
+                    {
+                        manager.AddUIComponent(component);
+                    }
+                    else
+                    {
+                        // Merge examples from the temp component into existing component
+                        foreach (var example in component.Examples)
+                        {
+                            existingComponent.AddExample(example);
+                        }
+                    }
+                }
+            }
+
+            return manager;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load solution '{solutionPath}': {ex.Message}", ex);
+        }
+    }
+
+    /// <summary>
+    /// Creates a UIComponentsManager from a single project file (.csproj) by loading and analyzing the project.
+    /// </summary>
+    /// <param name="projectPath">Path to the project file (.csproj)</param>
+    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <returns>A UIComponentsManager instance with components from the project</returns>
+    /// <exception cref="ArgumentException">Thrown when the project path is invalid</exception>
+    /// <exception cref="FileNotFoundException">Thrown when the project file is not found</exception>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or project cannot be loaded</exception>
+    public static async Task<UIComponentsManager> CreateFromProjectAsync(string projectPath,
+        bool includeApparentUIComponentsWithNoExamples = false)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+            throw new ArgumentException("Project path cannot be null or empty", nameof(projectPath));
+
+        if (!File.Exists(projectPath))
+            throw new FileNotFoundException($"Project file not found: {projectPath}");
+
+        EnsureMSBuildLocated();
+
+        using var workspace = MSBuildWorkspace.Create();
+
+        try
+        {
+            Project project = await workspace.OpenProjectAsync(projectPath);
+            Compilation compilation = await project.GetCompilationAsync() ??
+                throw new InvalidOperationException($"Failed to get compilation for project: {projectPath}");
+
+            return new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load project '{projectPath}': {ex.Message}", ex);
+        }
+    }
+
+    /// <summary>
+    /// Creates a UIComponentsManager from multiple project files (.csproj) by loading and analyzing all projects.
+    /// </summary>
+    /// <param name="projectPaths">Array of paths to project files (.csproj)</param>
+    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <returns>A UIComponentsManager instance with components from all projects</returns>
+    /// <exception cref="ArgumentException">Thrown when project paths array is null or empty</exception>
+    /// <exception cref="FileNotFoundException">Thrown when any project file is not found</exception>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or projects cannot be loaded</exception>
+    public static async Task<UIComponentsManager> CreateFromProjectsAsync(string[] projectPaths,
+        bool includeApparentUIComponentsWithNoExamples = false)
+    {
+        if (projectPaths == null || projectPaths.Length == 0)
+            throw new ArgumentException("Project paths array cannot be null or empty", nameof(projectPaths));
+
+        // Validate all project files exist
+        foreach (var projectPath in projectPaths)
+        {
+            if (string.IsNullOrWhiteSpace(projectPath))
+                throw new ArgumentException("Project path cannot be null or empty", nameof(projectPaths));
+
+            if (!File.Exists(projectPath))
+                throw new FileNotFoundException($"Project file not found: {projectPath}");
+        }
+
+        EnsureMSBuildLocated();
+
+        using var workspace = MSBuildWorkspace.Create();
+
+        try
+        {
+            var allCompilations = new List<Compilation>();
+
+            // Load all projects and get their compilations
+            foreach (var projectPath in projectPaths)
+            {
+                var project = await workspace.OpenProjectAsync(projectPath);
+                var compilation = await project.GetCompilationAsync();
+                if (compilation != null)
+                {
+                    allCompilations.Add(compilation);
+                }
+            }
+
+            if (allCompilations.Count == 0)
+                throw new InvalidOperationException("No valid compilations found in any of the provided projects");
+
+            // Create a combined manager by processing each compilation
+            var manager = new UIComponentsManager(allCompilations.First(),
+                includeApparentUIComponentsWithNoExamples);
+
+            // Process additional compilations and merge their components
+            foreach (var compilation in allCompilations.Skip(1))
+            {
+                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+
+                // Merge components from temp manager into main manager
+                foreach (var component in tempManager.UIComponents)
+                {
+                    var existingComponent = manager.GetUIComponent(component.Name);
+                    if (existingComponent == null)
+                    {
+                        manager.AddUIComponent(component);
+                    }
+                    else
+                    {
+                        // Merge examples from the temp component into existing component
+                        foreach (var example in component.Examples)
+                        {
+                            existingComponent.AddExample(example);
+                        }
+                    }
+                }
+            }
+
+            return manager;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load projects: {ex.Message}", ex);
+        }
+    }
+
+    /// <summary>
+    /// Ensures that MSBuild can be located for use with Roslyn workspaces.
+    /// This method attempts to locate MSBuild and throws an exception if it cannot be found.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located</exception>
+    public static void EnsureMSBuildLocated()
+    {
+        try
+        {
+            // Check if MSBuild is already registered
+            if (!MSBuildLocator.IsRegistered)
+            {
+                // Try to register the default MSBuild instance
+                var instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
+                if (instances.Length > 0)
+                {
+                    // Use the first available instance (usually the latest)
+                    MSBuildLocator.RegisterInstance(instances.First());
+                }
+                else
+                {
+                    // Try to register the default .NET SDK MSBuild
+                    MSBuildLocator.RegisterDefaults();
+                }
+            }
+
+            // Try to create a workspace to verify MSBuild is available
+            using var testWorkspace = MSBuildWorkspace.Create();
+            // If we get here, MSBuild is available
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException(
+                "MSBuild could not be located. Please ensure that either Visual Studio or the .NET SDK is installed. " +
+                "For .NET SDK, make sure the Microsoft.Build.Locator package is properly configured if needed.", ex);
+        }
+    }
 
     public void AddFromAssemblyAttributes(IAssemblySymbol assemblySymbol)
     {
@@ -164,10 +371,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 
         private void CheckForExampleMethod(MethodDeclarationSyntax methodDeclaration)
         {
-            AttributeSyntax exampleAttribute = methodDeclaration.AttributeLists
+            AttributeSyntax? exampleAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "Example");
-
             if (exampleAttribute is null)
             {
                 return;
@@ -331,22 +537,20 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
         public static string GetFullClassName(ClassDeclarationSyntax classDeclaration)
         {
             // First, check for traditional namespace declaration
-            NamespaceDeclarationSyntax namespaceDeclaration = classDeclaration.Ancestors()
+            NamespaceDeclarationSyntax? namespaceDeclaration = classDeclaration.Ancestors()
                 .OfType<NamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-
-            if (namespaceDeclaration != null)
+            if (namespaceDeclaration is not null)
             {
                 return $"{namespaceDeclaration.Name}.{classDeclaration.Identifier.Text}";
             }
 
             // Check for file-scoped namespace
-            FileScopedNamespaceDeclarationSyntax fileScoped = classDeclaration.SyntaxTree.GetRoot()
+            FileScopedNamespaceDeclarationSyntax? fileScoped = classDeclaration.SyntaxTree.GetRoot()
                 .DescendantNodes()
                 .OfType<FileScopedNamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-
-            if (fileScoped != null)
+            if (fileScoped is not null)
             {
                 return $"{fileScoped.Name}.{classDeclaration.Identifier.Text}";
             }
