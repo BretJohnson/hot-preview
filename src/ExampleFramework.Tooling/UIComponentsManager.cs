@@ -19,8 +19,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
     /// <param name="includeApparentUIComponentsWithNoExamples">Determines whether to include types that COULD be UIComponents,
     /// because they derive from a UI component class, but don't actually define any examples nor can a example be constructed
     /// automatically. Can be set by tooling that flags these for the user, to direct them to add a example.</param>
-    public UIComponentsManager(Compilation compilation, 
-        bool includeApparentUIComponentsWithNoExamples = false)
+    public UIComponentsManager(Compilation compilation, bool includeApparentUIComponentsWithNoExamples = false)
     {
         IEnumerable<MetadataReference> references = compilation.References;
 
@@ -372,10 +371,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 
         private void CheckForExampleMethod(MethodDeclarationSyntax methodDeclaration)
         {
-            AttributeSyntax exampleAttribute = methodDeclaration.AttributeLists
+            AttributeSyntax? exampleAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "Example");
-
             if (exampleAttribute is null)
             {
                 return;
@@ -539,22 +537,20 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
         public static string GetFullClassName(ClassDeclarationSyntax classDeclaration)
         {
             // First, check for traditional namespace declaration
-            NamespaceDeclarationSyntax namespaceDeclaration = classDeclaration.Ancestors()
+            NamespaceDeclarationSyntax? namespaceDeclaration = classDeclaration.Ancestors()
                 .OfType<NamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-
-            if (namespaceDeclaration != null)
+            if (namespaceDeclaration is not null)
             {
                 return $"{namespaceDeclaration.Name}.{classDeclaration.Identifier.Text}";
             }
 
             // Check for file-scoped namespace
-            FileScopedNamespaceDeclarationSyntax fileScoped = classDeclaration.SyntaxTree.GetRoot()
+            FileScopedNamespaceDeclarationSyntax? fileScoped = classDeclaration.SyntaxTree.GetRoot()
                 .DescendantNodes()
                 .OfType<FileScopedNamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-
-            if (fileScoped != null)
+            if (fileScoped is not null)
             {
                 return $"{fileScoped.Name}.{classDeclaration.Identifier.Text}";
             }
