@@ -34,4 +34,8 @@
     </UnoFeatures>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj" />
+  </ItemGroup>
+
 </Project>
