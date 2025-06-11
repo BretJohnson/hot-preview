@@ -35,6 +35,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <UnoIcon Include="Assets\Icons\icon.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj" />
   </ItemGroup>
 
