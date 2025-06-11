@@ -1,13 +1,14 @@
-﻿using ExampleFramework.App;
+﻿using System.Threading.Tasks;
+using ExampleFramework.App;
 
-namespace ExampleFramework.Wpf;
+namespace ExampleFramework.App.Maui;
 
-public class WpfExampleAppService(WpfExampleApplication wpfExampleApplication) : ExampleAppService(wpfExampleApplication)
+public class MauiExampleAppService(MauiExampleApplication mauiExampleApplication) : ExampleAppService(mauiExampleApplication)
 {
     public override async Task NavigateToExampleAsync(string uiComponentName, string exampleName)
     {
         UIComponentExamplePairReflection uiComponentExamplePair = GetUIComponentExamplePair(uiComponentName, exampleName);
-        await WpfExampleApplication.Instance.ExampleNavigatorService.
+        await MauiExampleApplication.Instance.ExampleNavigatorService.
             NavigateToExampleAsync(uiComponentExamplePair.UIComponent, uiComponentExamplePair.Example).ConfigureAwait(false);
     }
 }

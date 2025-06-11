@@ -4,7 +4,7 @@ using ExampleFramework.App;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.Maui;
+namespace ExampleFramework.App.Maui;
 
 public class MauiExampleNavigatorService
 {

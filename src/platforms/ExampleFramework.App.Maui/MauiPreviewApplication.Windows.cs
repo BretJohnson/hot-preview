@@ -4,7 +4,7 @@ using Microsoft.UI.Input;
 using Windows.System;
 using Windows.UI.Core;
 
-namespace ExampleFramework.Maui;
+namespace ExampleFramework.App.Maui;
 
 public partial class MauiExampleApplication
 {

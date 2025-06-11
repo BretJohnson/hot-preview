@@ -1,8 +1,8 @@
 ﻿using System;
 using ExampleFramework;
 using ExampleFramework.App;
-using ExampleFramework.Maui;
-using ExampleFramework.Maui.Pages;
+using ExampleFramework.App.Maui;
+using ExampleFramework.App.Maui.Pages;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 
@@ -13,7 +13,7 @@ using Microsoft.Maui.Controls;
 [assembly: ControlUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
 
-namespace ExampleFramework.Maui;
+namespace ExampleFramework.App.Maui;
 
 public partial class MauiExampleApplication : ExampleApplication
 {

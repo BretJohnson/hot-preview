@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleFramework", "src\ExampleFramework\ExampleFramework.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App", "src\ExampleFramework.App\ExampleFramework.App.csproj", "{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D2D79087-63DE-48DA-A903-D915B1FAE013}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maui", "maui", "{2D3F8C1A-337A-4913-A321-5167F7B49CE0}"
@@ -27,9 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceMAUI", "samples\ma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Maui", "src\platforms\ExampleFramework.Maui\ExampleFramework.Maui.csproj", "{E9FB47D7-4B05-044E-FCC3-10E875D6932B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App.Maui", "src\platforms\ExampleFramework.App.Maui\ExampleFramework.App.Maui.csproj", "{E9FB47D7-4B05-044E-FCC3-10E875D6932B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Wpf", "src\platforms\ExampleFramework.Wpf\ExampleFramework.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App.Wpf", "src\platforms\ExampleFramework.App.Wpf\ExampleFramework.App.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.DevTools", "src\ExampleFramework.DevTools\ExampleFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
 EndProject
@@ -45,6 +48,10 @@ Global
 		{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70580142-F7FB-4266-8B0A-0E5174EDB812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70580142-F7FB-4266-8B0A-0E5174EDB812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70580142-F7FB-4266-8B0A-0E5174EDB812}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,6 +101,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D0041716-74DA-45E3-A0D3-B4CC5CAC766B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A1B2C3D4-E5F6-7890-1234-567890ABCDEF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{2D3F8C1A-337A-4913-A321-5167F7B49CE0} = {D2D79087-63DE-48DA-A903-D915B1FAE013}
 		{70580142-F7FB-4266-8B0A-0E5174EDB812} = {2BCEA886-59E5-4D28-AA05-3310CBB59C55}
 		{AF981B9B-883D-4343-A2FD-313343A3AE29} = {2BCEA886-59E5-4D28-AA05-3310CBB59C55}

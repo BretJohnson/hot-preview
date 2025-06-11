@@ -2,7 +2,7 @@
 using System.Reflection;
 using ExampleFramework.App;
 
-namespace ExampleFramework.Maui;
+namespace ExampleFramework.App.Maui;
 
 public class MauiUIComponentExclusionFilter : IUIComponentExclusionFilter
 {

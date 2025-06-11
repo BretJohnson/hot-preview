@@ -1,4 +1,4 @@
-namespace ExampleFramework.Maui.ViewModels;
+namespace ExampleFramework.App.Maui.ViewModels;
 
 public abstract class ExamplesItemViewModel
 {

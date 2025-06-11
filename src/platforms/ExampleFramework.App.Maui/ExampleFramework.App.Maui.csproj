@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExampleFramework\ExampleFramework.csproj" />
+    <ProjectReference Include="..\..\ExampleFramework.App\ExampleFramework.App.csproj" />
   </ItemGroup>
 
   <ItemGroup>
