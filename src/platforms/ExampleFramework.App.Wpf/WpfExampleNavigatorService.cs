@@ -1,6 +1,6 @@
 ﻿using ExampleFramework.App;
 
-namespace ExampleFramework.Wpf;
+namespace ExampleFramework.App.Wpf;
 
 public class WpfExampleNavigatorService
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using ExampleFramework.App;
 
-namespace ExampleFramework.Maui.ViewModels;
+namespace ExampleFramework.App.Maui.ViewModels;
 
 public class ExamplesViewModel // : INotifyPropertyChanged
 {

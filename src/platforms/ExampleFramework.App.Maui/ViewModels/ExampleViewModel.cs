@@ -2,7 +2,7 @@ using System.Windows.Input;
 using ExampleFramework.App;
 using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.Maui.ViewModels
+namespace ExampleFramework.App.Maui.ViewModels
 {
     public class ExampleViewModel : ExamplesItemViewModel
     {
