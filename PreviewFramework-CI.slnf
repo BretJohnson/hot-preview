@@ -1,10 +1,10 @@
 {
   "solution": {
-    "path": "ExampleFramework.sln",
+    "path": "PreviewFramework.sln",
     "projects": [
-      "src\\ExampleFramework\\ExampleFramework.csproj",
-      "src\\platforms\\ExampleFramework.App.Maui\\ExampleFramework.App.Maui.csproj",
-      "src\\ExampleFramework.Tooling\\ExampleFramework.Tooling.csproj",
+      "src\\PreviewFramework\\PreviewFramework.csproj",
+      "src\\platforms\\PreviewFramework.App.Maui\\PreviewFramework.App.Maui.csproj",
+      "src\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
       "src\\visual-test-utils\\VisualTestUtils.AppConnector\\VisualTestUtils.AppConnector.csproj",
       "src\\visual-test-utils\\VisualTestUtils.ImageHash\\VisualTestUtils.ImageHash.csproj",
       "src\\visual-test-utils\\VisualTestUtils.MagickNet\\VisualTestUtils.MagickNet.csproj",

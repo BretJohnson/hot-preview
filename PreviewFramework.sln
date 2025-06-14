@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleFramework", "src\ExampleFramework\ExampleFramework.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreviewFramework", "src\PreviewFramework\PreviewFramework.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App", "src\ExampleFramework.App\ExampleFramework.App.csproj", "{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App", "src\PreviewFramework.App\PreviewFramework.App.csproj", "{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D2D79087-63DE-48DA-A903-D915B1FAE013}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.ImageHash",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.MagickNet", "src\visual-test-utils\VisualTestUtils.MagickNet\VisualTestUtils.MagickNet.csproj", "{21CE0B2C-F8A4-4952-A305-F88403ACBF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.Tooling", "src\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.Tooling", "src\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTemplateWithContent", "samples\maui\DefaultTemplateWithContent\DefaultTemplateWithContent.csproj", "{CC0F1259-82DC-4437-AC2D-946A8B5F5746}"
 EndProject
@@ -29,12 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceMAUI", "samples\ma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App.Maui", "src\platforms\ExampleFramework.App.Maui\ExampleFramework.App.Maui.csproj", "{E9FB47D7-4B05-044E-FCC3-10E875D6932B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Maui", "src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj", "{E9FB47D7-4B05-044E-FCC3-10E875D6932B}"
 EndProject
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.App.Wpf", "src\platforms\ExampleFramework.App.Wpf\ExampleFramework.App.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Wpf", "src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleFramework.DevTools", "src\ExampleFramework.DevTools\ExampleFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.DevTools", "src\PreviewFramework.DevTools\PreviewFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{A65F07C8-822E-48F5-834D-3C4244AF339B}"
 EndProject
