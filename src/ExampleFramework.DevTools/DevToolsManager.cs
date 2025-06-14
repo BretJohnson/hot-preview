@@ -1,4 +1,5 @@
 using ExampleFramework.Tooling;
+using System.Diagnostics;
 
 namespace ExampleFramework.DevTools;
 
@@ -7,20 +8,26 @@ namespace ExampleFramework.DevTools;
 /// </summary>
 public class DevToolsManager
 {
-    private static readonly Lazy<DevToolsManager> _instance = new(() => new DevToolsManager());
+    private static readonly Lazy<DevToolsManager> s_instance = new(() => new DevToolsManager());
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
-    private readonly UIComponentsManager _uiComponentsManager;
+    private UIComponentsManager _uiComponentsManager;
+    private string? _projectPath;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
     /// </summary>
-    public static DevToolsManager Instance => _instance.Value;
+    public static DevToolsManager Instance => s_instance.Value;
 
     /// <summary>
     /// Gets the UIComponentsManager instance.
     /// </summary>
     public UIComponentsManager UIComponentsManager => _uiComponentsManager;
+
+    /// <summary>
+    /// Get the current project path, if there is one.
+    /// </summary>
+    public string? ProjectPath => _projectPath;
 
     /// <summary>
     /// Private constructor to enforce singleton pattern.
@@ -31,10 +38,9 @@ public class DevToolsManager
         _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
         _logger.LogInformation("DevToolsManager instance created");
 
-        // Initialize UIComponentsManager with a hardcoded csproj path
-        // Update the path as needed for your environment
-        var csprojPath = @"Q:\\src\\example-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
-        _uiComponentsManager = UIComponentsManager.CreateFromProjectAsync(csprojPath).GetAwaiter().GetResult();
+        _projectPath = @"Q:\\src\\example-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
+
+        _uiComponentsManager = UIComponentsManager.CreateFromProjectAsync(_projectPath).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -119,5 +125,79 @@ public class DevToolsManager
 
         service = ServiceProvider.GetService<T>();
         return service is not null;
+    }
+
+    /// <summary>
+    /// Runs the project by launching the csproj file.
+    /// </summary>
+    /// <returns>True if the process started successfully, false otherwise.</returns>
+    public bool Run()
+    {
+        try
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = $"run --project \"{_projectPath}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            var process = Process.Start(startInfo);
+            if (process == null)
+            {
+                _logger.LogError("Failed to start the process");
+                return false;
+            }
+
+            _logger.LogInformation("Project started successfully");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error running the project");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Updates the project path and reloads the UIComponentsManager.
+    /// </summary>
+    /// <param name="newProjectPath">The new project path to use.</param>
+    /// <returns>True if the project was loaded successfully, false otherwise.</returns>
+    public async Task<bool> UpdateProjectPathAsync(string newProjectPath)
+    {
+        if (string.IsNullOrWhiteSpace(newProjectPath))
+        {
+            _logger.LogError("Project path cannot be null or empty");
+            return false;
+        }
+
+        if (!File.Exists(newProjectPath))
+        {
+            _logger.LogError("Project file does not exist: {ProjectPath}", newProjectPath);
+            return false;
+        }
+
+        try
+        {
+            _logger.LogInformation("Updating project path to: {ProjectPath}", newProjectPath);
+
+            // Update the project path
+            _projectPath = newProjectPath;
+
+            // Reload the UIComponentsManager with the new project
+            _uiComponentsManager = await UIComponentsManager.CreateFromProjectAsync(_projectPath);
+
+            _logger.LogInformation("Project path updated successfully");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating project path to: {ProjectPath}", newProjectPath);
+            return false;
+        }
     }
 }

@@ -1,5 +1,7 @@
 using ExampleFramework.DevTools.ViewModels;
 using Uno.Resizetizer;
+using Windows.Foundation;
+using Windows.UI.ViewManagement;
 
 namespace ExampleFramework.DevTools;
 public partial class App : Application
@@ -18,56 +20,58 @@ public partial class App : Application
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        ApplicationView.PreferredLaunchViewSize = new Size(400, 800);
+
         var builder = this.CreateBuilder(args)
-            // Add navigation support for toolkit controls such as TabBar and NavigationView
-            .UseToolkitNavigation()
-            .Configure(host => host
+                // Add navigation support for toolkit controls such as TabBar and NavigationView
+                .UseToolkitNavigation()
+                .Configure(host => host
 #if DEBUG
-                // Switch to Development environment when running in DEBUG
-                .UseEnvironment(Environments.Development)
+                    // Switch to Development environment when running in DEBUG
+                    .UseEnvironment(Environments.Development)
 #endif
-                .UseLogging(configure: (context, logBuilder) =>
-                {
-                    // Configure log levels for different categories of logging
-                    logBuilder
-                        .SetMinimumLevel(
-                            context.HostingEnvironment.IsDevelopment() ?
-                                LogLevel.Information :
-                                LogLevel.Warning)
+                    .UseLogging(configure: (context, logBuilder) =>
+                    {
+                        // Configure log levels for different categories of logging
+                        logBuilder
+                            .SetMinimumLevel(
+                                context.HostingEnvironment.IsDevelopment() ?
+                                    LogLevel.Information :
+                                    LogLevel.Warning)
 
-                        // Default filters for core Uno Platform namespaces
-                        .CoreLogLevel(LogLevel.Warning);
+                            // Default filters for core Uno Platform namespaces
+                            .CoreLogLevel(LogLevel.Warning);
 
-                    // Uno Platform namespace filter groups
-                    // Uncomment individual methods to see more detailed logging
-                    //// Generic Xaml events
-                    //logBuilder.XamlLogLevel(LogLevel.Debug);
-                    //// Layout specific messages
-                    //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
-                    //// Storage messages
-                    //logBuilder.StorageLogLevel(LogLevel.Debug);
-                    //// Binding related messages
-                    //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
-                    //// Binder memory references tracking
-                    //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
-                    //// DevServer and HotReload related
-                    //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
-                    //// Debug JS interop
-                    //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
+                        // Uno Platform namespace filter groups
+                        // Uncomment individual methods to see more detailed logging
+                        //// Generic Xaml events
+                        //logBuilder.XamlLogLevel(LogLevel.Debug);
+                        //// Layout specific messages
+                        //logBuilder.XamlLayoutLogLevel(LogLevel.Debug);
+                        //// Storage messages
+                        //logBuilder.StorageLogLevel(LogLevel.Debug);
+                        //// Binding related messages
+                        //logBuilder.XamlBindingLogLevel(LogLevel.Debug);
+                        //// Binder memory references tracking
+                        //logBuilder.BinderMemoryReferenceLogLevel(LogLevel.Debug);
+                        //// DevServer and HotReload related
+                        //logBuilder.HotReloadCoreLogLevel(LogLevel.Information);
+                        //// Debug JS interop
+                        //logBuilder.WebAssemblyLogLevel(LogLevel.Debug);
 
-                }, enableUnoLogging: true)
-                .UseConfiguration(configure: configBuilder =>
-                    configBuilder
-                        .EmbeddedSource<App>()
-                        .Section<AppConfig>()
-                )
-                .ConfigureServices((context, services) =>
-                {
-                    // TODO: Register your services
-                    //services.AddSingleton<IMyService, MyService>();
-                })
-                .UseNavigation(RegisterRoutes)
-            );
+                    }, enableUnoLogging: true)
+                    .UseConfiguration(configure: configBuilder =>
+                        configBuilder
+                            .EmbeddedSource<App>()
+                            .Section<AppConfig>()
+                    )
+                    .ConfigureServices((context, services) =>
+                    {
+                        // TODO: Register your services
+                        //services.AddSingleton<IMyService, MyService>();
+                    })
+                    .UseNavigation(RegisterRoutes)
+                );
         MainWindow = builder.Window;
 
 #if DEBUG
