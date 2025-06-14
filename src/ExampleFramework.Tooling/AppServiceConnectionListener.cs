@@ -35,9 +35,6 @@ public class AppServiceConnectionListener : IDisposable
         ConnectionSettingsJson.WriteConnectionSettingsJson(port);
 
         Task.Run(() => ListenLoopAsync(cancellationToken), cancellationToken);
-
-
-        Task.Run(() => ListenLoopAsync(cancellationToken), cancellationToken);
     }
 
     internal void AddConnection(AppServiceServerConnection connection)
