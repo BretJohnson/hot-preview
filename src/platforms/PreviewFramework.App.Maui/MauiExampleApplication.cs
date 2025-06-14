@@ -44,7 +44,6 @@ public partial class MauiExampleApplication : ExampleApplication
 
         ExampleAppService = new MauiExampleAppService(this);
 
-        ApplicationName = AppInfo.Current.Name;
         PlatformName = DeviceInfo.Current.Platform.ToString();
 
 #if WINDOWS
@@ -66,8 +65,6 @@ public partial class MauiExampleApplication : ExampleApplication
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
     public override ExampleAppService GetExampleAppService() => ExampleAppService;
-
-    public override string ApplicationName { get; set; }
 
     public override string PlatformName { get; set; }
 

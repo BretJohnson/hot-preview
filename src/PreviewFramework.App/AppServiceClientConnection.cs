@@ -32,7 +32,7 @@ public class AppServiceClientConnection(string connectionString)
         _appControllerService = _rpc.Attach<IExampleAppControllerService>();
 
         ExampleApplication exampleApplication = ExampleApplication.GetInstance();
-        await _appControllerService.RegisterAppAsync(exampleApplication.ProjectPath, exampleApplication.ApplicationName,
+        await _appControllerService.RegisterAppAsync(exampleApplication.ProjectPath,
             exampleApplication.PlatformName).ConfigureAwait(false);
     }
 }

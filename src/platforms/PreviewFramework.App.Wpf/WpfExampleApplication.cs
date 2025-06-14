@@ -39,6 +39,8 @@ public class WpfExampleApplication : ExampleApplication
 
     public WpfExampleNavigatorService ExampleNavigatorService { get; set; } = new WpfExampleNavigatorService();
 
+    public override string PlatformName { get; set; } = "Windows";
+
     public static void EnsureInitialized()
     {
         _ = Instance;

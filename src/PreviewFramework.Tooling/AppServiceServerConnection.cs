@@ -11,7 +11,7 @@ public sealed class AppServiceServerConnection(AppServiceConnectionListener conn
     private JsonRpc? _rpc;
     private IExampleAppService? _appService;
 
-    public string? AppName { get; set; }
+    public string? ProjectPath { get; set; }
 
     public string? PlatformName { get; set; }
 
@@ -48,9 +48,9 @@ public sealed class AppServiceServerConnection(AppServiceConnectionListener conn
         }
     }
 
-    Task IExampleAppControllerService.RegisterAppAsync(string appName, string platformName)
+    Task IExampleAppControllerService.RegisterAppAsync(string projectPath, string platformName)
     {
-        AppName = appName;
+        ProjectPath = projectPath;
         PlatformName = platformName;
         return Task.CompletedTask;
     }

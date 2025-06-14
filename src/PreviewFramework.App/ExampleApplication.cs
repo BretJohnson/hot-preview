@@ -37,8 +37,6 @@ public abstract class ExampleApplication
 
     public string? ProjectPath { get; set; }
 
-    public abstract string ApplicationName { get; set; }
-
     public abstract string PlatformName { get; set; }
 
     /// <summary>
