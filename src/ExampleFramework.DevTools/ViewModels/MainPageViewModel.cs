@@ -99,7 +99,13 @@ public partial class MainPageViewModel : ObservableObject
 
     private void Play()
     {
-        // TODO: Implement play functionality
+        bool success = DevToolsManager.Instance.Run();
+
+        if (!success)
+        {
+            // TODO: Show error message to user (could use a notification service or dialog)
+            // For now, this will be logged by the DevToolsManager
+        }
     }
 
     private void Settings()

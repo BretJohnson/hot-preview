@@ -8,7 +8,6 @@
       NavigationCacheMode="Required">
 
   <Page.Resources>
-    <!-- Converters -->
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
   </Page.Resources>
 
@@ -79,7 +78,6 @@
 
     <!-- Search Bar -->
     <Border Grid.Row="1"
-            Background="White"
             BorderBrush="#E5E7EB"
             BorderThickness="0,0,0,1"
             Padding="16,12">
@@ -89,12 +87,15 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Column="0"
-                 Text="{Binding SearchText, Mode=TwoWay}"
-                 PlaceholderText="Find components"
-                 Background="Transparent"
-                 BorderThickness="0"
-                 FontSize="14"/>
+        <AutoSuggestBox x:Name="SearchBox"
+                      Grid.Column="0"
+                      Text="{Binding SearchText, Mode=TwoWay}"
+                      PlaceholderText="Find components"
+                      QueryIcon="Find"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      FontSize="14"
+                      Margin="0,0,8,0"/>
 
         <Button Grid.Column="1"
                 Background="Transparent"
