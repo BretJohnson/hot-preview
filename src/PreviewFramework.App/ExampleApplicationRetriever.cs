@@ -11,14 +11,14 @@ public static class ExampleApplicationRetriever
     /// 
     /// Here's the algorithm:
     ///   1. If the app wants to support in-app example (e.g. the in app menu) or otherwise customize the example
-    ///   experience, it must include the platform specified ExampleFramework assembly (e.g. ExampleFramework.Maui)
-    ///   in addition to the ExampleFramework assembly. The platform assembly is discovered here, searching for any
+    ///   experience, it must include the platform specified PreviewFramework assembly (e.g. PreviewFramework.Maui)
+    ///   in addition to the PreviewFramework assembly. The platform assembly is discovered here, searching for any
     ///   assembly in the app with the [ExampleApplication] assembly attribute, used to specify the platform specific
     ///   ExampleApplication subclass. Note that 3rd party UI frameworks are supported here too - the platform assembly
     ///   need not be Microsoft authored, it just needs to have the [ExampleApplication] assembly attribute.
     ///
     ///   2. If app/library doesn't care about supporting in-app example UI or otherwise customizing the example experience,
-    ///   it can just included the ExampleFramework assembly (this one) and still decorate example methods with
+    ///   it can just included the PreviewFramework assembly (this one) and still decorate example methods with
     ///   [Example]. Normally libraries would do this, especially libraries that want to avoid platform dependencies. In this case,
     ///   null is returned - there's no ExampleApplication platform provider and VS can use fallback code in the tap (present for
     ///   some platforms but not all) to do the navigation.

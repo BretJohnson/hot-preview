@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace PreviewFramework.DevTools;
 
 /// <summary>
-/// Singleton manager class for global application state for the ExampleFramework DevTools app.
+/// Singleton manager class for global application state for the PreviewFramework DevTools app.
 /// </summary>
 public class DevToolsManager
 {
