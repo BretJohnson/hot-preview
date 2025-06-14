@@ -4,25 +4,25 @@ using Microsoft.Maui.Controls;
 
 namespace PreviewFramework.App.Maui.ViewModels
 {
-    public class ExampleViewModel : ExamplesItemViewModel
+    public class PreviewViewModel : PreviewsItemViewModel
     {
         public UIComponentReflection UIComponent { get; }
-        public ExampleReflection Example { get; }
+        public PreviewReflection Preview { get; }
         public ICommand TapCommand { get; }
 
-        public ExampleViewModel(UIComponentReflection uiComponent, ExampleReflection example)
+        public PreviewViewModel(UIComponentReflection uiComponent, PreviewReflection preview)
         {
             UIComponent = uiComponent;
-            Example = example;
+            Preview = preview;
 
             TapCommand = new Command(
                 execute: () =>
                 {
-                    ExamplesViewModel.Instance.NavigateToExample(UIComponent, Example);
+                    PreviewsViewModel.Instance.NavigateToPreview(UIComponent, Preview);
                 }
             );
         }
 
-        public string DisplayName => Example.DisplayName;
+        public string DisplayName => Preview.DisplayName;
     }
 }

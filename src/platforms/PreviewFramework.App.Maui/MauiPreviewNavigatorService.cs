@@ -32,7 +32,7 @@ public class MauiPreviewNavigatorService
             }
             else
             {
-                if (previewUI is RouteExample routeExample)
+                if (previewUI is RoutePreview routePreview)
                 {
                     Window? mainWindow = Application.Current!.Windows[0];
                     Shell? shell = mainWindow?.Page as Shell;
@@ -42,7 +42,7 @@ public class MauiPreviewNavigatorService
                         throw new InvalidOperationException("Main window doesn't use Shell");
                     }
 
-                    await shell.GoToAsync(routeExample.Route, NavigateAnimationsEnabled);
+                    await shell.GoToAsync(routePreview.Route, NavigateAnimationsEnabled);
                 }
                 else if (previewUI is ContentPage contentPage)
                 {
