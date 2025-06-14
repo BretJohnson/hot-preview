@@ -1,10 +1,11 @@
 ﻿using System;
 using ExampleFramework;
-using ExampleFramework.App;
 using ExampleFramework.App.Maui;
 using ExampleFramework.App.Maui.Pages;
 using Microsoft.Maui;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: ExampleApplicationClass(typeof(MauiExampleApplication))]
@@ -43,6 +44,9 @@ public partial class MauiExampleApplication : ExampleApplication
 
         ExampleAppService = new MauiExampleAppService(this);
 
+        ApplicationName = AppInfo.Current.Name;
+        PlatformName = DeviceInfo.Current.Platform.ToString();
+
 #if WINDOWS
         AddKeyboardHandling();
 #endif
@@ -62,6 +66,10 @@ public partial class MauiExampleApplication : ExampleApplication
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
     public override ExampleAppService GetExampleAppService() => ExampleAppService;
+
+    public override string ApplicationName { get; set; }
+
+    public override string PlatformName { get; set; }
 
     public void AddExampleUIShellItem(Shell shell, string title = "Examples", string? icon = null)
     {

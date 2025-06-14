@@ -8,12 +8,38 @@ public abstract class ExampleApplication
     private static ExampleApplication? s_instance;
 
     private readonly List<string> _additionalAppAssemblies = [];
+    private AppServiceClientConnection? _appServiceConnection;
 
-    public static ExampleApplication GetInstance() => s_instance ?? throw new InvalidOperationException($"{nameof(ExampleApplication)} not initialized");
+    public static ExampleApplication GetInstance() => s_instance ??
+        throw new InvalidOperationException($"{nameof(ExampleApplication)} not initialized");
+
+    protected static void InitInstance(ExampleApplication instance)
+    {
+        s_instance = instance;
+    }
 
     public abstract UIComponentsManagerReflection GetUIComponentsManager();
 
     public abstract ExampleAppService GetExampleAppService();
+
+    public void StartAppServiceConnection(string connectionString)
+    {
+        if (_appServiceConnection is not null)
+        {
+            throw new InvalidOperationException("AppServiceConnection is already initialized.");
+        }
+
+        _appServiceConnection = new AppServiceClientConnection(connectionString);
+
+        // Fire and forget
+        _ = _appServiceConnection.StartConnectionAsync(GetExampleAppService()).ConfigureAwait(false);
+    }
+
+    public string? ProjectPath { get; set; }
+
+    public abstract string ApplicationName { get; set; }
+
+    public abstract string PlatformName { get; set; }
 
     /// <summary>
     /// The app's service provider, which when present can be used to instantiate
@@ -41,9 +67,4 @@ public abstract class ExampleApplication
     }
 
     public IEnumerable<string> AdditionalAppAssemblies => _additionalAppAssemblies;
-
-    protected static void InitInstance(ExampleApplication instance)
-    {
-        s_instance = instance;
-    }
 }
