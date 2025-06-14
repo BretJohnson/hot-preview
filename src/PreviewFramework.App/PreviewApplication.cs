@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace PreviewFramework.App;
 
-public abstract class ExampleApplication
+public abstract class PreviewApplication
 {
-    private static ExampleApplication? s_instance;
+    private static PreviewApplication? s_instance;
 
     private readonly List<string> _additionalAppAssemblies = [];
     private AppServiceClientConnection? _appServiceConnection;
 
-    public static ExampleApplication GetInstance() => s_instance ??
-        throw new InvalidOperationException($"{nameof(ExampleApplication)} not initialized");
+    public static PreviewApplication GetInstance() => s_instance ??
+        throw new InvalidOperationException($"{nameof(PreviewApplication)} not initialized");
 
-    protected static void InitInstance(ExampleApplication instance)
+    protected static void InitInstance(PreviewApplication instance)
     {
         s_instance = instance;
     }

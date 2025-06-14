@@ -8,22 +8,22 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
-[assembly: ExampleApplicationClass(typeof(MauiExampleApplication))]
+[assembly: ExampleApplicationClass(typeof(MauiPreviewApplication))]
 
-[assembly: PageUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
-[assembly: ControlUIComponentBaseType(MauiExampleApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
+[assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
+[assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
 
 namespace PreviewFramework.App.Maui;
 
-public partial class MauiExampleApplication : ExampleApplication
+public partial class MauiPreviewApplication : PreviewApplication
 {
-    public static MauiExampleApplication Instance => s_instance.Value;
+    public static MauiPreviewApplication Instance => s_instance.Value;
 
-    private static readonly Lazy<MauiExampleApplication> s_instance =
+    private static readonly Lazy<MauiPreviewApplication> s_instance =
         new(() =>
         {
-            var instance = new MauiExampleApplication();
+            var instance = new MauiPreviewApplication();
             InitInstance(instance);
             return instance;
         });
@@ -32,7 +32,7 @@ public partial class MauiExampleApplication : ExampleApplication
 
     private readonly Lazy<UIComponentsManagerReflection> _uiComponentsManager;
 
-    private MauiExampleApplication()
+    private MauiPreviewApplication()
     {
         // Use application default IServiceProvider, if available
         IElement? applicationElement = Application.Current;
