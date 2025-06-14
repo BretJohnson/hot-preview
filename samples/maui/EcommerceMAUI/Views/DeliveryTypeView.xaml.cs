@@ -6,9 +6,9 @@ namespace EcommerceMAUI.Views;
 
 public partial class DeliveryTypeView : ContentPage
 {
-	public DeliveryTypeView(ObservableCollection<ProductListModel> products)
-	{
-		InitializeComponent();
+    public DeliveryTypeView(ObservableCollection<ProductListModel> products)
+    {
+        InitializeComponent();
         BindingContext = new DeliveryTypeViewModel(products);
     }
 

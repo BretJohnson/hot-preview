@@ -7,9 +7,9 @@ namespace EcommerceMAUI.Views;
 public partial class CardView : ContentPage
 {
     public CardView(ObservableCollection<CardInfoModel> cards = null)
-	{
-		InitializeComponent();
-		BindingContext = new CardViewModel(cards);
+    {
+        InitializeComponent();
+        BindingContext = new CardViewModel(cards);
     }
 
 #if PREVIEWS
