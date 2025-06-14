@@ -42,7 +42,7 @@ public partial class MauiPreviewApplication : PreviewApplication
             () => new UIComponentsManagerReflection(ServiceProvider, AdditionalAppAssemblies,
             new MauiUIComponentExclusionFilter()));
 
-        ExampleAppService = new MauiExampleAppService(this);
+        PreviewAppService = new MauiPreviewAppService(this);
 
         PlatformName = DeviceInfo.Current.Platform.ToString();
 
@@ -51,11 +51,11 @@ public partial class MauiPreviewApplication : PreviewApplication
 #endif
     }
 
-    public MauiExampleAppService ExampleAppService { get; }
+    public MauiPreviewAppService PreviewAppService { get; }
 
-    public MauiExampleNavigatorService ExampleNavigatorService { get; set; } = new MauiExampleNavigatorService();
+    public MauiPreviewNavigatorService PreviewNavigatorService { get; set; } = new MauiPreviewNavigatorService();
 
-    public Window? ExampleUIWindow { get; private set; }
+    public Window? PreviewUIWindow { get; private set; }
 
     public static void EnsureInitialized()
     {
@@ -64,49 +64,49 @@ public partial class MauiPreviewApplication : PreviewApplication
 
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
-    public override ExampleAppService GetExampleAppService() => ExampleAppService;
+    public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
     public override string PlatformName { get; set; }
 
-    public void AddExampleUIShellItem(Shell shell, string title = "Examples", string? icon = null)
+    public void AddPreviewUIShellItem(Shell shell, string title = "Previews", string? icon = null)
     {
-        var examplesShellContent = new ShellContent
+        var previewsShellContent = new ShellContent
         {
             Title = title,
             Icon = icon,
-            Route = "UIExamples",
-            ContentTemplate = new DataTemplate(typeof(ExamplesPage))
+            Route = "UIPreviews",
+            ContentTemplate = new DataTemplate(typeof(PreviewsPage))
         };
 
-        shell.Items.Add(examplesShellContent);
+        shell.Items.Add(previewsShellContent);
     }
 
-    public void ShowExampleUIWindow()
+    public void ShowPreviewUIWindow()
     {
-        if (ExampleUIWindow is null)
+        if (PreviewUIWindow is null)
         {
-            ExampleUIWindow = new Window(new ExamplesPage());
-            ExampleUIWindow.Title = "UI Examples";
-            ExampleUIWindow.Destroying += ExampleUIWindow_Destroying;
+            PreviewUIWindow = new Window(new PreviewsPage());
+            PreviewUIWindow.Title = "UI Previews";
+            PreviewUIWindow.Destroying += PreviewUIWindow_Destroying;
 
-            ExampleUIWindow.Width = 320;
-            ExampleUIWindow.Height = 500;
+            PreviewUIWindow.Width = 320;
+            PreviewUIWindow.Height = 500;
 
             Window mainWindow = Application.Current!.Windows[0];
             if (mainWindow is not null)
             {
                 // Position the window just left of the top left corner of the app window, but ensuring
                 // it's fully on the screen
-                ExampleUIWindow.X = double.Max(mainWindow.X - ExampleUIWindow.Width - 5, 0);
-                ExampleUIWindow.Y = double.Max(mainWindow.Y, 0);
+                PreviewUIWindow.X = double.Max(mainWindow.X - PreviewUIWindow.Width - 5, 0);
+                PreviewUIWindow.Y = double.Max(mainWindow.Y, 0);
             }
 
-            Application.Current?.OpenWindow(ExampleUIWindow);
+            Application.Current?.OpenWindow(PreviewUIWindow);
         }
     }
 
-    private void ExampleUIWindow_Destroying(object? sender, EventArgs e)
+    private void PreviewUIWindow_Destroying(object? sender, EventArgs e)
     {
-        ExampleUIWindow = null;
+        PreviewUIWindow = null;
     }
 }

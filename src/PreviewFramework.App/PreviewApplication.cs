@@ -20,7 +20,7 @@ public abstract class PreviewApplication
 
     public abstract UIComponentsManagerReflection GetUIComponentsManager();
 
-    public abstract ExampleAppService GetExampleAppService();
+    public abstract PreviewAppService GetPreviewAppService();
 
     public void StartAppServiceConnection(string connectionString)
     {
@@ -32,7 +32,7 @@ public abstract class PreviewApplication
         _appServiceConnection = new AppServiceClientConnection(connectionString);
 
         // Fire and forget
-        _ = _appServiceConnection.StartConnectionAsync(GetExampleAppService()).ConfigureAwait(false);
+        _ = _appServiceConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
     }
 
     public string? ProjectPath { get; set; }
