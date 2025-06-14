@@ -1,7 +1,7 @@
-using ExampleFramework.Tooling;
+using PreviewFramework.Tooling;
 using System.Diagnostics;
 
-namespace ExampleFramework.DevTools;
+namespace PreviewFramework.DevTools;
 
 /// <summary>
 /// Singleton manager class for global application state for the ExampleFramework DevTools app.

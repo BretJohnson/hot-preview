@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public class UIComponentReflection : UIComponentBase<ExampleReflection>
 {

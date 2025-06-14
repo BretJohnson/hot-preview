@@ -1,8 +1,8 @@
 using System.Windows.Input;
-using ExampleFramework.App;
+using PreviewFramework.App;
 using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.App.Maui.ViewModels
+namespace PreviewFramework.App.Maui.ViewModels
 {
     public class ExampleViewModel : ExamplesItemViewModel
     {

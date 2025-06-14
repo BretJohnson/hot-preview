@@ -1,6 +1,6 @@
 using Microsoft.UI.Xaml.Data;
 
-namespace ExampleFramework.DevTools.ViewModels;
+namespace PreviewFramework.DevTools.ViewModels;
 
 [Bindable]
 public abstract partial class NavTreeItemViewModel : ObservableObject

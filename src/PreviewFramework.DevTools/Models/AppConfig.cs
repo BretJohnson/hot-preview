@@ -1,4 +1,4 @@
-namespace ExampleFramework.DevTools.Models;
+namespace PreviewFramework.DevTools.Models;
 
 public record AppConfig
 {

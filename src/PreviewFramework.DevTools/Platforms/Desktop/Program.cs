@@ -1,4 +1,4 @@
-using ExampleFramework.DevTools;
+using PreviewFramework.DevTools;
 using Uno.UI.Hosting;
 
 internal class Program

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ExampleFramework.App;
+using PreviewFramework.App;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.App.Maui;
+namespace PreviewFramework.App.Maui;
 
 public class MauiExampleNavigatorService
 {

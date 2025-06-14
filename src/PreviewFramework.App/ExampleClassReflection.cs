@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public class ExampleClassReflection : ExampleReflection
 {

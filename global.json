@@ -3,8 +3,8 @@
     "Uno.Sdk": "6.0.110"
   },
   "sdk": {
-    "version": "8.0.116",
-    "rollForward": "latestMajor",
+    "version": "9.0.300",
+    "rollForward": "patch",
     "allowPrerelease": false
   }
 }

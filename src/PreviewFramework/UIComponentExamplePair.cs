@@ -1,4 +1,4 @@
-﻿namespace ExampleFramework;
+﻿namespace PreviewFramework;
 
 public class UIComponentExamplePair<TUIComponent, TExample>(TUIComponent uiComponent, TExample example)
     where TExample : ExampleBase

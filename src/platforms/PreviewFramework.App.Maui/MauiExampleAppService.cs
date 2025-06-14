@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ExampleFramework.App;
+using PreviewFramework.App;
 
-namespace ExampleFramework.App.Maui;
+namespace PreviewFramework.App.Maui;
 
 public class MauiExampleAppService(MauiExampleApplication mauiExampleApplication) : ExampleAppService(mauiExampleApplication)
 {

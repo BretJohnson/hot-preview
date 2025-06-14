@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 /// <summary>
 /// An attribute that specifies this is an example, for a control or other UI.

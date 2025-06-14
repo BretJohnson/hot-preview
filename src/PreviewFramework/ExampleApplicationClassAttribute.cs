@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 [AttributeUsage(AttributeTargets.Assembly)]
 public sealed class ExampleApplicationClassAttribute(Type exampleApplicationClass) : Attribute

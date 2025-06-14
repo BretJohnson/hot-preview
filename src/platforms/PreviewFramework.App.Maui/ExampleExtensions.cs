@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.App.Maui;
+namespace PreviewFramework.App.Maui;
 
 public static class ExampleExtensions
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, ExampleReflection>
 {

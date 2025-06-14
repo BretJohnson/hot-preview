@@ -1,6 +1,6 @@
-﻿using ExampleFramework.App;
+﻿using PreviewFramework.App;
 
-namespace ExampleFramework.App.Wpf;
+namespace PreviewFramework.App.Wpf;
 
 public class WpfExampleAppService(WpfExampleApplication wpfExampleApplication) : ExampleAppService(wpfExampleApplication)
 {

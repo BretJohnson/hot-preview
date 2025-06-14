@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public class ExampleStaticMethodReflection : ExampleReflection
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public static class ExampleApplicationRetriever
 {

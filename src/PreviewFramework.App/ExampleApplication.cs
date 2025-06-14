@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public abstract class ExampleApplication
 {

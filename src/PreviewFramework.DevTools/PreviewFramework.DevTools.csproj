@@ -6,16 +6,16 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>ExampleFramework.DevTools</ApplicationTitle>
+    <ApplicationTitle>PreviewFramework.DevTools</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.ExampleFramework.DevTools</ApplicationId>
+    <ApplicationId>com.companyname.PreviewFramework.DevTools</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <!-- Package Publisher -->
     <ApplicationPublisher>bret</ApplicationPublisher>
     <!-- Package Description -->
-    <Description>ExampleFramework.DevTools powered by Uno Platform.</Description>
+    <Description>PreviewFramework.DevTools powered by Uno Platform.</Description>
 
     <!--
       UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExampleFramework.Tooling\ExampleFramework.Tooling.csproj" />
+    <ProjectReference Include="..\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj" />
   </ItemGroup>
 
 </Project>

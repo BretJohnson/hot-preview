@@ -1,8 +1,8 @@
-﻿<Page x:Class="ExampleFramework.DevTools.Presentation.MainPage"
+﻿<Page x:Class="PreviewFramework.DevTools.Presentation.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:viewModels="using:ExampleFramework.DevTools.ViewModels"
-      xmlns:converters="using:ExampleFramework.DevTools.Converters"
+      xmlns:viewModels="using:PreviewFramework.DevTools.ViewModels"
+      xmlns:converters="using:PreviewFramework.DevTools.Converters"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
       NavigationCacheMode="Required">

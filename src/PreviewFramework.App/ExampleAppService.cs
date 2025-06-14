@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public abstract class ExampleAppService(ExampleApplication exampleApplication) : IExampleAppService
 {

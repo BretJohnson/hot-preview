@@ -1,6 +1,6 @@
-using ExampleFramework.Tooling;
+using PreviewFramework.Tooling;
 
-namespace ExampleFramework.DevTools.ViewModels.NavTree;
+namespace PreviewFramework.DevTools.ViewModels.NavTree;
 
 public class UIComponentViewModel(UIComponent uiComponent) : NavTreeItemViewModel
 {

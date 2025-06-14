@@ -1,4 +1,4 @@
-﻿namespace ExampleFramework.Tooling;
+﻿namespace PreviewFramework.Tooling;
 
 public class ExampleStaticMethod : Example
 {

@@ -1,4 +1,4 @@
-﻿namespace ExampleFramework;
+﻿namespace PreviewFramework;
 
 public class RouteExample(string route)
 {

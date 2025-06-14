@@ -1,4 +1,4 @@
-namespace ExampleFramework.DevTools.Services.Endpoints;
+namespace PreviewFramework.DevTools.Services.Endpoints;
 
 internal class DebugHttpHandler : DelegatingHandler
 {

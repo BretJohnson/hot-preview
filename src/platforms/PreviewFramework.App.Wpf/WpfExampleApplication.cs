@@ -1,6 +1,6 @@
-﻿using ExampleFramework;
-using ExampleFramework.App;
-using ExampleFramework.App.Wpf;
+﻿using PreviewFramework;
+using PreviewFramework.App;
+using PreviewFramework.App.Wpf;
 
 [assembly: ExampleApplicationClass(typeof(WpfExampleApplication))]
 
@@ -8,7 +8,7 @@ using ExampleFramework.App.Wpf;
 [assembly: PageUIComponentBaseType(WpfExampleApplication.WpfPlatformType, "System.Windows.Window")]
 [assembly: ControlUIComponentBaseType(WpfExampleApplication.WpfPlatformType, "System.Windows.Media.Visual")]
 
-namespace ExampleFramework.App.Wpf;
+namespace PreviewFramework.App.Wpf;
 
 public class WpfExampleApplication : ExampleApplication
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 public abstract class UIComponentBase<TExample> where TExample : ExampleBase
 {

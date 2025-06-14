@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 public interface IExampleAppControllerService
 {

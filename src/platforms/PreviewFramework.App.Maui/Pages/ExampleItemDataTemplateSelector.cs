@@ -1,7 +1,7 @@
-using ExampleFramework.App.Maui.ViewModels;
+using PreviewFramework.App.Maui.ViewModels;
 using Microsoft.Maui.Controls;
 
-namespace ExampleFramework.App.Maui.Pages;
+namespace PreviewFramework.App.Maui.Pages;
 
 public class ExampleItemDataTemplateSelector : DataTemplateSelector
 {

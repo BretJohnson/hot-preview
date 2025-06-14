@@ -1,4 +1,4 @@
-namespace ExampleFramework.App.Maui.ViewModels;
+namespace PreviewFramework.App.Maui.ViewModels;
 
 public class UIComponentCategoryViewModel : ExamplesItemViewModel
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 public sealed class PageUIComponentBaseTypeAttribute(string platform, string baseType) : Attribute

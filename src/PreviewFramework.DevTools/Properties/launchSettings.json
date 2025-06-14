@@ -8,13 +8,13 @@
     }
   },
   "profiles": {
-    "ExampleFramework.DevTools (Desktop)": {
+    "PreviewFramework.DevTools (Desktop)": {
       "commandName": "Project",
       "compatibleTargetFramework": "desktop"
     },
-    "ExampleFramework.DevTools (Desktop WSL2)": {
+    "PreviewFramework.DevTools (Desktop WSL2)": {
       "commandName": "WSL2",
-      "commandLineArgs": "{ProjectDir}/bin/Debug/net9.0-desktop/ExampleFramework.DevTools.dll",
+      "commandLineArgs": "{ProjectDir}/bin/Debug/net9.0-desktop/PreviewFramework.DevTools.dll",
       "distributionName": "",
       "compatibleTargetFramework": "desktop"
     }

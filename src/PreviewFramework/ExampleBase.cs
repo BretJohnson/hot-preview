@@ -1,4 +1,4 @@
-﻿namespace ExampleFramework;
+﻿namespace PreviewFramework;
 
 public abstract class ExampleBase
 {

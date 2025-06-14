@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using StreamJsonRpc;
 
-namespace ExampleFramework.App;
+namespace PreviewFramework.App;
 
 public class AppServiceClientConnection(string connectionString)
 {

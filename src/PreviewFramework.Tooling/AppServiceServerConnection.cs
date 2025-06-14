@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using StreamJsonRpc;
 
-namespace ExampleFramework.Tooling;
+namespace PreviewFramework.Tooling;
 
 public sealed class AppServiceServerConnection(AppServiceConnectionListener connectionListener, TcpClient tcpClient) :
     IExampleAppControllerService

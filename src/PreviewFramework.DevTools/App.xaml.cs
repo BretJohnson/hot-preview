@@ -1,9 +1,9 @@
-using ExampleFramework.DevTools.ViewModels;
+using PreviewFramework.DevTools.ViewModels;
 using Uno.Resizetizer;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 
-namespace ExampleFramework.DevTools;
+namespace PreviewFramework.DevTools;
 public partial class App : Application
 {
     /// <summary>

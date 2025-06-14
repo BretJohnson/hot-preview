@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Data;
 
-namespace ExampleFramework.DevTools.Converters;
+namespace PreviewFramework.DevTools.Converters;
 
 public class BoolToVisibilityConverter : IValueConverter
 {

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExampleFramework\ExampleFramework.csproj" />
+    <ProjectReference Include="..\PreviewFramework\PreviewFramework.csproj" />
   </ItemGroup>
 
 </Project>

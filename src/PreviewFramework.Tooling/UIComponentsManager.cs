@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Build.Locator;
 
-namespace ExampleFramework.Tooling;
+namespace PreviewFramework.Tooling;
 
 public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ExampleFramework;
+namespace PreviewFramework;
 
 public abstract class UIComponentsManagerBase<TUIComponent, TExample> where TUIComponent : UIComponentBase<TExample> where TExample : ExampleBase
 {

@@ -1,9 +1,9 @@
-using ExampleFramework.DevTools.ViewModels;
-using ExampleFramework.DevTools.ViewModels.NavTree;
-using ExampleFramework.Tooling;
+using PreviewFramework.DevTools.ViewModels;
+using PreviewFramework.DevTools.ViewModels.NavTree;
+using PreviewFramework.Tooling;
 using Microsoft.UI.Xaml.Data;
 
-namespace ExampleFramework.DevTools.Presentation;
+namespace PreviewFramework.DevTools.Presentation;
 
 [Bindable]
 public partial class MainPageViewModel : ObservableObject
