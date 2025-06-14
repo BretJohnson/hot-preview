@@ -4,12 +4,12 @@ using StreamJsonRpc;
 namespace PreviewFramework.Tooling;
 
 public sealed class AppServiceServerConnection(AppServiceConnectionListener connectionListener, TcpClient tcpClient) :
-    IExampleAppControllerService
+    IPreviewAppControllerService
 {
     private readonly AppServiceConnectionListener _connectionListener = connectionListener;
     private readonly TcpClient _tcpClient = tcpClient;
     private JsonRpc? _rpc;
-    private IExampleAppService? _appService;
+    private IPreviewAppService? _appService;
 
     public string? ProjectPath { get; set; }
 
@@ -22,7 +22,7 @@ public sealed class AppServiceServerConnection(AppServiceConnectionListener conn
             NetworkStream connectionStream = _tcpClient.GetStream();
 
             _rpc = JsonRpc.Attach(connectionStream);
-            _appService = _rpc.Attach<IExampleAppService>();
+            _appService = _rpc.Attach<IPreviewAppService>();
 
             JsonRpc.Attach(connectionStream, this);
 
@@ -48,7 +48,7 @@ public sealed class AppServiceServerConnection(AppServiceConnectionListener conn
         }
     }
 
-    Task IExampleAppControllerService.RegisterAppAsync(string projectPath, string platformName)
+    Task IPreviewAppControllerService.RegisterAppAsync(string projectPath, string platformName)
     {
         ProjectPath = projectPath;
         PlatformName = platformName;

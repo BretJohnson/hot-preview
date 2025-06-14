@@ -12,7 +12,7 @@ public partial class AppShell : Shell
         var currentTheme = Application.Current!.UserAppTheme;
         ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
 
-#if EXAMPLES
+#if PREVIEWS
         MauiExampleApplication.Instance.AddExampleUIShellItem(this);
 #endif
     }

@@ -8,7 +8,7 @@ public partial class App : Application
 {
     public App()
     {
-#if EXAMPLES
+#if PREVIEWS
         MauiExampleApplication.EnsureInitialized();
 #endif
 

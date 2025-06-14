@@ -1,6 +1,6 @@
 ﻿namespace PreviewFramework.Tooling;
 
-public abstract class Example(string name, string? displayName) : ExampleBase(displayName)
+public abstract class Preview(string name, string? displayName) : PreviewBase(displayName)
 {
     private readonly string _name = name;
 

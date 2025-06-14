@@ -1,3 +1,3 @@
-﻿#if EXAMPLES
+﻿#if PREVIEWS
 global using PreviewFramework;
 #endif

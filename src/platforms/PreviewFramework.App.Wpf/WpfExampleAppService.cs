@@ -6,7 +6,7 @@ public class WpfExampleAppService(WpfExampleApplication wpfExampleApplication) :
 {
     public override async Task NavigateToExampleAsync(string uiComponentName, string exampleName)
     {
-        UIComponentExamplePairReflection uiComponentExamplePair = GetUIComponentExamplePair(uiComponentName, exampleName);
+        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
         await WpfExampleApplication.Instance.ExampleNavigatorService.
             NavigateToExampleAsync(uiComponentExamplePair.UIComponent, uiComponentExamplePair.Example).ConfigureAwait(false);
     }
