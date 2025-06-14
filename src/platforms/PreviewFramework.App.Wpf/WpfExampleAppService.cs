@@ -2,12 +2,12 @@
 
 namespace PreviewFramework.App.Wpf;
 
-public class WpfExampleAppService(WpfExampleApplication wpfExampleApplication) : ExampleAppService(wpfExampleApplication)
+public class WpfPreviewAppService(WpfPreviewApplication wpfPreviewApplication) : PreviewAppService(wpfPreviewApplication)
 {
-    public override async Task NavigateToExampleAsync(string uiComponentName, string exampleName)
+    public override async Task NavigateToPreviewAsync(string uiComponentName, string previewName)
     {
         UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
-        await WpfExampleApplication.Instance.ExampleNavigatorService.
-            NavigateToExampleAsync(uiComponentExamplePair.UIComponent, uiComponentExamplePair.Example).ConfigureAwait(false);
+        await WpfPreviewApplication.Instance.ExampleNavigatorService.
+            NavigateToPreviewAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 }

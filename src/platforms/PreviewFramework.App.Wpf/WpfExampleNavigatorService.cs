@@ -4,13 +4,13 @@ namespace PreviewFramework.App.Wpf;
 
 public class WpfExampleNavigatorService
 {
-    public virtual void NavigateToExample(UIComponentReflection uiComponent, ExampleReflection example)
+    public virtual void NavigateToExample(UIComponentReflection uiComponent, PreviewReflection preview)
     {
-        _ = NavigateToExampleAsync(uiComponent, example);
+        _ = NavigateToPreviewAsync(uiComponent, preview);
     }
 
-    public virtual async Task NavigateToExampleAsync(UIComponentReflection uiComponent, ExampleReflection example)
+    public virtual async Task NavigateToPreviewAsync(UIComponentReflection uiComponent, PreviewReflection preview)
     {
-        throw new NotImplementedException("WpfExampleNavigatorService.NavigateToExampleAsync is not implemented.");
+        throw new NotImplementedException("WpfExampleNavigatorService.NavigateToPreviewAsync is not implemented.");
     }
 }

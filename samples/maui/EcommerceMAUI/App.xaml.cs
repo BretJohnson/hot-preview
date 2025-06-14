@@ -9,7 +9,7 @@ public partial class App : Application
     public App()
     {
 #if PREVIEWS
-        MauiExampleApplication.EnsureInitialized();
+        MauiPreviewApplication.EnsureInitialized();
 #endif
 
         InitializeComponent();

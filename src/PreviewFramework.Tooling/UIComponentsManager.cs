@@ -8,7 +8,7 @@ using Microsoft.Build.Locator;
 
 namespace PreviewFramework.Tooling;
 
-public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
+public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UIComponentsManager"/> class, processing metadata from the
@@ -128,9 +128,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
                     else
                     {
                         // Merge examples from the temp component into existing component
-                        foreach (var example in component.Examples)
+                        foreach (var preview in component.Previews)
                         {
-                            existingComponent.AddExample(example);
+                            existingComponent.AddPreview(preview);
                         }
                     }
                 }
@@ -247,9 +247,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
                     else
                     {
                         // Merge examples from the temp component into existing component
-                        foreach (var example in component.Examples)
+                        foreach (var preview in component.Previews)
                         {
-                            existingComponent.AddExample(example);
+                            existingComponent.AddPreview(preview);
                         }
                     }
                 }
@@ -342,10 +342,10 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
         return component;
     }
 
-    public void AddExample(string uiComponentName, Example example)
+    public void AddPreview(string uiComponentName, Preview preview)
     {
         UIComponent component = GetOrAddComponent(uiComponentName);
-        component.AddExample(example);
+        component.AddPreview(preview);
     }
 
     private class ExampleWalker : CSharpSyntaxWalker
@@ -373,7 +373,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
         {
             AttributeSyntax? exampleAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
-                .FirstOrDefault(attr => attr.Name.ToString() == "Example");
+                .FirstOrDefault(attr => attr.Name.ToString() == "Preview");
             if (exampleAttribute is null)
             {
                 return;
@@ -387,7 +387,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != ExampleAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != PreviewAttribute.TypeFullName)
             {
                 return;
             }
@@ -481,7 +481,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Example>
                 string uiComponentName = classTypeSymbol.ToDisplayString();
 
                 UIComponent? uiComponent = _uiComponentsManager.GetUIComponent(uiComponentName);
-                if (uiComponent == null || uiComponent.Examples.Count == 0)
+                if (uiComponent == null || uiComponent.Previews.Count == 0)
                 {
                     uiComponent ??= _uiComponentsManager.GetOrAddComponent(uiComponentName);
 

@@ -2,7 +2,7 @@
 
 namespace PreviewFramework.App.Maui;
 
-public static class ExampleExtensions
+public static class PreviewExtensions
 {
     /// <summary>
     /// Creates a new instance of a view of type <typeparamref name="TView"/> and sets its binding context
@@ -12,7 +12,7 @@ public static class ExampleExtensions
     /// <returns>A new instance of the view with the specified binding context.</returns>
     /// <remarks>
     /// This method simplifies the creation of control/page examples, setting the binding context as appropriate
-    /// for the example data.
+    /// for the preview data.
     /// </remarks>
     public static TView CreateViewWithBinding<TView>(object bindingContext) where TView : View, new()
     {
@@ -25,7 +25,7 @@ public static class ExampleExtensions
         where TView : View, new()
         where TService : class
     {
-        TService service = MauiExampleApplication.Instance.GetRequiredService<TService>();
+        TService service = MauiPreviewApplication.Instance.GetRequiredService<TService>();
         return CreateViewWithBinding<TView>(service);
     }
 }

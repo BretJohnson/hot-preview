@@ -5,14 +5,14 @@ using System.Reflection;
 
 namespace PreviewFramework.App;
 
-public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, ExampleReflection>
+public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, PreviewReflection>
 {
     private readonly IServiceProvider? _serviceProvider = null;
     private readonly IUIComponentExclusionFilter? _exclusionFilter = null;
 
     /// <summary>
     /// Discover all the UI components and associated examples in the the app, via reflection.
-    /// UI component / examples can be defined explicitly, using the [Example] attribute, or
+    /// UI component / examples can be defined explicitly, using the [Preview] attribute, or
     /// implicitly auto-generated, when there's for a default constructor or a constructor that can
     /// be resolved via Dependency Injection.
     /// <paramref name="serviceProvider">An optional <see cref="IServiceProvider"/> instance for dependency injection.</paramref>
@@ -211,9 +211,9 @@ public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponent
         return component;
     }
 
-    public void AddExample(ExampleReflection example)
+    public void AddPreview(PreviewReflection preview)
     {
-        UIComponentReflection component = GetOrAddUIComponent(example.UIComponentType);
-        component.AddExample(example);
+        UIComponentReflection component = GetOrAddUIComponent(preview.UIComponentType);
+        component.AddPreview(preview);
     }
 }

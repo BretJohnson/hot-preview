@@ -2,22 +2,22 @@
 using PreviewFramework.App;
 using PreviewFramework.App.Wpf;
 
-[assembly: ExampleApplicationClass(typeof(WpfExampleApplication))]
+[assembly: PreviewApplicationClass(typeof(WpfPreviewApplication))]
 
-[assembly: PageUIComponentBaseType(WpfExampleApplication.WpfPlatformType, "System.Windows.Controls.Page")]
-[assembly: PageUIComponentBaseType(WpfExampleApplication.WpfPlatformType, "System.Windows.Window")]
-[assembly: ControlUIComponentBaseType(WpfExampleApplication.WpfPlatformType, "System.Windows.Media.Visual")]
+[assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
+[assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]
+[assembly: ControlUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Media.Visual")]
 
 namespace PreviewFramework.App.Wpf;
 
-public class WpfExampleApplication : ExampleApplication
+public class WpfPreviewApplication : PreviewApplication
 {
-    public static WpfExampleApplication Instance => s_instance.Value;
+    public static WpfPreviewApplication Instance => s_instance.Value;
 
-    private static readonly Lazy<WpfExampleApplication> s_instance =
+    private static readonly Lazy<WpfPreviewApplication> s_instance =
         new(() =>
         {
-            var instance = new WpfExampleApplication();
+            var instance = new WpfPreviewApplication();
             InitInstance(instance);
             return instance;
         });
@@ -26,16 +26,16 @@ public class WpfExampleApplication : ExampleApplication
 
     private readonly Lazy<UIComponentsManagerReflection> _uiComponentsManager;
 
-    private WpfExampleApplication()
+    private WpfPreviewApplication()
     {
         _uiComponentsManager = new Lazy<UIComponentsManagerReflection>(
             () => new UIComponentsManagerReflection(ServiceProvider, AdditionalAppAssemblies,
             null));
 
-        ExampleAppService = new WpfExampleAppService(this);
+        PreviewAppService = new WpfPreviewAppService(this);
     }
 
-    public WpfExampleAppService ExampleAppService { get; }
+    public WpfPreviewAppService PreviewAppService { get; }
 
     public WpfExampleNavigatorService ExampleNavigatorService { get; set; } = new WpfExampleNavigatorService();
 
@@ -48,6 +48,6 @@ public class WpfExampleApplication : ExampleApplication
 
     public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
 
-    public override ExampleAppService GetExampleAppService() => ExampleAppService;
+    public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
 }
