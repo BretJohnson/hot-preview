@@ -1,6 +1,6 @@
 using System.Windows.Input;
-using PreviewFramework.App;
 using Microsoft.Maui.Controls;
+using PreviewFramework.App;
 
 namespace PreviewFramework.App.Maui.ViewModels
 {

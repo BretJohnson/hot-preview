@@ -1,11 +1,11 @@
 ﻿using System;
-using PreviewFramework;
-using PreviewFramework.App.Maui;
-using PreviewFramework.App.Maui.Pages;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
+using PreviewFramework;
+using PreviewFramework.App.Maui;
+using PreviewFramework.App.Maui.Pages;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: PreviewApplicationClass(typeof(MauiPreviewApplication))]

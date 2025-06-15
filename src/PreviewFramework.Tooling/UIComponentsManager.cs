@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
 using System.Reflection;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
-using Microsoft.Build.Locator;
 
 namespace PreviewFramework.Tooling;
 

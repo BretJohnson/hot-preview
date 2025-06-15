@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PreviewFramework.App;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using PreviewFramework.App;
 
 namespace PreviewFramework.App.Maui;
 
