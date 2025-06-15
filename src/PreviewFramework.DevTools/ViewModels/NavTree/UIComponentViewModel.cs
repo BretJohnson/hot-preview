@@ -10,7 +10,7 @@ public class UIComponentViewModel(UIComponent uiComponent) : NavTreeItemViewMode
 
     public override ObservableCollection<NavTreeItemViewModel>? Children { get; } =
         uiComponent.HasMultiplePreviews ?
-            new ObservableCollection<NavTreeItemViewModel>(uiComponent.Previews.Select(preview => new ExampleViewModel(preview))) :
+            new ObservableCollection<NavTreeItemViewModel>(uiComponent.Previews.Select(preview => new PreviewViewModel(preview))) :
             null;
 
 }

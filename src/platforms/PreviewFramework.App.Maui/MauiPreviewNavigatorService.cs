@@ -46,7 +46,7 @@ public class MauiPreviewNavigatorService
                 }
                 else if (previewUI is ContentPage contentPage)
                 {
-                    //MauiExamplesApplication.Instance.Application.MainPage = contentPage;
+                    //MauiPreviewApplication.Instance.Application.MainPage = contentPage;
                     await Application.Current!.MainPage!.Navigation.PushAsync(contentPage, NavigateAnimationsEnabled);
                 }
             }
