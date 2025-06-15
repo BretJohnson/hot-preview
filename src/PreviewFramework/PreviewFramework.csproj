@@ -5,4 +5,9 @@
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Include the props file in the NuGet package buildTransitive directory -->
+    <None Include="buildTransitive\PreviewFramework.props" Pack="true" PackagePath="buildTransitive\PreviewFramework.props" />
+  </ItemGroup>
+
 </Project>

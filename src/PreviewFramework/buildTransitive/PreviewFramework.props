@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  
+  <PropertyGroup>
+    <!-- Define PreviewsSupport property, defaulting to true if build configuration is Debug and the property isn't already set -->
+    <PreviewsSupport Condition="'$(PreviewsSupport)' == '' and '$(Configuration)' == 'Debug'">true</PreviewsSupport>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PreviewsSupport)' == 'true'">
+    <!-- Define PREVIEWS build define when PreviewsSupport is set -->
+    <DefineConstants>$(DefineConstants);PREVIEWS</DefineConstants>
+  </PropertyGroup>
+
+</Project>
