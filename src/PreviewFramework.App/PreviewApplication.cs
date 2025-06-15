@@ -48,7 +48,7 @@ public abstract class PreviewApplication
     public TService GetRequiredService<TService>() where TService : class
     {
         IServiceProvider? serviceProvider = ServiceProvider;
-        if (serviceProvider == null)
+        if (serviceProvider is null)
         {
             throw new InvalidOperationException("ServiceProvider is not available.");
         }

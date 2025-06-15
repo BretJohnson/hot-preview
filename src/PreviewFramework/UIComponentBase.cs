@@ -42,7 +42,7 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 
     public void InitCategory(UIComponentCategory category)
     {
-        if (Category != null && string.Compare(this.Category.Name, category.Name, StringComparison.OrdinalIgnoreCase) != 0)
+        if (Category is not null && string.Compare(this.Category.Name, category.Name, StringComparison.OrdinalIgnoreCase) != 0)
         {
             throw new InvalidOperationException($"Component '{Name}' can't be set to category '{category.Name}' since it already has category '{this.Category.Name}' set");
         }

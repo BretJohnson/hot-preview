@@ -30,7 +30,7 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIC
     {
         get
         {
-            if (_sortedComponents == null)
+            if (_sortedComponents is null)
             {
                 _sortedComponents = _uiComponentsByName.Values.OrderBy(component => component.DisplayName).ToList();
             }
@@ -61,14 +61,14 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIC
     public bool IsUIComponentBaseType(string typeName, out UIComponentKind kind, out string? platform)
     {
         platform = _pageUIComponentBaseTypes.IsUIComponentBaseType(typeName);
-        if (platform != null)
+        if (platform is not null)
         {
             kind = UIComponentKind.Page;
             return true;
         }
 
         platform = _controlUIComponentBaseTypes.IsUIComponentBaseType(typeName);
-        if (platform != null)
+        if (platform is not null)
         {
             kind = UIComponentKind.Control;
             return true;

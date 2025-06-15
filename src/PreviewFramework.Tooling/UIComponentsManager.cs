@@ -94,14 +94,14 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
         try
         {
-            var solution = await workspace.OpenSolutionAsync(solutionPath);
+            Solution solution = await workspace.OpenSolutionAsync(solutionPath);
 
             // Combine all compilations from all projects in the solution
             var allCompilations = new List<Compilation>();
 
-            foreach (var project in solution.Projects)
+            foreach (Project project in solution.Projects)
             {
-                var compilation = await project.GetCompilationAsync();
+                Compilation? compilation = await project.GetCompilationAsync();
                 if (compilation != null)
                 {
                     allCompilations.Add(compilation);
@@ -118,17 +118,17 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
 
                 // Merge components from temp manager into main manager
-                foreach (var component in tempManager.UIComponents)
+                foreach (UIComponent component in tempManager.UIComponents)
                 {
-                    var existingComponent = manager.GetUIComponent(component.Name);
-                    if (existingComponent == null)
+                    UIComponent? existingComponent = manager.GetUIComponent(component.Name);
+                    if (existingComponent is null)
                     {
                         manager.AddUIComponent(component);
                     }
                     else
                     {
                         // Merge examples from the temp component into existing component
-                        foreach (var preview in component.Previews)
+                        foreach (Preview preview in component.Previews)
                         {
                             existingComponent.AddPreview(preview);
                         }
@@ -192,11 +192,11 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     public static async Task<UIComponentsManager> CreateFromProjectsAsync(string[] projectPaths,
         bool includeApparentUIComponentsWithNoPreviews = false)
     {
-        if (projectPaths == null || projectPaths.Length == 0)
+        if (projectPaths is null || projectPaths.Length == 0)
             throw new ArgumentException("Project paths array cannot be null or empty", nameof(projectPaths));
 
         // Validate all project files exist
-        foreach (var projectPath in projectPaths)
+        foreach (string projectPath in projectPaths)
         {
             if (string.IsNullOrWhiteSpace(projectPath))
                 throw new ArgumentException("Project path cannot be null or empty", nameof(projectPaths));
@@ -214,10 +214,10 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             var allCompilations = new List<Compilation>();
 
             // Load all projects and get their compilations
-            foreach (var projectPath in projectPaths)
+            foreach (string projectPath in projectPaths)
             {
-                var project = await workspace.OpenProjectAsync(projectPath);
-                var compilation = await project.GetCompilationAsync();
+                Project project = await workspace.OpenProjectAsync(projectPath);
+                Compilation? compilation = await project.GetCompilationAsync();
                 if (compilation != null)
                 {
                     allCompilations.Add(compilation);
@@ -232,22 +232,22 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 includeApparentUIComponentsWithNoPreviews);
 
             // Process additional compilations and merge their components
-            foreach (var compilation in allCompilations.Skip(1))
+            foreach (Compilation? compilation in allCompilations.Skip(1))
             {
                 var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
 
                 // Merge components from temp manager into main manager
-                foreach (var component in tempManager.UIComponents)
+                foreach (UIComponent component in tempManager.UIComponents)
                 {
-                    var existingComponent = manager.GetUIComponent(component.Name);
-                    if (existingComponent == null)
+                    UIComponent? existingComponent = manager.GetUIComponent(component.Name);
+                    if (existingComponent is null)
                     {
                         manager.AddUIComponent(component);
                     }
                     else
                     {
                         // Merge examples from the temp component into existing component
-                        foreach (var preview in component.Previews)
+                        foreach (Preview preview in component.Previews)
                         {
                             existingComponent.AddPreview(preview);
                         }
@@ -276,7 +276,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             if (!MSBuildLocator.IsRegistered)
             {
                 // Try to register the default MSBuild instance
-                var instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
+                VisualStudioInstance[] instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
                 if (instances.Length > 0)
                 {
                     // Use the first available instance (usually the latest)
@@ -333,7 +333,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     public UIComponent GetOrAddComponent(string name)
     {
         UIComponent? component = GetUIComponent(name);
-        if (component == null)
+        if (component is null)
         {
             component = new UIComponent(UIComponentKind.Page, name);
             AddUIComponent(component);
@@ -418,7 +418,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                     if (secondArgument.Expression is TypeOfExpressionSyntax typeOfExpression)
                     {
                         ITypeSymbol? typeSymbol = _semanticModel.GetTypeInfo(typeOfExpression.Type).Type;
-                        if (typeSymbol == null)
+                        if (typeSymbol is null)
                         {
                             return;
                         }
@@ -473,7 +473,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             if (CanHaveAutoGeneratedPreview(classDeclaration))
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
-                if (classTypeSymbol == null)
+                if (classTypeSymbol is null)
                 {
                     return;
                 }
@@ -481,7 +481,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 string uiComponentName = classTypeSymbol.ToDisplayString();
 
                 UIComponent? uiComponent = _uiComponents.GetUIComponent(uiComponentName);
-                if (uiComponent == null || uiComponent.Previews.Count == 0)
+                if (uiComponent is null || uiComponent.Previews.Count == 0)
                 {
                     uiComponent ??= _uiComponents.GetOrAddComponent(uiComponentName);
 
@@ -492,7 +492,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             else if (_includeApparentUIComponentsWithNoPreviews)
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
-                if (classTypeSymbol == null)
+                if (classTypeSymbol is null)
                 {
                     return;
                 }
