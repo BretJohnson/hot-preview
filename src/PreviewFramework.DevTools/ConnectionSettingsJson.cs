@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
-namespace PreviewFramework.Tooling;
+namespace PreviewFramework.DevTools;
 
 public static class ConnectionSettingsJson
 {
@@ -23,10 +23,10 @@ public static class ConnectionSettingsJson
             addresses.Add("127.0.0.1");
 
         // Build the connection string
-        string appConnectionString = string.Join(";", addresses.Select(ip => $"{ip}:{appConnectionPort}"));
+        string appConnectionString = string.Join(",", addresses.Select(ip => $"{ip}:{appConnectionPort}"));
 
         // Prepare the JSON object
-        var jsonObj = new { appConnectionString };
+        var jsonObj = new { app = appConnectionString };
 
         // Get the user's home directory
         string homeDir = Environment.GetFolderPath(
@@ -34,12 +34,11 @@ public static class ConnectionSettingsJson
                 ? Environment.SpecialFolder.UserProfile
                 : Environment.SpecialFolder.Personal);
 
-        // Build the .exampleframework directory path
-        string configDir = Path.Combine(homeDir, ".exampleframework");
+        string configDir = Path.Combine(homeDir, ".previewdevtools");
         Directory.CreateDirectory(configDir);
 
-        // Write the JSON file
-        string jsonPath = Path.Combine(configDir, "devToolsConnection.json");
+        // Write the .previewdevtools/connectionSettings.json file
+        string jsonPath = Path.Combine(configDir, "connectionSettings.json");
         File.WriteAllText(jsonPath, JsonSerializer.Serialize(jsonObj, new JsonSerializerOptions { WriteIndented = true }));
 
         // Ensure the file is deleted when the app exits
