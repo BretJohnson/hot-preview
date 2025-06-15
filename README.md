@@ -1,6 +1,6 @@
 # Overview
 
-The Example Framework lets you easily work on pages/controls in your app in isolation, without the
+The Preview Framework lets you easily work on pages/controls in your app in isolation, without the
 need to run the app, navigate to the page, and supply any test data.
 
 Examples are similar stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in

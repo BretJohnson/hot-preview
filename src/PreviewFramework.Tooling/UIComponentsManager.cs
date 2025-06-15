@@ -74,13 +74,13 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// and analyzing them for UI components and examples.
     /// </summary>
     /// <param name="solutionPath">Path to the solution file (.sln)</param>
-    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no examples</param>
     /// <returns>A UIComponentsManager instance with components from all projects in the solution</returns>
     /// <exception cref="ArgumentException">Thrown when the solution path is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown when the solution file is not found</exception>
     /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or solution cannot be loaded</exception>
     public static async Task<UIComponentsManager> CreateFromSolutionAsync(string solutionPath,
-        bool includeApparentUIComponentsWithNoExamples = false)
+        bool includeApparentUIComponentsWithNoPreviews = false)
     {
         if (string.IsNullOrWhiteSpace(solutionPath))
             throw new ArgumentException("Solution path cannot be null or empty", nameof(solutionPath));
@@ -110,12 +110,12 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
             // Create a combined manager by processing each compilation
             var manager = new UIComponentsManager(allCompilations.FirstOrDefault() ?? throw new InvalidOperationException("No valid compilations found in solution"),
-                includeApparentUIComponentsWithNoExamples);
+                includeApparentUIComponentsWithNoPreviews);
 
             // Process additional compilations and merge their components
             foreach (Compilation? compilation in allCompilations.Skip(1))
             {
-                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
 
                 // Merge components from temp manager into main manager
                 foreach (var component in tempManager.UIComponents)

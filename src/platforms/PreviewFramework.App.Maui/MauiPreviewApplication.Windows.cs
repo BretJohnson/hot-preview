@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Maui;
+﻿using Microsoft.Maui;
 using Microsoft.UI.Input;
 using Windows.System;
 using Windows.UI.Core;
