@@ -50,8 +50,8 @@ namespace EcommerceMAUI.Model
             }
         }
 
-#if EXAMPLES
-        public static ObservableCollection<ProductListModel> GetExampleProducts()
+#if PREVIEWS
+        public static ObservableCollection<ProductListModel> GetPreviewProducts()
         {
             return new ObservableCollection<ProductListModel>
             {

@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 namespace PreviewFramework.App;
 
-public abstract class ExampleApplication
+public abstract class PreviewApplication
 {
-    private static ExampleApplication? s_instance;
+    private static PreviewApplication? s_instance;
 
     private readonly List<string> _additionalAppAssemblies = [];
     private AppServiceClientConnection? _appServiceConnection;
 
-    public static ExampleApplication GetInstance() => s_instance ??
-        throw new InvalidOperationException($"{nameof(ExampleApplication)} not initialized");
+    public static PreviewApplication GetInstance() => s_instance ??
+        throw new InvalidOperationException($"{nameof(PreviewApplication)} not initialized");
 
-    protected static void InitInstance(ExampleApplication instance)
+    protected static void InitInstance(PreviewApplication instance)
     {
         s_instance = instance;
     }
 
     public abstract UIComponentsManagerReflection GetUIComponentsManager();
 
-    public abstract ExampleAppService GetExampleAppService();
+    public abstract PreviewAppService GetPreviewAppService();
 
     public void StartAppServiceConnection(string connectionString)
     {
@@ -32,7 +32,7 @@ public abstract class ExampleApplication
         _appServiceConnection = new AppServiceClientConnection(connectionString);
 
         // Fire and forget
-        _ = _appServiceConnection.StartConnectionAsync(GetExampleAppService()).ConfigureAwait(false);
+        _ = _appServiceConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
     }
 
     public string? ProjectPath { get; set; }

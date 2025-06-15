@@ -5,6 +5,6 @@ global using DefaultTemplateWithContent.Services;
 global using DefaultTemplateWithContent.Utilities;
 global using Fonts;
 global using PreviewFramework;
-#if EXAMPLES
-global using static PreviewFramework.App.Maui.ExampleExtensions;
+#if PREVIEWS
+global using static PreviewFramework.App.Maui.PreviewExtensions;
 #endif

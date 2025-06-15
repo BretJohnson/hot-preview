@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace PreviewFramework;
 
-public interface IExampleAppControllerService
+public interface IPreviewAppControllerService
 {
     public Task RegisterAppAsync(string projectPath, string platformName);
 }

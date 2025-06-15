@@ -1,13 +1,14 @@
-﻿using PreviewFramework.App;
+﻿using System.Threading.Tasks;
+using PreviewFramework.App;
 
-namespace PreviewFramework.App.Wpf;
+namespace PreviewFramework.App.Maui;
 
-public class WpfPreviewAppService(WpfPreviewApplication wpfPreviewApplication) : PreviewAppService(wpfPreviewApplication)
+public class MauiPreviewAppService(MauiPreviewApplication mauiPreviewApplication) : PreviewAppService(mauiPreviewApplication)
 {
     public override async Task NavigateToPreviewAsync(string uiComponentName, string previewName)
     {
         UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
-        await WpfPreviewApplication.Instance.ExampleNavigatorService.
+        await MauiPreviewApplication.Instance.PreviewNavigatorService.
             NavigateToPreviewAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 }

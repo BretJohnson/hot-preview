@@ -9,8 +9,8 @@ public class UIComponentViewModel(UIComponent uiComponent) : NavTreeItemViewMode
     public override string Icon => "";
 
     public override ObservableCollection<NavTreeItemViewModel>? Children { get; } =
-        uiComponent.HasMultipleExamples ?
-            new ObservableCollection<NavTreeItemViewModel>(uiComponent.Examples.Select(example => new ExampleViewModel(example))) :
+        uiComponent.HasMultiplePreviews ?
+            new ObservableCollection<NavTreeItemViewModel>(uiComponent.Previews.Select(preview => new ExampleViewModel(preview))) :
             null;
 
 }

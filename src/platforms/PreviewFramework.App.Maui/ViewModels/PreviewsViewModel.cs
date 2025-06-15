@@ -5,22 +5,22 @@ using PreviewFramework.App;
 
 namespace PreviewFramework.App.Maui.ViewModels;
 
-public class ExamplesViewModel // : INotifyPropertyChanged
+public class PreviewsViewModel // : INotifyPropertyChanged
 {
     public static readonly UIComponentCategory UncategorizedCategory = new("Uncategorized");
-    private static readonly Lazy<ExamplesViewModel> s_lazyInstance = new Lazy<ExamplesViewModel>(() => new ExamplesViewModel());
+    private static readonly Lazy<PreviewsViewModel> s_lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
 
-    public static ExamplesViewModel Instance => s_lazyInstance.Value;
+    public static PreviewsViewModel Instance => s_lazyInstance.Value;
 
-    public IReadOnlyList<ExamplesItemViewModel> ExamplesItems { get; }
+    public IReadOnlyList<PreviewsItemViewModel> PreviewsItems { get; }
     public bool HasCategories { get; }
 
-    private ExamplesViewModel()
+    private PreviewsViewModel()
     {
         var categories = new List<UIComponentCategory>();
         Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
 
-        UIComponentsManagerReflection uiComponentsManager = MauiExampleApplication.Instance.GetUIComponentsManager();
+        UIComponentsManagerReflection uiComponentsManager = MauiPreviewApplication.Instance.GetUIComponentsManager();
 
         // Create a list of UIComponents for each category, including an "Uncategorized" category.
         foreach (UIComponentReflection uiComponent in uiComponentsManager.UIComponents)
@@ -46,7 +46,7 @@ public class ExamplesViewModel // : INotifyPropertyChanged
             componentsForCategory.Sort((component1, component2) => string.Compare(component1.DisplayName, component2.DisplayName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        var examplesItems = new List<ExamplesItemViewModel>();
+        var previewsItems = new List<PreviewsItemViewModel>();
 
         HasCategories = categories.Count > 1;
 
@@ -54,28 +54,28 @@ public class ExamplesViewModel // : INotifyPropertyChanged
         {
             if (HasCategories)
             {
-                examplesItems.Add(new UIComponentCategoryViewModel(category));
+                previewsItems.Add(new UIComponentCategoryViewModel(category));
             }
 
             foreach (UIComponentReflection uiComponent in uiComponentsByCategory[category])
             {
-                examplesItems.Add(new UIComponentViewModel(uiComponent));
+                previewsItems.Add(new UIComponentViewModel(uiComponent));
 
-                if (uiComponent.HasMultipleExamples)
+                if (uiComponent.HasMultiplePreviews)
                 {
-                    foreach (ExampleReflection example in uiComponent.Examples)
+                    foreach (PreviewReflection preview in uiComponent.Previews)
                     {
-                        examplesItems.Add(new ExampleViewModel(uiComponent, example));
+                        previewsItems.Add(new PreviewViewModel(uiComponent, preview));
                     }
                 }
             }
         }
 
-        ExamplesItems = examplesItems;
+        PreviewsItems = previewsItems;
     }
 
-    public void NavigateToExample(UIComponentReflection uiComponent, ExampleReflection example)
+    public void NavigateToPreview(UIComponentReflection uiComponent, PreviewReflection preview)
     {
-        MauiExampleApplication.Instance.ExampleNavigatorService.NavigateToExample(uiComponent, example);
+        MauiPreviewApplication.Instance.PreviewNavigatorService.NavigateToPreview(uiComponent, preview);
     }
 }

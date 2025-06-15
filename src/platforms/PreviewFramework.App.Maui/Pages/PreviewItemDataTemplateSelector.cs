@@ -3,11 +3,11 @@ using Microsoft.Maui.Controls;
 
 namespace PreviewFramework.App.Maui.Pages;
 
-public class ExampleItemDataTemplateSelector : DataTemplateSelector
+public class PreviewItemDataTemplateSelector : DataTemplateSelector
 {
     public DataTemplate? UIComponentTemplate { get; set; }
-    public DataTemplate? ExampleTemplate { get; set; }
+    public DataTemplate? PreviewTemplate { get; set; }
 
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container) =>
-        (item is UIComponentViewModel) ? UIComponentTemplate! : ExampleTemplate!;
+        (item is UIComponentViewModel) ? UIComponentTemplate! : PreviewTemplate!;
 }

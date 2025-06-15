@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PreviewFramework;
 
-public abstract class UIComponentsManagerBase<TUIComponent, TExample> where TUIComponent : UIComponentBase<TExample> where TExample : ExampleBase
+public abstract class UIComponentsManagerBase<TUIComponent, TExample> where TUIComponent : UIComponentBase<TExample> where TExample : PreviewBase
 {
     protected readonly UIComponentBaseTypes _pageUIComponentBaseTypes = new();
     protected readonly UIComponentBaseTypes _controlUIComponentBaseTypes = new();

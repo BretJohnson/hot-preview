@@ -10,9 +10,9 @@ public class AppServiceClientConnection(string connectionString)
     private readonly string _connectionString = connectionString;
     private TcpClient? _tcpClient;
     private JsonRpc? _rpc;
-    private IExampleAppControllerService? _appControllerService;
+    private IPreviewAppControllerService? _appControllerService;
 
-    public async Task StartConnectionAsync(ExampleAppService appService)
+    public async Task StartConnectionAsync(PreviewAppService appService)
     {
         // Parse _connectionString in the format "host:port"
         string[] parts = _connectionString.Split(':');
@@ -29,10 +29,10 @@ public class AppServiceClientConnection(string connectionString)
 
         _rpc = JsonRpc.Attach(networkStream, appService);
 
-        _appControllerService = _rpc.Attach<IExampleAppControllerService>();
+        _appControllerService = _rpc.Attach<IPreviewAppControllerService>();
 
-        ExampleApplication exampleApplication = ExampleApplication.GetInstance();
-        await _appControllerService.RegisterAppAsync(exampleApplication.ProjectPath,
-            exampleApplication.PlatformName).ConfigureAwait(false);
+        PreviewApplication previewApplication = PreviewApplication.GetInstance();
+        await _appControllerService.RegisterAppAsync(previewApplication.ProjectPath,
+            previewApplication.PlatformName).ConfigureAwait(false);
     }
 }

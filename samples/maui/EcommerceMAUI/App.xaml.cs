@@ -8,8 +8,8 @@ public partial class App : Application
 {
     public App()
     {
-#if EXAMPLES
-        MauiExampleApplication.EnsureInitialized();
+#if PREVIEWS
+        MauiPreviewApplication.EnsureInitialized();
 #endif
 
         InitializeComponent();

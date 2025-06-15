@@ -14,18 +14,18 @@ Initial support is for .NET MAUI.
 
 ## How to use (MAUI version)
 
-Add a reference to the `ExampleFramework.Maui` NuGet to your app (once that NuGet is published - it isn't yet so you'll need to use this repo instead).
+Add a reference to the `PreviewFramework.Maui` NuGet to your app (once that NuGet is published - it isn't yet so you'll need to use this repo instead).
 
 Add this line to your `App` constructor (needed for now):
 
 ```
-#if EXAMPLES
-    MauiExampleApplication.EnsureInitialized();
+#if PREVIEWS
+    MauiPreviewApplication.EnsureInitialized();
 #endif
 ```
 
-With just that, if you open your app in a tool that supports it (like what we're addning to Visual Studio) you we'll see examples automatically created for some of pages/controls.
-Examples are automatically created for:
+With just that, if you open your app in a tool that supports it (like what we're addning to Visual Studio) you we'll see previews automatically created for some of pages/controls.
+Previews are automatically created for:
 
 - Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required).,
 - Controls: Dervies from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters.
@@ -34,14 +34,14 @@ That should get you started. Beyond that, you'll probably want to define preview
 
 - Support any UI component (not just with zero argument constructors)
 - Provide sample data
-- Define multiple examples for a single UI component
+- Define multiple previews for a single UI component
 
-Defining your own examples isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static to your UI component class (in code behind with XAML) with the `[Example]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires.
+Defining your own previews isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires.
 
 ```C#
-#if EXAMPLES
-    [Example]
-    public static ConfirmAddressView Example() => new(ExampleData.GetExampleProducts(1), new DeliveryTypeModel(),
+#if PREVIEWS
+    [Preview]
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
         new AddressModel()
         {
             StreetOne = "21, Alex Davidson Avenue",
@@ -55,26 +55,26 @@ Defining your own examples isn't hard & is similar to what's done in SwiftUI and
 You can define multiple methods for multiple previews, like:
 
 ```C#
-#if EXAMPLES
-    [Example("0 cards")]
+#if PREVIEWS
+    [Preview("0 cards")]
     public static CardView NoCards() => new(PreviewData.GetPreviewCards(0));
 
-    [Example("1 card")]
+    [Preview("1 card")]
     public static CardView SingleCard() => new(PreviewData.GetPreviewCards(1));
 
-    [Example("2 cards")]
+    [Preview("2 cards")]
     public static CardView TwoCards() => new(PreviewData.GetPreviewCards(2));
 
-    [Example("6 cards")]
+    [Preview("6 cards")]
     public static CardView SixCards() => new(PreviewData.GetPreviewCards(6));
 #endif
 ```
 
-The `[Example]` argument is the optional display name - without that, the name
+The `[Preview]` argument is the optional display name - without that, the name
 is method name.
 
-Names really just matter when you have a multiple examples. If there's just one,
-then by convention it's named `Example`, but it doesn't matter as the tooling
+Names really just matter when you have a multiple previews. If there's just one,
+then by convention it's named `Preview`, but it doesn't matter as the tooling
 displays the UI component name instead.
 
 ## How to build

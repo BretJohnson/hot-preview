@@ -7,8 +7,8 @@ public partial class AddButton
         InitializeComponent();
     }
 
-#if EXAMPLES
-    [Example]
-    public static AddButton Example() => new();
+#if PREVIEWS
+    [Preview]
+    public static AddButton Preview() => new();
 #endif
 }

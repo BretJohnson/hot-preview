@@ -12,9 +12,9 @@ public partial class ConfirmAddressView : ContentPage
         BindingContext = new ConfirmAddressViewModel(products, deliveryType, primaryAddress);
     }
 
-#if EXAMPLES
-    [Example]
-    public static ConfirmAddressView Example() => new(ExampleData.GetExampleProducts(1), new DeliveryTypeModel(),
+#if PREVIEWS
+    [Preview]
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
         new AddressModel()
         {
             StreetOne = "21, Alex Davidson Avenue",

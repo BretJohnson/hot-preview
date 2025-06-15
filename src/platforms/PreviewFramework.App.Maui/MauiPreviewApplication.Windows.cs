@@ -6,7 +6,7 @@ using Windows.UI.Core;
 
 namespace PreviewFramework.App.Maui;
 
-public partial class MauiExampleApplication
+public partial class MauiPreviewApplication
 {
     private void AddKeyboardHandling()
     {
@@ -32,7 +32,7 @@ public partial class MauiExampleApplication
         // Handle global keyboard shortcuts
         if (e.Key == VirtualKey.Z && isCtrlDown && isShiftDown)
         {
-            Instance.ShowExampleUIWindow();
+            Instance.ShowPreviewUIWindow();
             e.Handled = true;
         }
     }

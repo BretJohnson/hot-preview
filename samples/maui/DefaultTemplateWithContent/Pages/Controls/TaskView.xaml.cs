@@ -35,8 +35,8 @@ public partial class TaskView
         TaskCompletedCommand?.Execute(task);
     }
 
-#if EXAMPLES
-    [Example]
-    public static TaskView Example() => CreateViewWithBinding<TaskView>(MockData.Activate().ProjectTask);
+#if PREVIEWS
+    [Preview]
+    public static TaskView Preview() => CreateViewWithBinding<TaskView>(MockData.Activate().ProjectTask);
 #endif
 }
