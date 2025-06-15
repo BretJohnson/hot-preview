@@ -16,10 +16,10 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// changes, create a new instance of this class to read the new compilation.
     /// </summary>
     /// <param name="compilation">Roslyn compilation</param>
-    /// <param name="includeApparentUIComponentsWithNoExamples">Determines whether to include types that COULD be UIComponents,
-    /// because they derive from a UI component class, but don't actually define any examples nor can a example be constructed
-    /// automatically. Can be set by tooling that flags these for the user, to direct them to add a example.</param>
-    public UIComponentsManager(Compilation compilation, bool includeApparentUIComponentsWithNoExamples = false)
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Determines whether to include types that COULD be UIComponents,
+    /// because they derive from a UI component class, but don't actually define any previews nor can a preview be constructed
+    /// automatically. Can be set by tooling that flags these for the user, to direct them to add a preview.</param>
+    public UIComponentsManager(Compilation compilation, bool includeApparentUIComponentsWithNoPreviews = false)
     {
         IEnumerable<MetadataReference> references = compilation.References;
 
@@ -62,10 +62,10 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         {
             SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            var exampleWalker = new ExampleWalker(compilation, semanticModel, this, includeApparentUIComponentsWithNoExamples);
+            var previewWalker = new PreviewWalker(compilation, semanticModel, this, includeApparentUIComponentsWithNoPreviews);
 
             SyntaxNode root = syntaxTree.GetRoot();
-            exampleWalker.Visit(root);
+            previewWalker.Visit(root);
         }
     }
 
@@ -74,7 +74,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// and analyzing them for UI components and examples.
     /// </summary>
     /// <param name="solutionPath">Path to the solution file (.sln)</param>
-    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no examples</param>
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
     /// <returns>A UIComponentsManager instance with components from all projects in the solution</returns>
     /// <exception cref="ArgumentException">Thrown when the solution path is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown when the solution file is not found</exception>
@@ -148,13 +148,13 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// Creates a UIComponentsManager from a single project file (.csproj) by loading and analyzing the project.
     /// </summary>
     /// <param name="projectPath">Path to the project file (.csproj)</param>
-    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
     /// <returns>A UIComponentsManager instance with components from the project</returns>
     /// <exception cref="ArgumentException">Thrown when the project path is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown when the project file is not found</exception>
     /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or project cannot be loaded</exception>
     public static async Task<UIComponentsManager> CreateFromProjectAsync(string projectPath,
-        bool includeApparentUIComponentsWithNoExamples = false)
+        bool includeApparentUIComponentsWithNoPreviews = false)
     {
         if (string.IsNullOrWhiteSpace(projectPath))
             throw new ArgumentException("Project path cannot be null or empty", nameof(projectPath));
@@ -172,7 +172,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             Compilation compilation = await project.GetCompilationAsync() ??
                 throw new InvalidOperationException($"Failed to get compilation for project: {projectPath}");
 
-            return new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+            return new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
         }
         catch (Exception ex)
         {
@@ -184,13 +184,13 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
     /// Creates a UIComponentsManager from multiple project files (.csproj) by loading and analyzing all projects.
     /// </summary>
     /// <param name="projectPaths">Array of paths to project files (.csproj)</param>
-    /// <param name="includeApparentUIComponentsWithNoExamples">Whether to include types that could be UI components but have no examples</param>
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
     /// <returns>A UIComponentsManager instance with components from all projects</returns>
     /// <exception cref="ArgumentException">Thrown when project paths array is null or empty</exception>
     /// <exception cref="FileNotFoundException">Thrown when any project file is not found</exception>
     /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or projects cannot be loaded</exception>
     public static async Task<UIComponentsManager> CreateFromProjectsAsync(string[] projectPaths,
-        bool includeApparentUIComponentsWithNoExamples = false)
+        bool includeApparentUIComponentsWithNoPreviews = false)
     {
         if (projectPaths == null || projectPaths.Length == 0)
             throw new ArgumentException("Project paths array cannot be null or empty", nameof(projectPaths));
@@ -229,12 +229,12 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
             // Create a combined manager by processing each compilation
             var manager = new UIComponentsManager(allCompilations.First(),
-                includeApparentUIComponentsWithNoExamples);
+                includeApparentUIComponentsWithNoPreviews);
 
             // Process additional compilations and merge their components
             foreach (var compilation in allCompilations.Skip(1))
             {
-                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoExamples);
+                var tempManager = new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
 
                 // Merge components from temp manager into main manager
                 foreach (var component in tempManager.UIComponents)
@@ -348,38 +348,38 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
         component.AddPreview(preview);
     }
 
-    private class ExampleWalker : CSharpSyntaxWalker
+    private class PreviewWalker : CSharpSyntaxWalker
     {
-        private readonly UIComponentsManager _uiComponentsManager;
         private readonly Compilation _compilation;
         private readonly SemanticModel _semanticModel;
-        private readonly bool _includeApparentUIComponentsWithNoExamples;
+        private readonly UIComponentsManager _uiComponents;
+        private readonly bool _includeApparentUIComponentsWithNoPreviews;
 
-        public ExampleWalker(Compilation compilation, SemanticModel semanticModel, UIComponentsManager uiComponents, bool includeUIComponentsWithNoExamples)
+        public PreviewWalker(Compilation compilation, SemanticModel semanticModel, UIComponentsManager uiComponents, bool includeUIComponentsWithNoPreviews)
         {
             _compilation = compilation;
             _semanticModel = semanticModel;
-            _uiComponentsManager = uiComponents;
-            _includeApparentUIComponentsWithNoExamples = includeUIComponentsWithNoExamples;
+            _uiComponents = uiComponents;
+            _includeApparentUIComponentsWithNoPreviews = includeUIComponentsWithNoPreviews;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
         {
-            CheckForExampleMethod(methodDeclaration);
+            CheckForPreviewMethod(methodDeclaration);
             base.VisitMethodDeclaration(methodDeclaration);
         }
 
-        private void CheckForExampleMethod(MethodDeclarationSyntax methodDeclaration)
+        private void CheckForPreviewMethod(MethodDeclarationSyntax methodDeclaration)
         {
-            AttributeSyntax? exampleAttribute = methodDeclaration.AttributeLists
+            AttributeSyntax? previewAttribute = methodDeclaration.AttributeLists
                 .SelectMany(attrList => attrList.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "Preview");
-            if (exampleAttribute is null)
+            if (previewAttribute is null)
             {
                 return;
             }
 
-            IMethodSymbol? attributeSymbol = _semanticModel.GetSymbolInfo(exampleAttribute).Symbol as IMethodSymbol;
+            IMethodSymbol? attributeSymbol = _semanticModel.GetSymbolInfo(previewAttribute).Symbol as IMethodSymbol;
             if (attributeSymbol is null)
             {
                 return;
@@ -394,9 +394,9 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
             string? uiComponentName = null;
             string? title = null;
-            if (exampleAttribute.ArgumentList != null)
+            if (previewAttribute.ArgumentList != null)
             {
-                SeparatedSyntaxList<AttributeArgumentSyntax> attributeArgs = exampleAttribute.ArgumentList.Arguments;
+                SeparatedSyntaxList<AttributeArgumentSyntax> attributeArgs = previewAttribute.ArgumentList.Arguments;
 
                 // If the attribute specifies a example title (1st argument), use it. Otherwise,
                 // the title defaults to the method name.
@@ -453,7 +453,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             string previewFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
 
             var preview = new PreviewStaticMethod(previewFullName, title);
-            _uiComponentsManager.AddPreview(uiComponentName, preview);
+            _uiComponents.AddPreview(uiComponentName, preview);
         }
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax classDeclaration)
@@ -470,7 +470,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 return;
             }
 
-            if (CanHaveAutoGeneratedExample(classDeclaration))
+            if (CanHaveAutoGeneratedPreview(classDeclaration))
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
                 if (classTypeSymbol == null)
@@ -480,16 +480,16 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
 
                 string uiComponentName = classTypeSymbol.ToDisplayString();
 
-                UIComponent? uiComponent = _uiComponentsManager.GetUIComponent(uiComponentName);
+                UIComponent? uiComponent = _uiComponents.GetUIComponent(uiComponentName);
                 if (uiComponent == null || uiComponent.Previews.Count == 0)
                 {
-                    uiComponent ??= _uiComponentsManager.GetOrAddComponent(uiComponentName);
+                    uiComponent ??= _uiComponents.GetOrAddComponent(uiComponentName);
 
                     var preview = new PreviewClass(uiComponentName, isAutoGenerated: true);
-                    _uiComponentsManager.AddPreview(uiComponentName, preview);
+                    _uiComponents.AddPreview(uiComponentName, preview);
                 }
             }
-            else if (_includeApparentUIComponentsWithNoExamples)
+            else if (_includeApparentUIComponentsWithNoPreviews)
             {
                 INamedTypeSymbol? classTypeSymbol = _semanticModel.GetDeclaredSymbol(classDeclaration);
                 if (classTypeSymbol == null)
@@ -498,11 +498,11 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
                 }
 
                 string uiComponentName = classTypeSymbol.ToDisplayString();
-                _uiComponentsManager.GetOrAddComponent(uiComponentName);
+                _uiComponents.GetOrAddComponent(uiComponentName);
             }
         }
 
-        private bool CanHaveAutoGeneratedExample(ClassDeclarationSyntax classDeclaration)
+        private bool CanHaveAutoGeneratedPreview(ClassDeclarationSyntax classDeclaration)
         {
             if (classDeclaration.Modifiers.Any(SyntaxKind.AbstractKeyword))
             {
@@ -588,7 +588,7 @@ public class UIComponentsManager : UIComponentsManagerBase<UIComponent, Preview>
             {
                 if (baseType is INamedTypeSymbol namedBaseType)
                 {
-                    if (_uiComponentsManager.IsUIComponentBaseType(namedBaseType.ToDisplayString(), out UIComponentKind kind))
+                    if (_uiComponents.IsUIComponentBaseType(namedBaseType.ToDisplayString(), out UIComponentKind kind))
                     {
                         return kind;
                     }

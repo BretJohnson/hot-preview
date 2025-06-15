@@ -21,7 +21,7 @@ public partial class MainPageViewModel : ObservableObject
         DevToolsManager.Instance.MainPageViewModel = this;
 
         _navigator = navigator;
-        Title = "Examples";
+        Title = "Previews";
 
         // Initialize commands
         PlayCommand = new RelayCommand(Play);
@@ -65,9 +65,9 @@ public partial class MainPageViewModel : ObservableObject
         // Documentation with sub-items
         var documentationItem = new UIComponentViewModel("Documentation", "📋", new ObservableCollection<NavTreeItemViewModel>
         {
-            new ExampleViewModel("Default", "📄"),
-            new ExampleViewModel("Expanded", "📄"),
-            new ExampleViewModel("Added to cart", "📄")
+            new PreviewViewModel("Default", "📄"),
+            new PreviewViewModel("Expanded", "📄"),
+            new PreviewViewModel("Added to cart", "📄")
         });
         documentationItem.IsExpanded = true;
         documentationItem.IsSelected = true; // This matches the blue highlight in screenshot

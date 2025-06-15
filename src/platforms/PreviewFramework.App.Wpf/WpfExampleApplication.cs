@@ -37,7 +37,7 @@ public class WpfPreviewApplication : PreviewApplication
 
     public WpfPreviewAppService PreviewAppService { get; }
 
-    public WpfExampleNavigatorService ExampleNavigatorService { get; set; } = new WpfExampleNavigatorService();
+    public WpfPreviewNavigatorService PreviewNavigatorService { get; set; } = new WpfPreviewNavigatorService();
 
     public override string PlatformName { get; set; } = "Windows";
 
