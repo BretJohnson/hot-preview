@@ -31,12 +31,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Maui", "src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj", "{E9FB47D7-4B05-044E-FCC3-10E875D6932B}"
 EndProject
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Wpf", "src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.DevTools", "src\PreviewFramework.DevTools\PreviewFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{A65F07C8-822E-48F5-834D-3C4244AF339B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.AppBuildTasks", "src\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj", "{5656B721-F1AE-B6D2-F137-9941882A399A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +96,10 @@ Global
 		{1609025D-27AF-22BE-3E93-6829BFDCCC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1609025D-27AF-22BE-3E93-6829BFDCCC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1609025D-27AF-22BE-3E93-6829BFDCCC68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5656B721-F1AE-B6D2-F137-9941882A399A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5656B721-F1AE-B6D2-F137-9941882A399A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5656B721-F1AE-B6D2-F137-9941882A399A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5656B721-F1AE-B6D2-F137-9941882A399A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +119,7 @@ Global
 		{864D052E-0443-B0EC-A144-D7A2656D0256} = {A65F07C8-822E-48F5-834D-3C4244AF339B}
 		{1609025D-27AF-22BE-3E93-6829BFDCCC68} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A65F07C8-822E-48F5-834D-3C4244AF339B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{5656B721-F1AE-B6D2-F137-9941882A399A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52CB1B96-37FD-4F1F-9488-5F8381E0A631}

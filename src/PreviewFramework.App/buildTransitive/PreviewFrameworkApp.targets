@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="PreviewFramework.AppBuildTasks.GeneratePreviewAppSettingsTask"
+             AssemblyFile="$(MSBuildThisPackageRoot)lib/$(TargetFramework)/PreviewFramework.AppBuildTasks.dll" />
+
+  <Target Name="GeneratePreviewAppSettings" BeforeTargets="CoreCompile">
+    <GeneratePreviewAppSettingsTask
+      ProjectPath="$(MSBuildProjectFullPath)"
+      OutputPath="$(IntermediateOutputPath)GeneratedPreviewAppSettings.g.cs" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)GeneratedPreviewAppSettings.g.cs" />
+    </ItemGroup>
+  </Target>
+</Project>

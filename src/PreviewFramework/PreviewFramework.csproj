@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Include the props file in the NuGet package buildTransitive directory -->
+    <!-- Include the props file in the NuGet package, so PREVIEWS is defined by default for Debug for all client builds -->
     <None Include="buildTransitive\PreviewFramework.props" Pack="true" PackagePath="buildTransitive\PreviewFramework.props" />
   </ItemGroup>
 
