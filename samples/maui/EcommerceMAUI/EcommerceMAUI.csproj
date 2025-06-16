@@ -34,7 +34,6 @@
 
   <PropertyGroup>
     <!-- Suppress the following warnings:
-		  CS8002: Referenced assembly does not have a strong name
 		  CS8618: Non-nullable property is uninitialized.
 		  CS8625: Cannot convert null literal to non-nullable reference type.
 		  CS8767: Nullability of reference types in value of type 'T' doesn't match target type 'T?'.
@@ -48,7 +47,7 @@
 		  CS8600: Converting null literal or possible null value to non-nullable type.
 		  XC0022: Binding could be compiled to improve runtime performance if x:DataType is specified.
 		  XC0025: Binding was not compiled because it has an explicitly set Source property and compilation of bindings with Source is not enabled. -->
-    <NoWarn>$(NoWarn);CS8002;CS8618;CS8625;CS8767;CS8602;CS0618;CS1998;CS8612;CS0168;CS8603;CS4014;CS8600;XC0022;XC0025</NoWarn>
+    <NoWarn>$(NoWarn);CS8618;CS8625;CS8767;CS8602;CS0618;CS1998;CS8612;CS0168;CS8603;CS4014;CS8600;XC0022;XC0025</NoWarn>
   </PropertyGroup>
 
 	<ItemGroup>
