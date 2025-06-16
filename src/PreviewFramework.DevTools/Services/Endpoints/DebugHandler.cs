@@ -29,7 +29,7 @@ internal class DebugHttpHandler : DelegatingHandler
                 _logger.LogDebugMessage($"{key}: {values}");
             }
 
-            var content = request.Content is not null ? await request.Content.ReadAsStringAsync() : null;
+            var content = request.Content is not null ? await request.Content.ReadAsStringAsync(cancellationToken) : null;
             if (!string.IsNullOrEmpty(content))
             {
                 _logger.LogDebugMessage(content);

@@ -1,5 +1,8 @@
-using PreviewFramework.Tooling;
 using System.Diagnostics;
+using Microsoft.Build.Locator;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
+using PreviewFramework.Tooling;
 
 namespace PreviewFramework.DevTools;
 
@@ -13,6 +16,7 @@ public class DevToolsManager
     private IServiceProvider? _serviceProvider;
     private UIComponentsManager _uiComponentsManager;
     private string? _projectPath;
+    private readonly AppServiceConnectionListener _appServiceConnectionListener;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
@@ -38,9 +42,15 @@ public class DevToolsManager
         _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
         _logger.LogInformation("DevToolsManager instance created");
 
-        _projectPath = @"Q:\\src\\example-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
+        // TODO: Don't hardcode this & initialize it asynchronously
+        _projectPath = @"Q:\\src\\ui-preview-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
+        _uiComponentsManager = CreateUIComponentsManagerFromProjectAsync(_projectPath).GetAwaiter().GetResult();
 
-        _uiComponentsManager = UIComponentsManager.CreateFromProjectAsync(_projectPath).GetAwaiter().GetResult();
+        // Initialize the app service connection listener
+        _appServiceConnectionListener = new AppServiceConnectionListener();
+        _appServiceConnectionListener.StartListening();
+
+        ConnectionSettingsJson.WriteSettings(_appServiceConnectionListener.Port);
     }
 
     /// <summary>
@@ -189,7 +199,7 @@ public class DevToolsManager
             _projectPath = newProjectPath;
 
             // Reload the UIComponentsManager with the new project
-            _uiComponentsManager = await UIComponentsManager.CreateFromProjectAsync(_projectPath);
+            _uiComponentsManager = await CreateUIComponentsManagerFromProjectAsync(_projectPath);
 
             _logger.LogInformation("Project path updated successfully");
             return true;
@@ -198,6 +208,80 @@ public class DevToolsManager
         {
             _logger.LogError(ex, "Error updating project path to: {ProjectPath}", newProjectPath);
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Creates a UIComponentsManager from a single project file (.csproj) by loading and analyzing the project.
+    /// </summary>
+    /// <param name="projectPath">Path to the project file (.csproj)</param>
+    /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
+    /// <returns>A UIComponentsManager instance with components from the project</returns>
+    /// <exception cref="ArgumentException">Thrown when the project path is invalid</exception>
+    /// <exception cref="FileNotFoundException">Thrown when the project file is not found</exception>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or project cannot be loaded</exception>
+    public static async Task<UIComponentsManager> CreateUIComponentsManagerFromProjectAsync(string projectPath,
+        bool includeApparentUIComponentsWithNoPreviews = false)
+    {
+        if (string.IsNullOrWhiteSpace(projectPath))
+            throw new ArgumentException("Project path cannot be null or empty", nameof(projectPath));
+
+        if (!File.Exists(projectPath))
+            throw new FileNotFoundException($"Project file not found: {projectPath}");
+
+        EnsureMSBuildLocated();
+
+        using MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+
+        try
+        {
+            Project project = await workspace.OpenProjectAsync(projectPath);
+            Compilation compilation = await project.GetCompilationAsync() ??
+                throw new InvalidOperationException($"Failed to get compilation for project: {projectPath}");
+
+            return new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load project '{projectPath}': {ex.Message}", ex);
+        }
+    }
+
+    /// <summary>
+    /// Ensures that MSBuild can be located for use with Roslyn workspaces.
+    /// This method attempts to locate MSBuild and throws an exception if it cannot be found.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located</exception>
+    public static void EnsureMSBuildLocated()
+    {
+        try
+        {
+            // Check if MSBuild is already registered
+            if (!MSBuildLocator.IsRegistered)
+            {
+                // Try to register the default MSBuild instance
+                VisualStudioInstance[] instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
+                if (instances.Length > 0)
+                {
+                    // Use the first available instance (usually the latest)
+                    MSBuildLocator.RegisterInstance(instances.First());
+                }
+                else
+                {
+                    // Try to register the default .NET SDK MSBuild
+                    MSBuildLocator.RegisterDefaults();
+                }
+            }
+
+            // Try to create a workspace to verify MSBuild is available
+            using var testWorkspace = MSBuildWorkspace.Create();
+            // If we get here, MSBuild is available
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException(
+                "MSBuild could not be located. Please ensure that either Visual Studio or the .NET SDK is installed. " +
+                "For .NET SDK, make sure the Microsoft.Build.Locator package is properly configured if needed.", ex);
         }
     }
 }

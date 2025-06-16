@@ -26,15 +26,12 @@ public class AppServiceConnectionListener : IDisposable
         }
     }
 
-    public void StartListening(CancellationToken cancellationToken = default)
+    public void StartListening()
     {
         // Get the port number
         int port = ((IPEndPoint)_listener.LocalEndpoint).Port;
 
-        // Write the connection settings JSON file
-        ConnectionSettingsJson.WriteConnectionSettingsJson(port);
-
-        Task.Run(() => ListenLoopAsync(cancellationToken), cancellationToken);
+        Task.Run(ListenLoopAsync);
     }
 
     internal void AddConnection(AppServiceServerConnection connection)
@@ -50,29 +47,19 @@ public class AppServiceConnectionListener : IDisposable
         _connections.TryRemove(connection, out _);
     }
 
-    private async Task ListenLoopAsync(CancellationToken cancellationToken)
+    private async Task ListenLoopAsync()
     {
-        while (_listener is not null && !cancellationToken.IsCancellationRequested)
+        while (_listener is not null)
         {
             try
             {
                 // Throws if cancellationToken is canceled before or during the wait
-                Task<TcpClient> acceptTask = _listener.AcceptTcpClientAsync(cancellationToken).AsTask();
-                Task completedTask = await Task.WhenAny(acceptTask, Task.Delay(Timeout.Infinite, cancellationToken));
-                if (completedTask == acceptTask)
-                {
-                    TcpClient tcpClient = acceptTask.Result;
+                TcpClient tcpClient = await _listener.AcceptTcpClientAsync();
 
-                    AppServiceServerConnection appServiceConnection = new AppServiceServerConnection(this, tcpClient);
+                AppServiceServerConnection appServiceConnection = new AppServiceServerConnection(this, tcpClient);
 
-                    // Handle each client connection asynchronously (fire and forget)
-                    _ = appServiceConnection.HandleConnectionAsync();
-                }
-                else
-                {
-                    // Cancellation requested
-                    break;
-                }
+                // Handle each client connection asynchronously (fire and forget)
+                _ = appServiceConnection.HandleConnectionAsync();
             }
             catch (ObjectDisposedException)
             {
@@ -84,7 +71,7 @@ public class AppServiceConnectionListener : IDisposable
                 // Cancellation requested, exit loop
                 break;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log or handle error as needed
             }
