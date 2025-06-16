@@ -58,7 +58,7 @@ namespace EcommerceMAUI.Model
             get
             {
                 switch (CardType)
-                { 
+                {
                      case "American Express":
                         return "AmericanExpress".ToColorFromResourceKey();
                      case "Diners Club":
@@ -116,7 +116,7 @@ namespace EcommerceMAUI.Model
                 else
                 {
                     return "FA6Regular";
-                }                
+                }
             }
         }
         public string MaskedCardNumber

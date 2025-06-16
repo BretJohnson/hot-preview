@@ -50,6 +50,6 @@ namespace EcommerceMAUI.ViewModel
         private async void SelectProduct(ProductListModel product)
         {
             await Application.Current.MainPage.Navigation.PushModalAsync(new ProductDetailsView());
-        }        
+        }
     }
 }

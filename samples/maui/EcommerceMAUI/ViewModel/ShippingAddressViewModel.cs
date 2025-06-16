@@ -28,7 +28,7 @@ namespace EcommerceMAUI.ViewModel
         }
 
         private void SelectAddress(AddressModel address)
-        {           
+        {
             foreach (var add in Addressess)
             {
                 if (add.AddressType == address.AddressType)

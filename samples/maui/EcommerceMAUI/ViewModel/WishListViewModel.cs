@@ -39,7 +39,7 @@ namespace EcommerceMAUI.ViewModel
         {
             await PopulateDataAsync();
         }
-      
+
         async Task PopulateDataAsync()
         {
             //await Task.Delay(500);

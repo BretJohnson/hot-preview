@@ -13,7 +13,7 @@ namespace EcommerceMAUI.ViewModel
             get => _TrackStatus;
             set => SetProperty(ref _TrackStatus, value);
 
-        }  
+        }
         public Track TrackOrderData { get; set; }
         public string PageTitle
         {

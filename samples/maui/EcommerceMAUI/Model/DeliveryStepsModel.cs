@@ -24,7 +24,7 @@ namespace EcommerceMAUI.Model
         {
             get => _DeliveryStatusDate;
             set => SetProperty(ref _DeliveryStatusDate, value);
-        }       
+        }
 
         private bool _IsComplete;
         public bool IsComplete
