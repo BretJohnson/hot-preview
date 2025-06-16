@@ -32,7 +32,7 @@ namespace EcommerceMAUI.ViewModel
         public ICommand QtyChangeCommand { get; }
         public ICommand CheckoutCommand { get; }
         public CartViewModel(ObservableCollection<ProductListModel> products = null)
-        {           
+        {
             DeleteCommand = new Command<ProductListModel>(DeleteProduct);
             FavoriteCommand = new Command<ProductListModel>(FavoriteProduct);
             QtyChangeCommand = new Command<ProductListModel>(ChangeProductQty);
@@ -70,7 +70,7 @@ namespace EcommerceMAUI.ViewModel
         private async void DeleteProduct(ProductListModel product)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            
+
         }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async void FavoriteProduct(ProductListModel product)

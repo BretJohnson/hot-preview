@@ -65,14 +65,14 @@ namespace EcommerceMAUI.ViewModel
             DeliveryType = deliveryType;
             Products = products;
             PrimaryAddress = address;
-            SelectedCard = card;          
+            SelectedCard = card;
             FinishCommand = new Command(FinishOrder);
             BackCommand = new Command(GoBack);
             IsLoaded = true;
 
         }
         private async void FinishOrder()
-        {            
+        {
             await Application.Current.MainPage.Navigation.PopToRootAsync();
             await Shell.Current.GoToAsync("///HomePageView");
             await ToastHelper.ShowToast("Order Complete");

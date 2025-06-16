@@ -21,7 +21,7 @@ namespace EcommerceMAUI.ViewModel
             get => _Products;
             set => SetProperty(ref _Products, value);
         }
-        
+
         private bool _IsLoaded = false;
         public bool IsLoaded
         {

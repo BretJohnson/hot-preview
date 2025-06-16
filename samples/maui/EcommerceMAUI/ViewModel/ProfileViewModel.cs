@@ -5,7 +5,7 @@ using System.Windows.Input;
 namespace EcommerceMAUI.ViewModel
 {
     public class ProfileViewModel : BaseViewModel
-    {        
+    {
         public string Name { get; set; } = "David Spade";
         public string Email { get; set; } = "iamdavid@gmail.com";
         public string ImageUrl { get; set; } = "https://raw.githubusercontent.com/exendahal/ecommerceXF/master/eCommerce/eCommerce.Android/Resources/drawable/Avatar.png";
@@ -65,7 +65,7 @@ namespace EcommerceMAUI.ViewModel
                     await Application.Current.MainPage.Navigation.PushAsync(((Page)Activator.CreateInstance(item.TargetType)));
                 }
             }
-            
-        }       
+
+        }
     }
 }

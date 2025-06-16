@@ -8,5 +8,5 @@ public partial class VerificationView : ContentPage
     {
         InitializeComponent();
         BindingContext = new VerificationViewModel();
-    }   
+    }
 }

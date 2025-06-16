@@ -21,11 +21,11 @@ public class KeyboardService : IKeyboardService
 
         // Get the window handle
         var windowHandle = WindowNative.GetWindowHandle(_window);
-        
+
         // Get keyboard input source
         var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
         _keyboardSource = InputKeyboardSource.GetForWindowId(windowId);
-        
+
         if (_keyboardSource != null)
         {
             _keyboardSource.KeyDown += OnKeyDown;

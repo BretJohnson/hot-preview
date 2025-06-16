@@ -51,8 +51,8 @@ namespace EcommerceMAUI.ViewModel
             _ = InitializeAsync();
         }
         private async Task InitializeAsync()
-        {            
-            await PopulateDataAsync(); 
+        {
+            await PopulateDataAsync();
         }
         async Task PopulateDataAsync()
         {
@@ -115,12 +115,12 @@ namespace EcommerceMAUI.ViewModel
 
         private void CameraViewBarcodeDetected(object sender, BarcodeEventArgs args)
         {
-           
+
         }
 
         private void CameraViewCamerasLoaded(object sender, EventArgs e)
         {
-           
+
         }
     }
 }

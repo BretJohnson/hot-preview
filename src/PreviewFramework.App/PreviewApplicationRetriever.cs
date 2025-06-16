@@ -8,7 +8,7 @@ public static class PreviewApplicationRetriever
 {
     /// <summary>
     /// Get the platform specific PreviewApplication, used to control the behavior of the preview, if it exists.
-    /// 
+    ///
     /// Here's the algorithm:
     ///   1. If the app wants to support in-app example (e.g. the in app menu) or otherwise customize the example
     ///   experience, it must include the platform specified PreviewFramework assembly (e.g. PreviewFramework.Maui)
