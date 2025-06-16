@@ -41,9 +41,14 @@
 		  CS8602: Dereference of a possibly null reference.
 		  CS0618: Type or member is obsolete.
 		  CS1998: This async method lacks 'await' operators and will run synchronously.
+		  CS8612: Nullability of reference types in value of type 'T' doesn't match target type 'T?'.
+		  CS0168: The variable 'x' is declared but never used.
+		  CS8603: Possible null reference return.
+		  CS4014: Because this call is not awaited, execution of the current method continues before the call is completed.
+		  CS8600: Converting null literal or possible null value to non-nullable type.
 		  XC0022: Binding could be compiled to improve runtime performance if x:DataType is specified.
 		  XC0025: Binding was not compiled because it has an explicitly set Source property and compilation of bindings with Source is not enabled. -->
-    <NoWarn>$(NoWarn);CS8002;CS8618;CS8625;CS8767;CS8602;CS0618;CS1998;XC0022;XC0025</NoWarn>
+    <NoWarn>$(NoWarn);CS8002;CS8618;CS8625;CS8767;CS8602;CS0618;CS1998;CS8612;CS0168;CS8603;CS4014;CS8600;XC0022;XC0025</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -194,7 +199,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
 	</ItemGroup>
-	
+
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionEcommerceMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>
