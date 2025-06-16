@@ -51,10 +51,6 @@
     <NoWarn>$(NoWarn);CS8002;CS8618;CS8625;CS8767;CS8602;CS0618;CS1998;CS8612;CS0168;CS8603;CS4014;CS8600;XC0022;XC0025</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    	<DefineConstants>$(DefineConstants);PREVIEWS</DefineConstants>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#00C569" Resize="false" BaseSize="128,128" />
@@ -200,6 +196,9 @@
 	  <ProjectReference Include="..\..\..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionEcommerceMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+  <!-- Since we using a project reference instead of referencing the NuGet we need to also import the props -->
+  <Import Project="..\..\..\src\PreviewFramework\buildTransitive\PreviewFramework.props" />
+
+  <ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionEcommerceMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

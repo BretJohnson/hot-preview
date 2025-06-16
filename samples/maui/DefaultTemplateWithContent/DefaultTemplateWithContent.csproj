@@ -20,7 +20,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<!-- https://github.com/CommunityToolkit/Maui/issues/2205 -->
-		<NoWarn>$(NoWarn);XC0103</NoWarn>
+		<NoWarn>XC0103</NoWarn>
 		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 
 		<!-- Display name -->
@@ -43,10 +43,6 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>$(DefineConstants);PREVIEWS</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
 		<!-- App Icon -->
@@ -83,5 +79,8 @@
 	  <ProjectReference Include="..\..\..\src\PreviewFramework\PreviewFramework.csproj" />
 	  <ProjectReference Include="..\..\..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
 	</ItemGroup>
+
+  <!-- Since we using a project reference instead of referencing the NuGet we need to also import the props -->
+  <Import Project="..\..\..\src\PreviewFramework\buildTransitive\PreviewFramework.props" />
 
 </Project>
