@@ -5,7 +5,7 @@ using StreamJsonRpc;
 
 namespace PreviewFramework.App;
 
-public class AppServiceClientConnection(string connectionString)
+public class ToolingAppClientConnection(string connectionString)
 {
     private readonly string _connectionString = connectionString;
     private TcpClient? _tcpClient;

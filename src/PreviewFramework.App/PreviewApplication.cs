@@ -8,7 +8,7 @@ public abstract class PreviewApplication
     private static PreviewApplication? s_instance;
 
     private readonly List<string> _additionalAppAssemblies = [];
-    private AppServiceClientConnection? _appServiceConnection;
+    private ToolingAppClientConnection? _toolingConnection;
 
     public static PreviewApplication GetInstance() => s_instance ??
         throw new InvalidOperationException($"{nameof(PreviewApplication)} not initialized");
@@ -22,18 +22,25 @@ public abstract class PreviewApplication
 
     public abstract PreviewAppService GetPreviewAppService();
 
-    public void StartAppServiceConnection(string connectionString)
+    public void StartToolingConnection()
     {
-        if (_appServiceConnection is not null)
+        if (_toolingConnection is not null)
         {
             throw new InvalidOperationException("AppServiceConnection is already initialized.");
         }
 
-        _appServiceConnection = new AppServiceClientConnection(connectionString);
+        if (ToolingConnectionString is null)
+        {
+            throw new InvalidOperationException("ToolingConnectionString is not set.");
+        }
+
+        _toolingConnection = new ToolingAppClientConnection(ToolingConnectionString);
 
         // Fire and forget
-        _ = _appServiceConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
+        _ = _toolingConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
     }
+
+    public string? ToolingConnectionString { get; set; }
 
     public string? ProjectPath { get; set; }
 

@@ -16,7 +16,7 @@ public class DevToolsManager
     private IServiceProvider? _serviceProvider;
     private UIComponentsManager _uiComponentsManager;
     private string? _projectPath;
-    private readonly AppServiceConnectionListener _appServiceConnectionListener;
+    private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
@@ -47,7 +47,7 @@ public class DevToolsManager
         _uiComponentsManager = CreateUIComponentsManagerFromProjectAsync(_projectPath).GetAwaiter().GetResult();
 
         // Initialize the app service connection listener
-        _appServiceConnectionListener = new AppServiceConnectionListener();
+        _appServiceConnectionListener = new ToolingAppServerConnectionListener();
         _appServiceConnectionListener.StartListening();
 
         ConnectionSettingsJson.WriteSettings(_appServiceConnectionListener.Port);
