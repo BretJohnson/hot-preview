@@ -4,14 +4,14 @@ using System.Net.Sockets;
 
 namespace PreviewFramework.Tooling;
 
-public class AppServiceConnectionListener : IDisposable
+public class ToolingAppServerConnectionListener : IDisposable
 {
     public const int DefaultPort = 54242;
 
     private readonly TcpListener _listener;
-    private readonly ConcurrentDictionary<AppServiceServerConnection, AppServiceServerConnection> _connections = [];
+    private readonly ConcurrentDictionary<ToolingAppServerConnection, ToolingAppServerConnection> _connections = [];
 
-    public AppServiceConnectionListener()
+    public ToolingAppServerConnectionListener()
     {
         try
         {
@@ -34,7 +34,7 @@ public class AppServiceConnectionListener : IDisposable
         Task.Run(ListenLoopAsync);
     }
 
-    internal void AddConnection(AppServiceServerConnection connection)
+    internal void AddConnection(ToolingAppServerConnection connection)
     {
         if (!_connections.TryAdd(connection, connection))
         {
@@ -42,10 +42,12 @@ public class AppServiceConnectionListener : IDisposable
         }
     }
 
-    internal void RemoveConnection(AppServiceServerConnection connection)
+    internal void RemoveConnection(ToolingAppServerConnection connection)
     {
         _connections.TryRemove(connection, out _);
     }
+
+    public int ConnectionCount => _connections.Count;
 
     private async Task ListenLoopAsync()
     {
@@ -56,7 +58,7 @@ public class AppServiceConnectionListener : IDisposable
                 // Throws if cancellationToken is canceled before or during the wait
                 TcpClient tcpClient = await _listener.AcceptTcpClientAsync();
 
-                AppServiceServerConnection appServiceConnection = new AppServiceServerConnection(this, tcpClient);
+                ToolingAppServerConnection appServiceConnection = new ToolingAppServerConnection(this, tcpClient);
 
                 // Handle each client connection asynchronously (fire and forget)
                 _ = appServiceConnection.HandleConnectionAsync();

@@ -3,10 +3,10 @@ using StreamJsonRpc;
 
 namespace PreviewFramework.Tooling;
 
-public sealed class AppServiceServerConnection(AppServiceConnectionListener connectionListener, TcpClient tcpClient) :
+public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListener connectionListener, TcpClient tcpClient) :
     IPreviewAppControllerService
 {
-    private readonly AppServiceConnectionListener _connectionListener = connectionListener;
+    private readonly ToolingAppServerConnectionListener _connectionListener = connectionListener;
     private readonly TcpClient _tcpClient = tcpClient;
     private JsonRpc? _rpc;
     private IPreviewAppService? _appService;
