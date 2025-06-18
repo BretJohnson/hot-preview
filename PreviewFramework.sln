@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.ImageHash",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualTestUtils.MagickNet", "src\visual-test-utils\VisualTestUtils.MagickNet\VisualTestUtils.MagickNet.csproj", "{21CE0B2C-F8A4-4952-A305-F88403ACBF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.Tooling", "src\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.Tooling", "src\tooling\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj", "{2B1E5950-1519-47EE-92E3-6FEA470EAF2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTemplateWithContent", "samples\maui\DefaultTemplateWithContent\DefaultTemplateWithContent.csproj", "{CC0F1259-82DC-4437-AC2D-946A8B5F5746}"
 EndProject
@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Maui",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.App.Wpf", "src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj", "{864D052E-0443-B0EC-A144-D7A2656D0256}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.DevTools", "src\PreviewFramework.DevTools\PreviewFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.DevTools", "src\tooling\PreviewFramework.DevTools\PreviewFramework.DevTools.csproj", "{1609025D-27AF-22BE-3E93-6829BFDCCC68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{A65F07C8-822E-48F5-834D-3C4244AF339B}"
 EndProject

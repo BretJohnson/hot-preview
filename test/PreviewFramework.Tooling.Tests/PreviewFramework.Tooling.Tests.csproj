@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj" />
+    <ProjectReference Include="..\..\src\tooling\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj" />
   </ItemGroup>
 
 </Project>
