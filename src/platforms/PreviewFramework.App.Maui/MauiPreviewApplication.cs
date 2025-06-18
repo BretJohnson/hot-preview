@@ -8,8 +8,6 @@ using PreviewFramework.App.Maui;
 using PreviewFramework.App.Maui.Pages;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
-[assembly: PreviewApplicationClass(typeof(MauiPreviewApplication))]
-
 [assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
 [assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
