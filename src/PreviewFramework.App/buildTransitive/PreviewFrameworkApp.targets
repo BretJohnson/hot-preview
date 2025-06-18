@@ -6,9 +6,9 @@
   <Target Name="GeneratePreviewAppSettings" BeforeTargets="CoreCompile">
     <GeneratePreviewAppSettingsTask
       ProjectPath="$(MSBuildProjectFullPath)"
-      OutputPath="$(IntermediateOutputPath)GeneratedPreviewAppSettings.g.cs" />
+      OutputPath="$(IntermediateOutputPath)PreviewAppInitializer.g.cs" />
     <ItemGroup>
-      <Compile Include="$(IntermediateOutputPath)GeneratedPreviewAppSettings.g.cs" />
+      <Compile Include="$(IntermediateOutputPath)PreviewAppInitializer.g.cs" />
     </ItemGroup>
   </Target>
 </Project>

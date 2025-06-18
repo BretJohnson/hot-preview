@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="17.14.8" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.14.8" />
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
   </ItemGroup>
 
 </Project>
