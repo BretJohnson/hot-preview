@@ -2,8 +2,6 @@
 using PreviewFramework.App;
 using PreviewFramework.App.Wpf;
 
-[assembly: PreviewApplicationClass(typeof(WpfPreviewApplication))]
-
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]
 [assembly: ControlUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Media.Visual")]
