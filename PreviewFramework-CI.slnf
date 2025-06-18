@@ -2,13 +2,17 @@
   "solution": {
     "path": "PreviewFramework.sln",
     "projects": [
+      "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
+      "src\\PreviewFramework.App\\PreviewFramework.App.csproj",
       "src\\PreviewFramework\\PreviewFramework.csproj",
       "src\\platforms\\PreviewFramework.App.Maui\\PreviewFramework.App.Maui.csproj",
+      "src\\tooling\\PreviewFramework.DevTools\\PreviewFramework.DevTools.csproj",
       "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
       "src\\visual-test-utils\\VisualTestUtils.AppConnector\\VisualTestUtils.AppConnector.csproj",
       "src\\visual-test-utils\\VisualTestUtils.ImageHash\\VisualTestUtils.ImageHash.csproj",
       "src\\visual-test-utils\\VisualTestUtils.MagickNet\\VisualTestUtils.MagickNet.csproj",
-      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj"
+      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj",
+      "test\\PreviewFramework.Tooling.Tests\\PreviewFramework.Tooling.Tests.csproj"
     ]
   }
 }
