@@ -50,7 +50,7 @@ public class DevToolsManager
         _appServiceConnectionListener = new ToolingAppServerConnectionListener();
         _appServiceConnectionListener.StartListening();
 
-        ConnectionSettingsJson.WriteSettings(_appServiceConnectionListener.Port);
+        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port);
     }
 
     /// <summary>

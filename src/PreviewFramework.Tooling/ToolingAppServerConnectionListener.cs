@@ -28,9 +28,6 @@ public class ToolingAppServerConnectionListener : IDisposable
 
     public void StartListening()
     {
-        // Get the port number
-        int port = ((IPEndPoint)_listener.LocalEndpoint).Port;
-
         Task.Run(ListenLoopAsync);
     }
 
