@@ -12,6 +12,9 @@ namespace PreviewFramework.AppBuildTasks
         [Required]
         public required string OutputPath { get; set; }
 
+        [Required]
+        public required string PlatformPreviewApplication { get; set; }
+
         public override bool Execute()
         {
             try
@@ -67,7 +70,7 @@ namespace PreviewFramework.App
         [ModuleInitializer]
         public static void Initialize()
         {
-            var previewApp = PreviewApplicationRetriever.GetPreviewApplication();
+            var previewApp = {{PlatformPreviewApplication}};
             if (previewApp != null)
             {
                 previewApp.ProjectPath = @"{{projectPath.Replace("\"", "\"\"")}}";
