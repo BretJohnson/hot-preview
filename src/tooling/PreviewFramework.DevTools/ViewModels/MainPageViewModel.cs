@@ -3,7 +3,7 @@ using PreviewFramework.DevTools.ViewModels.NavTree;
 using PreviewFramework.Tooling;
 using Microsoft.UI.Xaml.Data;
 
-namespace PreviewFramework.DevTools.Presentation;
+namespace PreviewFramework.DevTools.ViewModels;
 
 [Bindable]
 public partial class MainPageViewModel : ObservableObject
@@ -21,7 +21,6 @@ public partial class MainPageViewModel : ObservableObject
         DevToolsManager.Instance.MainPageViewModel = this;
 
         _navigator = navigator;
-        Title = "Previews";
 
         // Initialize commands
         PlayCommand = new RelayCommand(Play);
@@ -31,7 +30,7 @@ public partial class MainPageViewModel : ObservableObject
         InitializeNavTreeItems();
     }
 
-    public string Title { get; }
+    public DevToolsManager DevToolsManager => DevToolsManager.Instance;
 
     public ICommand PlayCommand { get; }
 
