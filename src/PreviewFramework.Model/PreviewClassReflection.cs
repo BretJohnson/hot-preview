@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PreviewFramework;
 
-namespace PreviewFramework.SharedModel;
+namespace PreviewFramework.Model;
 
 public class PreviewClassReflection : PreviewReflection
 {

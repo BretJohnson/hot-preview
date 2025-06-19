@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using PreviewFramework;
 
-namespace PreviewFramework.SharedModel;
+namespace PreviewFramework.Model;
 
 public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, PreviewReflection>
 {

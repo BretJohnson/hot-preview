@@ -2,7 +2,7 @@
 using System.Reflection;
 using PreviewFramework;
 
-namespace PreviewFramework.SharedModel;
+namespace PreviewFramework.Model;
 
 public class PreviewStaticMethodReflection : PreviewReflection
 {

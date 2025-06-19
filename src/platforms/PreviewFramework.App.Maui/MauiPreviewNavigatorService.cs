@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using PreviewFramework.SharedModel;
+using PreviewFramework.Model;
 
 namespace PreviewFramework.App.Maui;
 

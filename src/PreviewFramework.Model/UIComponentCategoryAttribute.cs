@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PreviewFramework.SharedModel;
+namespace PreviewFramework.Model;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 public sealed class UIComponentCategoryAttribute : Attribute

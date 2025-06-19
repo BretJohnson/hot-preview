@@ -1,5 +1,5 @@
 ﻿using PreviewFramework;
-using PreviewFramework.SharedModel;
+using PreviewFramework.Model;
 using PreviewFramework.App.Wpf;
 
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]

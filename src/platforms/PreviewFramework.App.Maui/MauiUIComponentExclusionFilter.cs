@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using PreviewFramework.SharedModel;
+using PreviewFramework.Model;
 
 namespace PreviewFramework.App.Maui;
 

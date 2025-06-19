@@ -1,7 +1,7 @@
 ﻿using System;
 using PreviewFramework;
 
-namespace PreviewFramework.SharedModel;
+namespace PreviewFramework.Model;
 
 public abstract class PreviewReflection : PreviewBase
 {

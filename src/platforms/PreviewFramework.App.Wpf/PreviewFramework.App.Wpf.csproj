@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" />
+    <ProjectReference Include="..\..\PreviewFramework.Model\PreviewFramework.Model.csproj" />
   </ItemGroup>
 
 </Project>

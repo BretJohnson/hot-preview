@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 using StreamJsonRpc;
-using PreviewFramework.SharedModel.Protocol;
+using PreviewFramework.Model.Protocol;
 
 namespace PreviewFramework.Tooling;
 

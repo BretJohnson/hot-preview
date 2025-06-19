@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreviewFramework", "src\PreviewFramework\PreviewFramework.csproj", "{D0041716-74DA-45E3-A0D3-B4CC5CAC766B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.SharedModel", "src\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj", "{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewFramework.Model", "src\PreviewFramework.Model\PreviewFramework.Model.csproj", "{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D2D79087-63DE-48DA-A903-D915B1FAE013}"
 EndProject

@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework.SharedModel;
+﻿namespace PreviewFramework.Model;
 
 public abstract class PreviewBase
 {
