@@ -4,7 +4,7 @@ global using System.Windows.Input;
 global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
 global using PreviewFramework.DevTools.Models;
-global using PreviewFramework.DevTools.Presentation;
+global using PreviewFramework.DevTools.Views;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;

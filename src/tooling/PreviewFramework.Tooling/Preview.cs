@@ -1,4 +1,6 @@
-﻿namespace PreviewFramework.Tooling;
+﻿using PreviewFramework.Model;
+
+namespace PreviewFramework.Tooling;
 
 public abstract class Preview(string name, string? displayName) : PreviewBase(displayName)
 {

@@ -6,6 +6,7 @@ using Microsoft.Maui.Devices;
 using PreviewFramework;
 using PreviewFramework.App.Maui;
 using PreviewFramework.App.Maui.Pages;
+using PreviewFramework.Model;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
