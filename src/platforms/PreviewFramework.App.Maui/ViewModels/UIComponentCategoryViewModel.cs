@@ -1,3 +1,5 @@
+using PreviewFramework.Model;
+
 namespace PreviewFramework.App.Maui.ViewModels;
 
 public class UIComponentCategoryViewModel : PreviewsItemViewModel

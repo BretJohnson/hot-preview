@@ -1,3 +1,7 @@
+using System;
+using System.Threading.Tasks;
+using PreviewFramework.Model;
+
 namespace PreviewFramework.App.Wpf;
 
 public class WpfPreviewNavigatorService

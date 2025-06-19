@@ -3,7 +3,7 @@
     "path": "PreviewFramework.sln",
     "projects": [
       "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
-      "src\\PreviewFramework.App\\PreviewFramework.App.csproj",
+      "src\\PreviewFramework.Model\\PreviewFramework.Model.csproj",
       "src\\PreviewFramework\\PreviewFramework.csproj",
       "src\\platforms\\PreviewFramework.App.Maui\\PreviewFramework.App.Maui.csproj",
       "src\\tooling\\PreviewFramework.DevTools\\PreviewFramework.DevTools.csproj",

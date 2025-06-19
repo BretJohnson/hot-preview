@@ -1,4 +1,6 @@
-﻿namespace PreviewFramework.Tooling;
+﻿using PreviewFramework.Model;
+
+namespace PreviewFramework.Tooling;
 
 public class UIComponent : UIComponentBase<Preview>
 {
