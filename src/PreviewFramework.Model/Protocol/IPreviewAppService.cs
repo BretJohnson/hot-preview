@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace PreviewFramework;
+namespace PreviewFramework.Model.Protocol;
 
 public interface IPreviewAppService
 {

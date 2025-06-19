@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using PreviewFramework;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.Model;
 
 public class PreviewStaticMethodReflection : PreviewReflection
 {

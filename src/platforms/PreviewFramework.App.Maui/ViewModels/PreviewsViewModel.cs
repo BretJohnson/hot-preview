@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using PreviewFramework.App;
+using PreviewFramework.Model;
 
 namespace PreviewFramework.App.Maui.ViewModels;
 

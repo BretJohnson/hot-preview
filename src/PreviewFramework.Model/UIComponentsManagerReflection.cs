@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using PreviewFramework;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.Model;
 
 public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, PreviewReflection>
 {

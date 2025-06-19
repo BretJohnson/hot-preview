@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace PreviewFramework;
+namespace PreviewFramework.Model;
 
 public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIComponent : UIComponentBase<TPreview> where TPreview : PreviewBase
 {

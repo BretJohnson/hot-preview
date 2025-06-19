@@ -1,6 +1,7 @@
 ﻿using System;
+using PreviewFramework;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.Model;
 
 public abstract class PreviewReflection : PreviewBase
 {

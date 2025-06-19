@@ -1,4 +1,4 @@
-﻿using PreviewFramework.App;
+﻿using PreviewFramework.Model;
 
 namespace PreviewFramework.App.Wpf;
 
