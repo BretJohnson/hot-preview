@@ -3,19 +3,25 @@ using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using PreviewFramework.Tooling;
+using CommunityToolkit.Mvvm.ComponentModel;
+using PreviewFramework.DevTools.ViewModels;
 
 namespace PreviewFramework.DevTools;
 
 /// <summary>
 /// Singleton manager class for global application state for the PreviewFramework DevTools app.
 /// </summary>
-public class DevToolsManager
+public partial class DevToolsManager : ObservableObject
 {
     private static readonly Lazy<DevToolsManager> s_instance = new(() => new DevToolsManager());
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
     private UIComponentsManager _uiComponentsManager;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ProjectName))]
     private string? _projectPath;
+
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
 
     /// <summary>
@@ -29,9 +35,10 @@ public class DevToolsManager
     public UIComponentsManager UIComponentsManager => _uiComponentsManager;
 
     /// <summary>
-    /// Get the current project path, if there is one.
+    /// Gets the project name from the project path, without the extension.
+    /// Returns null if no project path is set.
     /// </summary>
-    public string? ProjectPath => _projectPath;
+    public string? ProjectName => ProjectPath != null ? Path.GetFileNameWithoutExtension(ProjectPath) : null;
 
     /// <summary>
     /// Private constructor to enforce singleton pattern.
