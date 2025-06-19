@@ -1,4 +1,4 @@
-namespace PreviewFramework.App.Maui.ViewModels;
+namespace PreviewFramework.SharedModel.Maui.ViewModels;
 
 public abstract class PreviewsItemViewModel
 {

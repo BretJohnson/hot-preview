@@ -1,6 +1,6 @@
 ﻿using EcommerceMAUI.Views;
-using PreviewFramework.App;
-using PreviewFramework.App.Maui;
+using PreviewFramework.SharedModel;
+using PreviewFramework.SharedModel.Maui;
 
 namespace EcommerceMAUI;
 

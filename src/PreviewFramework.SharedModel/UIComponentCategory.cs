@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework;
+﻿namespace PreviewFramework.SharedModel;
 
 public class UIComponentCategory
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PreviewFramework;
+namespace PreviewFramework.SharedModel;
 
 public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 {

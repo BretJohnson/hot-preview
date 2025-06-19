@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using PreviewFramework.App;
+using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.App.Maui;
+namespace PreviewFramework.SharedModel.Maui;
 
 public class MauiPreviewAppService(MauiPreviewApplication mauiPreviewApplication) : PreviewAppService(mauiPreviewApplication)
 {

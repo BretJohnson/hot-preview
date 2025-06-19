@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.SharedModel;
 
 public class UIComponentNotFoundException : Exception
 {

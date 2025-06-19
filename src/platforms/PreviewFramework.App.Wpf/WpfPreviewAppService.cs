@@ -1,6 +1,6 @@
-﻿using PreviewFramework.App;
+﻿using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.App.Wpf;
+namespace PreviewFramework.SharedModel.Wpf;
 
 public class WpfPreviewAppService(WpfPreviewApplication wpfPreviewApplication) : PreviewAppService(wpfPreviewApplication)
 {

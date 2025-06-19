@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework;
+﻿namespace PreviewFramework.SharedModel;
 
 public class UIComponentPreviewPair<TUIComponent, TPreview>(TUIComponent uiComponent, TPreview preview)
     where TPreview : PreviewBase

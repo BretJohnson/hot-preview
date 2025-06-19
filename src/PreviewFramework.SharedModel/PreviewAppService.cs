@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PreviewFramework.SharedModel.Protocol;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.SharedModel;
 
 public abstract class PreviewAppService(PreviewApplication previewApplication) : IPreviewAppService
 {

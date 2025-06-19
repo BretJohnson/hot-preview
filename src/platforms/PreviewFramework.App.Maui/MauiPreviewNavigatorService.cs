@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using PreviewFramework.App;
+using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.App.Maui;
+namespace PreviewFramework.SharedModel.Maui;
 
 public class MauiPreviewNavigatorService
 {

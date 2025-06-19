@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using PreviewFramework.App;
+using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.App.Maui.ViewModels;
+namespace PreviewFramework.SharedModel.Maui.ViewModels;
 
 public class PreviewsViewModel // : INotifyPropertyChanged
 {

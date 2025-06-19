@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using StreamJsonRpc;
 
-namespace PreviewFramework.App;
+namespace PreviewFramework.SharedModel;
 
 public class ToolingAppClientConnection(string connectionString)
 {
