@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj" ReferenceOutputAssembly="false" GeneratePathProperty="true" />
     <ProjectReference Include="..\..\PreviewFramework.App\PreviewFramework.App.csproj" />
   </ItemGroup>
 
@@ -64,8 +65,8 @@
   <ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true">
     <Compile Remove="**\*.Windows.cs" />
     <None Include="**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-  </ItemGroup>  
-  
+  </ItemGroup>
+
   <ItemGroup>
 	  <Compile Update="App.xaml.cs">
 	    <DependentUpon>App.xaml</DependentUpon>

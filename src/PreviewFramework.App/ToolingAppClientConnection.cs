@@ -27,11 +27,20 @@ public class ToolingAppClientConnection(string connectionString)
         await _tcpClient.ConnectAsync(host, port).ConfigureAwait(false);
         NetworkStream networkStream = _tcpClient.GetStream();
 
-        _rpc = JsonRpc.Attach(networkStream, appService);
-
+        _rpc = new JsonRpc(networkStream, networkStream, appService);
         _appControllerService = _rpc.Attach<IPreviewAppControllerService>();
 
         PreviewApplication previewApplication = PreviewApplication.GetInstance();
+        try
+        {
+            _rpc.StartListening();
+        }
+        catch
+        {
+            _rpc.Dispose();
+            throw;
+        }
+
         await _appControllerService.RegisterAppAsync(previewApplication.ProjectPath,
             previewApplication.PlatformName).ConfigureAwait(false);
     }

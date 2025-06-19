@@ -21,13 +21,22 @@ public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListene
         {
             NetworkStream connectionStream = _tcpClient.GetStream();
 
-            _rpc = JsonRpc.Attach(connectionStream);
+            _rpc = new JsonRpc(connectionStream, connectionStream);
+
+            _rpc.AddLocalRpcTarget<IPreviewAppControllerService>(this, null);
             _appService = _rpc.Attach<IPreviewAppService>();
 
-            JsonRpc.Attach(connectionStream, this);
-
-            // Register the connection with the listener
             _connectionListener.AddConnection(this);
+
+            try
+            {
+                _rpc.StartListening();
+            }
+            catch
+            {
+                _rpc.Dispose();
+                throw;
+            }
 
             // Handle JSON-RPC method calls and notifications on this connection
             await _rpc.Completion;
@@ -48,7 +57,7 @@ public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListene
         }
     }
 
-    Task IPreviewAppControllerService.RegisterAppAsync(string projectPath, string platformName)
+    public Task RegisterAppAsync(string projectPath, string platformName)
     {
         ProjectPath = projectPath;
         PlatformName = platformName;

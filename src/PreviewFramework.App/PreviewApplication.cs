@@ -34,7 +34,8 @@ public abstract class PreviewApplication
             throw new InvalidOperationException("ToolingConnectionString is not set.");
         }
 
-        _toolingConnection = new ToolingAppClientConnection(ToolingConnectionString);
+        string platformConnectionString = TransformConnectionStringForPlatform(ToolingConnectionString);
+        _toolingConnection = new ToolingAppClientConnection(platformConnectionString);
 
         // Fire and forget
         _ = _toolingConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
@@ -72,4 +73,16 @@ public abstract class PreviewApplication
     }
 
     public IEnumerable<string> AdditionalAppAssemblies => _additionalAppAssemblies;
+
+    /// <summary>
+    /// Transforms a tooling connection string to be appropriate for the current platform.
+    /// By default, returns the input string unchanged. Platform-specific overrides can adjust
+    /// the connection string (such as IP addresses or ports) to match the requirements or conventions
+    /// of the target platform or device.
+    /// </summary>
+    public virtual string TransformConnectionStringForPlatform(string connectionString)
+    {
+        // By default, return the string supplied
+        return connectionString;
+    }
 }
