@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Maui;
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
 using PreviewFramework;
@@ -65,6 +65,54 @@ public partial class MauiPreviewApplication : PreviewApplication
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
     public override string PlatformName { get; set; }
+
+    public override string TransformConnectionStringForPlatform(string connectionString)
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            return connectionString;
+
+        // Split on the first ':' to separate IP list and port
+        int colonIndex = connectionString.IndexOf(':');
+        if (colonIndex < 0)
+            return connectionString;
+
+        string ipList = connectionString.Substring(0, colonIndex);
+        string portPart = connectionString.Substring(colonIndex); // includes the colon
+        var ips = new List<string>(ipList.Split(','));
+
+        bool hasLoopback = ips.Contains("127.0.0.1");
+        if (hasLoopback)
+        {
+            DevicePlatform platform = DeviceInfo.Platform;
+            bool isVirtual = DeviceInfo.DeviceType == DeviceType.Virtual;
+
+            // For desktop platforms, use loopback IP directly
+            if (platform == DevicePlatform.WinUI || platform == DevicePlatform.MacCatalyst)
+            {
+                ips.Clear();
+                ips.Add("127.0.0.1");
+            }
+            // For iOS simulator, the loopback address also works to connect to the host Mac
+            else if (platform == DevicePlatform.iOS && isVirtual)
+            {
+                ips.Clear();
+                ips.Add("127.0.0.1");
+            }
+            // For Android emulator, use the special loopback address for the host machine
+            else if (platform == DevicePlatform.Android && isVirtual)
+            {
+                ips.Clear();
+                ips.Add("10.0.2.2");
+            }
+            // Otherwise, use external IP(s)
+            else
+            {
+                ips.RemoveAll(ip => ip == "127.0.0.1");
+            }
+        }
+
+        return string.Join(",", ips) + portPart;
+    }
 
     public void AddPreviewUIShellItem(Shell shell, string title = "Previews", string? icon = null)
     {
