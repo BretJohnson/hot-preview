@@ -2,6 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using StreamJsonRpc;
+using PreviewFramework.SharedModel.Protocol;
 
 namespace PreviewFramework.SharedModel;
 
