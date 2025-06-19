@@ -1,12 +1,12 @@
 ﻿using PreviewFramework;
 using PreviewFramework.SharedModel;
-using PreviewFramework.SharedModel.Wpf;
+using PreviewFramework.App.Wpf;
 
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]
 [assembly: ControlUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Media.Visual")]
 
-namespace PreviewFramework.SharedModel.Wpf;
+namespace PreviewFramework.App.Wpf;
 
 public class WpfPreviewApplication : PreviewApplication
 {

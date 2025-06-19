@@ -4,7 +4,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.SharedModel.Maui;
+namespace PreviewFramework.App.Maui;
 
 public class MauiPreviewNavigatorService
 {

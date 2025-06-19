@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel.Wpf;
+namespace PreviewFramework.App.Wpf;
 
 public class WpfPreviewNavigatorService
 {

@@ -1,9 +1,9 @@
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using PreviewFramework.SharedModel;
-using PreviewFramework.SharedModel.Maui.Utilities;
+using PreviewFramework.App.Maui.Utilities;
 
-namespace PreviewFramework.SharedModel.Maui.ViewModels;
+namespace PreviewFramework.App.Maui.ViewModels;
 
 public class UIComponentViewModel : PreviewsItemViewModel
 {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.SharedModel.Maui;
+namespace PreviewFramework.App.Maui;
 
 public class MauiUIComponentExclusionFilter : IUIComponentExclusionFilter
 {

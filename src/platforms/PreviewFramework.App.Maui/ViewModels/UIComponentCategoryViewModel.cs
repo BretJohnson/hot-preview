@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel.Maui.ViewModels;
+namespace PreviewFramework.App.Maui.ViewModels;
 
 public class UIComponentCategoryViewModel : PreviewsItemViewModel
 {

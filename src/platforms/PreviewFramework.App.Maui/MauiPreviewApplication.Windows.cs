@@ -3,7 +3,7 @@ using Microsoft.UI.Input;
 using Windows.System;
 using Windows.UI.Core;
 
-namespace PreviewFramework.SharedModel.Maui;
+namespace PreviewFramework.App.Maui;
 
 public partial class MauiPreviewApplication
 {

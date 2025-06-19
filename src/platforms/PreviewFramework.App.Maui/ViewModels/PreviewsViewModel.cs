@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using PreviewFramework.SharedModel;
 
-namespace PreviewFramework.SharedModel.Maui.ViewModels;
+namespace PreviewFramework.App.Maui.ViewModels;
 
 public class PreviewsViewModel // : INotifyPropertyChanged
 {
