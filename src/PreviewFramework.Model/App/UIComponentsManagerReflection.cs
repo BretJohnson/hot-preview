@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PreviewFramework;
 
-namespace PreviewFramework.Model;
+namespace PreviewFramework.Model.App;
 
 public class UIComponentsManagerReflection : UIComponentsManagerBase<UIComponentReflection, PreviewReflection>
 {

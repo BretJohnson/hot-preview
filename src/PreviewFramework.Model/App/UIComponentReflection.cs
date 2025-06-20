@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace PreviewFramework.Model;
+namespace PreviewFramework.Model.App;
 
 public class UIComponentReflection : UIComponentBase<PreviewReflection>
 {

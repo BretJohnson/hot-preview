@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using StreamJsonRpc;
 using PreviewFramework.Model.Protocol;
 
-namespace PreviewFramework.Model;
+namespace PreviewFramework.Model.App;
 
 public class ToolingAppClientConnection(string connectionString)
 {

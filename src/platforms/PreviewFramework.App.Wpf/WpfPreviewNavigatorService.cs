@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using PreviewFramework.Model;
+using PreviewFramework.Model.App;
 
 namespace PreviewFramework.App.Wpf;
 

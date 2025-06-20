@@ -6,4 +6,3 @@ When generating commit messages, follow these rules:
 - Do not end the subject line with a period
 - Separate the subject from the body with a blank line
 - If a body is needed, wrap it at 72 characters
-- Use the body to explain what and why, not how

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using PreviewFramework;
 
-namespace PreviewFramework.Model;
+namespace PreviewFramework.Model.App;
 
 public class PreviewClassReflection : PreviewReflection
 {
