@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Description>MSBuild tasks for PreviewFramework</Description>
+
+    <!-- To avoid warning, disable dynamic platform resolution since this is referenced with SkipGetTargetFrameworkProperties="true" -->
+    <EnableDynamicPlatformResolution>false</EnableDynamicPlatformResolution>
   </PropertyGroup>
 
   <ItemGroup>

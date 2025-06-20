@@ -16,9 +16,6 @@
         <!-- https://github.com/dotnet/msbuild/blob/main/documentation/ProjectReference-Protocol.md#setplatform-negotiation -->
         <EnableDynamicPlatformResolution>true</EnableDynamicPlatformResolution>
 
-        <!-- Set default Platforms for netstandard2.0 projects to avoid MSB3982 warning -->
-        <Platforms Condition="'$(TargetFramework)' == 'netstandard2.0' AND '$(Platforms)' == ''">AnyCPU</Platforms>
-
         <!-- Opt in till https://github.com/NuGet/Home/issues/9803 makes this the default. -->
         <!-- Opt back out until an SDK with the fix for https://github.com/NuGet/Home/issues/12177 is generally available. -->
         <RestoreUseStaticGraphEvaluation>false</RestoreUseStaticGraphEvaluation>

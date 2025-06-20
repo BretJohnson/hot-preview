@@ -11,15 +11,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PreviewFramework\PreviewFramework.csproj" />
-    <ProjectReference Include="..\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
-
-  <!-- Include the task assembly in the package under build -->
-  <Target Name="IncludeTaskAssemblies" BeforeTargets="GenerateNuspec">
-    <ItemGroup>
-      <_PackageFiles Include="..\PreviewFramework.AppBuildTasks\bin\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll">
-        <PackagePath>build\PreviewFramework.AppBuildTasks.dll</PackagePath>
-      </_PackageFiles>
-    </ItemGroup>
-  </Target>
 </Project>
