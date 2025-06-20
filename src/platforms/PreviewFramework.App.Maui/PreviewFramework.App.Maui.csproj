@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
-    <ProjectReference Include="..\..\PreviewFramework.Model\PreviewFramework.Model.csproj" />
+    <ProjectReference Include="..\..\PreviewFramework.Model\PreviewFramework.Model.csproj" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup>
