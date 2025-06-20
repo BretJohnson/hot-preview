@@ -155,7 +155,7 @@ public partial class DevToolsManager : ObservableObject
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = $"run --project \"{_projectPath}\"",
+                Arguments = $"run --project \"{ProjectPath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -203,10 +203,10 @@ public partial class DevToolsManager : ObservableObject
             _logger.LogInformation("Updating project path to: {ProjectPath}", newProjectPath);
 
             // Update the project path
-            _projectPath = newProjectPath;
+            ProjectPath = newProjectPath;
 
             // Reload the UIComponentsManager with the new project
-            _uiComponentsManager = await CreateUIComponentsManagerFromProjectAsync(_projectPath);
+            _uiComponentsManager = await CreateUIComponentsManagerFromProjectAsync(newProjectPath);
 
             _logger.LogInformation("Project path updated successfully");
             return true;
