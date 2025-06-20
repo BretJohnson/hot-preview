@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Description>MSBuild tasks for PreviewFramework</Description>
+
+    <!-- Add platform metadata for EnableDynamicPlatformResolution -->
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
