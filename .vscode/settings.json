@@ -21,4 +21,15 @@
     "editor.formatOnSave": false // enable this when they conform
   },
   "dotnet.defaultSolution": "PreviewFramework.sln",
+
+  // Disable the git pager in the integrated terminal to avoid it being invoked for AI agent commands, like from Cursor
+  "terminal.integrated.env.windows": {
+    "GIT_PAGER": ""
+  },
+  "terminal.integrated.env.osx": {
+    "GIT_PAGER": ""
+  },
+  "terminal.integrated.env.linux": {
+    "GIT_PAGER": ""
+  }
 }
