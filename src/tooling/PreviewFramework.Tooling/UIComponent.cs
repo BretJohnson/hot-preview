@@ -6,7 +6,7 @@ public class UIComponent : UIComponentBase<Preview>
 {
     private readonly string _typeName;
 
-    internal UIComponent(UIComponentKind kind, string typeName, string? displayName = null) : base(kind, displayName)
+    internal UIComponent(UIComponentKind kind, string typeName, string? displayNameOverride = null) : base(kind, displayNameOverride)
     {
         _typeName = typeName;
     }

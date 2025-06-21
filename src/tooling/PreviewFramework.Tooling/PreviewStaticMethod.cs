@@ -1,8 +1,5 @@
 ﻿namespace PreviewFramework.Tooling;
 
-public class PreviewStaticMethod : Preview
+public class PreviewStaticMethod(string methodFullName, string? displayNameOverride) : Preview(methodFullName, displayNameOverride)
 {
-    public PreviewStaticMethod(string methodFullName, string? displayName) : base(methodFullName, displayName)
-    {
-    }
 }

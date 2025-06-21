@@ -1,17 +1,12 @@
 using System;
 using System.Reflection;
-using PreviewFramework;
+using PreviewFramework.Model.Protocol;
 
 namespace PreviewFramework.Model.App;
 
-public class PreviewStaticMethodReflection : PreviewReflection
+public class PreviewStaticMethodReflection(PreviewAttribute previewAttribute, MethodInfo methodInfo) : PreviewReflection(previewAttribute)
 {
-    public MethodInfo MethodInfo { get; }
-
-    public PreviewStaticMethodReflection(PreviewAttribute previewAttribute, MethodInfo methodInfo) : base(previewAttribute)
-    {
-        MethodInfo = methodInfo;
-    }
+    public MethodInfo MethodInfo { get; } = methodInfo;
 
     public override object Create()
     {
@@ -41,4 +36,6 @@ public class PreviewStaticMethodReflection : PreviewReflection
     /// full qualified method name.
     /// </summary>
     public override string Name => MethodInfo.DeclaringType.FullName + "." + MethodInfo.Name;
+
+    public override string GetPreviewType() => PreviewType.StaticMethod;
 }

@@ -7,17 +7,19 @@ namespace PreviewFramework.Model.App;
 
 public abstract class PreviewAppService(PreviewApplication previewApplication) : IPreviewAppService
 {
+    public PreviewApplication PreviewApplication { get; } = previewApplication;
+
     public abstract Task NavigateToPreviewAsync(string uiComponentName, string previewName);
 
     protected UIComponentReflection GetUIComponent(string uiComponentName)
     {
-        return previewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName) ??
+        return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName) ??
             throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
     }
 
     protected UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
     {
-        return previewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName);
+        return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName);
     }
 
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
@@ -30,6 +32,17 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 
         string[] previewNames = component.Previews.Select(preview => preview.Name).ToArray();
         return Task.FromResult(previewNames);
+    }
+
+    public Task<UIComponentInfo[]> GetUIComponentsAsync()
+    {
+        UIComponentsManagerReflection uiComponentsManager = PreviewApplication.GetUIComponentsManager();
+
+        UIComponentInfo[] uiComponentInfos = uiComponentsManager.UIComponents
+            .Select(component => component.GetUIComponentInfo())
+            .ToArray();
+
+        return Task.FromResult(uiComponentInfos);
     }
 
     protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)

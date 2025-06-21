@@ -6,12 +6,12 @@ namespace PreviewFramework.Model;
 
 public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 {
-    private readonly string? _displayName;
+    private readonly string? _displayNameOverride;
     private readonly List<TPreview> _previews = [];
 
-    public UIComponentBase(UIComponentKind kind, string? displayName)
+    public UIComponentBase(UIComponentKind kind, string? displayNameOverride)
     {
-        _displayName = displayName;
+        _displayNameOverride = displayNameOverride;
         Kind = kind;
     }
 
@@ -30,7 +30,9 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
     /// isn't necessarily unique. It defaults to the class name (with no namespace qualifier) but can be
     /// overridden by the developer.
     /// </summary>
-    public string DisplayName => _displayName ?? NameUtilities.GetUnqualifiedName(Name);
+    public string DisplayName => _displayNameOverride ?? NameUtilities.GetUnqualifiedName(Name);
+
+    public string? DisplayNameOverride => _displayNameOverride;
 
     public bool HasPreview => _previews.Count >= 0;
 

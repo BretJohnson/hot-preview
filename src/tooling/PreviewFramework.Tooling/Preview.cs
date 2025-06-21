@@ -2,7 +2,7 @@
 
 namespace PreviewFramework.Tooling;
 
-public abstract class Preview(string name, string? displayName) : PreviewBase(displayName)
+public abstract class Preview(string name, string? displayNameOverride) : PreviewBase(displayNameOverride)
 {
     private readonly string _name = name;
 
