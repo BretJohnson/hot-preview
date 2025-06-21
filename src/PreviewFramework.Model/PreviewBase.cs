@@ -20,3 +20,4 @@ public abstract class PreviewBase(string? displayNameOverride)
     /// full qualified method name.
     /// </summary>
     public abstract string Name { get; }
+}
