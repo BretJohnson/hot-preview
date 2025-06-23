@@ -6,7 +6,7 @@ using PreviewFramework.SharedModel;
 
 namespace PreviewFramework.Tooling;
 
-public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UIComponent, Preview>
+public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UIComponentTooling, Preview>
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromRoslyn and processes the compilation to gather UI component information.
@@ -96,24 +96,24 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UICompon
 
     private void AddApparentUIElement(string uiComponentName, UIComponentKind kind)
     {
-        if (!_uiComponentsByName.TryGetValue(uiComponentName, out UIComponent? component))
+        if (!_uiComponentsByName.TryGetValue(uiComponentName, out UIComponentTooling? component))
         {
-            component = new UIComponent(kind, uiComponentName, null, []);
+            component = new UIComponentTooling(kind, uiComponentName, null, []);
             _uiComponentsByName[uiComponentName] = component;
         }
     }
 
     private void AddPreview(string uiComponentName, Preview preview)
     {
-        if (_uiComponentsByName.TryGetValue(uiComponentName, out UIComponent? component))
+        if (_uiComponentsByName.TryGetValue(uiComponentName, out UIComponentTooling? component))
         {
-            component = (UIComponent)component.WithAddedPreview(preview);
+            component = (UIComponentTooling)component.WithAddedPreview(preview);
         }
         else
         {
             // TODO: Add this: UIComponentKind kind = InferUIComponentKind(uiComponentType);
             UIComponentKind kind = UIComponentKind.Page;
-            component = new UIComponent(kind, uiComponentName, null, [preview]);
+            component = new UIComponentTooling(kind, uiComponentName, null, [preview]);
         }
 
         _uiComponentsByName[uiComponentName] = component;
@@ -123,11 +123,11 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UICompon
     /// Creates an immutable UIComponentsManager from the builder's current state.
     /// </summary>
     /// <returns>An immutable UIComponentsManager containing all the builder's data</returns>
-    public UIComponentsManager ToImmutable()
+    public UIComponentsManagerTooling ToImmutable()
     {
         Validate();
 
-        return new UIComponentsManager(UIComponentsByName, Categories);
+        return new UIComponentsManagerTooling(UIComponentsByName, Categories);
     }
 
     private class PreviewWalker(Compilation compilation, SemanticModel semanticModel, GetUIComponentsFromRoslyn builder, bool includeUIComponentsWithNoPreviews) : CSharpSyntaxWalker

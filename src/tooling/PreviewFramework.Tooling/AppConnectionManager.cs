@@ -14,7 +14,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     private AppManager? _appManager;
 
     public string? PlatformName { get; set; }
-    public UIComponentsManager? UIComponentsManager { get; private set; }
+    public UIComponentsManagerTooling? UIComponentsManager { get; private set; }
 
     internal async Task HandleConnectionAsync()
     {

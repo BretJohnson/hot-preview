@@ -1,4 +1,3 @@
-using PreviewFramework.DevTools.ViewModels;
 using PreviewFramework.DevTools.ViewModels.NavTree;
 using PreviewFramework.Tooling;
 using Microsoft.UI.Xaml.Data;
@@ -40,10 +39,10 @@ public partial class MainPageViewModel : ObservableObject
     {
         NavTreeItems.Clear();
 
-        AppManager? currentApp = DevToolsManager.Instance.CurrentApp;
-        if (currentApp is not null)
+        UIComponentsManagerTooling? uiComponentsManager = DevToolsManager.Instance.CurrentApp?.UIComponentsManager;
+        if (uiComponentsManager is not null)
         {
-            foreach (UIComponent uiComponent in currentApp.UIComponentsManager.UIComponents)
+            foreach (UIComponentTooling uiComponent in uiComponentsManager.UIComponents)
             {
                 NavTreeItems.Add(new UIComponentViewModel(uiComponent));
             }

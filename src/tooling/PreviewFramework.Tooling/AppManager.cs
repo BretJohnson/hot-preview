@@ -14,7 +14,7 @@ public class AppManager(AppsManager appsManager, string projectPath)
 {
     public AppsManager AppsManager { get; } = appsManager;
 
-    public UIComponentsManager UIComponentsManager { get; set; }
+    public UIComponentsManagerTooling? UIComponentsManager { get; set; }
 
     /// <summary>
     /// Whether the app shouldn't be automatically removed when there are no more app connections.

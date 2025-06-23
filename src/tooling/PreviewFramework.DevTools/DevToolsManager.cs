@@ -15,7 +15,7 @@ public partial class DevToolsManager : ObservableObject
     private static readonly Lazy<DevToolsManager> s_instance = new(() => new DevToolsManager());
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
-    private UIComponentsManager _uiComponentsManager;
+    private UIComponentsManagerTooling _uiComponentsManager;
 
     private readonly AppsManager _appsManager = new();
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
@@ -210,15 +210,15 @@ public partial class DevToolsManager : ObservableObject
 #endif
 
     /// <summary>
-    /// Creates a UIComponentsManager from a single project file (.csproj) by loading and analyzing the project.
+    /// Creates a UIComponentsManagerTooling from a single project file (.csproj) by loading and analyzing the project.
     /// </summary>
     /// <param name="projectPath">Path to the project file (.csproj)</param>
     /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
-    /// <returns>A UIComponentsManager instance with components from the project</returns>
+    /// <returns>A UIComponentsManagerTooling instance with components from the project</returns>
     /// <exception cref="ArgumentException">Thrown when the project path is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown when the project file is not found</exception>
     /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or project cannot be loaded</exception>
-    public static async Task<UIComponentsManager> CreateUIComponentsManagerFromProjectAsync(string projectPath,
+    public static async Task<UIComponentsManagerTooling> CreateUIComponentsManagerFromProjectAsync(string projectPath,
         bool includeApparentUIComponentsWithNoPreviews = false)
     {
         if (string.IsNullOrWhiteSpace(projectPath))

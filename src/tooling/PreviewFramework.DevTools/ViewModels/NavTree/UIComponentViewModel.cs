@@ -2,7 +2,7 @@ using PreviewFramework.Tooling;
 
 namespace PreviewFramework.DevTools.ViewModels.NavTree;
 
-public class UIComponentViewModel(UIComponent uiComponent) : NavTreeItemViewModel
+public class UIComponentViewModel(UIComponentTooling uiComponent) : NavTreeItemViewModel
 {
     public override string DisplayName => uiComponent.DisplayName;
 
