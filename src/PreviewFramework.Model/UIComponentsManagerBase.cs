@@ -4,19 +4,13 @@ using System.Linq;
 
 namespace PreviewFramework.Model;
 
-public abstract class UIComponentsManagerBase<TUIComponent, TPreview> where TUIComponent : UIComponentBase<TPreview> where TPreview : PreviewBase
+public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
+    IReadOnlyDictionary<string, TUIComponent> uiComponents,
+    IReadOnlyDictionary<string, UIComponentCategory> categories) where TUIComponent : UIComponentBase<TPreview> where TPreview : PreviewBase
 {
-    private readonly IReadOnlyDictionary<string, TUIComponent> _uiComponentsByName;
-    private readonly IReadOnlyDictionary<string, UIComponentCategory> _categories;
+    private readonly IReadOnlyDictionary<string, TUIComponent> _uiComponentsByName = uiComponents;
+    private readonly IReadOnlyDictionary<string, UIComponentCategory> _categories = categories;
     private List<TUIComponent>? _sortedComponents;
-
-    protected UIComponentsManagerBase(
-        IReadOnlyDictionary<string, TUIComponent> uiComponents,
-        IReadOnlyDictionary<string, UIComponentCategory> categories)
-    {
-        _uiComponentsByName = uiComponents;
-        _categories = categories;
-    }
 
     public IEnumerable<UIComponentCategory> Categories => _categories.Values;
 
