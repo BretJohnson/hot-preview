@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace PreviewFramework.Tooling;
 
@@ -11,10 +8,10 @@ namespace PreviewFramework.Tooling;
 /// Uses SynchronizationContext to ensure property change notifications are raised on the correct thread,
 /// e.g. the UI thread.
 /// </summary>
-/// <param name="syncContext">The SynchronizationContext to use for marshaling property change notifications to the UI thread</param>
-public abstract class ToolingObservableObject(SynchronizationContext syncContext) : INotifyPropertyChanged
+/// <param name="synchronizationContext">The SynchronizationContext to use for marshaling property change notifications to the UI thread</param>
+public abstract class ToolingObservableObject(SynchronizationContext synchronizationContext) : INotifyPropertyChanged
 {
-    private readonly SynchronizationContext _syncContext = syncContext ?? throw new ArgumentNullException(nameof(syncContext));
+    public SynchronizationContext SynchronizationContext { get; } = synchronizationContext;
 
     /// <summary>
     /// Occurs when a property value changes.
@@ -34,7 +31,7 @@ public abstract class ToolingObservableObject(SynchronizationContext syncContext
             return;
         }
 
-        if (SynchronizationContext.Current == _syncContext)
+        if (SynchronizationContext == SynchronizationContext.Current)
         {
             // Already on the correct thread - create args and invoke directly
             handler(this, new PropertyChangedEventArgs(propertyName));
@@ -42,7 +39,7 @@ public abstract class ToolingObservableObject(SynchronizationContext syncContext
         else
         {
             // Marshal to the UI thread using tuple to avoid closure allocation
-            _syncContext.Post(state =>
+            SynchronizationContext.Post(state =>
             {
                 (PropertyChangedEventHandler h, object sender, PropertyChangedEventArgs args) = ((PropertyChangedEventHandler, object, PropertyChangedEventArgs))state!;
                 h(sender, args);

@@ -10,11 +10,17 @@ namespace PreviewFramework.Tooling;
 /// </summary>
 /// <param name="appsManager">The apps manager that owns this app</param>
 /// <param name="projectPath">The startup project path of the app</param>
-public class AppManager(AppsManager appsManager, string projectPath)
+public class AppManager(SynchronizationContext synchronizationContext, AppsManager appsManager, string projectPath) : ToolingObservableObject(synchronizationContext)
 {
+    private UIComponentsManagerTooling? _uiComponentsManager;
+
     public AppsManager AppsManager { get; } = appsManager;
 
-    public UIComponentsManagerTooling? UIComponentsManager { get; set; }
+    public UIComponentsManagerTooling? UIComponentsManager
+    {
+        get => _uiComponentsManager;
+        set => SetProperty(ref _uiComponentsManager, value);
+    }
 
     /// <summary>
     /// Whether the app shouldn't be automatically removed when there are no more app connections.
@@ -50,5 +56,11 @@ public class AppManager(AppsManager appsManager, string projectPath)
         {
             AppsManager.RemoveApp(ProjectPath);
         }
+    }
+
+    internal void UpdateUIComponents()
+    {
+
+
     }
 }

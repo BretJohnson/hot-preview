@@ -1,11 +1,13 @@
+using System.Collections.Concurrent;
+
 namespace PreviewFramework.Tooling;
 
 /// <summary>
 /// The AppsManager is responsible for managing the apps that are connected to the tooling server.
 /// </summary>
-public class AppsManager
+public class AppsManager(SynchronizationContext synchronizationContext) : ToolingObservableObject(synchronizationContext)
 {
-    private readonly Dictionary<string, AppManager> _apps = [];
+    private readonly ConcurrentDictionary<string, AppManager> _apps = [];
 
     /// <summary>
     /// Gets the dictionary of AppManager instances, keyed by project path.
@@ -21,7 +23,7 @@ public class AppsManager
     {
         if (!_apps.TryGetValue(projectPath, out AppManager? appManager))
         {
-            appManager = new AppManager(this, projectPath);
+            appManager = new AppManager(SynchronizationContext, this, projectPath);
             _apps[projectPath] = appManager;
         }
 
@@ -33,16 +35,8 @@ public class AppsManager
     /// </summary>
     /// <param name="projectPath">The project path to remove the AppManager for</param>
     /// <returns>True if the AppManager was successfully removed; otherwise, false</returns>
-    public bool RemoveApp(string projectPath)
+    public void RemoveApp(string projectPath)
     {
-        return _apps.Remove(projectPath);
-    }
-
-    /// <summary>
-    /// Clears all AppManagers.
-    /// </summary>
-    public void ClearApps()
-    {
-        _apps.Clear();
+        _apps.TryRemove(projectPath, out _);
     }
 }
