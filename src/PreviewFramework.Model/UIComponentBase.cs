@@ -35,15 +35,6 @@ public abstract class UIComponentBase<TPreview>(UIComponentKind kind, string? di
 
     public bool HasMultiplePreviews => _previews.Count > 1;
 
-    public void InitCategory(UIComponentCategory category)
-    {
-        if (Category is not null && string.Compare(this.Category.Name, category.Name, StringComparison.OrdinalIgnoreCase) != 0)
-        {
-            throw new InvalidOperationException($"Component '{Name}' can't be set to category '{category.Name}' since it already has category '{this.Category.Name}' set");
-        }
-        Category = category;
-    }
-
     public IReadOnlyList<TPreview> Previews => _previews;
 
     public TPreview? GetPreview(string name)

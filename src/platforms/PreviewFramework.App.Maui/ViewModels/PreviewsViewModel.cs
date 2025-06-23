@@ -8,7 +8,7 @@ namespace PreviewFramework.App.Maui.ViewModels;
 
 public class PreviewsViewModel // : INotifyPropertyChanged
 {
-    public static readonly UIComponentCategory UncategorizedCategory = new("Uncategorized");
+    public static readonly UIComponentCategory UncategorizedCategory = new("Uncategorized", []);
     private static readonly Lazy<PreviewsViewModel> s_lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
 
     public static PreviewsViewModel Instance => s_lazyInstance.Value;

@@ -88,30 +88,21 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
     }
 
     /// <summary>
-    /// Adds a category by name, creating it if it doesn't exist.
+    /// Adds a category if it doesn't exist, or updates it with the additional uiComponentNames if it does.
     /// </summary>
     /// <param name="categoryName">The name of the category</param>
-    public void AddCategory(string categoryName)
-    {
-        if (!_categories.ContainsKey(categoryName))
-        {
-            _categories[categoryName] = new UIComponentCategory(categoryName);
-        }
-    }
-
-    /// <summary>
-    /// Gets or adds a category by name.
-    /// </summary>
-    /// <param name="categoryName">The name of the category</param>
-    /// <returns>The category instance</returns>
-    public UIComponentCategory GetOrAddCategory(string categoryName)
+    public void AddOrUpdateCategory(string categoryName, IReadOnlyList<string> uiComponentNames)
     {
         if (!_categories.TryGetValue(categoryName, out UIComponentCategory? category))
         {
-            category = new UIComponentCategory(categoryName);
-            _categories[categoryName] = category;
+            category = new UIComponentCategory(categoryName, uiComponentNames);
         }
-        return category;
+        else
+        {
+            category = category.WithAddedUIComponentNames(uiComponentNames);
+        }
+
+        _categories[categoryName] = category;
     }
 
     /// <summary>

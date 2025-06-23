@@ -28,13 +28,17 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
             AddUIComponentBaseClassesFromAssembly(assembly);
         }
 
-        AddUIComponentsFromAssembly(Assembly.GetEntryAssembly());
+        Assembly? entryAssembly = Assembly.GetEntryAssembly();
+        if (entryAssembly is not null)
+        {
+            AddUIComponentsFromAssembly(entryAssembly);
+        }
 
         HashSet<string> additionalAppAssemblesSet = new(additionalAppAssemblies, StringComparer.OrdinalIgnoreCase);
         foreach (Assembly assembly in assemblies)
         {
             string? name = assembly.GetName().Name;
-            if (name != null && additionalAppAssemblesSet.Contains(name))
+            if (name is not null && additionalAppAssemblesSet.Contains(name))
             {
                 AddUIComponentsFromAssembly(assembly);
             }
@@ -65,20 +69,13 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
         }
     }
 
-    private void AddUIComponentsFromAssembly(Assembly? assembly)
+    private void AddUIComponentsFromAssembly(Assembly assembly)
     {
-        if (assembly == null) return;
-
         IEnumerable<UIComponentCategoryAttribute> uiComponentCategoryAttributes = assembly.GetCustomAttributes<UIComponentCategoryAttribute>();
         foreach (UIComponentCategoryAttribute uiComponentCategoryAttribute in uiComponentCategoryAttributes)
         {
-            UIComponentCategory category = GetOrAddCategory(uiComponentCategoryAttribute.Name);
-
-            foreach (Type type in uiComponentCategoryAttribute.UIComponentTypes)
-            {
-                UIComponentReflection component = GetOrAddUIComponent(type);
-                component.InitCategory(category);
-            }
+            IReadOnlyList<string> uiComponentTypeNames = uiComponentCategoryAttribute.UIComponentTypes.Select(t => t.FullName!).ToList();
+            AddOrUpdateCategory(uiComponentCategoryAttribute.Name, uiComponentTypeNames);
         }
 
         Type[] types = assembly.GetExportedTypes();
@@ -90,7 +87,7 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
             }
 
             PreviewAttribute? typePreviewAttribute = type.GetCustomAttribute<PreviewAttribute>(false);
-            if (typePreviewAttribute != null)
+            if (typePreviewAttribute is not null)
             {
                 AddPreview(new PreviewClassReflection(typePreviewAttribute, type));
             }
