@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using PreviewFramework.Model;
 using PreviewFramework.Model.App;
 
@@ -8,7 +7,6 @@ namespace PreviewFramework.App.Maui.ViewModels;
 
 public class PreviewsViewModel // : INotifyPropertyChanged
 {
-    public static readonly UIComponentCategory UncategorizedCategory = new("Uncategorized");
     private static readonly Lazy<PreviewsViewModel> s_lazyInstance = new Lazy<PreviewsViewModel>(() => new PreviewsViewModel());
 
     public static PreviewsViewModel Instance => s_lazyInstance.Value;
@@ -18,57 +16,40 @@ public class PreviewsViewModel // : INotifyPropertyChanged
 
     private PreviewsViewModel()
     {
-        var categories = new List<UIComponentCategory>();
-        Dictionary<UIComponentCategory, List<UIComponentReflection>> uiComponentsByCategory = [];
-
         UIComponentsManagerReflection uiComponentsManager = MauiPreviewApplication.Instance.GetUIComponentsManager();
-
-        // Create a list of UIComponents for each category, including an "Uncategorized" category.
-        foreach (UIComponentReflection uiComponent in uiComponentsManager.UIComponents)
-        {
-            UIComponentCategory? category = uiComponent.Category;
-
-            category ??= UncategorizedCategory;
-
-            if (!uiComponentsByCategory.TryGetValue(category, out List<UIComponentReflection>? uiComponentsForCategory))
-            {
-                categories.Add(category);
-                uiComponentsForCategory = [];
-                uiComponentsByCategory.Add(category, uiComponentsForCategory);
-            }
-
-            uiComponentsForCategory.Add(uiComponent);
-        }
-
-        // Sort the categories and components
-        categories.Sort((category1, category2) => string.Compare(category1.Name, category2.Name, StringComparison.CurrentCultureIgnoreCase));
-        foreach (List<UIComponentReflection> componentsForCategory in uiComponentsByCategory.Values)
-        {
-            componentsForCategory.Sort((component1, component2) => string.Compare(component1.DisplayName, component2.DisplayName, StringComparison.CurrentCultureIgnoreCase));
-        }
-
         var previewsItems = new List<PreviewsItemViewModel>();
+        HasCategories = uiComponentsManager.HasCategories;
 
-        HasCategories = categories.Count > 1;
-
-        foreach (UIComponentCategory category in categories)
+        void AddComponentPreviews(UIComponentReflection uiComponent)
         {
-            if (HasCategories)
+            previewsItems.Add(new UIComponentViewModel(uiComponent));
+            if (uiComponent.HasMultiplePreviews)
+            {
+                foreach (PreviewReflection preview in uiComponent.Previews)
+                {
+                    previewsItems.Add(new PreviewViewModel(uiComponent, preview));
+                }
+            }
+        }
+
+        if (HasCategories)
+        {
+            IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<UIComponentReflection> UIComponents)> categorizedUIComponents = uiComponentsManager.CategorizedUIComponents;
+            foreach ((UIComponentCategory category, IReadOnlyList<UIComponentReflection> uiComponents) in categorizedUIComponents)
             {
                 previewsItems.Add(new UIComponentCategoryViewModel(category));
-            }
 
-            foreach (UIComponentReflection uiComponent in uiComponentsByCategory[category])
-            {
-                previewsItems.Add(new UIComponentViewModel(uiComponent));
-
-                if (uiComponent.HasMultiplePreviews)
+                foreach (UIComponentReflection uiComponent in uiComponents)
                 {
-                    foreach (PreviewReflection preview in uiComponent.Previews)
-                    {
-                        previewsItems.Add(new PreviewViewModel(uiComponent, preview));
-                    }
+                    AddComponentPreviews(uiComponent);
                 }
+            }
+        }
+        else
+        {
+            foreach (UIComponentReflection uiComponent in uiComponentsManager.SortedUIComponents)
+            {
+                AddComponentPreviews(uiComponent);
             }
         }
 
