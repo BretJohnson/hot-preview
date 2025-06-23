@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
@@ -6,7 +6,7 @@ using Microsoft.Maui.Devices;
 using PreviewFramework;
 using PreviewFramework.App.Maui;
 using PreviewFramework.App.Maui.Pages;
-using PreviewFramework.Model.App;
+using PreviewFramework.SharedModel.App;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]

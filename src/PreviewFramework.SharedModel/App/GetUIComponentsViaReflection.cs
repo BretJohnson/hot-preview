@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace PreviewFramework.Model.App;
+namespace PreviewFramework.SharedModel.App;
 
 public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UIComponentReflection, PreviewReflection>
 {

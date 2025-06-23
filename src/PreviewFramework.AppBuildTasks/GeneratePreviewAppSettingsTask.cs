@@ -63,7 +63,7 @@ namespace PreviewFramework.AppBuildTasks
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace PreviewFramework.Model
+namespace PreviewFramework.SharedModel
 {
     public static class PreviewApplicationInitializer
     {

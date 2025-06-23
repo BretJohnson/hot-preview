@@ -1,4 +1,4 @@
-﻿namespace VisualTestUtils
+namespace VisualTestUtils
 {
     /// <summary>
     /// This interface can be implemented by the client and is used to associate

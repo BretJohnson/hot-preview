@@ -1,4 +1,4 @@
-﻿namespace VisualTestUtils
+namespace VisualTestUtils
 {
     /// <summary>
     /// IImageEditor allows changing images. It's useful, for instance, for cropping

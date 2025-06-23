@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework.Model;
+namespace PreviewFramework.SharedModel;
 
 public enum UIComponentKind
 {

@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework;
+namespace PreviewFramework;
 
 public class RoutePreview(string route)
 {

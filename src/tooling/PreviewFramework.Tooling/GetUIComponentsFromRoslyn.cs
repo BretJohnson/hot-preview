@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using PreviewFramework.Model;
+using PreviewFramework.SharedModel;
 
 namespace PreviewFramework.Tooling;
 

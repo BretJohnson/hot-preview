@@ -1,4 +1,4 @@
-using PreviewFramework.Model;
+using PreviewFramework.SharedModel;
 
 namespace PreviewFramework.App.Maui.ViewModels;
 

@@ -1,4 +1,4 @@
-﻿using Camera.MAUI.ZXingHelper;
+using Camera.MAUI.ZXingHelper;
 using EcommerceMAUI.Model;
 using EcommerceMAUI.Views;
 using System.Collections.ObjectModel;

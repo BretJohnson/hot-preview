@@ -1,4 +1,4 @@
-﻿namespace MauiSandboxApp
+namespace MauiSandboxApp
 {
     public partial class App : Application
     {

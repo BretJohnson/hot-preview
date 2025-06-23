@@ -1,4 +1,4 @@
-﻿namespace EcommerceMAUI;
+namespace EcommerceMAUI;
 
 public partial class AppShell : Shell
 {

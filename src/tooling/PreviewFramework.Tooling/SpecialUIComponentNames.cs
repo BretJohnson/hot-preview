@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework.Tooling;
+namespace PreviewFramework.Tooling;
 
 public static class SpecialUIComponentNames
 {

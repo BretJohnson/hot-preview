@@ -1,4 +1,4 @@
-﻿namespace VisualTestUtils
+namespace VisualTestUtils
 {
     /// <summary>
     /// Interface for image verification.

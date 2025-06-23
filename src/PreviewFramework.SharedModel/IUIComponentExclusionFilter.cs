@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace PreviewFramework.Model;
+namespace PreviewFramework.SharedModel;
 
 public interface IUIComponentExclusionFilter
 {

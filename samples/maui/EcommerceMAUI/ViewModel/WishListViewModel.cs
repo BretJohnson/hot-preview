@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using EcommerceMAUI.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

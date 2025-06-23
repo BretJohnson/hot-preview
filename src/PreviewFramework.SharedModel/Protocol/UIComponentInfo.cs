@@ -1,4 +1,4 @@
-namespace PreviewFramework.Model.Protocol;
+namespace PreviewFramework.SharedModel.Protocol;
 
 public record UIComponentInfo(
     string Name,

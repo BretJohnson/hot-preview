@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Helpers;
+using EcommerceMAUI.Helpers;
 using EcommerceMAUI.Views;
 using System.Windows.Input;
 

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using PreviewFramework.Model;
-using PreviewFramework.Model.App;
+using PreviewFramework.SharedModel;
+using PreviewFramework.SharedModel.App;
 
 namespace PreviewFramework.App.Maui;
 

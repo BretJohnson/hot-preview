@@ -1,4 +1,4 @@
-﻿using DefaultTemplateWithContent.Models;
+using DefaultTemplateWithContent.Models;
 using DefaultTemplateWithContent.PageModels;
 
 namespace DefaultTemplateWithContent.Pages;

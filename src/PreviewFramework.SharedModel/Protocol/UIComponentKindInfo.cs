@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework.Model.Protocol;
+namespace PreviewFramework.SharedModel.Protocol;
 
 public static class UIComponentKindInfo
 {

@@ -1,4 +1,4 @@
-﻿namespace PreviewFramework.DevTools.Views;
+namespace PreviewFramework.DevTools.Views;
 
 public sealed partial class MainPage : Page
 {

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PreviewFramework.Model\PreviewFramework.Model.csproj" GeneratePathProperty="true" />
+    <ProjectReference Include="..\..\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup>

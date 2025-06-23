@@ -1,4 +1,4 @@
-﻿using ImageMagick;
+using ImageMagick;
 
 namespace VisualTestUtils.MagickNet
 {

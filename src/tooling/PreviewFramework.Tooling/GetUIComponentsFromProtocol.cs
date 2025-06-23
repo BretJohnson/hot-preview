@@ -1,5 +1,5 @@
-using PreviewFramework.Model;
-using PreviewFramework.Model.Protocol;
+using PreviewFramework.SharedModel;
+using PreviewFramework.SharedModel.Protocol;
 
 namespace PreviewFramework.Tooling;
 

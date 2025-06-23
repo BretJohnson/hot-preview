@@ -1,7 +1,7 @@
 using System;
-using PreviewFramework.Model.Protocol;
+using PreviewFramework.SharedModel.Protocol;
 
-namespace PreviewFramework.Model.App;
+namespace PreviewFramework.SharedModel.App;
 
 public abstract class PreviewReflection : PreviewBase
 {

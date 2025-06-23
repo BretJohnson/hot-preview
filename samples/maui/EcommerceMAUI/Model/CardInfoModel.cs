@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Helpers;
+using EcommerceMAUI.Helpers;
 using EcommerceMAUI.Helpers.ExtensionMethods;
 using EcommerceMAUI.ViewModel;
 

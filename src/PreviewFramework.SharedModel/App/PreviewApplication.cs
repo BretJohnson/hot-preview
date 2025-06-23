@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PreviewFramework.Model.App;
+namespace PreviewFramework.SharedModel.App;
 
 public abstract class PreviewApplication
 {

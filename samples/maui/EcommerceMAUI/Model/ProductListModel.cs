@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.ViewModel;
+using EcommerceMAUI.ViewModel;
 using System.Collections.ObjectModel;
 
 namespace EcommerceMAUI.Model

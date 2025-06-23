@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using PreviewFramework.App.Maui;
 using Font = Microsoft.Maui.Font;

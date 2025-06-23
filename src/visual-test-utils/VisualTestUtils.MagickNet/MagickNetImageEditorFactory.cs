@@ -1,4 +1,4 @@
-﻿namespace VisualTestUtils.MagickNet
+namespace VisualTestUtils.MagickNet
 {
     public class MagickNetImageEditorFactory : IImageEditorFactory
     {

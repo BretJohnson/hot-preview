@@ -2,9 +2,9 @@ using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using StreamJsonRpc;
-using PreviewFramework.Model.Protocol;
+using PreviewFramework.SharedModel.Protocol;
 
-namespace PreviewFramework.Model.App;
+namespace PreviewFramework.SharedModel.App;
 
 public class ToolingAppClientConnection(string connectionString)
 {
