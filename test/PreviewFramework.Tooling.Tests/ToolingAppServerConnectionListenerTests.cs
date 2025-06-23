@@ -10,7 +10,7 @@ namespace PreviewFramework.Tooling.Tests
         public async Task ConnectionCount_ReflectsActiveConnections()
         {
             // Arrange
-            var appsManager = new AppsManager();
+            var appsManager = new AppsManager(SynchronizationContext.Current ?? new SynchronizationContext());
             using var listener = new ToolingAppServerConnectionListener(appsManager);
 
             // Act - Start listening

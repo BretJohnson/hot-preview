@@ -15,9 +15,8 @@ public partial class DevToolsManager : ObservableObject
     private static readonly Lazy<DevToolsManager> s_instance = new(() => new DevToolsManager());
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
-    private UIComponentsManagerTooling _uiComponentsManager;
 
-    private readonly AppsManager _appsManager = new();
+    private readonly AppsManager _appsManager = new(SynchronizationContext.Current ?? new SynchronizationContext());
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
 
     public AppManager? CurrentApp { get; set; }
