@@ -68,11 +68,16 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager.AddAppConnection(this);
 
         UIComponentInfo[] uiComponentInfos = await _appService!.GetUIComponentsAsync();
+        UIComponentsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
 
-        GetUIComponentsFromProtocol builder = new GetUIComponentsFromProtocol(uiComponentInfos);
-        UIComponentsManager = builder.ToImmutable();
-        // TODO: Implement NotifyUIComponentsChanged if needed
+        _appManager.UpdateUIComponents();
     }
 
-    public Task NotifyUIComponentsChangedAsync() { return Task.CompletedTask; }
+    public async Task NotifyUIComponentsChangedAsync()
+    {
+        UIComponentInfo[] uiComponentInfos = await _appService!.GetUIComponentsAsync();
+        UIComponentsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
+
+        _appManager?.UpdateUIComponents();
+    }
 }

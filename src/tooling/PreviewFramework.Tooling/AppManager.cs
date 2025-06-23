@@ -60,7 +60,26 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
 
     internal void UpdateUIComponents()
     {
+        var uiComponentManagers = new List<UIComponentsManagerTooling>();
+        foreach (AppConnectionManager appConnection in AppConnections)
+        {
+            if (appConnection.UIComponentsManager is not null)
+            {
+                uiComponentManagers.Add(appConnection.UIComponentsManager);
+            }
+        }
 
-
+        if (uiComponentManagers.Count == 0)
+        {
+            UIComponentsManager = null;
+        }
+        else if (uiComponentManagers.Count == 1)
+        {
+            UIComponentsManager = uiComponentManagers[0];
+        }
+        else
+        {
+            UIComponentsManager = new GetUIComponentsConsolidated(uiComponentManagers).ToImmutable();
+        }
     }
 }
