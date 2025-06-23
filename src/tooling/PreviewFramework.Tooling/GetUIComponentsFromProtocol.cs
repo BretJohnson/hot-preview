@@ -3,7 +3,7 @@ using PreviewFramework.SharedModel.Protocol;
 
 namespace PreviewFramework.Tooling;
 
-public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComponentTooling, PreviewTooling>
+public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderTooling
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromApp and processes the UI component information from the app,
@@ -24,15 +24,7 @@ public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComp
         }
     }
 
-    /// <summary>
-    /// Creates an immutable UIComponentsManagerTooling from the builder's current state.
-    /// </summary>
-    /// <returns>An immutable UIComponentsManagerTooling containing all the builder's data</returns>
-    public UIComponentsManagerTooling ToImmutable()
-    {
-        // Create an immutable manager from the current state
-        return new UIComponentsManagerTooling(UIComponentsByName, Categories);
-    }
+
 
     /// <summary>
     /// Creates a PreviewTooling object from protocol PreviewInfo.

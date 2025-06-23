@@ -6,7 +6,7 @@ using PreviewFramework.SharedModel;
 
 namespace PreviewFramework.Tooling;
 
-public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UIComponentTooling, PreviewTooling>
+public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromRoslyn and processes the compilation to gather UI component information.
@@ -119,16 +119,7 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UICompon
         _uiComponentsByName[uiComponentName] = component;
     }
 
-    /// <summary>
-    /// Creates an immutable UIComponentsManager from the builder's current state.
-    /// </summary>
-    /// <returns>An immutable UIComponentsManager containing all the builder's data</returns>
-    public UIComponentsManagerTooling ToImmutable()
-    {
-        Validate();
 
-        return new UIComponentsManagerTooling(UIComponentsByName, Categories);
-    }
 
     private class PreviewWalker(Compilation compilation, SemanticModel semanticModel, GetUIComponentsFromRoslyn builder, bool includeUIComponentsWithNoPreviews) : CSharpSyntaxWalker
     {
