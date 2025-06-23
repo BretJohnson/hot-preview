@@ -2,14 +2,11 @@
 
 namespace PreviewFramework.Tooling;
 
-public class UIComponent : UIComponentBase<Preview>
+public class UIComponent(UIComponentKind kind, string typeName, string? displayNameOverride, IReadOnlyList<Preview> previews) :
+    UIComponentBase<Preview>(kind, displayNameOverride, previews)
 {
-    private readonly string _typeName;
+    public override string Name => typeName;
 
-    internal UIComponent(UIComponentKind kind, string typeName, string? displayNameOverride = null) : base(kind, displayNameOverride)
-    {
-        _typeName = typeName;
-    }
-
-    public override string Name => _typeName;
+    public override UIComponentBase<Preview> WithAddedPreview(Preview preview) =>
+        new UIComponent(Kind, typeName, DisplayNameOverride, GetUpdatedPreviews(preview));
 }

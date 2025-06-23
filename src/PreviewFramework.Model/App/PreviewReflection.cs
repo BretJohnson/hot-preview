@@ -29,7 +29,7 @@ public abstract class PreviewReflection : PreviewBase
     {
         get
         {
-            if (_uiComponentType != null)
+            if (_uiComponentType is not null)
             {
                 return _uiComponentType;
             }

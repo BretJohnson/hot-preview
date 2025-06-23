@@ -1,19 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using PreviewFramework.Model.Protocol;
 
 namespace PreviewFramework.Model.App;
 
-public class UIComponentReflection : UIComponentBase<PreviewReflection>
+public class UIComponentReflection(Type type, UIComponentKind kind, string? displayNameOverride, IReadOnlyList<PreviewReflection> previews) :
+    UIComponentBase<PreviewReflection>(kind, displayNameOverride, previews)
 {
-    internal UIComponentReflection(Type type, UIComponentKind kind, string? displayNameOverride) : base(kind, displayNameOverride)
-    {
-        Type = type;
-    }
-
-    public Type Type { get; }
+    public Type Type { get; } = type;
 
     public override string Name => Type.FullName;
+
+    public override UIComponentBase<PreviewReflection> WithAddedPreview(PreviewReflection preview) =>
+        new UIComponentReflection(Type, Kind, DisplayNameOverride, GetUpdatedPreviews(preview));
 
     /// <summary>
     /// Gets the UI component information including name, display name, and preview information.

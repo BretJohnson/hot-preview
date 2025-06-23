@@ -14,9 +14,9 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
     where TUIComponent : UIComponentBase<TPreview>
     where TPreview : PreviewBase
 {
-    private readonly Dictionary<string, TUIComponent> _uiComponentsByName = [];
-    private readonly Dictionary<string, UIComponentCategory> _categories = [];
-    private readonly Dictionary<(UIComponentKind kind, string platform), List<string>> _baseTypes = [];
+    protected readonly Dictionary<string, TUIComponent> _uiComponentsByName = [];
+    protected readonly Dictionary<string, UIComponentCategory> _categories = [];
+    protected readonly Dictionary<(UIComponentKind kind, string platform), List<string>> _baseTypes = [];
 
     /// <summary>
     /// Initializes a new instance of the UIComponentsManagerBuilderBase class.

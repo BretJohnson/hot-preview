@@ -16,14 +16,8 @@ public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComp
         {
             // Create the UI component with the display name and kind from protocol
             UIComponentKind componentKind = UIComponentKindInfo.ToUIComponentKind(uiComponentInfo.UIComponentKindInfo);
-            UIComponent uiComponent = new UIComponent(componentKind, uiComponentInfo.Name, uiComponentInfo.DisplayName);
-
-            // Add previews from the protocol
-            foreach (PreviewInfo previewInfo in uiComponentInfo.Previews)
-            {
-                Preview preview = CreatePreview(previewInfo);
-                uiComponent.AddPreview(preview);
-            }
+            var uiComponent = new UIComponent(componentKind, uiComponentInfo.Name, uiComponentInfo.DisplayName,
+                uiComponentInfo.Previews.Select(CreatePreview).ToList());
 
             // Add the component to the builder
             AddOrUpdateUIComponent(uiComponent);
