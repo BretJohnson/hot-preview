@@ -3,7 +3,7 @@ using PreviewFramework.SharedModel.Protocol;
 
 namespace PreviewFramework.Tooling;
 
-public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComponentTooling, Preview>
+public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComponentTooling, PreviewTooling>
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromApp and processes the UI component information from the app,
@@ -35,11 +35,11 @@ public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderBase<UIComp
     }
 
     /// <summary>
-    /// Creates a Preview object from protocol PreviewInfo.
+    /// Creates a PreviewTooling object from protocol PreviewInfo.
     /// </summary>
     /// <param name="previewInfo">Preview information from the protocol</param>
-    /// <returns>A Preview object</returns>
-    private static Preview CreatePreview(PreviewInfo previewInfo)
+    /// <returns>A PreviewTooling object</returns>
+    private static PreviewTooling CreatePreview(PreviewInfo previewInfo)
     {
         return previewInfo.PreviewType switch
         {
