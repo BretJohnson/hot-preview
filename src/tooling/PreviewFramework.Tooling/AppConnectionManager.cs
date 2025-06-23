@@ -4,17 +4,17 @@ using PreviewFramework.Model.Protocol;
 
 namespace PreviewFramework.Tooling;
 
-public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListener connectionListener, TcpClient tcpClient) :
+public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpClient) :
     IPreviewAppControllerService
 {
-    private readonly ToolingAppServerConnectionListener _connectionListener = connectionListener;
+    private readonly AppsManager _appsManager = appsManager;
     private readonly TcpClient _tcpClient = tcpClient;
     private JsonRpc? _rpc;
     private IPreviewAppService? _appService;
-
-    public string? ProjectPath { get; set; }
+    private AppManager? _appManager;
 
     public string? PlatformName { get; set; }
+    public UIComponentsManager? UIComponentsManager { get; private set; }
 
     internal async Task HandleConnectionAsync()
     {
@@ -26,8 +26,6 @@ public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListene
 
             _rpc.AddLocalRpcTarget<IPreviewAppControllerService>(this, null);
             _appService = _rpc.Attach<IPreviewAppService>();
-
-            _connectionListener.AddConnection(this);
 
             try
             {
@@ -52,16 +50,29 @@ public sealed class ToolingAppServerConnection(ToolingAppServerConnectionListene
         }
         finally
         {
-            _connectionListener.RemoveConnection(this);
-
+            _appManager?.RemoveAppConnection(this);
             _tcpClient.Dispose();
         }
     }
 
-    public Task RegisterAppAsync(string projectPath, string platformName)
+    public async Task RegisterAppAsync(string projectPath, string platformName)
     {
-        ProjectPath = projectPath;
+        if (_appManager is not null)
+        {
+            throw new InvalidOperationException($"App was already registered for this connection");
+        }
+
         PlatformName = platformName;
-        return Task.CompletedTask;
+
+        _appManager = _appsManager.GetOrCreateApp(projectPath);
+        _appManager.AddAppConnection(this);
+
+        UIComponentInfo[] uiComponentInfos = await _appService!.GetUIComponentsAsync();
+
+        GetUIComponentsFromProtocol builder = new GetUIComponentsFromProtocol(uiComponentInfos);
+        UIComponentsManager = builder.ToImmutable();
+        // TODO: Implement NotifyUIComponentsChanged if needed
     }
+
+    public Task NotifyUIComponentsChangedAsync() { return Task.CompletedTask; }
 }

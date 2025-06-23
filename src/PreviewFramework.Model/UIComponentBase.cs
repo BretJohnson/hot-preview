@@ -4,16 +4,9 @@ using System.Linq;
 
 namespace PreviewFramework.Model;
 
-public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
+public abstract class UIComponentBase<TPreview>(UIComponentKind kind, string? displayNameOverride) where TPreview : PreviewBase
 {
-    private readonly string? _displayNameOverride;
     private readonly List<TPreview> _previews = [];
-
-    public UIComponentBase(UIComponentKind kind, string? displayNameOverride)
-    {
-        _displayNameOverride = displayNameOverride;
-        Kind = kind;
-    }
 
     /// <summary>
     /// Name is intended to be what's used by the code to identify the component. It's the component's
@@ -23,16 +16,16 @@ public abstract class UIComponentBase<TPreview> where TPreview : PreviewBase
 
     public UIComponentCategory? Category { get; private set; }
 
-    public UIComponentKind Kind { get; }
+    public UIComponentKind Kind { get; } = kind;
 
     /// <summary>
     /// DisplayName is intended to be what's shown in the UI to identify the component. It can contain spaces and
     /// isn't necessarily unique. It defaults to the class name (with no namespace qualifier) but can be
     /// overridden by the developer.
     /// </summary>
-    public string DisplayName => _displayNameOverride ?? NameUtilities.GetUnqualifiedName(Name);
+    public string DisplayName => DisplayNameOverride ?? NameUtilities.GetUnqualifiedName(Name);
 
-    public string? DisplayNameOverride => _displayNameOverride;
+    public string? DisplayNameOverride { get; } = displayNameOverride;
 
     public bool HasPreview => _previews.Count >= 0;
 

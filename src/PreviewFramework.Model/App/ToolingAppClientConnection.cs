@@ -42,7 +42,7 @@ public class ToolingAppClientConnection(string connectionString)
             throw;
         }
 
-        await _appControllerService.RegisterAppAsync(previewApplication.ProjectPath,
+        await _appControllerService.RegisterAppAsync(previewApplication.ProjectPath!,
             previewApplication.PlatformName).ConfigureAwait(false);
     }
 }

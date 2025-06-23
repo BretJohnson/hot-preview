@@ -27,7 +27,7 @@ public partial class MainPageViewModel : ObservableObject
         SettingsCommand = new RelayCommand(Settings);
 
         // Initialize sample data
-        InitializeNavTreeItems();
+        UpdateNavTreeItems();
     }
 
     public DevToolsManager DevToolsManager => DevToolsManager.Instance;
@@ -36,13 +36,17 @@ public partial class MainPageViewModel : ObservableObject
 
     public ICommand SettingsCommand { get; }
 
-    private void InitializeNavTreeItems()
+    private void UpdateNavTreeItems()
     {
         NavTreeItems.Clear();
 
-        foreach (UIComponent uiComponent in DevToolsManager.Instance.UIComponentsManager.UIComponents)
+        AppManager? currentApp = DevToolsManager.Instance.CurrentApp;
+        if (currentApp is not null)
         {
-            NavTreeItems.Add(new UIComponentViewModel(uiComponent));
+            foreach (UIComponent uiComponent in currentApp.UIComponentsManager.UIComponents)
+            {
+                NavTreeItems.Add(new UIComponentViewModel(uiComponent));
+            }
         }
     }
 

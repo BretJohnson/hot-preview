@@ -8,11 +8,13 @@ public class ToolingAppServerConnectionListener : IDisposable
 {
     public const int DefaultPort = 54242;
 
+    private readonly AppsManager _appsManager;
     private readonly TcpListener _listener;
-    private readonly ConcurrentDictionary<ToolingAppServerConnection, ToolingAppServerConnection> _connections = [];
+    private readonly ConcurrentDictionary<AppConnectionManager, AppConnectionManager> _connections = [];
 
-    public ToolingAppServerConnectionListener()
+    public ToolingAppServerConnectionListener(AppsManager appsManager)
     {
+        _appsManager = appsManager;
         try
         {
             _listener = new TcpListener(IPAddress.Any, DefaultPort);
@@ -31,7 +33,7 @@ public class ToolingAppServerConnectionListener : IDisposable
         Task.Run(ListenLoopAsync);
     }
 
-    internal void AddConnection(ToolingAppServerConnection connection)
+    internal void AddConnection(AppConnectionManager connection)
     {
         if (!_connections.TryAdd(connection, connection))
         {
@@ -39,7 +41,7 @@ public class ToolingAppServerConnectionListener : IDisposable
         }
     }
 
-    internal void RemoveConnection(ToolingAppServerConnection connection)
+    internal void RemoveConnection(AppConnectionManager connection)
     {
         _connections.TryRemove(connection, out _);
     }
@@ -55,7 +57,7 @@ public class ToolingAppServerConnectionListener : IDisposable
                 // Throws if cancellationToken is canceled before or during the wait
                 TcpClient tcpClient = await _listener.AcceptTcpClientAsync();
 
-                ToolingAppServerConnection appServiceConnection = new ToolingAppServerConnection(this, tcpClient);
+                var appServiceConnection = new AppConnectionManager(_appsManager, tcpClient);
 
                 // Handle each client connection asynchronously (fire and forget)
                 _ = appServiceConnection.HandleConnectionAsync();

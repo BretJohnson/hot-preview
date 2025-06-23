@@ -3,7 +3,6 @@ using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using PreviewFramework.Tooling;
-using CommunityToolkit.Mvvm.ComponentModel;
 using PreviewFramework.DevTools.ViewModels;
 
 namespace PreviewFramework.DevTools;
@@ -18,27 +17,15 @@ public partial class DevToolsManager : ObservableObject
     private IServiceProvider? _serviceProvider;
     private UIComponentsManager _uiComponentsManager;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ProjectName))]
-    private string? _projectPath;
-
+    private readonly AppsManager _appsManager = new();
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
+
+    public AppManager? CurrentApp { get; set; }
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
     /// </summary>
     public static DevToolsManager Instance => s_instance.Value;
-
-    /// <summary>
-    /// Gets the UIComponentsManager instance.
-    /// </summary>
-    public UIComponentsManager UIComponentsManager => _uiComponentsManager;
-
-    /// <summary>
-    /// Gets the project name from the project path, without the extension.
-    /// Returns null if no project path is set.
-    /// </summary>
-    public string? ProjectName => ProjectPath != null ? Path.GetFileNameWithoutExtension(ProjectPath) : null;
 
     /// <summary>
     /// Private constructor to enforce singleton pattern.
@@ -49,12 +36,14 @@ public partial class DevToolsManager : ObservableObject
         _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
         _logger.LogInformation("DevToolsManager instance created");
 
+#if OLD_TEST_CODE
         // TODO: Don't hardcode this & initialize it asynchronously
         _projectPath = @"Q:\\src\\ui-preview-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
         _uiComponentsManager = CreateUIComponentsManagerFromProjectAsync(_projectPath).GetAwaiter().GetResult();
+#endif
 
         // Initialize the app service connection listener
-        _appServiceConnectionListener = new ToolingAppServerConnectionListener();
+        _appServiceConnectionListener = new ToolingAppServerConnectionListener(_appsManager);
         _appServiceConnectionListener.StartListening();
 
         ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port);
@@ -155,7 +144,7 @@ public partial class DevToolsManager : ObservableObject
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = $"run --project \"{ProjectPath}\"",
+                Arguments = $"run --project \"ProjectPath\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -179,6 +168,7 @@ public partial class DevToolsManager : ObservableObject
         }
     }
 
+#if LATER
     /// <summary>
     /// Updates the project path and reloads the UIComponentsManager.
     /// </summary>
@@ -217,6 +207,7 @@ public partial class DevToolsManager : ObservableObject
             return false;
         }
     }
+#endif
 
     /// <summary>
     /// Creates a UIComponentsManager from a single project file (.csproj) by loading and analyzing the project.
@@ -246,7 +237,7 @@ public partial class DevToolsManager : ObservableObject
             Compilation compilation = await project.GetCompilationAsync() ??
                 throw new InvalidOperationException($"Failed to get compilation for project: {projectPath}");
 
-            return new UIComponentsManager(compilation, includeApparentUIComponentsWithNoPreviews);
+            return new GetUIComponentsFromRoslyn(compilation, includeApparentUIComponentsWithNoPreviews).ToImmutable();
         }
         catch (Exception ex)
         {

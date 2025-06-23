@@ -1,11 +1,6 @@
 ﻿namespace PreviewFramework.Model;
 
-public class UIComponentCategory
+public class UIComponentCategory(string name)
 {
-    public UIComponentCategory(string name)
-    {
-        this.Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
 }

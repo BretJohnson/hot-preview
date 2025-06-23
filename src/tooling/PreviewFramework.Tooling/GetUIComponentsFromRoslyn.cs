@@ -6,17 +6,16 @@ using PreviewFramework.Model;
 
 namespace PreviewFramework.Tooling;
 
-public class GetUIComponentsFromRoslyn
+public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderBase<UIComponent, Preview>
 {
     /// <summary>
-    /// Processes metadata from the provided compilation and its references to gather UI component information.
+    /// Initializes a new instance of GetUIComponentsFromRoslyn and processes the compilation to gather UI component information.
     /// </summary>
     /// <param name="compilation">Roslyn compilation</param>
-    /// <param name="uiComponentsManager">The UI components manager to populate</param>
     /// <param name="includeApparentUIComponentsWithNoPreviews">Determines whether to include types that COULD be UIComponents,
     /// because they derive from a UI component class, but don't actually define any previews nor can a preview be constructed
     /// automatically. Can be set by tooling that flags these for the user, to direct them to add a preview.</param>
-    public static void GetUIComponentsFromCompilation(Compilation compilation, bool includeApparentUIComponentsWithNoPreviews, UIComponentsManager uiComponentsManager)
+    public GetUIComponentsFromRoslyn(Compilation compilation, bool includeApparentUIComponentsWithNoPreviews)
     {
         IEnumerable<MetadataReference> references = compilation.References;
 
@@ -27,16 +26,16 @@ public class GetUIComponentsFromRoslyn
             {
                 if (compilation.GetAssemblyOrModuleSymbol(peReference) is IAssemblySymbol peAssemblySymbol)
                 {
-                    AddFromAssemblyAttributes(peAssemblySymbol, uiComponentsManager);
+                    AddFromAssemblyAttributes(peAssemblySymbol);
                 }
             }
             else if (reference is CompilationReference compilationReference)
             {
-                AddFromAssemblyAttributes(compilationReference.Compilation.Assembly, uiComponentsManager);
+                AddFromAssemblyAttributes(compilationReference.Compilation.Assembly);
             }
         }
 
-        AddFromAssemblyAttributes(compilation.Assembly, uiComponentsManager);
+        AddFromAssemblyAttributes(compilation.Assembly);
 
         // Later handle component categories, but for now they aren't supported
 #if LATER
@@ -59,14 +58,14 @@ public class GetUIComponentsFromRoslyn
         {
             SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            var previewWalker = new PreviewWalker(compilation, semanticModel, uiComponentsManager, includeApparentUIComponentsWithNoPreviews);
+            PreviewWalker previewWalker = new PreviewWalker(compilation, semanticModel, this, includeApparentUIComponentsWithNoPreviews);
 
             SyntaxNode root = syntaxTree.GetRoot();
             previewWalker.Visit(root);
         }
     }
 
-    private static void AddFromAssemblyAttributes(IAssemblySymbol assemblySymbol, UIComponentsManager uiComponentsManager)
+    private void AddFromAssemblyAttributes(IAssemblySymbol assemblySymbol)
     {
         ImmutableArray<AttributeData> attributes = assemblySymbol.GetAttributes();
         foreach (AttributeData attribute in attributes)
@@ -74,39 +73,64 @@ public class GetUIComponentsFromRoslyn
             string? attributeTypeName = attribute.AttributeClass?.ToDisplayString();
             if (attributeTypeName == PageUIComponentBaseTypeAttribute.TypeFullName)
             {
-                AddUIComponentBaseType(attribute, uiComponentsManager.PageUIComponentBaseTypes);
+                AddUIComponentBaseTypeFromAttribute(attribute, UIComponentKind.Page);
             }
             else if (attributeTypeName == ControlUIComponentBaseTypeAttribute.TypeFullName)
             {
-                AddUIComponentBaseType(attribute, uiComponentsManager.ControlUIComponentBaseTypes);
+                AddUIComponentBaseTypeFromAttribute(attribute, UIComponentKind.Control);
             }
         }
     }
 
-    private static void AddUIComponentBaseType(AttributeData attribute, UIComponentBaseTypes baseTypes)
+    private void AddUIComponentBaseTypeFromAttribute(AttributeData attribute, UIComponentKind kind)
     {
         if (attribute.ConstructorArguments.Length == 2)
         {
             if (attribute.ConstructorArguments[0].Value is string platform &&
                 attribute.ConstructorArguments[1].Value is string typeName)
             {
-                baseTypes.AddBaseType(platform, typeName);
+                AddUIComponentBaseType(kind, platform, typeName);
             }
         }
+    }
+
+    private UIComponent GetOrAddUIComponent(string name)
+    {
+        // Create new component (AddOrUpdateUIComponent will handle if it already exists)
+        UIComponent newComponent = new UIComponent(UIComponentKind.Page, name);
+        AddOrUpdateUIComponent(newComponent);
+        return newComponent;
+    }
+
+    private void AddPreview(string uiComponentName, Preview preview)
+    {
+        UIComponent component = GetOrAddUIComponent(uiComponentName);
+        component.AddPreview(preview);
+    }
+
+    /// <summary>
+    /// Creates an immutable UIComponentsManager from the builder's current state.
+    /// </summary>
+    /// <returns>An immutable UIComponentsManager containing all the builder's data</returns>
+    public UIComponentsManager ToImmutable()
+    {
+        Validate();
+
+        return new UIComponentsManager(UIComponentsByName, Categories);
     }
 
     private class PreviewWalker : CSharpSyntaxWalker
     {
         private readonly Compilation _compilation;
         private readonly SemanticModel _semanticModel;
-        private readonly UIComponentsManager _uiComponents;
+        private readonly GetUIComponentsFromRoslyn _builder;
         private readonly bool _includeApparentUIComponentsWithNoPreviews;
 
-        public PreviewWalker(Compilation compilation, SemanticModel semanticModel, UIComponentsManager uiComponents, bool includeUIComponentsWithNoPreviews)
+        public PreviewWalker(Compilation compilation, SemanticModel semanticModel, GetUIComponentsFromRoslyn builder, bool includeUIComponentsWithNoPreviews)
         {
             _compilation = compilation;
             _semanticModel = semanticModel;
-            _uiComponents = uiComponents;
+            _builder = builder;
             _includeApparentUIComponentsWithNoPreviews = includeUIComponentsWithNoPreviews;
         }
 
@@ -199,8 +223,8 @@ public class GetUIComponentsFromRoslyn
 
             string previewFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
 
-            var preview = new PreviewStaticMethod(previewFullName, title);
-            _uiComponents.AddPreview(uiComponentName, preview);
+            PreviewStaticMethod preview = new PreviewStaticMethod(previewFullName, title);
+            _builder.AddPreview(uiComponentName, preview);
         }
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax classDeclaration)
@@ -227,13 +251,13 @@ public class GetUIComponentsFromRoslyn
 
                 string uiComponentName = classTypeSymbol.ToDisplayString();
 
-                UIComponent? uiComponent = _uiComponents.GetUIComponent(uiComponentName);
+                UIComponent? uiComponent = _builder.GetUIComponent(uiComponentName);
                 if (uiComponent is null || uiComponent.Previews.Count == 0)
                 {
-                    uiComponent ??= _uiComponents.GetOrAddComponent(uiComponentName);
+                    uiComponent ??= _builder.GetOrAddUIComponent(uiComponentName);
 
-                    var preview = new PreviewClass(uiComponentName, isAutoGenerated: true);
-                    _uiComponents.AddPreview(uiComponentName, preview);
+                    PreviewClass preview = new PreviewClass(uiComponentName, displayNameOverride: null, isAutoGenerated: true);
+                    _builder.AddPreview(uiComponentName, preview);
                 }
             }
             else if (_includeApparentUIComponentsWithNoPreviews)
@@ -245,7 +269,7 @@ public class GetUIComponentsFromRoslyn
                 }
 
                 string uiComponentName = classTypeSymbol.ToDisplayString();
-                _uiComponents.GetOrAddComponent(uiComponentName);
+                _builder.GetOrAddUIComponent(uiComponentName);
             }
         }
 
@@ -335,7 +359,7 @@ public class GetUIComponentsFromRoslyn
             {
                 if (baseType is INamedTypeSymbol namedBaseType)
                 {
-                    if (_uiComponents.IsUIComponentBaseType(namedBaseType.ToDisplayString(), out UIComponentKind kind))
+                    if (_builder.IsUIComponentBaseType(namedBaseType.ToDisplayString(), out UIComponentKind kind))
                     {
                         return kind;
                     }

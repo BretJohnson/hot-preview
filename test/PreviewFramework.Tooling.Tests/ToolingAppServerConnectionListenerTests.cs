@@ -1,6 +1,5 @@
 using System.Net.Sockets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PreviewFramework.Tooling;
 
 namespace PreviewFramework.Tooling.Tests
 {
@@ -11,7 +10,8 @@ namespace PreviewFramework.Tooling.Tests
         public async Task ConnectionCount_ReflectsActiveConnections()
         {
             // Arrange
-            using var listener = new ToolingAppServerConnectionListener();
+            var appsManager = new AppsManager();
+            using var listener = new ToolingAppServerConnectionListener(appsManager);
 
             // Act - Start listening
             listener.StartListening();

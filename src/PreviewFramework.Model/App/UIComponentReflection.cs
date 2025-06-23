@@ -23,6 +23,7 @@ public class UIComponentReflection : UIComponentBase<PreviewReflection>
     {
         return new UIComponentInfo(
             Name: Name,
+            UIComponentKindInfo: UIComponentKindInfo.FromUIComponentKind(Kind),
             DisplayName: DisplayNameOverride,
             Previews: Previews.Select(preview => preview.GetPreviewInfo()).ToArray());
     }

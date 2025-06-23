@@ -37,5 +37,5 @@ public class PreviewStaticMethodReflection(PreviewAttribute previewAttribute, Me
     /// </summary>
     public override string Name => MethodInfo.DeclaringType.FullName + "." + MethodInfo.Name;
 
-    public override string GetPreviewType() => PreviewType.StaticMethod;
+    public override string GetPreviewTypeInfo() => PreviewTypeInfo.StaticMethod;
 }
