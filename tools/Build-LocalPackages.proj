@@ -1,0 +1,43 @@
+<Project DefaultTargets="BuildPackages">
+  <Import Project="..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+  </PropertyGroup>
+
+  <!-- List of projects that produce NuGet packages -->
+  <ItemGroup>
+    <PackableProject Include="..\src\PreviewFramework\PreviewFramework.csproj" />
+    <PackableProject Include="..\src\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" />
+    <PackableProject Include="..\src\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj" />
+    <PackableProject Include="..\src\tooling\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj" />
+    <PackableProject Include="..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
+    <PackableProject Include="..\src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj" />
+    <PackableProject Include="..\src\visual-test-utils\VisualTestUtils\VisualTestUtils.csproj" />
+    <PackableProject Include="..\src\visual-test-utils\VisualTestUtils.AppConnector\VisualTestUtils.AppConnector.csproj" />
+    <PackableProject Include="..\src\visual-test-utils\VisualTestUtils.ImageHash\VisualTestUtils.ImageHash.csproj" />
+    <PackableProject Include="..\src\visual-test-utils\VisualTestUtils.MagickNet\VisualTestUtils.MagickNet.csproj" />
+  </ItemGroup>
+
+  <!-- Main target that builds packages -->
+  <Target Name="BuildPackages">
+    <Message Text="Building all NuGet packages in $(Configuration) configuration..." Importance="high" />
+
+    <!-- Build AppBuildTasks first as it's needed by SharedModel -->
+    <MSBuild Projects="..\src\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+
+    <!-- Pack all projects -->
+    <MSBuild Projects="@(PackableProject)"
+             Targets="Pack"
+             Properties="Configuration=$(Configuration)"
+             ContinueOnError="false" />
+
+    <Message Text="Packages built to: $(PackageOutputPath)" Importance="high" />
+  </Target>
+
+  <!-- Alias common target names to BuildPackages -->
+  <Target Name="Build" DependsOnTargets="BuildPackages" />
+  <Target Name="Pack" DependsOnTargets="BuildPackages" />
+</Project>
