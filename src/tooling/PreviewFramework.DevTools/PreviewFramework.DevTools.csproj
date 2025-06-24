@@ -1,6 +1,6 @@
-<Project Sdk="Uno.Sdk">
+﻿<Project Sdk="Uno.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0</TargetFrameworks>
+    <TargetFramework>net9.0-desktop</TargetFramework>
 
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
