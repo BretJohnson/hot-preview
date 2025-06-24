@@ -10,9 +10,9 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
     private readonly ConcurrentDictionary<string, AppManager> _apps = [];
 
     /// <summary>
-    /// Gets the dictionary of AppManager instances, keyed by project path.
+    /// Gets the current app(s), if any. A property change notification is raised when the apps collection changes.
     /// </summary>
-    public IReadOnlyDictionary<string, AppManager> Apps => _apps;
+    public IEnumerable<AppManager> Apps => _apps.Values;
 
     /// <summary>
     /// Gets or creates an AppManager for the specified project path.
@@ -25,6 +25,8 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
         {
             appManager = new AppManager(SynchronizationContext, this, projectPath);
             _apps[projectPath] = appManager;
+
+            OnPropertyChanged(nameof(Apps));
         }
 
         return appManager;
@@ -37,6 +39,9 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
     /// <returns>True if the AppManager was successfully removed; otherwise, false</returns>
     public void RemoveApp(string projectPath)
     {
-        _apps.TryRemove(projectPath, out _);
+        if (_apps.TryRemove(projectPath, out _))
+        {
+            OnPropertyChanged(nameof(Apps));
+        }
     }
 }

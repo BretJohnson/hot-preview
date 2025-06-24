@@ -16,6 +16,9 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
 
     public AppsManager AppsManager { get; } = appsManager;
 
+    /// <summary>
+    /// Gets or sets the UIComponentsManager for the app. A property change notification is raised when the UIComponentsManager collection changes.
+    /// </summary>
     public UIComponentsManagerTooling? UIComponentsManager
     {
         get => _uiComponentsManager;
