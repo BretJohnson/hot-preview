@@ -13,13 +13,10 @@
     <ProjectReference Include="..\PreviewFramework\PreviewFramework.csproj" />
   </ItemGroup>
 
-  <!-- Include the AppBuildTasks assembly in the package under build. Note that there's no explicit ProjectReference to the AppBuildTasks project -->
-  <!-- in this project as that caused issues, but it needs to be built before building the NuGet package for this -->
-  <Target Name="IncludeTaskAssemblies" BeforeTargets="GenerateNuspec">
-    <ItemGroup>
-      <_PackageFiles Include="..\..\bin\PreviewFramework.AppBuildTasks\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll">
-        <PackagePath>build\PreviewFramework.AppBuildTasks.dll</PackagePath>
-      </_PackageFiles>
-    </ItemGroup>
-  </Target>
+  <ItemGroup>
+    <!-- Include the AppBuildTasks assembly and associated targets file in the NuGet package, so the platform NuGets can use the task -->
+    <None Include="..\..\bin\PreviewFramework.AppBuildTasks\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll" Pack="true" PackagePath="buildTransitive\PreviewFramework.AppBuildTasks.dll" />
+    <None Include="buildTransitive\PreviewFramework.SharedModel.targets" Pack="true" PackagePath="buildTransitive\PreviewFramework.SharedModel.targets" />
+  </ItemGroup>
+
 </Project>

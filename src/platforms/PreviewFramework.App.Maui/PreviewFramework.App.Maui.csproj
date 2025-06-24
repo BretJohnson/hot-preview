@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
@@ -25,6 +25,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" GeneratePathProperty="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include the targets files in the NuGet package -->
+    <None Include="build\PreviewFramework.App.Maui.targets" Pack="true" PackagePath="build\PreviewFramework.App.Maui.targets" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,45 +72,36 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Compile Update="App.xaml.cs">
-	    <DependentUpon>App.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\ExampleItemDataTemplateSelector.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\ExamplesPage.xaml.cs">
-	    <DependentUpon>ExamplesPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
+  <Compile Update="App.xaml.cs">
+    <DependentUpon>App.xaml</DependentUpon>
+  </Compile>
+  <Compile Update="Pages\ExampleItemDataTemplateSelector.cs">
+    <DependentUpon>%(Filename)</DependentUpon>
+  </Compile>
+  <Compile Update="Pages\ExamplesPage.xaml.cs">
+    <DependentUpon>ExamplesPage.xaml</DependentUpon>
+  </Compile>
+</ItemGroup>
 
-	<ItemGroup>
-	  <MauiXaml Update="App.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\Colors.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\Styles.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
+<ItemGroup>
+  <MauiXaml Update="App.xaml">
+    <Generator>MSBuild:Compile</Generator>
+  </MauiXaml>
+  <MauiXaml Update="Resources\Styles\Colors.xaml">
+    <Generator>MSBuild:Compile</Generator>
+  </MauiXaml>
+  <MauiXaml Update="Resources\Styles\Styles.xaml">
+    <Generator>MSBuild:Compile</Generator>
+  </MauiXaml>
+</ItemGroup>
 
-	<ItemGroup>
-	  <MauiImage Update="Resources\IconsLight\ic_preview_control__light.svg">
-	    <TintColor>#66B3FF</TintColor>
-	  </MauiImage>
-	  <MauiImage Update="Resources\IconsLight\ic_preview_page__light.svg">
-	    <TintColor>#66B3FF</TintColor>
-	  </MauiImage>
-	</ItemGroup>
-
-  <!-- Include the task assembly in the package under build -->
-  <Target Name="IncludeTaskAssemblies" BeforeTargets="GenerateNuspec">
-    <ItemGroup>
-      <_PackageFiles Include="..\..\PreviewFramework.AppBuildTasks\bin\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll">
-        <PackagePath>build\PreviewFramework.AppBuildTasks.dll</PackagePath>
-      </_PackageFiles>
-    </ItemGroup>
-  </Target>
+<ItemGroup>
+  <MauiImage Update="Resources\IconsLight\ic_preview_control__light.svg">
+    <TintColor>#66B3FF</TintColor>
+  </MauiImage>
+  <MauiImage Update="Resources\IconsLight\ic_preview_page__light.svg">
+    <TintColor>#66B3FF</TintColor>
+  </MauiImage>
+</ItemGroup>
 
 </Project>
