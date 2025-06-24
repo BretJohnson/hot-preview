@@ -52,6 +52,14 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
+    private void OnCurrentAppPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppManager.UIComponentsManager))
+        {
+            UpdateNavTreeItems();
+        }
+    }
+
     private void UpdateCurrentAppFromAppsManager()
     {
         IEnumerable<AppManager> apps = DevToolsManager.Instance.AppsManager.Apps;
@@ -85,8 +93,20 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
-    partial void OnCurrentAppChanged(AppManager? value)
+    partial void OnCurrentAppChanged(AppManager? oldValue, AppManager? newValue)
     {
+        // Unsubscribe from the old app's property changes
+        if (oldValue is not null)
+        {
+            oldValue.PropertyChanged -= OnCurrentAppPropertyChanged;
+        }
+
+        // Subscribe to the new app's property changes
+        if (newValue is not null)
+        {
+            newValue.PropertyChanged += OnCurrentAppPropertyChanged;
+        }
+
         // Update nav tree items when current app changes
         UpdateNavTreeItems();
     }
