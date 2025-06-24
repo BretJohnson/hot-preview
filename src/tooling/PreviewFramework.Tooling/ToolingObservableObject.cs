@@ -41,7 +41,7 @@ public abstract class ToolingObservableObject(SynchronizationContext synchroniza
             // Marshal to the UI thread using tuple to avoid closure allocation
             SynchronizationContext.Post(state =>
             {
-                (PropertyChangedEventHandler h, object sender, PropertyChangedEventArgs args) = ((PropertyChangedEventHandler, object, PropertyChangedEventArgs))state!;
+                (PropertyChangedEventHandler h, ToolingObservableObject sender, PropertyChangedEventArgs args) = ((PropertyChangedEventHandler, ToolingObservableObject, PropertyChangedEventArgs))state!;
                 h(sender, args);
             }, (handler, this, new PropertyChangedEventArgs(propertyName)));
         }
