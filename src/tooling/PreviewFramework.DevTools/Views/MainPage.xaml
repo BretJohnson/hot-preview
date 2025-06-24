@@ -107,34 +107,52 @@
       </Grid>
     </Border>
 
-    <!-- Navigation Tree -->
-    <TreeView x:Name="NavTree"
-            Grid.Row="2"
-            CanDragItems="False"
-            CanReorderItems="False"
-            ItemsSource="{Binding NavTreeItems}">
+    <!-- Navigation Tree Area -->
+    <Grid Grid.Row="2">
+      <!-- Navigation Tree -->
+      <TreeView x:Name="NavTree"
+              CanDragItems="False"
+              CanReorderItems="False"
+              ItemsSource="{Binding NavTreeItems}"
+              Visibility="{Binding NavTreeItems, Converter={StaticResource BoolToVisibilityConverter}}">
 
-      <TreeView.ItemTemplate>
-        <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
-          <TreeViewItem ItemsSource="{Binding Children}">
-            <StackPanel Orientation="Horizontal">
-              <!-- Icon -->
-              <TextBlock Text="{Binding Icon}"
-                        FontSize="14"
-                        Margin="0,0,8,0"
-                        VerticalAlignment="Center"/>
+        <TreeView.ItemTemplate>
+          <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
+            <TreeViewItem ItemsSource="{Binding Children}">
+              <StackPanel Orientation="Horizontal">
+                <!-- Icon -->
+                <TextBlock Text="{Binding Icon}"
+                          FontSize="14"
+                          Margin="0,0,8,0"
+                          VerticalAlignment="Center"/>
 
-              <!-- Display Name -->
-              <TextBlock Text="{Binding DisplayName}"
-                        FontSize="14"
-                        VerticalAlignment="Center"/>
-            </StackPanel>
-          </TreeViewItem>
-        </DataTemplate>
+                <!-- Display Name -->
+                <TextBlock Text="{Binding DisplayName}"
+                          FontSize="14"
+                          VerticalAlignment="Center"/>
+              </StackPanel>
+            </TreeViewItem>
+          </DataTemplate>
 
-      </TreeView.ItemTemplate>
+        </TreeView.ItemTemplate>
 
-    </TreeView>
+      </TreeView>
+
+      <!-- No App Connected Message -->
+      <StackPanel HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Visibility="{Binding NavTreeItems, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+        <TextBlock Text="No app connected"
+                   FontSize="16"
+                   Foreground="#6B7280"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="Start an app to see its components"
+                   FontSize="14"
+                   Foreground="#9CA3AF"
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+    </Grid>
 
   </Grid>
 </Page>
