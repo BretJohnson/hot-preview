@@ -189,14 +189,8 @@
 	  <PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
 	  <PackageReference Include="PINView.MAUI" Version="1.0.2" />
 	  <PackageReference Include="Camera.MAUI" Version="1.5.1" />
+	  <PackageReference Include="PreviewFramework.App.Maui" Version="*-*" /> <!-- Always use the latest version including prereleases -->
 	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
-	</ItemGroup>
-
-  <!-- Since we using a project reference instead of referencing the NuGet we need to also import the props -->
-  <Import Project="..\..\..\src\PreviewFramework\buildTransitive\PreviewFramework.props" />
 
   <ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionEcommerceMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
