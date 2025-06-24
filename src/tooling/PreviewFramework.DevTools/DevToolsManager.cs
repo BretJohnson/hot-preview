@@ -16,15 +16,14 @@ public partial class DevToolsManager : ObservableObject
     private readonly ILogger<DevToolsManager> _logger;
     private IServiceProvider? _serviceProvider;
 
-    private readonly AppsManager _appsManager = new(SynchronizationContext.Current ?? new SynchronizationContext());
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
-
-    public AppManager? CurrentApp { get; set; }
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
     /// </summary>
     public static DevToolsManager Instance => s_instance.Value;
+
+    public AppsManager AppsManager { get; } = new(SynchronizationContext.Current ?? new SynchronizationContext());
 
     /// <summary>
     /// Private constructor to enforce singleton pattern.
@@ -42,7 +41,7 @@ public partial class DevToolsManager : ObservableObject
 #endif
 
         // Initialize the app service connection listener
-        _appServiceConnectionListener = new ToolingAppServerConnectionListener(_appsManager);
+        _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);
         _appServiceConnectionListener.StartListening();
 
         ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port);

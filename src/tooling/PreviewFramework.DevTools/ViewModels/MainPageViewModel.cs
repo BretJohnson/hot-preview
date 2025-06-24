@@ -13,7 +13,10 @@ public partial class MainPageViewModel : ObservableObject
     private string _searchText = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<NavTreeItemViewModel> _navTreeItems = [];
+    private IReadOnlyList<NavTreeItemViewModel>? _navTreeItems = [];
+
+    [ObservableProperty]
+    private AppManager? _currentApp;
 
     public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator)
     {
@@ -25,6 +28,12 @@ public partial class MainPageViewModel : ObservableObject
         PlayCommand = new RelayCommand(Play);
         SettingsCommand = new RelayCommand(Settings);
 
+        // Subscribe to AppsManager property changes to handle app selection
+        DevToolsManager.Instance.AppsManager.PropertyChanged += OnAppsManagerPropertyChanged;
+
+        // Initialize CurrentApp with the first available app
+        UpdateCurrentAppFromAppsManager();
+
         // Initialize sample data
         UpdateNavTreeItems();
     }
@@ -35,18 +44,51 @@ public partial class MainPageViewModel : ObservableObject
 
     public ICommand SettingsCommand { get; }
 
+    private void OnAppsManagerPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppsManager.Apps))
+        {
+            UpdateCurrentAppFromAppsManager();
+        }
+    }
+
+    private void UpdateCurrentAppFromAppsManager()
+    {
+        IEnumerable<AppManager> apps = DevToolsManager.Instance.AppsManager.Apps;
+
+        // If current app is still in the list, keep it
+        if (CurrentApp is not null && apps.Contains(CurrentApp))
+        {
+            return;
+        }
+
+        // Otherwise, select the first app or null if list is empty
+        CurrentApp = apps.FirstOrDefault();
+    }
+
     private void UpdateNavTreeItems()
     {
-        NavTreeItems.Clear();
-
-        UIComponentsManagerTooling? uiComponentsManager = DevToolsManager.Instance.CurrentApp?.UIComponentsManager;
+        UIComponentsManagerTooling? uiComponentsManager = CurrentApp?.UIComponentsManager;
         if (uiComponentsManager is not null)
         {
+            List<NavTreeItemViewModel> newNavTreeItems = [];
             foreach (UIComponentTooling uiComponent in uiComponentsManager.UIComponents)
             {
-                NavTreeItems.Add(new UIComponentViewModel(uiComponent));
+                newNavTreeItems.Add(new UIComponentViewModel(uiComponent));
             }
+
+            NavTreeItems = newNavTreeItems;
         }
+        else
+        {
+            NavTreeItems = null;
+        }
+    }
+
+    partial void OnCurrentAppChanged(AppManager? value)
+    {
+        // Update nav tree items when current app changes
+        UpdateNavTreeItems();
     }
 
 #if LATER
