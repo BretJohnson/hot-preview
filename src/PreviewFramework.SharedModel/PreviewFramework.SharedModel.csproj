@@ -17,7 +17,7 @@
   <!-- in this project as that caused issues, but it needs to be built before building the NuGet package for this -->
   <Target Name="IncludeTaskAssemblies" BeforeTargets="GenerateNuspec">
     <ItemGroup>
-      <_PackageFiles Include="..\PreviewFramework.AppBuildTasks\bin\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll">
+      <_PackageFiles Include="..\..\bin\PreviewFramework.AppBuildTasks\$(Configuration)\netstandard2.0\PreviewFramework.AppBuildTasks.dll">
         <PackagePath>build\PreviewFramework.AppBuildTasks.dll</PackagePath>
       </_PackageFiles>
     </ItemGroup>
