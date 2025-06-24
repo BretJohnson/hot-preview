@@ -38,8 +38,6 @@ public partial class MainPageViewModel : ObservableObject
         UpdateNavTreeItems();
     }
 
-    public DevToolsManager DevToolsManager => DevToolsManager.Instance;
-
     public ICommand PlayCommand { get; }
 
     public ICommand SettingsCommand { get; }
@@ -80,7 +78,7 @@ public partial class MainPageViewModel : ObservableObject
         if (uiComponentsManager is not null)
         {
             List<NavTreeItemViewModel> newNavTreeItems = [];
-            foreach (UIComponentTooling uiComponent in uiComponentsManager.UIComponents)
+            foreach (UIComponentTooling uiComponent in uiComponentsManager.SortedUIComponents)
             {
                 newNavTreeItems.Add(new UIComponentViewModel(uiComponent));
             }
