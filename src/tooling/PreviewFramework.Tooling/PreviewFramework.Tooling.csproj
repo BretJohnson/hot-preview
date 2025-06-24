@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\PreviewFramework\PreviewFramework.csproj" />
-    <ProjectReference Include="..\..\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj" />
+    <ProjectReference Include="..\..\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" />
   </ItemGroup>
 
 </Project>

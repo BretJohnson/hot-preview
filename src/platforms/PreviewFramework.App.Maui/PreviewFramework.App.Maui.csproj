@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj" GeneratePathProperty="true" />
+    <ProjectReference Include="..\..\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup>
