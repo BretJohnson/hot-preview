@@ -11,5 +11,11 @@
         <!-- Suppress the following warnings:
           CS8002: Referenced assembly does not have a strong name -->
         <NoWarn>$(NoWarn);CS8002</NoWarn>
+
+        <!-- Add local package source if it exists. The samples use public NuGets by default,
+             but you can run tools/Build-LocalNuGets.ps1 to build local NuGets and it will use those instead. -->
+        <RestoreAdditionalProjectSources Condition="Exists('$(RepoRootPath)bin\Packages\$(Configuration)')">
+            $(RepoRootPath)bin\Packages\$(Configuration)
+        </RestoreAdditionalProjectSources>
     </PropertyGroup>
 </Project>
