@@ -15,8 +15,6 @@ public static class Converters
     // Visibility
     public static Visibility ToVisibility(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
     public static Visibility ToVisibilityInverted(bool value) => !value ? Visibility.Visible : Visibility.Collapsed;
-    public static Visibility VisibleWhenTrue(bool value) => ToVisibility(value);
-    public static Visibility VisibleWhenFalse(bool value) => ToVisibilityInverted(value);
     public static Visibility VisibleWhenNotNull(object value) => ToVisibility(value is not null);
     public static Visibility VisibleWhenNull(object value) => ToVisibility(value is null);
 
