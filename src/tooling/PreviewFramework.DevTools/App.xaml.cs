@@ -4,6 +4,7 @@ using Windows.Foundation;
 using Windows.UI.ViewManagement;
 
 namespace PreviewFramework.DevTools;
+
 public partial class App : Application
 {
     /// <summary>
@@ -79,10 +80,10 @@ public partial class App : Application
 #endif
         MainWindow.SetWindowIcon();
 
+        DevToolsManager.Initialize(SynchronizationContext.Current!);
+
         Host = await builder.NavigateAsync<Shell>();
 
-        // Initialize DevToolsManager with the application service provider
-        DevToolsManager.Instance.Initialize(Host.Services);
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)

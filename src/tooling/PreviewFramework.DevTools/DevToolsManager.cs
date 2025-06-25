@@ -12,33 +12,26 @@ namespace PreviewFramework.DevTools;
 /// </summary>
 public partial class DevToolsManager : ObservableObject
 {
-    private static readonly Lazy<DevToolsManager> s_instance = new(() => new DevToolsManager());
+    private static DevToolsManager? s_instance;
     private readonly ILogger<DevToolsManager> _logger;
-    private IServiceProvider? _serviceProvider;
 
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
     /// </summary>
-    public static DevToolsManager Instance => s_instance.Value;
+    public static DevToolsManager Instance => s_instance ??
+        throw new InvalidOperationException("DevToolsManager has not been initialized yet.");
 
-    public AppsManager AppsManager { get; } = new(SynchronizationContext.Current ?? new SynchronizationContext());
+    public AppsManager AppsManager { get; }
 
-    /// <summary>
-    /// Private constructor to enforce singleton pattern.
-    /// </summary>
-    private DevToolsManager()
+    private DevToolsManager(SynchronizationContext uiThreadSynchronizationContext)
     {
-        // Create a default logger if not provided through Initialize
-        _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
-        _logger.LogInformation("DevToolsManager instance created");
+        // SynchronizationContext.Current must be for the UI thread
+        AppsManager = new(uiThreadSynchronizationContext);
 
-#if OLD_TEST_CODE
-        // TODO: Don't hardcode this & initialize it asynchronously
-        _projectPath = @"Q:\\src\\ui-preview-framework\\samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj";
-        _uiComponentsManager = CreateUIComponentsManagerFromProjectAsync(_projectPath).GetAwaiter().GetResult();
-#endif
+        _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
+        _logger.LogWarning("DevToolsManager initialized without application services, using default logger");
 
         // Initialize the app service connection listener
         _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);
@@ -47,18 +40,7 @@ public partial class DevToolsManager : ObservableObject
         ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port);
     }
 
-    /// <summary>
-    /// Gets a value indicating whether the manager has been initialized.
-    /// </summary>
-    public bool IsInitialized { get; private set; }
-
     public MainPageViewModel MainPageViewModel { get; set; } = null!;
-
-    /// <summary>
-    /// Gets the service provider for dependency resolution.
-    /// </summary>
-    public IServiceProvider ServiceProvider => _serviceProvider ??
-        throw new InvalidOperationException("DevToolsManager has not been initialized. Call Initialize before using.");
 
     /// <summary>
     /// Gets or sets the current theme (light/dark).
@@ -69,66 +51,14 @@ public partial class DevToolsManager : ObservableObject
     /// Initializes the DevToolsManager with services from the application.
     /// </summary>
     /// <param name="serviceProvider">The application's service provider.</param>
-    public void Initialize(IServiceProvider serviceProvider)
+    public static void Initialize(SynchronizationContext uiThreadSynchronizationContext)
     {
-        if (IsInitialized)
+        if (s_instance is not null)
         {
-            _logger.LogWarning("DevToolsManager already initialized");
-            return;
+            throw new InvalidOperationException("DevToolsManager already initialized");
         }
 
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        IsInitialized = true;
-
-        // Get a better logger from DI
-        ILoggerFactory? loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-        if (loggerFactory is not null)
-        {
-            // Replace the default logger with one from DI
-            ILogger<DevToolsManager> logger = loggerFactory.CreateLogger<DevToolsManager>();
-            logger.LogInformation("DevToolsManager initialized with application services");
-        }
-
-        _logger.LogInformation("DevToolsManager initialized");
-    }
-
-    /// <summary>
-    /// Gets a service of type T from the service provider.
-    /// </summary>
-    /// <typeparam name="T">The type of service to get.</typeparam>
-    /// <returns>The service instance.</returns>
-    public T GetService<T>() where T : notnull
-    {
-        if (!IsInitialized)
-        {
-            throw new InvalidOperationException("DevToolsManager has not been initialized. Call Initialize before using.");
-        }
-
-        T? service = ServiceProvider.GetService<T>();
-        if (service is null)
-        {
-            throw new InvalidOperationException($"Service of type {typeof(T).Name} could not be resolved.");
-        }
-
-        return service;
-    }
-
-    /// <summary>
-    /// Tries to get a service of type T from the service provider.
-    /// </summary>
-    /// <typeparam name="T">The type of service to get.</typeparam>
-    /// <param name="service">The output service instance if found.</param>
-    /// <returns>True if the service was found, false otherwise.</returns>
-    public bool TryGetService<T>(out T? service) where T : class
-    {
-        if (!IsInitialized)
-        {
-            service = null;
-            return false;
-        }
-
-        service = ServiceProvider.GetService<T>();
-        return service is not null;
+        s_instance = new DevToolsManager(uiThreadSynchronizationContext);
     }
 
     /// <summary>
