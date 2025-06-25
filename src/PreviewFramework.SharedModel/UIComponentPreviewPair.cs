@@ -1,10 +1,10 @@
 namespace PreviewFramework.SharedModel;
 
-public class UIComponentPreviewPair<TUIComponent, TPreview>(TUIComponent uiComponent, TPreview preview)
+public readonly struct UIComponentPreviewPair<TUIComponent, TPreview>(TUIComponent uiComponent, TPreview preview)
     where TPreview : PreviewBase
     where TUIComponent : UIComponentBase<TPreview>
 {
-    public TUIComponent UIComponent => uiComponent;
+    public TUIComponent UIComponent { get; } = uiComponent;
 
-    public TPreview Preview => preview;
+    public TPreview Preview { get; } = preview;
 }

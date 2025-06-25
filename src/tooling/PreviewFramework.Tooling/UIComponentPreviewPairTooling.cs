@@ -1,7 +1,7 @@
-using PreviewFramework.SharedModel;
-
 namespace PreviewFramework.Tooling;
 
-public class UIComponentPreviewPairTooling(UIComponentTooling uiComponent, PreviewTooling preview) : UIComponentPreviewPair<UIComponentTooling, PreviewTooling>(uiComponent, preview)
+public readonly struct UIComponentPreviewPairTooling(UIComponentTooling uiComponent, PreviewTooling preview)
 {
+    public UIComponentTooling UIComponent { get; } = uiComponent;
+    public PreviewTooling Preview { get; } = preview;
 }

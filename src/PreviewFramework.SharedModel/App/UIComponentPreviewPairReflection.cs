@@ -1,5 +1,7 @@
 namespace PreviewFramework.SharedModel.App;
 
-public class UIComponentPreviewPairReflection(UIComponentReflection uiComponent, PreviewReflection preview) : UIComponentPreviewPair<UIComponentReflection, PreviewReflection>(uiComponent, preview)
+public readonly struct UIComponentPreviewPairReflection(UIComponentReflection uiComponent, PreviewReflection preview)
 {
+    public UIComponentReflection UIComponent { get; } = uiComponent;
+    public PreviewReflection Preview { get; } = preview;
 }
