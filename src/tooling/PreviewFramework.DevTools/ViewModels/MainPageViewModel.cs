@@ -1,6 +1,7 @@
+using Microsoft.UI.Xaml.Data;
+using PreviewFramework.DevTools.Utilities;
 using PreviewFramework.DevTools.ViewModels.NavTree;
 using PreviewFramework.Tooling;
-using Microsoft.UI.Xaml.Data;
 
 namespace PreviewFramework.DevTools.ViewModels;
 
@@ -11,9 +12,6 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     private string _searchText = string.Empty;
-
-    [ObservableProperty]
-    private IReadOnlyList<NavTreeItemViewModel>? _navTreeItems = [];
 
     [ObservableProperty]
     private AppManager? _currentApp;
@@ -37,6 +35,8 @@ public partial class MainPageViewModel : ObservableObject
         // Initialize sample data
         UpdateNavTreeItems();
     }
+
+    public BulkObservableCollection<NavTreeItemViewModel> NavTreeItems { get; } = [];
 
     public ICommand PlayCommand { get; }
 
@@ -83,29 +83,26 @@ public partial class MainPageViewModel : ObservableObject
                 newNavTreeItems.Add(new UIComponentViewModel(uiComponent));
             }
 
-            NavTreeItems = newNavTreeItems;
+            NavTreeItems.ReplaceAll(newNavTreeItems);
         }
         else
         {
-            NavTreeItems = null;
+            NavTreeItems.Clear();
         }
     }
 
     partial void OnCurrentAppChanged(AppManager? oldValue, AppManager? newValue)
     {
-        // Unsubscribe from the old app's property changes
         if (oldValue is not null)
         {
             oldValue.PropertyChanged -= OnCurrentAppPropertyChanged;
         }
 
-        // Subscribe to the new app's property changes
         if (newValue is not null)
         {
             newValue.PropertyChanged += OnCurrentAppPropertyChanged;
         }
 
-        // Update nav tree items when current app changes
         UpdateNavTreeItems();
     }
 
