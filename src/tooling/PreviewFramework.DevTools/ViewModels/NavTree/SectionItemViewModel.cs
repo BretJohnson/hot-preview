@@ -6,5 +6,5 @@ public class SectionItemViewModel(string displayName, string icon = "") : NavTre
 
     public override string Icon { get; } = icon;
 
-    public override ObservableCollection<NavTreeItemViewModel> Children { get; } = new ObservableCollection<NavTreeItemViewModel>();
+    public override IReadOnlyList<NavTreeItemViewModel>? Children { get; } = new List<NavTreeItemViewModel>();
 }

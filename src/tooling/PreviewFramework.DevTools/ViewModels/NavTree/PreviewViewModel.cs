@@ -2,9 +2,17 @@ using PreviewFramework.Tooling;
 
 namespace PreviewFramework.DevTools.ViewModels.NavTree;
 
-public class PreviewViewModel(PreviewTooling preview) : NavTreeItemViewModel
+public class PreviewViewModel(UIComponentTooling uiComponent, PreviewTooling preview) : NavTreeItemViewModel
 {
-    public override string DisplayName => preview.DisplayName;
+    public UIComponentTooling UIComponent { get; } = uiComponent;
+    public PreviewTooling Preview { get; } = preview;
+
+    public override string DisplayName => Preview.DisplayName;
     public override string Icon => "📄";
-    public PreviewTooling Preview => preview;
+
+    public override void OnItemInvoked()
+    {
+        // Navigate to the preview, for all app connections that have the preview
+        DevToolsManager.Instance.MainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, Preview);
+    }
 }

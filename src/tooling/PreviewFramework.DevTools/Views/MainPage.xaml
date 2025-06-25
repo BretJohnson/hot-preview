@@ -97,6 +97,7 @@
               CanDragItems="False"
               CanReorderItems="False"
               ItemsSource="{x:Bind ViewModel.NavTreeItems}"
+              ItemInvoked="OnNavTreeItemInvoked"
               Visibility="{x:Bind converters:Converters.ToVisibility(ViewModel.HaveApp), Mode=OneWay}">
 
         <TreeView.ItemTemplate>

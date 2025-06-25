@@ -10,8 +10,9 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     private readonly AppsManager _appsManager = appsManager;
     private readonly TcpClient _tcpClient = tcpClient;
     private JsonRpc? _rpc;
-    private IPreviewAppService? _appService;
     private AppManager? _appManager;
+
+    public IPreviewAppService? AppService { get; private set; }
 
     public string? PlatformName { get; set; }
     public UIComponentsManagerTooling? UIComponentsManager { get; private set; }
@@ -25,7 +26,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
             _rpc = new JsonRpc(connectionStream, connectionStream);
 
             _rpc.AddLocalRpcTarget<IPreviewAppControllerService>(this, null);
-            _appService = _rpc.Attach<IPreviewAppService>();
+            AppService = _rpc.Attach<IPreviewAppService>();
 
             try
             {
@@ -67,7 +68,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager = _appsManager.GetOrCreateApp(projectPath);
         _appManager.AddAppConnection(this);
 
-        UIComponentInfo[] uiComponentInfos = await _appService!.GetUIComponentsAsync();
+        UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
         UIComponentsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
 
         _appManager.UpdateUIComponents();
@@ -75,7 +76,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
 
     public async Task NotifyUIComponentsChangedAsync()
     {
-        UIComponentInfo[] uiComponentInfos = await _appService!.GetUIComponentsAsync();
+        UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
         UIComponentsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
 
         _appManager?.UpdateUIComponents();

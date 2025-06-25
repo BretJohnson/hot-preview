@@ -8,9 +8,17 @@ public class UIComponentViewModel(UIComponentTooling uiComponent) : NavTreeItemV
 
     public override string Icon => "";
 
-    public override ObservableCollection<NavTreeItemViewModel>? Children { get; } =
+    public override IReadOnlyList<NavTreeItemViewModel>? Children { get; } =
         uiComponent.HasMultiplePreviews ?
-            new ObservableCollection<NavTreeItemViewModel>(uiComponent.Previews.Select(preview => new PreviewViewModel(preview))) :
+            uiComponent.Previews.Select(preview => new PreviewViewModel(uiComponent, preview)).ToList() :
             null;
 
+    public override void OnItemInvoked()
+    {
+        if (uiComponent.HasSinglePreview)
+        {
+            // Navigate to the preview, for all app connections that have the preview
+            DevToolsManager.Instance.MainPageViewModel.CurrentApp?.NavigateToPreview(uiComponent, uiComponent.DefaultPreview);
+        }
+    }
 }

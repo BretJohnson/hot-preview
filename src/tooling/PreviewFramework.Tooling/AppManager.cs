@@ -87,4 +87,16 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
             UIComponentsManager = new GetUIComponentsConsolidated(uiComponentManagers).ToImmutable();
         }
     }
+
+    public void NavigateToPreview(UIComponentTooling uiComponent, PreviewTooling preview)
+    {
+        foreach (AppConnectionManager appConnection in AppConnections)
+        {
+            if (appConnection.UIComponentsManager?.HasPreview(uiComponent.Name, preview.Name) ?? false)
+            {
+                // Fire and forget
+                _ = appConnection.AppService?.NavigateToPreviewAsync(uiComponent.Name, preview.Name);
+            }
+        }
+    }
 }

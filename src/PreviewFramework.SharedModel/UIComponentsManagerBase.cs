@@ -86,4 +86,16 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
 
     public TUIComponent? GetUIComponent(string name) =>
         _uiComponentsByName.TryGetValue(name, out TUIComponent? uiComponent) ? uiComponent : null;
+
+    /// <summary>
+    /// Returns true if the manager contains the specified UI component and that component contains the specified preview.
+    /// </summary>
+    /// <param name="uiComponentName">The name of the UI component to check.</param>
+    /// <param name="previewName">The name of the preview to check.</param>
+    /// <returns>True if both the UI component and preview exist; otherwise, false.</returns>
+    public bool HasPreview(string uiComponentName, string previewName)
+    {
+        TUIComponent? uiComponent = GetUIComponent(uiComponentName);
+        return uiComponent?.GetPreview(previewName) is not null;
+    }
 }
