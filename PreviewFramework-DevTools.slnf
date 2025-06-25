@@ -1,0 +1,13 @@
+{
+  "solution": {
+    "path": "PreviewFramework.sln",
+    "projects": [
+      "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
+      "src\\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj",
+      "src\\PreviewFramework\\PreviewFramework.csproj",
+      "src\\tooling\\PreviewFramework.DevTools\\PreviewFramework.DevTools.csproj",
+      "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
+      "test\\PreviewFramework.Tooling.Tests\\PreviewFramework.Tooling.Tests.csproj"
+    ]
+  }
+}
