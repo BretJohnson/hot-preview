@@ -113,9 +113,8 @@
       <TreeView x:Name="NavTree"
               CanDragItems="False"
               CanReorderItems="False"
-
               ItemsSource="{x:Bind ViewModel.NavTreeItems}"
-              Visibility="{x:Bind converters:Converters.VisibleIfNotNull(ViewModel.CurrentApp), Mode=OneWay}">
+              Visibility="{x:Bind converters:Converters.VisibleWhenNotNull(ViewModel.CurrentApp), Mode=OneWay}">
 
         <TreeView.ItemTemplate>
           <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
@@ -142,7 +141,7 @@
       <!-- No App Connected Message -->
       <StackPanel HorizontalAlignment="Center"
                   VerticalAlignment="Center"
-                  Visibility="{x:Bind converters:Converters.VisibleIfNull(ViewModel.CurrentApp), Mode=OneWay}">
+                  Visibility="{x:Bind converters:Converters.VisibleWhenNull(ViewModel.CurrentApp), Mode=OneWay}">
         <TextBlock Text="No app connected"
                    FontSize="16"
                    Foreground="#6B7280"
