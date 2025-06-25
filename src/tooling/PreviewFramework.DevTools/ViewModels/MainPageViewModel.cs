@@ -16,6 +16,11 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private AppManager? _currentApp;
 
+    /// <summary>
+    /// Returns true when there is a connected app (CurrentApp is not null).
+    /// </summary>
+    public bool HaveApp => CurrentApp is not null;
+
     public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator)
     {
         DevToolsManager.Instance.MainPageViewModel = this;
@@ -102,6 +107,9 @@ public partial class MainPageViewModel : ObservableObject
         {
             newValue.PropertyChanged += OnCurrentAppPropertyChanged;
         }
+
+        // Notify that HaveApp property has changed
+        OnPropertyChanged(nameof(HaveApp));
 
         UpdateNavTreeItems();
     }
