@@ -45,8 +45,8 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
           </Border>
-          <TextBlock Text="{Binding DevToolsManager.ProjectName, FallbackValue=Previews}"
-                     FontSize="18"
+          <TextBlock Text="{x:Bind ViewModel.PageTitle, Mode=OneWay}"
+                     FontSize="14"
                      FontWeight="SemiBold"
                      Foreground="White"
                      VerticalAlignment="Center"/>

@@ -16,6 +16,8 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
 
     public AppsManager AppsManager { get; } = appsManager;
 
+    public string ProjectPath { get; } = projectPath;
+
     /// <summary>
     /// Gets or sets the UIComponentsManager for the app. A property change notification is raised when the UIComponentsManager collection changes.
     /// </summary>
@@ -33,7 +35,7 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
 
     private readonly ConcurrentDictionary<AppConnectionManager, AppConnectionManager> _appConnections = [];
 
-    public string ProjectPath { get; } = projectPath;
+    public string ProjectName => Path.GetFileNameWithoutExtension(ProjectPath);
 
     public IEnumerable<AppConnectionManager> AppConnections => _appConnections.Keys;
 

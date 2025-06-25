@@ -21,6 +21,8 @@ public partial class MainPageViewModel : ObservableObject
     /// </summary>
     public bool HaveApp => CurrentApp is not null;
 
+    public string PageTitle => CurrentApp is not null ? CurrentApp.ProjectName : "Preview DevTools";
+
     public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator)
     {
         DevToolsManager.Instance.MainPageViewModel = this;
@@ -31,11 +33,15 @@ public partial class MainPageViewModel : ObservableObject
         PlayCommand = new RelayCommand(Play);
         SettingsCommand = new RelayCommand(Settings);
 
-        // Subscribe to AppsManager property changes to handle app selection
-        DevToolsManager.Instance.AppsManager.PropertyChanged += OnAppsManagerPropertyChanged;
-
-        // Initialize CurrentApp with the first available app
+        // Initialize CurrentApp with the first app, if there is one. Update CurrentApp when AppsManager.Apps changes.
         UpdateCurrentAppFromAppsManager();
+        DevToolsManager.Instance.AppsManager.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(AppsManager.Apps))
+            {
+                UpdateCurrentAppFromAppsManager();
+            }
+        };
 
         // Initialize sample data
         UpdateNavTreeItems();
@@ -46,22 +52,6 @@ public partial class MainPageViewModel : ObservableObject
     public ICommand PlayCommand { get; }
 
     public ICommand SettingsCommand { get; }
-
-    private void OnAppsManagerPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(AppsManager.Apps))
-        {
-            UpdateCurrentAppFromAppsManager();
-        }
-    }
-
-    private void OnCurrentAppPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(AppManager.UIComponentsManager))
-        {
-            UpdateNavTreeItems();
-        }
-    }
 
     private void UpdateCurrentAppFromAppsManager()
     {
@@ -75,6 +65,33 @@ public partial class MainPageViewModel : ObservableObject
 
         // Otherwise, select the first app or null if list is empty
         CurrentApp = apps.FirstOrDefault();
+    }
+
+    partial void OnCurrentAppChanged(AppManager? oldValue, AppManager? newValue)
+    {
+        if (oldValue is not null)
+        {
+            oldValue.PropertyChanged -= OnCurrentAppPropertyChanged;
+        }
+
+        if (newValue is not null)
+        {
+            newValue.PropertyChanged += OnCurrentAppPropertyChanged;
+        }
+
+        // Notify that dependent properties have changed
+        OnPropertyChanged(nameof(HaveApp));
+        OnPropertyChanged(nameof(PageTitle));
+
+        UpdateNavTreeItems();
+    }
+
+    private void OnCurrentAppPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppManager.UIComponentsManager))
+        {
+            UpdateNavTreeItems();
+        }
     }
 
     private void UpdateNavTreeItems()
@@ -94,24 +111,6 @@ public partial class MainPageViewModel : ObservableObject
         {
             NavTreeItems.Clear();
         }
-    }
-
-    partial void OnCurrentAppChanged(AppManager? oldValue, AppManager? newValue)
-    {
-        if (oldValue is not null)
-        {
-            oldValue.PropertyChanged -= OnCurrentAppPropertyChanged;
-        }
-
-        if (newValue is not null)
-        {
-            newValue.PropertyChanged += OnCurrentAppPropertyChanged;
-        }
-
-        // Notify that HaveApp property has changed
-        OnPropertyChanged(nameof(HaveApp));
-
-        UpdateNavTreeItems();
     }
 
 #if LATER
