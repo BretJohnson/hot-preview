@@ -3,7 +3,7 @@
 The Preview Framework lets you easily work on pages/controls in your app in isolation, without the
 need to run the app, navigate to the page, and supply any test data.
 
-Examples are similar stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
+Examples are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
 and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) -
 but for .NET UI.
@@ -24,11 +24,11 @@ Add this line to your `App` constructor (needed for now):
 #endif
 ```
 
-With just that, if you open your app in a tool that supports it (like what we're addning to Visual Studio) you we'll see previews automatically created for some of pages/controls.
+With just that, if you open your app in a tool that supports it (like what we're adding to Visual Studio) you'll see previews automatically created for some of your pages/controls.
 Previews are automatically created for:
 
-- Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required).,
-- Controls: Dervies from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters.
+- Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required).
+- Controls: Derives from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters.
 
 That should get you started. Beyond that, you'll probably want to define previews yourself, which lets you:
 
@@ -36,7 +36,7 @@ That should get you started. Beyond that, you'll probably want to define preview
 - Provide sample data
 - Define multiple previews for a single UI component
 
-Defining your own previews isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires.
+Defining your own previews isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static method to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires.
 
 ```C#
 #if PREVIEWS
@@ -71,12 +71,12 @@ You can define multiple methods for multiple previews, like:
 ```
 
 The `[Preview]` argument is the optional display name - without that, the name
-is method name.
+is the method name.
 
-Names really just matter when you have a multiple previews. If there's just one,
+Names really just matter when you have multiple previews. If there's just one,
 then by convention it's named `Preview`, but it doesn't matter as the tooling
 displays the UI component name instead.
 
 ## How to build
 
-In brief, run `init.ps1` then open the solution. For details see [Contibuting](Contributing.md)
+In brief, run `init.ps1` then open the solution. For details see [Contributing](CONTRIBUTING.md)
