@@ -4,7 +4,7 @@ public class SectionItemViewModel(string displayName, string icon = "") : NavTre
 {
     public override string DisplayName { get; } = displayName;
 
-    public override string Icon { get; } = icon;
+    public override string PathIcon { get; } = icon;
 
     public override IReadOnlyList<NavTreeItemViewModel>? Children { get; } = new List<NavTreeItemViewModel>();
 }

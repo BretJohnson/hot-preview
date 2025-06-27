@@ -1,4 +1,6 @@
 using Microsoft.UI.Xaml.Data;
+using PreviewFramework.DevTools.Utilities;
+using PreviewFramework.SharedModel;
 
 namespace PreviewFramework.DevTools.ViewModels;
 
@@ -12,7 +14,7 @@ public abstract partial class NavTreeItemViewModel : ObservableObject
     public string Content => DisplayName;
 
     public abstract string DisplayName { get; }
-    public abstract string Icon { get; }
+    public abstract string PathIcon { get; }
     public virtual IReadOnlyList<NavTreeItemViewModel>? Children { get; }
 
     /// <summary>

@@ -30,5 +30,5 @@ public class UIComponentViewModel : PreviewsItemViewModel
 
     public string DisplayName => UIComponent.DisplayName;
 
-    public string Icon => IconUtilities.GetIcon(UIComponent.Kind == UIComponentKind.Control ? "control" : "page");
+    public string PathIcon => UIComponent.PathIcon;
 }

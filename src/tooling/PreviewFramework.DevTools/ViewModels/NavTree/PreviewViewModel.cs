@@ -8,7 +8,7 @@ public class PreviewViewModel(UIComponentTooling uiComponent, PreviewTooling pre
     public PreviewTooling Preview { get; } = preview;
 
     public override string DisplayName => Preview.DisplayName;
-    public override string Icon => "📄";
+    public override string PathIcon => UIComponent.PathIcon;
 
     public override void OnItemInvoked()
     {

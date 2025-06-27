@@ -6,7 +6,7 @@ public class UIComponentViewModel(UIComponentTooling uiComponent) : NavTreeItemV
 {
     public override string DisplayName => uiComponent.DisplayName;
 
-    public override string Icon => "";
+    public override string PathIcon => uiComponent.PathIcon;
 
     public override IReadOnlyList<NavTreeItemViewModel>? Children { get; } =
         uiComponent.HasMultiplePreviews ?

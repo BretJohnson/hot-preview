@@ -100,18 +100,28 @@
               ItemInvoked="OnNavTreeItemInvoked"
               Visibility="{x:Bind converters:Converters.ToVisibility(ViewModel.HaveApp), Mode=OneWay}">
 
+      <TreeView.ItemContainerStyle>
+          <!-- Tighten up the vertical spacing, reducing the default padding -->
+          <Style TargetType="TreeViewItem">
+              <Setter Property="Padding" Value="0,2,0,2"/>
+          </Style>
+      </TreeView.ItemContainerStyle>
+
         <TreeView.ItemTemplate>
           <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
             <TreeViewItem ItemsSource="{Binding Children}">
               <StackPanel Orientation="Horizontal">
                 <!-- Icon -->
-                <TextBlock Text="{Binding Icon}"
-                          FontSize="14"
-                          Margin="0,0,8,0"
-                          VerticalAlignment="Center"/>
+                <Viewbox Width="18" Height="18" Margin="0,0,8,0">
+                  <Canvas Width="24" Height="24"
+                        VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Path Data="{x:Bind PathIcon, Mode=OneTime}"
+                        Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+                  </Canvas>
+                </Viewbox>
 
                 <!-- Display Name -->
-                <TextBlock Text="{Binding DisplayName}"
+                <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
                           FontSize="14"
                           VerticalAlignment="Center"/>
               </StackPanel>
