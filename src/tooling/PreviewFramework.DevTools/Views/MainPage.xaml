@@ -81,7 +81,7 @@
             BorderThickness="0,0,0,1"
             Padding="16,12">
       <AutoSuggestBox x:Name="SearchBox"
-                    Text="{Binding SearchText, Mode=TwoWay}"
+                    Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
                     PlaceholderText="Find components"
                     QueryIcon="Find"
                     Background="Transparent"
@@ -109,7 +109,7 @@
 
         <TreeView.ItemTemplate>
           <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
-            <TreeViewItem ItemsSource="{Binding Children}">
+            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}">
               <StackPanel Orientation="Horizontal">
                 <!-- Icon -->
                 <Viewbox Width="18" Height="18" Margin="0,0,8,0">
