@@ -1,35 +1,34 @@
 using System.Diagnostics;
 
-namespace PreviewFramework.McpServer.Helpers
+namespace PreviewFramework.McpServer.Helpers;
+
+public static class Idb
 {
-    public static class Idb
+    public static bool CheckIdbInstalled()
     {
-        public static bool CheckIdbInstalled()
+        try
         {
-            try
+            var process = new System.Diagnostics.Process
             {
-                var process = new System.Diagnostics.Process
+                StartInfo = new ProcessStartInfo
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "idb",
-                        Arguments = "version",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
+                    FileName = "idb",
+                    Arguments = "version",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
 
-                process.Start();
-                process.WaitForExit();
+            process.Start();
+            process.WaitForExit();
 
-                return process.ExitCode == 0; // Return true if Idb is installed and the command succeeds.
-            }
-            catch
-            {
-                // Handle errors, e.g., if Idb is not found or the command fails.
-                return false;
-            }
+            return process.ExitCode == 0; // Return true if Idb is installed and the command succeeds.
+        }
+        catch
+        {
+            // Handle errors, e.g., if Idb is not found or the command fails.
+            return false;
         }
     }
 }

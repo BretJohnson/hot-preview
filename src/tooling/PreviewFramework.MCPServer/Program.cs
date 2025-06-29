@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,7 +11,7 @@ internal class Program
     private static async Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose() // Capture all log levels  
+    .MinimumLevel.Verbose() // Capture all log levels
     .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "GitHubTriageMcpServer_.log"),
         rollingInterval: RollingInterval.Day,
         outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")

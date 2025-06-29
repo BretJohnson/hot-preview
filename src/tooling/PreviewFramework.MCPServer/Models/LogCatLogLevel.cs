@@ -1,13 +1,12 @@
-namespace PreviewFramework.McpServer.Models
+namespace PreviewFramework.McpServer.Models;
+
+public enum LogCatLogLevel
 {
-    public enum LogCatLogLevel
-    {
-        Verbose,
-        Debug,
-        Info,
-        Warning,
-        Error,
-        Fatal,
-        Unknown
-    }
+    Verbose,
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Fatal,
+    Unknown
 }
