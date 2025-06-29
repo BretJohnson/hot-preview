@@ -1,6 +1,8 @@
 ﻿using PreviewFramework.McpServer.Helpers;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
+using System;
+using System.Collections.Generic;
 
 namespace PreviewFramework.McpServer
 {
