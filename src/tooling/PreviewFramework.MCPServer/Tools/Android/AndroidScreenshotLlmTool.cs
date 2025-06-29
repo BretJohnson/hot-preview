@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.AI;
-using MobileDevMcpServer.Helpers;
+using PreviewFramework.McpServer.Helpers;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer
+namespace PreviewFramework.McpServer
 {
     [McpServerToolType]
     public class AndroidScreenshotLlmTool
@@ -39,7 +39,7 @@ namespace MobileDevMcpServer
                     return false;
                 }
 
-                ChatMessage[] messages =      
+                ChatMessage[] messages =
                 [
                 new(ChatRole.System, VerifyScreenshotPrompt),
                 new ChatMessage(ChatRole.User,
@@ -48,7 +48,7 @@ namespace MobileDevMcpServer
                         new TextContent(prompt ?? "Compare the images"),
                         new DataContent(screenshot1, "image/png"),
                         new DataContent(screenshot2, "image/png")
-            
+
                     })
                 ];
 
@@ -60,7 +60,7 @@ namespace MobileDevMcpServer
 
                 var response = await thisServer.AsSamplingChatClient().GetResponseAsync(messages, options, cancellationToken);
 
-                if(response is not null)
+                if (response is not null)
                 {
                     var result = response.Text;
                     bool.TryParse(result, out bool boolResult);

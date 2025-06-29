@@ -1,11 +1,11 @@
-﻿using MobileDevMcpServer.Helpers;
-using MobileDevMcpServer.Models;
+﻿using PreviewFramework.McpServer.Helpers;
+using PreviewFramework.McpServer.Models;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 
-namespace MobileDevMcpServer
+namespace PreviewFramework.McpServer
 {
     [McpServerToolType]
     public class IosDeviceTool
@@ -95,7 +95,7 @@ namespace MobileDevMcpServer
 
                     foreach (var device in runtime.Value)
                     {
-                         if (device.State == "Booted")
+                        if (device.State == "Booted")
                         {
                             // Format the result as a table
                             var deviceStr = "# Booted Device\n\n";

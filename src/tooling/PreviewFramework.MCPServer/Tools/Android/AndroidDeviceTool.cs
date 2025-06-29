@@ -1,9 +1,9 @@
-﻿using MobileDevMcpServer.Helpers;
-using MobileDevMcpServer.Models;
+﻿using PreviewFramework.McpServer.Helpers;
+using PreviewFramework.McpServer.Models;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer
+namespace PreviewFramework.McpServer
 {
     /// <summary>
     /// Executes ADB command with passed parameters.
@@ -13,7 +13,7 @@ namespace MobileDevMcpServer
     {
 
         /*
-         To do a prompt like  "click on a green button with a rabbit on it".. 
+         To do a prompt like  "click on a green button with a rabbit on it"..
          need to do a more descriptive prompt like
          "obtain connected device display size, then calculate from it the location of [description of the element] and click on it"
          So maybe we could add a special Tool for such task.

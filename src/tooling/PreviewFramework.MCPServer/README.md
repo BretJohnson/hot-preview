@@ -1,5 +1,7 @@
 # Mobile Development MCP
 
+> **Attribution**: This code is based on the excellent work from [Javier Suárez](https://github.com/jsuarezruiz/mobile-dev-mcp-server) and [Nick Kovalsky](https://github.com/taublast/MCP-JavierMobile). We're building on their great foundation to integrate mobile development capabilities into the PreviewFramework ecosystem.
+
 **Control mobile devices with AI through the Model Context Protocol!**
 
 This is a MCP designed to manage and interact with mobile devices and simulators. It provides utilities for tasks such as app installation, device management, and log retrieval for iOS and Android development environments.
@@ -90,7 +92,7 @@ Try these queries:
 
 ### Gallery
 
-<img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/tool-list-vscode.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/list-ios-simulators.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/list-android-apps.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/diagnostics-android.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/launch-android-app.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/logs-android.png" width="30%"></img> 
+<img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/tool-list-vscode.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/list-ios-simulators.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/list-android-apps.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/diagnostics-android.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/launch-android-app.png" width="30%"></img> <img src="https://raw.githubusercontent.com/jsuarezruiz/mobile-dev-mcp-server/refs/heads/main/images/logs-android.png" width="30%"></img>
 
 ### Contributing
 

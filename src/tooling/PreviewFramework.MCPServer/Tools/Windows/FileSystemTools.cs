@@ -1,7 +1,7 @@
 ﻿using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer;
+namespace PreviewFramework.McpServer;
 
 [McpServerToolType]
 public class FileSystemTools

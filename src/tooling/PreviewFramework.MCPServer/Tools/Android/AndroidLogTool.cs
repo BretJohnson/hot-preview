@@ -1,9 +1,9 @@
-﻿using MobileDevMcpServer.Helpers;
-using MobileDevMcpServer.Models;
+﻿using PreviewFramework.McpServer.Helpers;
+using PreviewFramework.McpServer.Models;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer
+namespace PreviewFramework.McpServer
 {
     [McpServerToolType]
     public class AndroidLogTool

@@ -1,4 +1,4 @@
-namespace MobileDevMcpServer.Models
+namespace PreviewFramework.McpServer.Models
 {
     public enum LogCatLogLevel
     {

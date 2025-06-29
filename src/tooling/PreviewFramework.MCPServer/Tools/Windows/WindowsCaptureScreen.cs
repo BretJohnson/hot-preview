@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MobileDevMcpServer;
+namespace PreviewFramework.McpServer;
 
 [McpServerToolType]
 public class WindowsCaptureScreen
@@ -102,16 +102,16 @@ public class WindowsCaptureScreen
 
                 switch (extension)
                 {
-                case ".jpg":
-                case ".jpeg":
-                format = ImageFormat.Jpeg;
-                break;
-                case ".bmp":
-                format = ImageFormat.Bmp;
-                break;
-                case ".gif":
-                format = ImageFormat.Gif;
-                break;
+                    case ".jpg":
+                    case ".jpeg":
+                        format = ImageFormat.Jpeg;
+                        break;
+                    case ".bmp":
+                        format = ImageFormat.Bmp;
+                        break;
+                    case ".gif":
+                        format = ImageFormat.Gif;
+                        break;
                 }
 
                 // Save the bitmap to file
@@ -264,16 +264,16 @@ public class WindowsCaptureScreen
 
                 switch (extension)
                 {
-                case ".jpg":
-                case ".jpeg":
-                format = ImageFormat.Jpeg;
-                break;
-                case ".bmp":
-                format = ImageFormat.Bmp;
-                break;
-                case ".gif":
-                format = ImageFormat.Gif;
-                break;
+                    case ".jpg":
+                    case ".jpeg":
+                        format = ImageFormat.Jpeg;
+                        break;
+                    case ".bmp":
+                        format = ImageFormat.Bmp;
+                        break;
+                    case ".gif":
+                        format = ImageFormat.Gif;
+                        break;
                 }
 
                 // Save the bitmap to file

@@ -1,8 +1,8 @@
-﻿using MobileDevMcpServer.Helpers;
+﻿using PreviewFramework.McpServer.Helpers;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer
+namespace PreviewFramework.McpServer
 {
     [McpServerToolType]
     public class IosScreenshotTool
@@ -20,7 +20,7 @@ namespace MobileDevMcpServer
         /// </returns>
         /// <remarks>
         /// This method interacts with the specified device to capture its current screen content.
-        /// Ensure that the device with the given <paramref name="deviceId"/> is connected, 
+        /// Ensure that the device with the given <paramref name="deviceId"/> is connected,
         /// accessible, and properly configured for the operation.
         /// </remarks>
         [McpServerTool(Name = "ios_screenshot")]

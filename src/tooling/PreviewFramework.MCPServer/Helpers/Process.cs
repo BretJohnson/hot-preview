@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace MobileDevMcpServer.Helpers
+namespace PreviewFramework.McpServer.Helpers
 {
     public static class Process
     {

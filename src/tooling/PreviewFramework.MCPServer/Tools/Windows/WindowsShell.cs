@@ -1,8 +1,8 @@
-﻿using MobileDevMcpServer.Helpers;
+﻿using PreviewFramework.McpServer.Helpers;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace MobileDevMcpServer;
+namespace PreviewFramework.McpServer;
 
 [McpServerToolType]
 public class WindowsTools
@@ -121,4 +121,3 @@ public class WindowsTools
     }
 
 }
-
