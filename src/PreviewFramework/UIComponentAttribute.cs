@@ -10,6 +10,8 @@ namespace PreviewFramework;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class UIComponentAttribute : Attribute
 {
+    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(UIComponentAttribute));
+
     /// <summary>
     /// Optional display name for the UI component, if it's different from the type name.
     /// </summary>
