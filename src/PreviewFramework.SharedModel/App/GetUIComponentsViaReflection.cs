@@ -86,6 +86,31 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
                 continue;
             }
 
+            // Check for UIComponentAttribute
+            UIComponentAttribute? uiComponentAttribute = type.GetCustomAttribute<UIComponentAttribute>(false);
+            if (uiComponentAttribute is not null)
+            {
+                UIComponentKind kind = InferUIComponentKind(type);
+
+                // Add or update the UI component with the display name from the attribute
+                string uiComponentName = type.FullName ?? throw new ArgumentException("UI Component type must have a FullName");
+
+                UIComponentReflection component;
+                if (_uiComponentsByName.TryGetValue(uiComponentName, out UIComponentReflection? existingComponent))
+                {
+                    // Update the display name if the component already exists
+                    component = new UIComponentReflection(type, existingComponent.Kind,
+                        uiComponentAttribute.DisplayName, existingComponent.Previews);
+                }
+                else
+                {
+                    // Create a new component with no previews yet
+                    component = new UIComponentReflection(type, kind, uiComponentAttribute.DisplayName, []);
+                }
+
+                _uiComponentsByName[uiComponentName] = component;
+            }
+
             PreviewAttribute? typePreviewAttribute = type.GetCustomAttribute<PreviewAttribute>(false);
             if (typePreviewAttribute is not null)
             {
