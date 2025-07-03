@@ -11,6 +11,7 @@ using ModelContextProtocol.Server;
 namespace PreviewFramework.McpServer;
 
 [McpServerToolType]
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class WindowsCaptureScreen
 {
     /// <summary>
@@ -378,10 +379,10 @@ public class WindowsCaptureScreen
     /// </summary>
     private static class NativeMethods
     {
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -391,10 +392,10 @@ public class WindowsCaptureScreen
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWindowVisible(IntPtr hWnd);
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowTextLength(IntPtr hWnd);
 
         [DllImport("user32.dll")]
