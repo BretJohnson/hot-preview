@@ -165,7 +165,7 @@ public class WindowsCaptureScreen
                         int length = NativeMethods.GetWindowTextLength(hWnd);
                         if (length > 0)
                         {
-                            StringBuilder sb = new StringBuilder(length + 1);
+                            var sb = new StringBuilder(length + 1);
                             NativeMethods.GetWindowText(hWnd, sb, sb.Capacity);
                             string title = sb.ToString();
 
@@ -295,8 +295,8 @@ public class WindowsCaptureScreen
     public class WindowInfo
     {
         public IntPtr Handle { get; set; }
-        public string Title { get; set; }
-        public string ClassName { get; set; }
+        public required string Title { get; set; }
+        public string? ClassName { get; set; }
         public uint ProcessId { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -315,7 +315,7 @@ public class WindowsCaptureScreen
     {
         try
         {
-            List<WindowInfo> windows = new List<WindowInfo>();
+            var windows = new List<WindowInfo>();
             uint currentProcessId = (uint)System.Diagnostics.Process.GetCurrentProcess().Id; // Get this app's PID
 
             NativeMethods.EnumWindows((hWnd, lParam) =>
