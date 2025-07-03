@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackableProject Include="..\src\PreviewFramework\PreviewFramework.csproj" />
     <PackableProject Include="..\src\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" />
-    <PackableProject Include="..\src\PreviewFramework.AppBuildTasks\PreviewFramework.AppBuildTasks.csproj" />
     <PackableProject Include="..\src\tooling\PreviewFramework.Tooling\PreviewFramework.Tooling.csproj" />
+    <PackableProject Include="..\src\tooling\PreviewFramework.DotNetTool\PreviewFramework.DotNetTool.csproj" />
     <PackableProject Include="..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
     <PackableProject Include="..\src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj" />
     <PackableProject Include="..\src\visual-test-utils\VisualTestUtils\VisualTestUtils.csproj" />

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>preview-devtools</ToolCommandName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>PreviewFramework.DevTools</PackageId>
+    <Title>PreviewFramework DevTools</Title>
+    <PackageDescription>A .NET global tool for launching PreviewFramework DevTools - a visual development environment for UI component previews</PackageDescription>
+    <PackageTags>preview;ui;components;devtools;maui;wpf;uno;tool</PackageTags>
+  </PropertyGroup>
+
+  <!-- Include DevTools files directly in the project -->
+  <ItemGroup>
+    <Content Include="../../../bin/PreviewFramework.DevToolsApp/Debug/net9.0-desktop/**/*"
+             PackagePath="tools/devtools/%(RecursiveDir)%(Filename)%(Extension)"
+             Pack="true"
+             Condition="Exists('../../../bin/PreviewFramework.DevToolsApp/Debug/net9.0-desktop/')" />
+  </ItemGroup>
+
+  <!-- Custom target to ensure DevTools is built first -->
+  <Target Name="BuildDevToolsFirst" BeforeTargets="Build">
+    <MSBuild Projects="../PreviewFramework.DevToolsApp/PreviewFramework.DevToolsApp.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);TargetFramework=net9.0-desktop" />
+  </Target>
+
+</Project>

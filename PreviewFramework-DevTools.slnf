@@ -5,8 +5,9 @@
       "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
       "src\\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj",
       "src\\PreviewFramework\\PreviewFramework.csproj",
-      "src\\tooling\\PreviewFramework.DevTools\\PreviewFramework.DevTools.csproj",
+      "src\\tooling\\PreviewFramework.DevToolsApp\\PreviewFramework.DevToolsApp.csproj",
       "src\\tooling\\PreviewFramework.MCPServer\\PreviewFramework.MCPServer.csproj",
+      "src\\tooling\\PreviewFramework.DotNetTool\\PreviewFramework.DotNetTool.csproj",
       "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
       "test\\PreviewFramework.Tooling.Tests\\PreviewFramework.Tooling.Tests.csproj"
     ]
