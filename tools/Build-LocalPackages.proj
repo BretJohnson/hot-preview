@@ -28,6 +28,11 @@
              Targets="Build"
              Properties="Configuration=$(Configuration)" />
 
+    <!-- Also explicitly build PreviewFramework.DevToolsApp, which is included in PreviewFramework.DotNetTool -->
+    <MSBuild Projects="..\src\tooling\PreviewFramework.DevToolsApp\PreviewFramework.DevToolsApp.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+
     <!-- Pack all projects -->
     <MSBuild Projects="@(PackableProject)"
              Targets="Pack"
