@@ -23,11 +23,11 @@
              Pack="true" />
   </ItemGroup>
 
-  <!-- Ensure DevToolsApp is built before we process content files -->
-  <Target Name="EnsureDevToolsAppBuilt" BeforeTargets="AssignTargetPaths">
-    <MSBuild Projects="../PreviewFramework.DevToolsApp/PreviewFramework.DevToolsApp.csproj"
-             Targets="Build"
-             Properties="Configuration=$(Configuration);TargetFramework=net9.0-desktop" />
-  </Target>
+  <!-- Build dependency without reference - ensures DevToolsApp builds first in solution builds -->
+  <ItemGroup>
+    <MSBuildProjectReference Include="../PreviewFramework.DevToolsApp/PreviewFramework.DevToolsApp.csproj">
+      <AdditionalProperties>TargetFramework=net9.0-desktop</AdditionalProperties>
+    </MSBuildProjectReference>
+  </ItemGroup>
 
 </Project>
