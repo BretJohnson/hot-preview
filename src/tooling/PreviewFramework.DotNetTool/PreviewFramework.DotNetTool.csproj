@@ -23,11 +23,11 @@
              Pack="true" />
   </ItemGroup>
 
-  <!-- Custom target to ensure DevToolsApp is built first -->
-  <Target Name="BuildDevToolsFirst" BeforeTargets="Build">
+  <!-- Ensure DevToolsApp is built before we process content files -->
+  <Target Name="EnsureDevToolsAppBuilt" BeforeTargets="AssignTargetPaths">
     <MSBuild Projects="../PreviewFramework.DevToolsApp/PreviewFramework.DevToolsApp.csproj"
              Targets="Build"
-             Properties="Configuration=$(Configuration);TargetFramework=net9.0-desktop" />
+             Properties="Configuration=$(Configuration)" />
   </Target>
 
 </Project>
