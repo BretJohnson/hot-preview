@@ -10,10 +10,6 @@
       "src\\tooling\\PreviewFramework.DevToolsApp\\PreviewFramework.DevToolsApp.csproj",
       "src\\tooling\\PreviewFramework.DotNetTool\\PreviewFramework.DotNetTool.csproj",
       "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
-      "src\\visual-test-utils\\VisualTestUtils.AppConnector\\VisualTestUtils.AppConnector.csproj",
-      "src\\visual-test-utils\\VisualTestUtils.ImageHash\\VisualTestUtils.ImageHash.csproj",
-      "src\\visual-test-utils\\VisualTestUtils.MagickNet\\VisualTestUtils.MagickNet.csproj",
-      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj",
       "test\\PreviewFramework.Tooling.Tests\\PreviewFramework.Tooling.Tests.csproj"
     ]
   }
