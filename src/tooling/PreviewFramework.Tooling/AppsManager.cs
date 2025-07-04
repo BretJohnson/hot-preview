@@ -14,6 +14,8 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
     /// </summary>
     public IEnumerable<AppManager> Apps => _apps.Values;
 
+    public int AppCount => _apps.Count;
+
     /// <summary>
     /// Gets or creates an AppManager for the specified project path.
     /// </summary>

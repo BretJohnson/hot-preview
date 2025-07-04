@@ -10,7 +10,6 @@ public class ToolingAppServerConnectionListener : IDisposable
 
     private readonly AppsManager _appsManager;
     private readonly TcpListener _listener;
-    private readonly ConcurrentDictionary<AppConnectionManager, AppConnectionManager> _connections = [];
 
     public ToolingAppServerConnectionListener(AppsManager appsManager)
     {
@@ -32,21 +31,6 @@ public class ToolingAppServerConnectionListener : IDisposable
     {
         Task.Run(ListenLoopAsync);
     }
-
-    internal void AddConnection(AppConnectionManager connection)
-    {
-        if (!_connections.TryAdd(connection, connection))
-        {
-            throw new InvalidOperationException("Connection unexpected already added to listeners");
-        }
-    }
-
-    internal void RemoveConnection(AppConnectionManager connection)
-    {
-        _connections.TryRemove(connection, out _);
-    }
-
-    public int ConnectionCount => _connections.Count;
 
     private async Task ListenLoopAsync()
     {
