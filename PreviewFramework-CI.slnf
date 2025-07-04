@@ -2,18 +2,18 @@
   "solution": {
     "path": "PreviewFramework.sln",
     "projects": [
+      "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
       "src\\PreviewFramework.SharedModel\\PreviewFramework.SharedModel.csproj",
       "src\\PreviewFramework\\PreviewFramework.csproj",
-      "src\\PreviewFramework.AppBuildTasks\\PreviewFramework.AppBuildTasks.csproj",
-      "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
       "src\\platforms\\PreviewFramework.App.Maui\\PreviewFramework.App.Maui.csproj",
       "src\\platforms\\PreviewFramework.App.Wpf\\PreviewFramework.App.Wpf.csproj",
-      "src\\tooling\\PreviewFramework.DevTools\\PreviewFramework.DevTools.csproj",
-      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj",
+      "src\\tooling\\PreviewFramework.DevToolsApp\\PreviewFramework.DevToolsApp.csproj",
+      "src\\tooling\\PreviewFramework.DotNetTool\\PreviewFramework.DotNetTool.csproj",
+      "src\\tooling\\PreviewFramework.Tooling\\PreviewFramework.Tooling.csproj",
       "src\\visual-test-utils\\VisualTestUtils.AppConnector\\VisualTestUtils.AppConnector.csproj",
       "src\\visual-test-utils\\VisualTestUtils.ImageHash\\VisualTestUtils.ImageHash.csproj",
       "src\\visual-test-utils\\VisualTestUtils.MagickNet\\VisualTestUtils.MagickNet.csproj",
-      "test\\PreviewFramework.Tests\\PreviewFramework.Tests.csproj",
+      "src\\visual-test-utils\\VisualTestUtils\\VisualTestUtils.csproj",
       "test\\PreviewFramework.Tooling.Tests\\PreviewFramework.Tooling.Tests.csproj"
     ]
   }
