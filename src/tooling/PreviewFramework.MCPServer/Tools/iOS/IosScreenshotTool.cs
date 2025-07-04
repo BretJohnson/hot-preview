@@ -1,8 +1,8 @@
 ﻿using System;
-using PreviewFramework.McpServer.Helpers;
-using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.IO;
+using ModelContextProtocol.Server;
+using PreviewFramework.McpServer.Helpers;
 
 namespace PreviewFramework.McpServer;
 
@@ -18,7 +18,7 @@ public class IosScreenshotTool
     /// </param>
     /// <returns>
     /// A byte array representing the screenshot image data.
-    /// Returns <c>null</c> if the screenshot operation fails.
+    /// Returns <see langword="null"/> if the screenshot operation fails.
     /// </returns>
     /// <remarks>
     /// This method interacts with the specified device to capture its current screen content.

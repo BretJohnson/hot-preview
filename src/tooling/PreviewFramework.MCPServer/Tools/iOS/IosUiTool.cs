@@ -1,7 +1,7 @@
-﻿using PreviewFramework.McpServer.Helpers;
-using ModelContextProtocol.Server;
+﻿using System;
 using System.ComponentModel;
-using System;
+using ModelContextProtocol.Server;
+using PreviewFramework.McpServer.Helpers;
 
 namespace PreviewFramework.McpServer;
 
@@ -11,9 +11,9 @@ public class IosUiTool
     /// <summary>
     /// Simulates a tap gesture on the screen of an iOS device.
     /// This method requires the device's serial number and the screen coordinates (X, Y) as inputs.
-    /// <param name="deviceId">The unique identifier (UDID) of the target iOS device.</param>
-    /// <param name="x">The X coordinate of the screen where the tap should occur.</param>
-    /// <param name="y">The Y coordinate of the screen where the tap should occur.</param>
+    /// <paramref name="deviceId">The unique identifier (UDID) of the target iOS device.</paramref>
+    /// <paramref name="x">The X coordinate of the screen where the tap should occur.</paramref>
+    /// <paramref name="y">The Y coordinate of the screen where the tap should occur.</paramref>
     /// <returns>
     /// A string indicating the result of the tap operation.
     /// </returns>

@@ -2,8 +2,8 @@ using System.Diagnostics;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-using PreviewFramework.Tooling;
 using PreviewFramework.DevToolsApp.ViewModels;
+using PreviewFramework.Tooling;
 
 namespace PreviewFramework.DevToolsApp;
 

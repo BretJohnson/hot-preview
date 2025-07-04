@@ -1,8 +1,8 @@
-﻿using PreviewFramework.McpServer.Helpers;
-using ModelContextProtocol.Server;
-using System.ComponentModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using ModelContextProtocol.Server;
+using PreviewFramework.McpServer.Helpers;
 
 namespace PreviewFramework.McpServer;
 
@@ -12,6 +12,7 @@ public class AndroidUiTool
     /// <summary>
     /// Simulates a tap gesture on the screen of an Android device.
     /// This method requires the device's serial number and the screen coordinates (X, Y) as inputs.
+    /// </summary>
     /// <param name="deviceSerial">The serial number of the target Android device.</param>
     /// <param name="x">The X coordinate of the screen where the tap should occur.</param>
     /// <param name="y">The Y coordinate of the screen where the tap should occur.</param>

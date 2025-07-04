@@ -1,6 +1,6 @@
-using Microsoft.Build.Framework;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using Microsoft.Build.Framework;
 
 namespace PreviewFramework.AppBuildTasks
 {

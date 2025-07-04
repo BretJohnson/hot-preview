@@ -1,8 +1,8 @@
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
+using PreviewFramework.App.Maui.Utilities;
 using PreviewFramework.SharedModel;
 using PreviewFramework.SharedModel.App;
-using PreviewFramework.App.Maui.Utilities;
 
 namespace PreviewFramework.App.Maui.ViewModels;
 
