@@ -19,12 +19,11 @@
   <!-- Include DevTools files directly in the project -->
   <ItemGroup>
     <Content Include="../../../bin/PreviewFramework.DevToolsApp/Debug/net9.0-desktop/**/*"
-             PackagePath="tools/devtools/%(RecursiveDir)%(Filename)%(Extension)"
-             Pack="true"
-             Condition="Exists('../../../bin/PreviewFramework.DevToolsApp/Debug/net9.0-desktop/')" />
+             PackagePath="tools/app/%(RecursiveDir)%(Filename)%(Extension)"
+             Pack="true" />
   </ItemGroup>
 
-  <!-- Custom target to ensure DevTools is built first -->
+  <!-- Custom target to ensure DevToolsApp is built first -->
   <Target Name="BuildDevToolsFirst" BeforeTargets="Build">
     <MSBuild Projects="../PreviewFramework.DevToolsApp/PreviewFramework.DevToolsApp.csproj"
              Targets="Build"
