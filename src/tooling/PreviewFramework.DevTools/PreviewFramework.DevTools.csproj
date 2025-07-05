@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>PreviewFramework.DevTools</PackageId>
     <Title>PreviewFramework DevTools</Title>
     <PackageDescription>A .NET global tool for launching PreviewFramework DevTools - a visual development environment for UI component previews</PackageDescription>
     <PackageTags>preview;ui;components;devtools;maui;wpf;uno;tool</PackageTags>
