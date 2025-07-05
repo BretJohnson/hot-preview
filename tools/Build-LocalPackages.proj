@@ -26,7 +26,7 @@
     <ItemGroup>
       <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework" />
       <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.sharedmodel" />
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.devtoolscli" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.devtools" />
       <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.app.maui" />
       <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.app.wpf" />
     </ItemGroup>

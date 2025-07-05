@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace PreviewFramework.DevToolsCli;
+namespace PreviewFramework.DevTools;
 
 public static class Program
 {

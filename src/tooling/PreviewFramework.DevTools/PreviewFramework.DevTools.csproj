@@ -5,8 +5,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>PreviewFramework.DevToolsCli</RootNamespace>
-    <AssemblyName>PreviewFramework.DevToolsCli</AssemblyName>
+    <RootNamespace>PreviewFramework.DevTools</RootNamespace>
+    <AssemblyName>PreviewFramework.DevTools</AssemblyName>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>preview-devtools</ToolCommandName>
   </PropertyGroup>
