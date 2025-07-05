@@ -8,13 +8,20 @@
   <!-- List of projects that produce NuGet packages -->
   <ItemGroup>
     <PackableProject Include="..\src\PreviewFramework\PreviewFramework.csproj" />
+    <PackableProject Include="..\src\PreviewFramework.SharedModel\PreviewFramework.SharedModel.csproj" />
     <PackableProject Include="..\src\tooling\PreviewFramework.DevTools\PreviewFramework.DevTools.csproj" />
     <PackableProject Include="..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
     <PackableProject Include="..\src\platforms\PreviewFramework.App.Wpf\PreviewFramework.App.Wpf.csproj" />
   </ItemGroup>
 
+  <!-- Clean package output directory -->
+  <Target Name="CleanPackageOutput">
+    <Message Text="Cleaning package output directory: $(PackageOutputPath)" Importance="high" />
+    <RemoveDir Directories="$(PackageOutputPath)" Condition="Exists('$(PackageOutputPath)')" />
+  </Target>
+
   <!-- Main target that builds packages -->
-  <Target Name="BuildPackages">
+  <Target Name="BuildPackages" DependsOnTargets="CleanPackageOutput">
     <Message Text="Building all NuGet packages in $(Configuration) configuration..." Importance="high" />
 
     <!-- Build AppBuildTasks first as it's needed by SharedModel -->
