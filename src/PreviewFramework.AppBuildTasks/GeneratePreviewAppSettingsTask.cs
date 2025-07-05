@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using Microsoft.Build.Framework;
@@ -30,25 +31,41 @@ namespace PreviewFramework.AppBuildTasks
 
                 // Get the connection string from the JSON file
                 string connectionString = "";
+                string homeDir = Environment.GetFolderPath(
+                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                        ? Environment.SpecialFolder.UserProfile
+                        : Environment.SpecialFolder.Personal);
+                string configDir = Path.Combine(homeDir, ".previewframework");
+                string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
+
+                // Check if DevToolsApp is running and launch if needed
+                bool devToolsAppWasRunning = IsDevToolsAppRunning();
+                if (!devToolsAppWasRunning)
+                {
+                    if (!LaunchDevToolsApp())
+                    {
+                        return false; // Error already logged
+                    }
+                }
+                else
+                {
+                    // DevToolsApp is running, but check if JSON file exists
+                    if (!File.Exists(jsonPath))
+                    {
+                        Log.LogError($"PreviewFramework.DevToolsApp is running, but the {jsonPath} file doesn't exist.");
+                        return false;
+                    }
+                }
+
                 try
                 {
-                    string homeDir = Environment.GetFolderPath(
-                        RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                            ? Environment.SpecialFolder.UserProfile
-                            : Environment.SpecialFolder.Personal);
-                    string configDir = Path.Combine(homeDir, ".previewframework");
-                    string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
-
-                    if (File.Exists(jsonPath))
+                    string jsonContent = File.ReadAllText(jsonPath);
+                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
                     {
-                        string jsonContent = File.ReadAllText(jsonPath);
-                        using (JsonDocument doc = JsonDocument.Parse(jsonContent))
+                        if (doc.RootElement.TryGetProperty("app", out JsonElement appElement) &&
+                            appElement.ValueKind == JsonValueKind.String)
                         {
-                            if (doc.RootElement.TryGetProperty("app", out var appElement) &&
-                                appElement.ValueKind == JsonValueKind.String)
-                            {
-                                connectionString = appElement.GetString() ?? "";
-                            }
+                            connectionString = appElement.GetString() ?? "";
                         }
                     }
                 }
@@ -90,6 +107,97 @@ namespace PreviewFramework.SharedModel
                 Log.LogErrorFromException(ex);
                 return false;
             }
+        }
+
+        private static bool IsDevToolsAppRunning()
+        {
+            try
+            {
+                Process[] processes = Process.GetProcessesByName("PreviewFramework.DevToolsApp");
+                return processes.Length > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool LaunchDevToolsApp()
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "preview-devtools",
+                    Arguments = "--launch",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using var process = Process.Start(startInfo);
+                if (process is null)
+                {
+                    Log.LogError("Failed to start preview-devtools process.");
+                    return false;
+                }
+
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    string errorOutput = process.StandardError.ReadToEnd();
+                    if (errorOutput.Contains("not found") || errorOutput.Contains("command not found"))
+                    {
+                        Log.LogError("preview-devtools not found.\nInstall it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
+                    }
+                    else
+                    {
+                        Log.LogError($"preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
+                    }
+                    return false;
+                }
+
+                // Wait for the connection settings file to exist or 5 seconds timeout
+                return WaitForConnectionSettingsFile();
+            }
+            catch (Exception ex) when (ex.Message.Contains("not found") || ex.Message.Contains("No such file"))
+            {
+                Log.LogError("preview-devtools not found.\nInstall it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.LogError($"Error launching preview-devtools: {ex.Message}");
+                return false;
+            }
+        }
+
+        private bool WaitForConnectionSettingsFile()
+        {
+            string homeDir = Environment.GetFolderPath(
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    ? Environment.SpecialFolder.UserProfile
+                    : Environment.SpecialFolder.Personal);
+            string configDir = Path.Combine(homeDir, ".previewframework");
+            string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
+
+            var timeout = TimeSpan.FromSeconds(5);
+            var stopwatch = Stopwatch.StartNew();
+
+            while (stopwatch.Elapsed < timeout)
+            {
+                if (File.Exists(jsonPath))
+                {
+                    return true;
+                }
+                Thread.Sleep(100); // Check every 100ms
+            }
+
+            // Timeout reached - log error message
+            Log.LogError($"preview-devtools launched but the {jsonPath} file didn't get created");
+            return false;
         }
     }
 }

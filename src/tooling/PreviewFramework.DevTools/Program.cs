@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Reflection;
+
 namespace PreviewFramework.DevToolsCli;
 
 public static class Program
