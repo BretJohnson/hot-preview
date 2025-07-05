@@ -8,6 +8,8 @@
 
     <!-- To avoid warning, disable dynamic platform resolution since this is referenced with SkipGetTargetFrameworkProperties="true" -->
     <EnableDynamicPlatformResolution>false</EnableDynamicPlatformResolution>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
