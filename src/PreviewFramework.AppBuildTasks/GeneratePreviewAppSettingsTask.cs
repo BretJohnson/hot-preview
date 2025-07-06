@@ -41,24 +41,24 @@ namespace PreviewFramework.AppBuildTasks
                 string configDir = Path.Combine(homeDir, ".previewframework");
                 string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
 
-                // Check if DevToolsApp is running and launch if needed
+                // Check if the devtools app is running, launching it if not.
                 bool devToolsAppWasRunning = IsDevToolsAppRunning();
                 if (!devToolsAppWasRunning)
                 {
-                    if (!LaunchDevToolsApp())
+                    if (!LaunchDevToolsAppWithLock(configDir, jsonPath))
                     {
                         return false;   // Error already logged
                     }
                 }
                 else
                 {
-                    Log.LogMessage(MessageImportance.High, "preview-devtools app is already running");
+                    Log.LogMessage(MessageImportance.High, "PreviewFramework: devtools is already running");
+                }
 
-                    if (!File.Exists(jsonPath))
-                    {
-                        Log.LogError($"PreviewFramework.DevToolsApp is running, but the {jsonPath} file doesn't exist.");
-                        return false;
-                    }
+                if (!File.Exists(jsonPath))
+                {
+                    Log.LogError($"PreviewFramework: devtools is running, but the {jsonPath} file doesn't exist.");
+                    return false;
                 }
 
                 try
@@ -108,6 +108,7 @@ namespace PreviewFramework.SharedModel
             }
             catch (Exception ex)
             {
+                Log.LogError($"PreviewFramework: Error generating preview app settings");
                 Log.LogErrorFromException(ex);
                 return false;
             }
@@ -126,6 +127,78 @@ namespace PreviewFramework.SharedModel
             }
         }
 
+        /// <summary>
+        /// Launches the DevTools app with file-based locking to handle concurrent execution.
+        /// Different processes (like MSBuild and devenv when doing a rebuild all in VS) may execute
+        /// this task during the build. This method uses an exclusive file lock to ensure the app
+        /// is only launched once, with any other launch attempts waiting on the first one to complete.
+        /// </summary>
+        private bool LaunchDevToolsAppWithLock(string configDir, string jsonPath)
+        {
+            string lockFilePath = Path.Combine(configDir, "devtools-launching.lock");
+
+            if (!Directory.Exists(configDir))
+            {
+                Directory.CreateDirectory(configDir);
+            }
+
+            // Try to create and hold an exclusive lock on the file
+            try
+            {
+                string lockContent = $"Launched by process {Process.GetCurrentProcess().ProcessName} {Process.GetCurrentProcess().Id} at {DateTime.UtcNow:O}";
+                using var lockFile = LockFile.Create(lockFilePath, lockContent);
+
+                Log.LogMessage(MessageImportance.Low, "PreviewFramework: Acquired launch lock, launching devtools app...");
+
+                // Launch the app while holding the exclusive lock
+                bool success = LaunchDevToolsApp();
+                return success;
+
+                // Lock file will be automatically deleted when disposed
+            }
+            catch (IOException ex) when (ex.HResult == unchecked((int)0x80070020)) // File is being used by another process
+            {
+                Log.LogMessage(MessageImportance.Low, "PreviewFramework: Another process is launching devtools app, waiting...");
+                return WaitForLaunchCompletion(lockFilePath, jsonPath);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError($"PreviewFramework: Failed to create launch lock file: {ex.Message}");
+                return false;
+            }
+        }
+
+        private bool WaitForLaunchCompletion(string lockFilePath, string jsonPath)
+        {
+            var timeout = TimeSpan.FromSeconds(10); // Longer timeout for waiting on another process
+            var stopwatch = Stopwatch.StartNew();
+
+            while (stopwatch.Elapsed < timeout)
+            {
+                // Check if the lock file is gone (launch completed)
+                if (!File.Exists(lockFilePath))
+                {
+                    // Lock file is gone, check if the settings file exists
+                    if (File.Exists(jsonPath))
+                    {
+                        Log.LogMessage(MessageImportance.High, "PreviewFramework: devtools launched by a different build task");
+                        return true;
+                    }
+                    else
+                    {
+                        Log.LogError("PreviewFramework: A different build task finished launching devtools but the settings file doesn't exist");
+                        return false;
+                    }
+                }
+
+                Thread.Sleep(200); // Check every 200ms
+            }
+
+            // Timeout reached - the other process might have failed
+            Log.LogError("PreviewFramework: Timeout waiting for another build task to launch devtools");
+            return false;
+        }
+
         private bool LaunchDevToolsApp()
         {
             try
@@ -140,12 +213,12 @@ namespace PreviewFramework.SharedModel
                     CreateNoWindow = true
                 };
 
-                Log.LogMessage(MessageImportance.High, "Launching preview-devtools app...");
+                Log.LogMessage(MessageImportance.High, "PreviewFramework: Launching devtools...");
 
                 using var process = Process.Start(startInfo);
                 if (process is null)
                 {
-                    Log.LogError("Failed to start preview-devtools process.");
+                    Log.LogError("PreviewFramework: Failed to start preview-devtools process");
                     return false;
                 }
 
@@ -154,26 +227,32 @@ namespace PreviewFramework.SharedModel
                 if (process.ExitCode != 0)
                 {
                     string errorOutput = process.StandardError.ReadToEnd();
-                    Log.LogError($"preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
+                    Log.LogError($"PreviewFramework: preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
                     return false;
                 }
 
                 // Wait for the connection settings file to exist or 5 seconds timeout
-                return WaitForConnectionSettingsFile();
+                if (!WaitForConnectionSettingsFile())
+                {
+                    return false;
+                }
+
+                Log.LogMessage(MessageImportance.High, $"PreviewFramework: Launched devtools");
+                return true;
             }
             // When the preview-devtools executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
             // For English systems, match on the message.
             catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
             {
-                Log.LogError("preview-devtools not found.");
-                Log.LogError("Install it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
+                Log.LogError("PreviewFramework: preview-devtools not found.");
+                Log.LogError("PreviewFramework: Install it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
                 return false;
             }
             // In other cases, including non-English systems, log a more generic message that covers the not installed case too.
             catch (Exception ex)
             {
-                Log.LogError($"Error launching preview-devtools: {ex}");
-                Log.LogError("Ensure it is installed via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
+                Log.LogError($"PreviewFramework: Error launching preview-devtools: {ex}");
+                Log.LogError("PreviewFramework: Ensure it is installed via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
                 return false;
             }
         }
@@ -200,7 +279,7 @@ namespace PreviewFramework.SharedModel
             }
 
             // Timeout reached - log error message
-            Log.LogError($"preview-devtools launched but the {jsonPath} file didn't get created");
+            Log.LogError($"PreviewFramework: preview-devtools launched but the {jsonPath} file didn't get created");
             return false;
         }
     }
