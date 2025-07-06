@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -49,6 +50,8 @@ namespace PreviewFramework.AppBuildTasks
                 }
                 else
                 {
+                    Log.LogMessage(MessageImportance.High, "preview-devtools app is already running");
+
                     // DevToolsApp is running, but check if JSON file exists
                     if (!File.Exists(jsonPath))
                     {
@@ -136,6 +139,8 @@ namespace PreviewFramework.SharedModel
                     CreateNoWindow = true
                 };
 
+                Log.LogMessage(MessageImportance.High, "Launching preview-devtools app...");
+
                 using var process = Process.Start(startInfo);
                 if (process is null)
                 {
@@ -148,28 +153,26 @@ namespace PreviewFramework.SharedModel
                 if (process.ExitCode != 0)
                 {
                     string errorOutput = process.StandardError.ReadToEnd();
-                    if (errorOutput.Contains("not found") || errorOutput.Contains("command not found"))
-                    {
-                        Log.LogError("preview-devtools not found.\nInstall it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
-                    }
-                    else
-                    {
-                        Log.LogError($"preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
-                    }
+                    Log.LogError($"preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
                     return false;
                 }
 
                 // Wait for the connection settings file to exist or 5 seconds timeout
                 return WaitForConnectionSettingsFile();
             }
-            catch (Exception ex) when (ex.Message.Contains("not found") || ex.Message.Contains("No such file"))
+            // When the preview-devtools executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
+            // For English systems, match on the message.
+            catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
             {
-                Log.LogError("preview-devtools not found.\nInstall it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
+                Log.LogError("preview-devtools not found.");
+                Log.LogError("Install it via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
                 return false;
             }
+            // In other cases, including non-English systems, log a more generic message that covers the not installed case too.
             catch (Exception ex)
             {
-                Log.LogError($"Error launching preview-devtools: {ex.Message}");
+                Log.LogError($"Error launching preview-devtools: {ex}");
+                Log.LogError("Ensure it is installed via e.g.: dotnet tool install -g --prerelease PreviewFramework.DevTools");
                 return false;
             }
         }
