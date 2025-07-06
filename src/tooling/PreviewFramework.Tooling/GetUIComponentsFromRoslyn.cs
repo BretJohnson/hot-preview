@@ -194,17 +194,6 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
                 }
             }
 
-            if (uiComponentName is null)
-            {
-                ITypeSymbol? returnTypeSymbol = _semanticModel.GetTypeInfo(methodDeclaration.ReturnType).Type;
-                if (returnTypeSymbol is null)
-                {
-                    return;
-                }
-
-                uiComponentName = returnTypeSymbol.ToDisplayString();
-            }
-
             if (methodDeclaration.Parent is not TypeDeclarationSyntax typeDeclaration)
             {
                 return;
@@ -214,6 +203,25 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
             if (parentTypeSymbol is null)
             {
                 return;
+            }
+
+            if (uiComponentName is null)
+            {
+                ITypeSymbol? returnTypeSymbol = _semanticModel.GetTypeInfo(methodDeclaration.ReturnType).Type;
+                if (returnTypeSymbol is null)
+                {
+                    return;
+                }
+
+                // For a return value of void, use the containing class as the default UI component type
+                if (returnTypeSymbol.SpecialType == SpecialType.System_Void)
+                {
+                    uiComponentName = parentTypeSymbol.ToDisplayString();
+                }
+                else
+                {
+                    uiComponentName = returnTypeSymbol.ToDisplayString();
+                }
             }
 
             string previewFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
