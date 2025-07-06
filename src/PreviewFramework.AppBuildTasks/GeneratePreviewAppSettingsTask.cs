@@ -30,7 +30,9 @@ namespace PreviewFramework.AppBuildTasks
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // Get the connection string from the JSON file
+                // Get the connection string from devToolsConnectionSettings.json. That file exists while
+                // DevToolsApp is running, which we'll launch if needed.
+
                 string connectionString = "";
                 string homeDir = Environment.GetFolderPath(
                     RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
@@ -45,14 +47,13 @@ namespace PreviewFramework.AppBuildTasks
                 {
                     if (!LaunchDevToolsApp())
                     {
-                        return false; // Error already logged
+                        return false;   // Error already logged
                     }
                 }
                 else
                 {
                     Log.LogMessage(MessageImportance.High, "preview-devtools app is already running");
 
-                    // DevToolsApp is running, but check if JSON file exists
                     if (!File.Exists(jsonPath))
                     {
                         Log.LogError($"PreviewFramework.DevToolsApp is running, but the {jsonPath} file doesn't exist.");
