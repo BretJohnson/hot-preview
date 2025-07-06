@@ -52,7 +52,6 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
     public UIComponentsManagerReflection ToImmutable()
     {
         Validate();
-
         return new UIComponentsManagerReflection(UIComponentsByName, Categories);
     }
 

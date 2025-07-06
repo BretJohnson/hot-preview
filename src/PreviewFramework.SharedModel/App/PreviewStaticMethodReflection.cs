@@ -34,7 +34,6 @@ public class PreviewStaticMethodReflection(PreviewAttribute previewAttribute, Me
                 return MethodInfo.DeclaringType;
             }
 
-
             return type;
         }
     }
