@@ -17,6 +17,22 @@ namespace PreviewFramework.AppBuildTasks
         [Required]
         public required string PlatformPreviewApplication { get; set; }
 
+        private static string PreviewFrameworkConfigDir
+        {
+            get
+            {
+                string homeDir = Environment.GetFolderPath(
+                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                        ? Environment.SpecialFolder.UserProfile
+                        : Environment.SpecialFolder.Personal);
+                return Path.Combine(homeDir, ".previewframework");
+            }
+        }
+
+        private static string DevToolsLaunchingLockFilePath => Path.Combine(PreviewFrameworkConfigDir, "devtools-launching.lock");
+
+        private static string DevToolsConnectionJsonPath => Path.Combine(PreviewFrameworkConfigDir, "devToolsConnectionSettings.json");
+
         public override bool Execute()
         {
             try
@@ -34,25 +50,15 @@ namespace PreviewFramework.AppBuildTasks
                 // DevToolsApp is running, which we'll launch if needed.
 
                 string connectionString = "";
-                string homeDir = Environment.GetFolderPath(
-                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                        ? Environment.SpecialFolder.UserProfile
-                        : Environment.SpecialFolder.Personal);
-                string configDir = Path.Combine(homeDir, ".previewframework");
-                string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
+                string jsonPath = DevToolsConnectionJsonPath;
 
                 // Check if the devtools app is running, launching it if not.
-                bool devToolsAppWasRunning = IsDevToolsAppRunning();
-                if (!devToolsAppWasRunning)
+                if (!IsDevToolsAppRunning())
                 {
-                    if (!LaunchDevToolsAppWithLock(configDir, jsonPath))
+                    if (!LaunchDevToolsAppWithLock())
                     {
                         return false;   // Error already logged
                     }
-                }
-                else
-                {
-                    Log.LogMessage(MessageImportance.High, "PreviewFramework: devtools is already running");
                 }
 
                 if (!File.Exists(jsonPath))
@@ -114,12 +120,24 @@ namespace PreviewFramework.SharedModel
             }
         }
 
-        private static bool IsDevToolsAppRunning()
+        private bool IsDevToolsAppRunning()
         {
             try
             {
                 Process[] processes = Process.GetProcessesByName("PreviewFramework.DevToolsApp");
-                return processes.Length > 0;
+                if (processes.Length == 0)
+                {
+                    return false;
+                }
+
+                // Check if the app is currently launching - if so, treat it as not running
+                if (File.Exists(DevToolsLaunchingLockFilePath))
+                {
+                    return false; // App is launching, treat as not running
+                }
+
+                Log.LogMessage(MessageImportance.High, "PreviewFramework: devtools is already running");
+                return true;
             }
             catch
             {
@@ -133,13 +151,14 @@ namespace PreviewFramework.SharedModel
         /// this task during the build. This method uses an exclusive file lock to ensure the app
         /// is only launched once, with any other launch attempts waiting on the first one to complete.
         /// </summary>
-        private bool LaunchDevToolsAppWithLock(string configDir, string jsonPath)
+        private bool LaunchDevToolsAppWithLock()
         {
-            string lockFilePath = Path.Combine(configDir, "devtools-launching.lock");
+            string lockFilePath = DevToolsLaunchingLockFilePath;
+            string lockFileDirectory = Path.GetDirectoryName(lockFilePath);
 
-            if (!Directory.Exists(configDir))
+            if (!Directory.Exists(lockFileDirectory))
             {
-                Directory.CreateDirectory(configDir);
+                Directory.CreateDirectory(lockFileDirectory);
             }
 
             // Try to create and hold an exclusive lock on the file
@@ -159,7 +178,7 @@ namespace PreviewFramework.SharedModel
             catch (IOException ex) when (ex.HResult == unchecked((int)0x80070020)) // File is being used by another process
             {
                 Log.LogMessage(MessageImportance.Low, "PreviewFramework: Another process is launching devtools app, waiting...");
-                return WaitForLaunchCompletion(lockFilePath, jsonPath);
+                return WaitForLaunchCompletion(lockFilePath);
             }
             catch (Exception ex)
             {
@@ -168,7 +187,7 @@ namespace PreviewFramework.SharedModel
             }
         }
 
-        private bool WaitForLaunchCompletion(string lockFilePath, string jsonPath)
+        private bool WaitForLaunchCompletion(string lockFilePath)
         {
             var timeout = TimeSpan.FromSeconds(10); // Longer timeout for waiting on another process
             var stopwatch = Stopwatch.StartNew();
@@ -179,9 +198,9 @@ namespace PreviewFramework.SharedModel
                 if (!File.Exists(lockFilePath))
                 {
                     // Lock file is gone, check if the settings file exists
-                    if (File.Exists(jsonPath))
+                    if (File.Exists(DevToolsConnectionJsonPath))
                     {
-                        Log.LogMessage(MessageImportance.High, "PreviewFramework: devtools launched by a different build task");
+                        Log.LogMessage(MessageImportance.Low, "PreviewFramework: devtools launched by a different build task");
                         return true;
                     }
                     else
@@ -259,12 +278,7 @@ namespace PreviewFramework.SharedModel
 
         private bool WaitForConnectionSettingsFile()
         {
-            string homeDir = Environment.GetFolderPath(
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    ? Environment.SpecialFolder.UserProfile
-                    : Environment.SpecialFolder.Personal);
-            string configDir = Path.Combine(homeDir, ".previewframework");
-            string jsonPath = Path.Combine(configDir, "devToolsConnectionSettings.json");
+            string jsonPath = DevToolsConnectionJsonPath;
 
             var timeout = TimeSpan.FromSeconds(5);
             var stopwatch = Stopwatch.StartNew();
