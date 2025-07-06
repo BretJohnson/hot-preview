@@ -22,10 +22,18 @@ public class PreviewStaticMethodReflection(PreviewAttribute previewAttribute, Me
         {
             Type type = MethodInfo.ReturnType;
 
+            // For a return value of RoutePreview<T>, use T as the default UI component type
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RoutePreview<>))
             {
                 return type.GetGenericArguments()[0];
             }
+
+            // For a return value of void, use the containing class as the default UI component type
+            if (type == typeof(void))
+            {
+                return MethodInfo.DeclaringType;
+            }
+
 
             return type;
         }
