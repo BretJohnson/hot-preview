@@ -6,15 +6,29 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        // Check if this is the first instance of the application
+        if (!SingleInstanceManager.IsFirstInstance())
+        {
+            // Another instance is already running and has been activated
+            return;
+        }
 
-        var host = UnoPlatformHostBuilder.Create()
-            .App(() => new App())
-            .UseX11()
-            .UseLinuxFrameBuffer()
-            .UseMacOS()
-            .UseWin32()
-            .Build();
+        try
+        {
+            var host = UnoPlatformHostBuilder.Create()
+                .App(() => new App())
+                .UseX11()
+                .UseLinuxFrameBuffer()
+                .UseMacOS()
+                .UseWin32()
+                .Build();
 
-        host.Run();
+            host.Run();
+        }
+        finally
+        {
+            // Release the mutex when the application shuts down
+            SingleInstanceManager.ReleaseMutex();
+        }
     }
 }

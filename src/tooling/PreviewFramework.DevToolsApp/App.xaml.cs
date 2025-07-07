@@ -80,6 +80,12 @@ public partial class App : Application
 #endif
         MainWindow.SetWindowIcon();
 
+        // Handle window closing to release single instance mutex
+        MainWindow.Closed += (sender, args) =>
+        {
+            SingleInstanceManager.ReleaseMutex();
+        };
+
         DevToolsManager.Initialize(SynchronizationContext.Current!);
 
         Host = await builder.NavigateAsync<Shell>();
