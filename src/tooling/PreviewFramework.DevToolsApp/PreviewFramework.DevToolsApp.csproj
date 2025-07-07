@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0-desktop</TargetFramework>
 
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
