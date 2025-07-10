@@ -48,6 +48,12 @@ public abstract class PreviewApplication
     public abstract string PlatformName { get; set; }
 
     /// <summary>
+    /// Gets or sets whether JsonRpc diagnostic tracing is enabled.
+    /// When true, JsonRpc communication will be traced to the console.
+    /// </summary>
+    public bool EnableJsonRpcTracing { get; set; } = false;
+
+    /// <summary>
     /// The app's service provider, which when present can be used to instantiate
     /// UI components via dependency injection.
     /// </summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using PreviewFramework.SharedModel.Protocol;
@@ -32,6 +33,12 @@ public class ToolingAppClientConnection(string connectionString)
         _appControllerService = _rpc.Attach<IPreviewAppControllerService>();
 
         PreviewApplication previewApplication = PreviewApplication.GetInstance();
+        if (previewApplication.EnableJsonRpcTracing)
+        {
+            _rpc.TraceSource.Switch.Level = SourceLevels.All;
+            _rpc.TraceSource.Listeners.Add(new DefaultTraceListener());
+        }
+
         try
         {
             _rpc.StartListening();
