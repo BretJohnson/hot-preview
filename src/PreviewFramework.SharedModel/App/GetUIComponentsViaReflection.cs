@@ -16,8 +16,8 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
     /// <param name="serviceProvider">An optional IServiceProvider instance for dependency injection</param>
     /// <param name="additionalAppAssemblies">Additional app assembly names to scan</param>
     /// <param name="exclusionFilter">Optional filter to exclude certain types</param>
-    public GetUIComponentsViaReflection(IServiceProvider? serviceProvider, IEnumerable<string> additionalAppAssemblies,
-        IUIComponentExclusionFilter? exclusionFilter)
+    public GetUIComponentsViaReflection(IServiceProvider? serviceProvider, Assembly? mainAssembly,
+        IEnumerable<string> additionalAppAssemblies, IUIComponentExclusionFilter? exclusionFilter)
     {
         _serviceProvider = serviceProvider;
         _exclusionFilter = exclusionFilter;
@@ -28,10 +28,10 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
             AddUIComponentBaseClassesFromAssembly(assembly);
         }
 
-        Assembly? entryAssembly = Assembly.GetEntryAssembly();
-        if (entryAssembly is not null)
+        mainAssembly ??= Assembly.GetEntryAssembly();
+        if (mainAssembly is not null)
         {
-            AddUIComponentsFromAssembly(entryAssembly);
+            AddUIComponentsFromAssembly(mainAssembly);
         }
 
         HashSet<string> additionalAppAssemblesSet = new(additionalAppAssemblies, StringComparer.OrdinalIgnoreCase);

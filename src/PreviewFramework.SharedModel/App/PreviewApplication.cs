@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace PreviewFramework.SharedModel.App;
 
@@ -52,6 +53,8 @@ public abstract class PreviewApplication
     /// When true, JsonRpc communication will be traced to the console.
     /// </summary>
     public bool EnableJsonRpcTracing { get; set; } = false;
+
+    public Assembly? MainAssembly { get; set; }
 
     /// <summary>
     /// The app's service provider, which when present can be used to instantiate

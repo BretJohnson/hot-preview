@@ -100,6 +100,7 @@ namespace PreviewFramework.SharedModel
             var previewApp = {{PlatformPreviewApplication}};
             if (previewApp != null)
             {
+                previewApp.MainAssembly = typeof(PreviewApplicationInitializer).Assembly;
                 previewApp.ProjectPath = @"{{projectPath.Replace("\"", "\"\"")}}";
                 previewApp.ToolingConnectionString = @"{{connectionString.Replace("\"", "\"\"")}}";
                 {{(connectionString != "" ? "previewApp.StartToolingConnection();" : "// No tooling connection, so not starting connection")}}

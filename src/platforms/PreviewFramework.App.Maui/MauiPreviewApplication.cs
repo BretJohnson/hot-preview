@@ -38,7 +38,8 @@ public partial class MauiPreviewApplication : PreviewApplication
         ServiceProvider = applicationElement?.Handler?.MauiContext?.Services;
 
         _uiComponentsManager = new Lazy<UIComponentsManagerReflection>(
-            () => new GetUIComponentsViaReflection(ServiceProvider, AdditionalAppAssemblies, new MauiUIComponentExclusionFilter()).ToImmutable());
+            () => new GetUIComponentsViaReflection(ServiceProvider, MainAssembly, AdditionalAppAssemblies,
+                new MauiUIComponentExclusionFilter()).ToImmutable());
 
         PreviewAppService = new MauiPreviewAppService(this);
 
