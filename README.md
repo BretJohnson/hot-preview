@@ -1,6 +1,6 @@
 # Overview
 
-The Preview Framework lets you easily work on pages/controls in your app in isolation, without the
+HotPreview lets you easily work on pages/controls in your app in isolation, without the
 need to run the app, navigate to the page, and supply any test data.
 
 Previews are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
@@ -16,14 +16,14 @@ Initial support is for .NET MAUI.
 
 Quickstart:
 
-- Install the preview DevTools with `dotnet tool install -g PreviewFramework.DevTools`
-- Add a reference to the `PreviewFramework.App.<platform>` NuGet (e.g. `PreviewFramework.App.Maui` for MAUI) to your app
+- Install the preview DevTools with `dotnet tool install -g HotPreview.DevTools`
+- Add a reference to the `HotPreview.App.<platform>` NuGet (e.g. `HotPreview.App.Maui` for MAUI) to your app
 - Build your app for Debug and run it
 
 With that, you should see this:
-- Building launches Preview DevTools, if it's not already running
-- When your app starts, it connects to Preview DevTools
-- Preview DevTools shows a tree of your UI components and their previews. Initially it will only have auto-generated previews, but you can add your own later.
+- Building launches HotPreview DevTools, if it's not already running
+- When your app starts, it connects to HotPreview DevTools
+- HotPreview DevTools shows a tree of your UI components and their previews. Initially it will only have auto-generated previews, but you can add your own later.
 - Click on UI components/previews in the to navigate directly to the preview in your app
 
 Previews are automatically created for:

@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "HotPreview.sln",
+    "projects": [
+      "samples\\maui\\DefaultTemplateWithContent\\DefaultTemplateWithContent.csproj",
+      "samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj"
+    ]
+  }
+}

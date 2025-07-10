@@ -29,7 +29,7 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)strongname.snk</AssemblyOriginatorKeyFile>
 
-        <PackageProjectUrl>https://github.com/BretJohnson/preview-framework</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/BretJohnson/ui-preview-framework</PackageProjectUrl>
         <Company>Bret Johnson</Company>
         <Authors>Bret Johnson</Authors>
         <Copyright>© Bret Johnson. All rights reserved.</Copyright>

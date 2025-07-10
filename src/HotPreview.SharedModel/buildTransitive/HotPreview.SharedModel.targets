@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Make the GeneratePreviewAppSettingsTask available to the HotPreview app platform NuGets -->
+  <UsingTask TaskName="HotPreview.AppBuildTasks.GeneratePreviewAppSettingsTask"
+             AssemblyFile="HotPreview.AppBuildTasks.dll" />
+</Project>
