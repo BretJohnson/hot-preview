@@ -31,7 +31,7 @@ Previews are automatically created for:
 - Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required) or with parameters can be resolved via dependency injection (via ActivatorUtilities.CreateInstance).
 - Controls: Derives from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters or with parameters can be resolved via dependency injection (via ActivatorUtilities.CreateInstance).
 
-That should get you started. Beyond that, you'll probably want to define previews yourself, which lets you:
+That should get you started. Beyond that you'll probably want to define previews yourself, which lets you:
 
 - Support any UI component, whatever the constructor requirements
 - Provide sample data
