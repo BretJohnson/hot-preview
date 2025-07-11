@@ -8,10 +8,8 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
 
-#if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
 [assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
-#endif
 
 namespace HotPreview.App.Maui;
 
