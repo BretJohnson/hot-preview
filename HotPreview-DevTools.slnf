@@ -6,7 +6,6 @@
       "src\\HotPreview.SharedModel\\HotPreview.SharedModel.csproj",
       "src\\HotPreview\\HotPreview.csproj",
       "src\\tooling\\HotPreview.DevToolsApp\\HotPreview.DevToolsApp.csproj",
-      "src\\tooling\\HotPreview.MCPServer\\HotPreview.MCPServer.csproj",
       "src\\tooling\\HotPreview.DevTools\\HotPreview.DevTools.csproj",
       "src\\tooling\\HotPreview.Tooling\\HotPreview.Tooling.csproj",
       "test\\HotPreview.Tooling.Tests\\HotPreview.Tooling.Tests.csproj"

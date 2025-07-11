@@ -36,8 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `HotPreview.App.Maui` - MAUI platform implementation with preview navigation and rendering
 - `HotPreview.DevToolsApp` - WinUI3 desktop application for visual component management
 - `HotPreview.DevTools` - Global tool launcher for DevTools
-- `HotPreview.Tooling` - Tooling infrastructure and Roslyn-based component discovery
-- `HotPreview.MCPServer` - MCP server for AI-assisted development workflows
+- `HotPreview.Tooling` - Tooling infrastructure, Roslyn-based component discovery, and MCP server for AI-assisted development workflows (includes McpServer module)
 
 ### Preview System
 
