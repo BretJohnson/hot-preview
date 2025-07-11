@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace PreviewFramework.DevToolsApp.Utilities;
+namespace HotPreview.DevToolsApp.Utilities;
 
 public class BulkObservableCollection<T> : ObservableCollection<T>
 {

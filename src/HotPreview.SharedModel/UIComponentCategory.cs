@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public class UIComponentCategory(string name, IReadOnlyList<string> uiComponentNames)
 {

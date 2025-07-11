@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PreviewFramework.Tooling.Tests
+namespace HotPreview.Tooling.Tests
 {
     [TestClass]
     public class ToolingAppServerConnectionListenerTests

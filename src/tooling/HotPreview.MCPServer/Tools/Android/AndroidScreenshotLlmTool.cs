@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Server;
-using PreviewFramework.McpServer.Helpers;
+using HotPreview.McpServer.Helpers;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 public class AndroidScreenshotLlmTool

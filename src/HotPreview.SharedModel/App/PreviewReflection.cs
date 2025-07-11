@@ -1,7 +1,7 @@
 using System;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public abstract class PreviewReflection : PreviewBase
 {

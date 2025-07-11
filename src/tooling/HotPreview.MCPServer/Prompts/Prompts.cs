@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using ModelContextProtocol.Server;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerPromptType]
 public class Prompts

@@ -1,4 +1,4 @@
-namespace PreviewFramework;
+namespace HotPreview;
 
 public enum PreviewMode
 {

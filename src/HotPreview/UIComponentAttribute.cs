@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework;
+namespace HotPreview;
 
 /// <summary>
 /// An attribute that specifies this class is a UI component. Normally UI compenents don't need

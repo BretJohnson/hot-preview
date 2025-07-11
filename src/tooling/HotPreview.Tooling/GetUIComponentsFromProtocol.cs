@@ -1,7 +1,7 @@
-using PreviewFramework.SharedModel;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel;
+using HotPreview.SharedModel.Protocol;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderTooling
 {

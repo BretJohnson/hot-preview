@@ -2,10 +2,10 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using PreviewFramework;
-using PreviewFramework.SharedModel;
+using HotPreview;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
 {

@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 /// <summary>
 /// The AppManager is responsible for managing the connection(s) and metadata for a specific app. Apps

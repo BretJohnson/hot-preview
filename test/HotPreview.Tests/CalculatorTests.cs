@@ -1,7 +1,7 @@
 // Copyright (c) Bret Johnson. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using PreviewFramework;
+using HotPreview;
 using Xunit;
 
 public class CalculatorTests

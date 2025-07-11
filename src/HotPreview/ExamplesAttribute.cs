@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework;
+namespace HotPreview;
 
 /// <summary>
 /// An attribute that specifies metadata for UI component that has previews.

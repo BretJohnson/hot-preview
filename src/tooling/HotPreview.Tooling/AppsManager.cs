@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 /// <summary>
 /// The AppsManager is responsible for managing the apps that are connected to the tooling server.

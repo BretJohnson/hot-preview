@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace PreviewFramework.McpServer.Helpers;
+namespace HotPreview.McpServer.Helpers;
 
 public static class Adb
 {

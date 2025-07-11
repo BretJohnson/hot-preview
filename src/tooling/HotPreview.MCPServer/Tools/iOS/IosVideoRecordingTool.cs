@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using ModelContextProtocol.Server;
-using PreviewFramework.McpServer.Helpers;
+using HotPreview.McpServer.Helpers;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 public class IosVideoRecordingTool

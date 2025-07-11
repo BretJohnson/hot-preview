@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using ModelContextProtocol.Server;
-using PreviewFramework.McpServer.Helpers;
+using HotPreview.McpServer.Helpers;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 public class IosUiTool

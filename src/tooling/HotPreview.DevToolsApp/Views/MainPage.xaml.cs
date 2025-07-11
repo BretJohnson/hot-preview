@@ -1,7 +1,7 @@
-using PreviewFramework.DevToolsApp.ViewModels;
-using PreviewFramework.DevToolsApp.ViewModels.NavTree;
+using HotPreview.DevToolsApp.ViewModels;
+using HotPreview.DevToolsApp.ViewModels.NavTree;
 
-namespace PreviewFramework.DevToolsApp.Views;
+namespace HotPreview.DevToolsApp.Views;
 
 public sealed partial class MainPage : Page
 {

@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public abstract class PreviewBase(string? displayNameOverride)
 {

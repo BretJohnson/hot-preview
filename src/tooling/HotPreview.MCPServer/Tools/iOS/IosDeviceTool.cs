@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using ModelContextProtocol.Server;
-using PreviewFramework.McpServer.Helpers;
-using PreviewFramework.McpServer.Models;
+using HotPreview.McpServer.Helpers;
+using HotPreview.McpServer.Models;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 public class IosDeviceTool

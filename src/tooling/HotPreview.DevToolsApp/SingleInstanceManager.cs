@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace PreviewFramework.DevToolsApp;
+namespace HotPreview.DevToolsApp;
 
 /// <summary>
 /// Manages single instance behavior for the DevTools application.
@@ -11,7 +11,7 @@ namespace PreviewFramework.DevToolsApp;
 /// </summary>
 internal static class SingleInstanceManager
 {
-    private static readonly string MutexName = "PreviewFramework.DevToolsApp.SingleInstance";
+    private static readonly string MutexName = "HotPreview.DevToolsApp.SingleInstance";
     private static Mutex? _mutex;
 
     /// <summary>
@@ -79,7 +79,7 @@ internal static class SingleInstanceManager
         try
         {
             // Find by process name
-            Process[] processes = Process.GetProcessesByName("PreviewFramework.DevToolsApp");
+            Process[] processes = Process.GetProcessesByName("HotPreview.DevToolsApp");
 
             foreach (Process process in processes)
             {

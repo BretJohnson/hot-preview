@@ -1,6 +1,6 @@
-using PreviewFramework.SharedModel;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 /// <summary>
 /// A builder class for constructing UIComponentsManagerTooling instances.

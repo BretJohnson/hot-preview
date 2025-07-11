@@ -1,4 +1,4 @@
-namespace PreviewFramework.McpServer.Models;
+namespace HotPreview.McpServer.Models;
 
 public enum LogCatLogLevel
 {

@@ -1,4 +1,4 @@
-namespace PreviewFramework.DevToolsApp.Models;
+namespace HotPreview.DevToolsApp.Models;
 
 public record AppConfig
 {

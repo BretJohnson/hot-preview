@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using ModelContextProtocol.Server;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 public class FileSystemTools

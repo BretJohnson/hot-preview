@@ -1,6 +1,6 @@
-using PreviewFramework.SharedModel;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public class GetUIComponentsConsolidated : UIComponentsManagerBuilderTooling
 {

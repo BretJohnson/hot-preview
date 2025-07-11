@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public class PreviewStaticMethodReflection(PreviewAttribute previewAttribute, MethodInfo methodInfo) : PreviewReflection(previewAttribute)
 {

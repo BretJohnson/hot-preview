@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework;
+namespace HotPreview;
 
 /// <summary>
 /// An attribute that specifies this is a preview, for a control or other UI.

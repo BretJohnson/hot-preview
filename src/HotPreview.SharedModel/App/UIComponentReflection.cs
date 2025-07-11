@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public class UIComponentReflection(Type type, UIComponentKind kind, string? displayNameOverride, IReadOnlyList<PreviewReflection> previews) :
     UIComponentBase<PreviewReflection>(kind, displayNameOverride, previews)

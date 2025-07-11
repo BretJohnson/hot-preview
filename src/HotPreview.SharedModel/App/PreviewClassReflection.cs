@@ -1,8 +1,8 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public class PreviewClassReflection : PreviewReflection
 {

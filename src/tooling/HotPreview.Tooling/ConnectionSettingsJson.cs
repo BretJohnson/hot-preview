@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public static class ConnectionSettingsJson
 {

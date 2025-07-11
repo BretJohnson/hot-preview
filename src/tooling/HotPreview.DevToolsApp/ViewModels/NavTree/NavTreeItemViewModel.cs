@@ -1,8 +1,8 @@
 using Microsoft.UI.Xaml.Data;
-using PreviewFramework.DevToolsApp.Utilities;
-using PreviewFramework.SharedModel;
+using HotPreview.DevToolsApp.Utilities;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.DevToolsApp.ViewModels;
+namespace HotPreview.DevToolsApp.ViewModels;
 
 [Bindable]
 public abstract partial class NavTreeItemViewModel : ObservableObject

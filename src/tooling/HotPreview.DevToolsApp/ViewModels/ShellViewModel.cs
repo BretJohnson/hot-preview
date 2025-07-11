@@ -1,6 +1,6 @@
 using Microsoft.UI.Xaml.Data;
 
-namespace PreviewFramework.DevToolsApp.ViewModels;
+namespace HotPreview.DevToolsApp.ViewModels;
 
 [Bindable]
 public class ShellViewModel

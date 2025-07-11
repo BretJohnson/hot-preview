@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public class UIComponentsManagerReflection(
     IReadOnlyDictionary<string, UIComponentReflection> uiComponents,

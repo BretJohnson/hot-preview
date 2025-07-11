@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
-using PreviewFramework;
-using PreviewFramework.App.Maui;
-using PreviewFramework.App.Maui.Pages;
-using PreviewFramework.SharedModel.App;
+using HotPreview;
+using HotPreview.App.Maui;
+using HotPreview.App.Maui.Pages;
+using HotPreview.SharedModel.App;
 
 #if !MICROSOFT_PREVIEW_IN_TAP
 [assembly: PageUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.Page")]
 [assembly: ControlUIComponentBaseType(MauiPreviewApplication.MauiPlatformType, "Microsoft.Maui.Controls.View")]
 #endif
 
-namespace PreviewFramework.App.Maui;
+namespace HotPreview.App.Maui;
 
 public partial class MauiPreviewApplication : PreviewApplication
 {

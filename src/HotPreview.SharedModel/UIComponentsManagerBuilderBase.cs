@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 /// <summary>
 /// A builder class for constructing UIComponentsManager instances.

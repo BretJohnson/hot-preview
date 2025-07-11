@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public readonly struct UIComponentPreviewPairTooling(UIComponentTooling uiComponent, PreviewTooling preview)
 {

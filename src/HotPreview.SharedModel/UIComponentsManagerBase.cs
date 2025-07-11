@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
     IReadOnlyDictionary<string, TUIComponent> uiComponents,

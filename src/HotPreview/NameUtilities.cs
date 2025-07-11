@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework;
+namespace HotPreview;
 
 public class NameUtilities
 {

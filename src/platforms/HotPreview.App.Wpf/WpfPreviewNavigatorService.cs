@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using PreviewFramework.SharedModel.App;
+using HotPreview.SharedModel.App;
 
-namespace PreviewFramework.App.Wpf;
+namespace HotPreview.App.Wpf;
 
 public class WpfPreviewNavigatorService
 {

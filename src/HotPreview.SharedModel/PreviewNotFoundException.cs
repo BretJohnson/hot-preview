@@ -1,6 +1,6 @@
 using System;
 
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public class PreviewNotFoundException : Exception
 {

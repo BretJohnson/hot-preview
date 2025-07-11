@@ -8,7 +8,7 @@
     <RootNamespace>HotPreview.DevTools</RootNamespace>
     <AssemblyName>HotPreview.DevTools</AssemblyName>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>hotpreview-devtools</ToolCommandName>
+    <ToolCommandName>preview-devtools</ToolCommandName>
   </PropertyGroup>
 
   <PropertyGroup>

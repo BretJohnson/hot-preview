@@ -7,5 +7,5 @@ global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using Microsoft.UI.Xaml.Controls;
-global using PreviewFramework.DevToolsApp.Models;
-global using PreviewFramework.DevToolsApp.Views;
+global using HotPreview.DevToolsApp.Models;
+global using HotPreview.DevToolsApp.Views;

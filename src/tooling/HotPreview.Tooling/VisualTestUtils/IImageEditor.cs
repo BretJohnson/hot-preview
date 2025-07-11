@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling.VisualTestUtils
+namespace HotPreview.Tooling.VisualTestUtils
 {
     /// <summary>
     /// IImageEditor allows changing images. It's useful, for instance, for cropping

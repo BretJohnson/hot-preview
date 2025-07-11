@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace PreviewFramework.SharedModel.Protocol;
+namespace HotPreview.SharedModel.Protocol;
 
 public interface IPreviewAppControllerService
 {

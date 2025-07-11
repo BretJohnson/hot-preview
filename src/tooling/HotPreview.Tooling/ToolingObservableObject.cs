@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 /// <summary>
 /// A base class for objects that need to notify about property changes with thread-safe UI marshaling.

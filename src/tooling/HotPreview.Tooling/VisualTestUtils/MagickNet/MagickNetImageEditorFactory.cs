@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling.VisualTestUtils.MagickNet
+namespace HotPreview.Tooling.VisualTestUtils.MagickNet
 {
     public class MagickNetImageEditorFactory : IImageEditorFactory
     {

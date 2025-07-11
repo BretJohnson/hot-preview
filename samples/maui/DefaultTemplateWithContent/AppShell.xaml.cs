@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using PreviewFramework.App.Maui;
+using HotPreview.App.Maui;
 using Font = Microsoft.Maui.Font;
 
 namespace DefaultTemplateWithContent;

@@ -2,10 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 using StreamJsonRpc;
 
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public class ToolingAppClientConnection(string connectionString)
 {

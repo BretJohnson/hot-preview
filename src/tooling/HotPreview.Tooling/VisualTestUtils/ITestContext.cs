@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling.VisualTestUtils
+namespace HotPreview.Tooling.VisualTestUtils
 {
     /// <summary>
     /// This interface can be implemented by the client and is used to associate

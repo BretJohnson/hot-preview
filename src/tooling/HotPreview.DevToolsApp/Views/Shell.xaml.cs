@@ -1,4 +1,4 @@
-namespace PreviewFramework.DevToolsApp.Views;
+namespace HotPreview.DevToolsApp.Views;
 
 public sealed partial class Shell : UserControl, IContentControlProvider
 {

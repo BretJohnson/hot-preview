@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public abstract class UIComponentBase<TPreview>(UIComponentKind kind, string? displayNameOverride, IReadOnlyList<TPreview> previews) where TPreview : PreviewBase
 {

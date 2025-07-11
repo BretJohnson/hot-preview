@@ -1,6 +1,6 @@
-using PreviewFramework.SharedModel;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public class UIComponentTooling(UIComponentKind kind, string typeName, string? displayNameOverride, IReadOnlyList<PreviewTooling> previews) :
     UIComponentBase<PreviewTooling>(kind, displayNameOverride, previews)

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using ModelContextProtocol.Server;
-using PreviewFramework.McpServer.Helpers;
-using PreviewFramework.McpServer.Models;
+using HotPreview.McpServer.Helpers;
+using HotPreview.McpServer.Models;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 /// <summary>
 /// Executes ADB command with passed parameters.

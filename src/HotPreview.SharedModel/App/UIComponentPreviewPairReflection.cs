@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel.App;
+namespace HotPreview.SharedModel.App;
 
 public readonly struct UIComponentPreviewPairReflection(UIComponentReflection uiComponent, PreviewReflection preview)
 {

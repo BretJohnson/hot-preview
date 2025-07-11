@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ModelContextProtocol.Server;
 
-namespace PreviewFramework.McpServer;
+namespace HotPreview.McpServer;
 
 [McpServerToolType]
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]

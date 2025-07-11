@@ -1,8 +1,8 @@
 using System.Net.Sockets;
-using PreviewFramework.SharedModel.Protocol;
+using HotPreview.SharedModel.Protocol;
 using StreamJsonRpc;
 
-namespace PreviewFramework.Tooling;
+namespace HotPreview.Tooling;
 
 public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpClient) :
     IPreviewAppControllerService

@@ -76,11 +76,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\PreviewFramework\PreviewFramework.csproj" />
-	  <ProjectReference Include="..\..\..\src\platforms\PreviewFramework.App.Maui\PreviewFramework.App.Maui.csproj" />
+	  <ProjectReference Include="..\..\..\src\HotPreview\HotPreview.csproj" />
+	  <ProjectReference Include="..\..\..\src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
 	</ItemGroup>
 
   <!-- Since we using a project reference instead of referencing the NuGet we need to also import the props -->
-  <Import Project="..\..\..\src\PreviewFramework\buildTransitive\PreviewFramework.props" />
+  <Import Project="..\..\..\src\HotPreview\buildTransitive\HotPreview.props" />
 
 </Project>

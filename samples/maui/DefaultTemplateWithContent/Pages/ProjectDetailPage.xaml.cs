@@ -1,5 +1,5 @@
 using DefaultTemplateWithContent.Models;
-using PreviewFramework.App.Maui;
+using HotPreview.App.Maui;
 
 namespace DefaultTemplateWithContent.Pages;
 public partial class ProjectDetailPage : ContentPage

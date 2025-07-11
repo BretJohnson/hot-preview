@@ -1,6 +1,6 @@
 #nullable disable
 
-namespace PreviewFramework.McpServer.Models;
+namespace HotPreview.McpServer.Models;
 
 public class AdbDevice
 {

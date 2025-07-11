@@ -1,6 +1,6 @@
-using PreviewFramework.Tooling;
+using HotPreview.Tooling;
 
-namespace PreviewFramework.DevToolsApp.ViewModels.NavTree;
+namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
 public class UIComponentViewModel(UIComponentTooling uiComponent) : NavTreeItemViewModel
 {

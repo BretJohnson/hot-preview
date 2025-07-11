@@ -1,5 +1,5 @@
 
-namespace PreviewFramework.AppBuildTasks
+namespace HotPreview.AppBuildTasks
 {
     /// <summary>
     /// Represents an exclusive file lock that automatically deletes the file when disposed.

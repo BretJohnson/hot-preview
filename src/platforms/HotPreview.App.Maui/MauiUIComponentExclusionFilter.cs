@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
-using PreviewFramework.SharedModel;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.App.Maui;
+namespace HotPreview.App.Maui;
 
 public class MauiUIComponentExclusionFilter : IUIComponentExclusionFilter
 {

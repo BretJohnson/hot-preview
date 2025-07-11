@@ -1,4 +1,4 @@
-namespace PreviewFramework.DevToolsApp.Converters;
+namespace HotPreview.DevToolsApp.Converters;
 
 public static class Converters
 {

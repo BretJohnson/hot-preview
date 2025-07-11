@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace PreviewFramework.Tooling.VisualTestUtils
+namespace HotPreview.Tooling.VisualTestUtils
 {
     public class VisualRegressionTester
     {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:PreviewFramework.App.Maui.ViewModels"
-             xmlns:pages="clr-namespace:PreviewFramework.App.Maui.Pages"
-             x:Class="PreviewFramework.App.Maui.Pages.PreviewsPage"
+             xmlns:local="clr-namespace:HotPreview.App.Maui.ViewModels"
+             xmlns:pages="clr-namespace:HotPreview.App.Maui.Pages"
+             x:Class="HotPreview.App.Maui.Pages.PreviewsPage"
              x:DataType="local:PreviewsViewModel"
              Shell.PresentationMode="NotAnimated"
              Title="UI Previews">

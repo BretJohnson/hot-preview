@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 #nullable disable
 
-namespace PreviewFramework.McpServer.Models;
+namespace HotPreview.McpServer.Models;
 
 public class SimulatorDevices
 {

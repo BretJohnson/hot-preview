@@ -1,4 +1,4 @@
-namespace PreviewFramework.DevToolsApp.ViewModels.NavTree;
+namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
 public class SectionItemViewModel(string displayName, string icon = "") : NavTreeItemViewModel
 {

@@ -1,9 +1,9 @@
 using Microsoft.UI.Xaml.Data;
-using PreviewFramework.DevToolsApp.Utilities;
-using PreviewFramework.DevToolsApp.ViewModels.NavTree;
-using PreviewFramework.Tooling;
+using HotPreview.DevToolsApp.Utilities;
+using HotPreview.DevToolsApp.ViewModels.NavTree;
+using HotPreview.Tooling;
 
-namespace PreviewFramework.DevToolsApp.ViewModels;
+namespace HotPreview.DevToolsApp.ViewModels;
 
 [Bindable]
 public partial class MainPageViewModel : ObservableObject

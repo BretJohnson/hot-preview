@@ -2,13 +2,13 @@ using System.Diagnostics;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-using PreviewFramework.DevToolsApp.ViewModels;
-using PreviewFramework.Tooling;
+using HotPreview.DevToolsApp.ViewModels;
+using HotPreview.Tooling;
 
-namespace PreviewFramework.DevToolsApp;
+namespace HotPreview.DevToolsApp;
 
 /// <summary>
-/// Singleton manager class for global application state for the PreviewFramework DevTools app.
+/// Singleton manager class for global application state for the HotPreview DevTools app.
 /// </summary>
 public partial class DevToolsManager : ObservableObject
 {

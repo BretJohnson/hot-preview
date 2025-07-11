@@ -189,7 +189,7 @@
 	  <PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
 	  <PackageReference Include="PINView.MAUI" Version="1.0.2" />
 	  <PackageReference Include="Camera.MAUI" Version="1.5.1" />
-	  <PackageReference Include="PreviewFramework.App.Maui" Version="*-*" /> <!-- Always use the latest version including prereleases -->
+	  <PackageReference Include="HotPreview.App.Maui" Version="*-*" /> <!-- Always use the latest version including prereleases -->
 	</ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionEcommerceMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>

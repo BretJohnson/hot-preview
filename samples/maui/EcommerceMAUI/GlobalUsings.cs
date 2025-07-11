@@ -1,3 +1,3 @@
 #if PREVIEWS
-global using PreviewFramework;
+global using HotPreview;
 #endif

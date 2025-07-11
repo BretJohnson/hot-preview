@@ -1,6 +1,6 @@
 using ImageMagick;
 
-namespace PreviewFramework.Tooling.VisualTestUtils.MagickNet
+namespace HotPreview.Tooling.VisualTestUtils.MagickNet
 {
     /// <summary>
     /// Verify images using ImageMagick.

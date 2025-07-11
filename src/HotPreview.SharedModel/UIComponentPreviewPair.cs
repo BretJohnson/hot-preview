@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel;
+namespace HotPreview.SharedModel;
 
 public readonly struct UIComponentPreviewPair<TUIComponent, TPreview>(TUIComponent uiComponent, TPreview preview)
     where TPreview : PreviewBase

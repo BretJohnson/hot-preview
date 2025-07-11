@@ -1,7 +1,7 @@
 using Microsoft.Maui.Controls;
-using PreviewFramework.App.Maui.ViewModels;
+using HotPreview.App.Maui.ViewModels;
 
-namespace PreviewFramework.App.Maui.Pages;
+namespace HotPreview.App.Maui.Pages;
 
 public partial class PreviewsPage : ContentPage
 {

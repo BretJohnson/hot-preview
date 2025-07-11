@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling.VisualTestUtils
+namespace HotPreview.Tooling.VisualTestUtils
 {
     /// <summary>
     /// Interface for image verification.

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace PreviewFramework.DevTools;
+namespace HotPreview.DevTools;
 
 public static class Program
 {
@@ -28,16 +28,16 @@ public static class Program
             }
 
             string devToolsAppDirectory = Path.Combine(toolsDirectory, "app");
-            string devToolsAppExecutable = Path.Combine(devToolsAppDirectory, "PreviewFramework.DevToolsApp.exe");
+            string devToolsAppExecutable = Path.Combine(devToolsAppDirectory, "HotPreview.DevToolsApp.exe");
 
             if (!File.Exists(devToolsAppExecutable))
             {
-                Console.Error.WriteLine($"Error: PreviewFramework.DevToolsApp.exe not found.");
+                Console.Error.WriteLine($"Error: HotPreview.DevToolsApp.exe not found.");
                 Console.Error.WriteLine($"Expected location: {devToolsAppExecutable}");
                 return 1;
             }
 
-            Console.WriteLine($"Launching PreviewFramework DevToolsApp from: {devToolsAppExecutable}");
+            Console.WriteLine($"Launching HotPreview DevToolsApp from: {devToolsAppExecutable}");
 
             // Launch the DevToolsApp application in the background
             var startInfo = new ProcessStartInfo
@@ -51,7 +51,7 @@ public static class Program
             using var process = Process.Start(startInfo);
             if (process is null)
             {
-                Console.Error.WriteLine("Error: Failed to start PreviewFramework.DevToolsApp.exe.");
+                Console.Error.WriteLine("Error: Failed to start HotPreview.DevToolsApp.exe.");
                 return 1;
             }
 
@@ -60,7 +60,7 @@ public static class Program
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error launching PreviewFramework.DevToolsApp.exe: {ex.Message}");
+            Console.Error.WriteLine($"Error launching HotPreview.DevToolsApp.exe: {ex.Message}");
             return 1;
         }
     }

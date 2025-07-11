@@ -1,4 +1,4 @@
-namespace PreviewFramework.Tooling.VisualTestUtils;
+namespace HotPreview.Tooling.VisualTestUtils;
 
 public enum ImageSnapshotFormat
 {

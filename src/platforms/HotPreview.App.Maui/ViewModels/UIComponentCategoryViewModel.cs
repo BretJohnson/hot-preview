@@ -1,6 +1,6 @@
-using PreviewFramework.SharedModel;
+using HotPreview.SharedModel;
 
-namespace PreviewFramework.App.Maui.ViewModels;
+namespace HotPreview.App.Maui.ViewModels;
 
 public class UIComponentCategoryViewModel : PreviewsItemViewModel
 {

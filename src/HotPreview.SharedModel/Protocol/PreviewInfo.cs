@@ -1,4 +1,4 @@
-namespace PreviewFramework.SharedModel.Protocol;
+namespace HotPreview.SharedModel.Protocol;
 
 public record PreviewInfo(
     string PreviewType,
