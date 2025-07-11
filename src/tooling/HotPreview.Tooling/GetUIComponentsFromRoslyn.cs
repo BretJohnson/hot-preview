@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
+using HotPreview;
+using HotPreview.SharedModel;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using HotPreview;
-using HotPreview.SharedModel;
 
 namespace HotPreview.Tooling;
 

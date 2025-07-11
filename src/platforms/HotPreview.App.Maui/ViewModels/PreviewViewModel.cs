@@ -1,7 +1,7 @@
 using System.Windows.Input;
-using Microsoft.Maui.Controls;
 using HotPreview.SharedModel;
 using HotPreview.SharedModel.App;
+using Microsoft.Maui.Controls;
 
 namespace HotPreview.App.Maui.ViewModels
 {

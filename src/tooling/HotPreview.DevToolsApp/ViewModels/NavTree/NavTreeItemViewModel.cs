@@ -1,6 +1,6 @@
-using Microsoft.UI.Xaml.Data;
 using HotPreview.DevToolsApp.Utilities;
 using HotPreview.SharedModel;
+using Microsoft.UI.Xaml.Data;
 
 namespace HotPreview.DevToolsApp.ViewModels;
 

@@ -1,6 +1,6 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
 using HotPreview.SharedModel.Protocol;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HotPreview.SharedModel.App;
 

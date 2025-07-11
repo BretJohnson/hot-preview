@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
 using HotPreview.SharedModel;
 using HotPreview.SharedModel.App;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 
 namespace HotPreview.App.Maui;
 

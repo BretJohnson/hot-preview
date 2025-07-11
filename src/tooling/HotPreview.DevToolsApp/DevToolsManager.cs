@@ -1,9 +1,9 @@
 using System.Diagnostics;
+using HotPreview.DevToolsApp.ViewModels;
+using HotPreview.Tooling;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-using HotPreview.DevToolsApp.ViewModels;
-using HotPreview.Tooling;
 
 namespace HotPreview.DevToolsApp;
 

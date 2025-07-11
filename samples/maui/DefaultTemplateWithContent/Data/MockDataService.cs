@@ -11,7 +11,7 @@ public class MockDataService
     public MockDataService(DatabaseManager databaseManager, JsonDataService jsonDataService, ProjectRepository projectRepository,
         TaskRepository taskRepository, TagRepository tagRepository, CategoryRepository categoryRepository)
     {
-        _databaseManager= databaseManager;
+        _databaseManager = databaseManager;
         _jsonDataService = jsonDataService;
 
         ProjectRepository = projectRepository;

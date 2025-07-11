@@ -1,5 +1,5 @@
-using Microsoft.Maui.Controls;
 using HotPreview.App.Maui.ViewModels;
+using Microsoft.Maui.Controls;
 
 namespace HotPreview.App.Maui.Pages;
 

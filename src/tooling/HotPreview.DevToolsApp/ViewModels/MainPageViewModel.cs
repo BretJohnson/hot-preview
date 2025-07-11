@@ -1,7 +1,7 @@
-using Microsoft.UI.Xaml.Data;
 using HotPreview.DevToolsApp.Utilities;
 using HotPreview.DevToolsApp.ViewModels.NavTree;
 using HotPreview.Tooling;
+using Microsoft.UI.Xaml.Data;
 
 namespace HotPreview.DevToolsApp.ViewModels;
 
