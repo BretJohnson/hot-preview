@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include the props file in the NuGet package, so PREVIEWS is defined by default for Debug for all client builds -->
+    <None Include="buildTransitive\HotPreview.props" Pack="true" PackagePath="buildTransitive\HotPreview.props" />
+  </ItemGroup>
+
+</Project>

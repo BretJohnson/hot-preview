@@ -8,7 +8,7 @@
             "name": "DevTools Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/src/tooling/PreviewFramework.DevTools/PreviewFramework.DevTools.csproj"
+            "projectPath": "${workspaceFolder}/src/tooling/HotPreview.DevTools/HotPreview.DevTools.csproj"
         }
     ]
 }

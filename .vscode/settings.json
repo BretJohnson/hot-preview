@@ -20,7 +20,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": false // enable this when they conform
   },
-  "dotnet.defaultSolution": "PreviewFramework.sln",
+  "dotnet.defaultSolution": "HotPreview.sln",
 
   // Disable the git pager in the integrated terminal to avoid it being invoked for AI agent commands, like from Cursor
   "terminal.integrated.env.windows": {
