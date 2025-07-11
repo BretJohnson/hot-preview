@@ -44,12 +44,12 @@ jobs:
       run: tools/variables/_define.ps1
       shell: pwsh
     - name: 🛠 build
-      run: dotnet build -t:build,pack PreviewFramework-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build.binlog"
+      run: dotnet build -t:build,pack HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build.binlog"
     - name: 🧪 test
       run: tools/dotnet-test-cloud.ps1 -Configuration ${{ env.BUILDCONFIGURATION }} -Agent ${{ runner.os }}
       shell: pwsh
     - name: 💅🏻 Verify formatted code
-      run: dotnet format PreviewFramework-CI.slnf --verify-no-changes --no-restore
+      run: dotnet format HotPreview-CI.slnf --verify-no-changes --no-restore
       shell: pwsh
     # - name: 📚 Verify docfx build
     #   run: dotnet docfx docfx/docfx.json --warningsAsErrors --disableGitFeatures

@@ -24,7 +24,7 @@ public static class ConnectionSettingsJson
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 ? Environment.SpecialFolder.UserProfile
                 : Environment.SpecialFolder.Personal);
-        string configDir = Path.Combine(homeDir, ".previewframework");
+        string configDir = Path.Combine(homeDir, ".hotpreview");
         Directory.CreateDirectory(configDir);
         string jsonPath = Path.Combine(configDir, fileName);
 

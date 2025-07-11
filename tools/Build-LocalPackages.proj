@@ -24,11 +24,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework" />
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.sharedmodel" />
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.devtools" />
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.app.maui" />
-      <CachedPackageDirectories Include="$(NuGetPackagesPath)\previewframework.app.wpf" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.sharedmodel" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.devtools" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.app.maui" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.app.wpf" />
     </ItemGroup>
 
     <Message Text="Clearing cached packages from NuGet cache: $(NuGetPackagesPath)" Importance="high" />

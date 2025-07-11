@@ -4,7 +4,7 @@
           BeforeTargets="CoreCompile"
           Condition="'$(BuildingProject)' != 'false'"
           Inputs="$(MSBuildProjectFullPath)"
-          Outputs="$(IntermediateOutputPath)PreviewAppInitializer.g.cs;$(UserProfile)\.previewframework\devToolsConnectionSettings.json">
+          Outputs="$(IntermediateOutputPath)PreviewAppInitializer.g.cs;$(UserProfile)\.hotpreview\devToolsConnectionSettings.json">
     <GeneratePreviewAppSettingsTask
       ProjectPath="$(MSBuildProjectFullPath)"
       OutputPath="$(IntermediateOutputPath)PreviewAppInitializer.g.cs"
