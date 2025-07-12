@@ -43,11 +43,11 @@ jobs:
     - name: ⚙️ Set pipeline variables based on source
       run: tools/variables/_define.ps1
       shell: pwsh
-    - name: 🛠 build
+    - name: 🛠 Build
       run: dotnet build -t:build HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build.binlog"
-    - name: 🛠 pack
-      run: dotnet build -t:pack HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/pack.binlog"
-    - name: 🧪 test
+    - name: 🛠 Build packages
+      run: dotnet build Build-Packages.proj -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build-packages.binlog"
+    - name: 🧪 Test
       run: tools/dotnet-test-cloud.ps1 -Configuration ${{ env.BUILDCONFIGURATION }} -Agent ${{ runner.os }}
       shell: pwsh
     - name: 💅🏻 Verify formatted code

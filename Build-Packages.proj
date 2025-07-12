@@ -1,5 +1,5 @@
 <Project DefaultTargets="BuildPackages">
-  <Import Project="..\Directory.Build.props" />
+  <Import Project="Directory.Build.props" />
 
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
@@ -7,11 +7,11 @@
 
   <!-- List of projects that produce NuGet packages -->
   <ItemGroup>
-    <PackableProject Include="..\src\HotPreview\HotPreview.csproj" />
-    <PackableProject Include="..\src\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
-    <PackableProject Include="..\src\tooling\HotPreview.DevTools\HotPreview.DevTools.csproj" />
-    <PackableProject Include="..\src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
-    <PackableProject Include="..\src\platforms\HotPreview.App.Wpf\HotPreview.App.Wpf.csproj" />
+    <PackableProject Include="src\HotPreview\HotPreview.csproj" />
+    <PackableProject Include="src\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
+    <PackableProject Include="src\tooling\HotPreview.DevTools\HotPreview.DevTools.csproj" />
+    <PackableProject Include="src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
+    <PackableProject Include="src\platforms\HotPreview.App.Wpf\HotPreview.App.Wpf.csproj" />
   </ItemGroup>
 
   <!-- Clean package output directory -->
@@ -43,12 +43,12 @@
     <Message Text="Building all NuGet packages in $(Configuration) configuration..." Importance="high" />
 
     <!-- Build AppBuildTasks first as it's needed by SharedModel -->
-    <MSBuild Projects="..\src\HotPreview.AppBuildTasks\HotPreview.AppBuildTasks.csproj"
+    <MSBuild Projects="src\HotPreview.AppBuildTasks\HotPreview.AppBuildTasks.csproj"
              Targets="Build"
              Properties="Configuration=$(Configuration)" />
 
     <!-- Also explicitly build HotPreview.DevToolsApp, which is included in HotPreview.DevTools -->
-    <MSBuild Projects="..\src\tooling\HotPreview.DevToolsApp\HotPreview.DevToolsApp.csproj"
+    <MSBuild Projects="src\tooling\HotPreview.DevToolsApp\HotPreview.DevToolsApp.csproj"
              Targets="Build"
              Properties="Configuration=$(Configuration)" />
 
