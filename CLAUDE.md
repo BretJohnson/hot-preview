@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run tests**: `dotnet test`
 - **Pack NuGet packages**: `dotnet pack` (outputs to `bin/Packages/`)
 - **Install DevTools globally**: `dotnet tool install -g HotPreview.DevTools`
-- **Launch DevTools**: `preview-devtools` (after installing globally)
+- **Launch DevTools**: `hotpreview` (after installing globally)
 - **Documentation**: `cd docfx && dotnet docfx --serve` (builds and serves docs locally)
 
 ## Development Setup

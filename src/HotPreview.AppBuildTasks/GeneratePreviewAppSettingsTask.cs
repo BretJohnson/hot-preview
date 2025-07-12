@@ -225,7 +225,7 @@ namespace HotPreview.SharedModel
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = "preview-devtools",
+                    FileName = "hotpreview",
                     Arguments = "--launch",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -238,7 +238,7 @@ namespace HotPreview.SharedModel
                 using var process = Process.Start(startInfo);
                 if (process is null)
                 {
-                    Log.LogError("HotPreview: Failed to start preview-devtools process");
+                    Log.LogError("HotPreview: Failed to start hotpreview process");
                     return false;
                 }
 
@@ -247,7 +247,7 @@ namespace HotPreview.SharedModel
                 if (process.ExitCode != 0)
                 {
                     string errorOutput = process.StandardError.ReadToEnd();
-                    Log.LogError($"HotPreview: preview-devtools failed with exit code {process.ExitCode}: {errorOutput}");
+                    Log.LogError($"HotPreview: hotpreview failed with exit code {process.ExitCode}: {errorOutput}");
                     return false;
                 }
 
@@ -260,18 +260,18 @@ namespace HotPreview.SharedModel
                 Log.LogMessage(MessageImportance.High, $"HotPreview: Launched devtools");
                 return true;
             }
-            // When the preview-devtools executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
+            // When the hotpreview executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
             // For English systems, match on the message.
             catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
             {
-                Log.LogError("HotPreview: preview-devtools not found.");
+                Log.LogError("HotPreview: hotpreview not found.");
                 Log.LogError("HotPreview: Install it via e.g.: dotnet tool install -g --prerelease HotPreview.DevTools");
                 return false;
             }
             // In other cases, including non-English systems, log a more generic message that covers the not installed case too.
             catch (Exception ex)
             {
-                Log.LogError($"HotPreview: Error launching preview-devtools: {ex}");
+                Log.LogError($"HotPreview: Error launching hotpreview: {ex}");
                 Log.LogError("HotPreview: Ensure it is installed via e.g.: dotnet tool install -g --prerelease HotPreview.DevTools");
                 return false;
             }
@@ -294,7 +294,7 @@ namespace HotPreview.SharedModel
             }
 
             // Timeout reached - log error message
-            Log.LogError($"HotPreview: preview-devtools launched but the {jsonPath} file didn't get created");
+            Log.LogError($"HotPreview: hotpreview launched but the {jsonPath} file didn't get created");
             return false;
         }
     }
