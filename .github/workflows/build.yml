@@ -44,7 +44,9 @@ jobs:
       run: tools/variables/_define.ps1
       shell: pwsh
     - name: 🛠 build
-      run: dotnet build -t:build,pack HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build.binlog"
+      run: dotnet build -t:build HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/build.binlog"
+    - name: 🛠 pack
+      run: dotnet pack -t:pack HotPreview-CI.slnf --no-restore -c ${{ env.BUILDCONFIGURATION }} /bl:"${{ runner.temp }}/_artifacts/build_logs/pack.binlog"
     - name: 🧪 test
       run: tools/dotnet-test-cloud.ps1 -Configuration ${{ env.BUILDCONFIGURATION }} -Agent ${{ runner.os }}
       shell: pwsh
