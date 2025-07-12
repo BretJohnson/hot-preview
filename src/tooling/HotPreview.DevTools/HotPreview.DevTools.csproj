@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <Title>HotPreview DevTools</Title>
-    <PackageDescription>A .NET global tool for launching HotPreview DevTools - a visual development environment for UI component previews</PackageDescription>
+    <PackageDescription>A .NET global tool for launching Hot Preview DevTools - a visual development environment for UI component previews</PackageDescription>
     <PackageTags>hotpreview;preview;ui;components;devtools;maui;wpf;uno;tool</PackageTags>
   </PropertyGroup>
 

@@ -21,7 +21,7 @@ public partial class MainPageViewModel : ObservableObject
     /// </summary>
     public bool HaveApp => CurrentApp is not null;
 
-    public string PageTitle => CurrentApp is not null ? CurrentApp.ProjectName : "Preview DevTools";
+    public string PageTitle => CurrentApp is not null ? CurrentApp.ProjectName : "Hot Preview";
 
     public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator)
     {

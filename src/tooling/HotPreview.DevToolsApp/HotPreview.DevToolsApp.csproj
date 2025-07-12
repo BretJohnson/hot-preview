@@ -6,7 +6,7 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>HotPreview.DevToolsApp</ApplicationTitle>
+    <ApplicationTitle>Hot Preview DevTools</ApplicationTitle>
     <!-- App Identifier -->
     <ApplicationId>com.companyname.HotPreview.DevToolsApp</ApplicationId>
     <!-- Versions -->
@@ -15,7 +15,7 @@
     <!-- Package Publisher -->
     <ApplicationPublisher>bret</ApplicationPublisher>
     <!-- Package Description -->
-    <Description>HotPreview.DevToolsApp powered by Uno Platform.</Description>
+    <Description>Hot Preview DevToolsApp, powered by Uno Platform.</Description>
 
     <!--
       UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
