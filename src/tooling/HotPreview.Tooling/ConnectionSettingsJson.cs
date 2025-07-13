@@ -7,7 +7,7 @@ namespace HotPreview.Tooling;
 
 public static class ConnectionSettingsJson
 {
-    public static void WriteSettings(string fileName, int appConnectionPort)
+    public static void WriteSettings(string fileName, int appConnectionPort, string? mcpServerUrl = null)
     {
         List<string> addresses = ["127.0.0.1"];
 
@@ -28,7 +28,17 @@ public static class ConnectionSettingsJson
         Directory.CreateDirectory(configDir);
         string jsonPath = Path.Combine(configDir, fileName);
 
-        File.WriteAllText(jsonPath, JsonSerializer.Serialize(new { app = appConnectionString },
+        var settings = new Dictionary<string, object>
+        {
+            ["app"] = appConnectionString
+        };
+        
+        if (!string.IsNullOrEmpty(mcpServerUrl))
+        {
+            settings["mcp"] = mcpServerUrl;
+        }
+
+        File.WriteAllText(jsonPath, JsonSerializer.Serialize(settings,
             new JsonSerializerOptions { WriteIndented = true }));
 
         // Ensure the file is deleted when the app exits

@@ -1,4 +1,5 @@
 using HotPreview.DevToolsApp.ViewModels;
+using HotPreview.Tooling.McpServer;
 using Uno.Resizetizer;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
@@ -68,8 +69,8 @@ public partial class App : Application
                     )
                     .ConfigureServices((context, services) =>
                     {
-                        // TODO: Register your services
-                        //services.AddSingleton<IMyService, MyService>();
+                        // Register MCP HTTP server service
+                        services.AddHostedService<McpHttpServerService>();
                     })
                     .UseNavigation(RegisterRoutes)
                 );
@@ -87,8 +88,15 @@ public partial class App : Application
         };
 
         DevToolsManager.Initialize(SynchronizationContext.Current!);
-
+        
         Host = await builder.NavigateAsync<Shell>();
+        
+        // Update DevToolsManager with MCP service after Host is created
+        var mcpService = Host.Services.GetService<McpHttpServerService>();
+        if (mcpService != null)
+        {
+            DevToolsManager.Instance.SetMcpService(mcpService);
+        }
 
     }
 

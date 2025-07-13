@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.Tooling;
+using HotPreview.Tooling.McpServer;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -16,6 +17,7 @@ public partial class DevToolsManager : ObservableObject
     private readonly ILogger<DevToolsManager> _logger;
 
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
+    private McpHttpServerService? _mcpHttpServerService;
 
     /// <summary>
     /// Gets the singleton instance of the DevToolsManager.
@@ -37,7 +39,8 @@ public partial class DevToolsManager : ObservableObject
         _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);
         _appServiceConnectionListener.StartListening();
 
-        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port);
+        // Initial connection settings without MCP URL (will be updated when MCP service starts)
+        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, null);
     }
 
     public MainPageViewModel MainPageViewModel { get; set; } = null!;
@@ -48,9 +51,17 @@ public partial class DevToolsManager : ObservableObject
     public string CurrentTheme { get; set; } = "Light";
 
     /// <summary>
+    /// Updates the connection settings with MCP server URL if available.
+    /// </summary>
+    public void UpdateConnectionSettings()
+    {
+        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService?.ServerUrl);
+    }
+
+    /// <summary>
     /// Initializes the DevToolsManager with services from the application.
     /// </summary>
-    /// <param name="serviceProvider">The application's service provider.</param>
+    /// <param name="uiThreadSynchronizationContext">The UI thread synchronization context.</param>
     public static void Initialize(SynchronizationContext uiThreadSynchronizationContext)
     {
         if (s_instance is not null)
@@ -59,6 +70,16 @@ public partial class DevToolsManager : ObservableObject
         }
 
         s_instance = new DevToolsManager(uiThreadSynchronizationContext);
+    }
+
+    /// <summary>
+    /// Sets the MCP HTTP server service and updates connection settings.
+    /// </summary>
+    /// <param name="mcpHttpServerService">The MCP HTTP server service instance.</param>
+    public void SetMcpService(McpHttpServerService mcpHttpServerService)
+    {
+        _mcpHttpServerService = mcpHttpServerService;
+        UpdateConnectionSettings();
     }
 
     /// <summary>
