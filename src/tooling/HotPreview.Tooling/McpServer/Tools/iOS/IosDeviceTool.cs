@@ -131,13 +131,13 @@ public class IosDeviceTool
     [Description("Boots the specified iOS simulator device.")]
     public void BootDevice(string deviceId)
     {
+        if (string.IsNullOrEmpty(deviceId))
+        {
+            throw new ArgumentNullException(nameof(deviceId), "Error: Invalid or missing device ID.");
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(deviceId))
-            {
-                throw new ArgumentNullException(nameof(deviceId), "Error: Invalid or missing device ID.");
-            }
-
             // Execute the command to boot the simulator device
             Process.ExecuteCommand($"xcrun simctl boot {deviceId}");
         }
@@ -161,13 +161,13 @@ public class IosDeviceTool
     [Description("Shuts down the specified iOS simulator device.")]
     public void ShutdownDevice(string deviceId)
     {
+        if (string.IsNullOrEmpty(deviceId))
+        {
+            throw new ArgumentNullException(nameof(deviceId), "Error: Invalid or missing device ID.");
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(deviceId))
-            {
-                throw new ArgumentNullException(nameof(deviceId), "Error: Invalid or missing device ID.");
-            }
-
             // Execute the command to shut down the simulator device
             Process.ExecuteCommand($"xcrun simctl shutdown {deviceId}");
         }

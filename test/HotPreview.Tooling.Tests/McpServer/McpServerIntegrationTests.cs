@@ -42,31 +42,31 @@ public class McpServerIntegrationTests
 
             // Assert: Tools discovered
             Assert.IsNotNull(toolsResponse);
-            Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
-            Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
+            Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out JsonElement result));
+            Assert.IsTrue(result.TryGetProperty("tools", out JsonElement toolsArray));
 
             List<JsonElement> tools = toolsArray.EnumerateArray().ToList();
             Assert.IsTrue(tools.Count > 0, "No tools discovered");
 
-            // Act 3: Call a file system tool (most reliable for testing)
+            // Act 3: Call a desktop capture tool (most reliable for testing)
             using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
-            string testContent = "Integration test content";
-            string testFile = tempHelper.CreateTempFile(content: testContent);
+            string testScreenshotPath = tempHelper.CreateTempFile(fileName: "test_screenshot.png");
 
-            JsonDocument readFileResponse = await mcpClient.CallToolAsync("read_file",
-                new { filePath = testFile }, cancellationToken);
+            JsonDocument screenshotResponse = await mcpClient.CallToolAsync("take_screenshot",
+                new { outputPath = testScreenshotPath }, cancellationToken);
 
             // Assert: Tool execution successful
-            Assert.IsNotNull(readFileResponse);
-            Assert.IsTrue(readFileResponse.RootElement.TryGetProperty("result", out var readResult));
+            Assert.IsNotNull(screenshotResponse);
+            Assert.IsTrue(screenshotResponse.RootElement.TryGetProperty("result", out JsonElement screenshotResult));
 
-            if (readResult.TryGetProperty("content", out var content))
+            if (screenshotResult.TryGetProperty("content", out JsonElement content))
             {
                 List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
                 string? textContent = contentArray[0].GetProperty("text").GetString();
-                Assert.AreEqual(testContent, textContent);
+                Assert.IsTrue(textContent?.Contains("successfully saved") == true,
+                    $"Expected content to contain 'successfully saved', but got: {textContent}");
             }
         }
         finally
@@ -91,14 +91,14 @@ public class McpServerIntegrationTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Call tool with invalid parameters
-            JsonDocument response = await mcpClient.CallToolAsync("read_file",
-                new { filePath = "/nonexistent/path/that/does/not/exist.txt" }, cancellationToken);
+            JsonDocument response = await mcpClient.CallToolAsync("take_screenshot",
+                new { outputPath = "/invalid/path/that/does/not/exist/screenshot.png" }, cancellationToken);
 
             // Assert: Error handled gracefully
             Assert.IsNotNull(response);
-            Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
+            Assert.IsTrue(response.RootElement.TryGetProperty("result", out JsonElement result));
 
-            if (result.TryGetProperty("content", out var content))
+            if (result.TryGetProperty("content", out JsonElement content))
             {
                 List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
@@ -135,15 +135,13 @@ public class McpServerIntegrationTests
             // Call 1: List tools
             responses.Add(await mcpClient.ListToolsAsync(cancellationToken));
 
-            // Call 2: Read a file
-            var testFile = tempHelper.CreateTempFile(content: "Test content");
-            responses.Add(await mcpClient.CallToolAsync("read_file",
-                new { filePath = testFile }, cancellationToken));
+            // Call 2: Take a screenshot
+            string testScreenshotPath = tempHelper.CreateTempFile(fileName: "test_screenshot.png");
+            responses.Add(await mcpClient.CallToolAsync("take_screenshot",
+                new { outputPath = testScreenshotPath }, cancellationToken));
 
-            // Call 3: List directory
-            string testDir = tempHelper.CreateTempDirectory();
-            responses.Add(await mcpClient.CallToolAsync("list_directory",
-                new { directoryPath = testDir }, cancellationToken));
+            // Call 3: List windows
+            responses.Add(await mcpClient.CallToolAsync("list_windows", new { }, cancellationToken));
 
             // Assert: All calls successful
             foreach (var response in responses)
@@ -226,8 +224,8 @@ public class McpServerIntegrationTests
             foreach (var response in responses)
             {
                 Assert.IsNotNull(response);
-                Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-                Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
+                Assert.IsTrue(response.RootElement.TryGetProperty("result", out JsonElement result));
+                Assert.IsTrue(result.TryGetProperty("tools", out JsonElement toolsArray));
                 Assert.IsTrue(toolsArray.GetArrayLength() > 0);
             }
         }
@@ -291,24 +289,24 @@ public class McpServerIntegrationTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
             using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
 
-            // Act: Test file operations with line numbers
-            string testContent = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5";
-            string testFile = tempHelper.CreateTempFile(content: testContent);
+            // Act: Test desktop capture with region parameters
+            string testScreenshotPath = tempHelper.CreateTempFile(fileName: "region_screenshot.png");
 
-            JsonDocument response = await mcpClient.CallToolAsync("read_file_lines",
-                new { filePath = testFile, startLine = 2, endLine = 4 }, cancellationToken);
+            JsonDocument response = await mcpClient.CallToolAsync("take_region_screenshot",
+                new { outputPath = testScreenshotPath, x = 0, y = 0, width = 100, height = 100 }, cancellationToken);
 
             // Assert
             Assert.IsNotNull(response);
-            Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
+            Assert.IsTrue(response.RootElement.TryGetProperty("result", out JsonElement result));
 
-            if (result.TryGetProperty("content", out var content))
+            if (result.TryGetProperty("content", out JsonElement content))
             {
                 List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
                 string? textContent = contentArray[0].GetProperty("text").GetString();
-                Assert.AreEqual("Line 2\nLine 3\nLine 4", textContent);
+                Assert.IsTrue(textContent?.Contains("successfully saved") == true,
+                    $"Expected content to contain 'successfully saved', but got: {textContent}");
             }
         }
         finally

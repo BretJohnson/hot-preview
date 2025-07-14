@@ -110,13 +110,13 @@ public class AndroidDeviceTool
     [Description("Boots the specified Android device.")]
     public void BootDevice(string avdName)
     {
+        if (string.IsNullOrEmpty(avdName))
+        {
+            throw new ArgumentNullException(nameof(avdName), "Error: Device name is missing or invalid.");
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(avdName))
-            {
-                throw new ArgumentNullException(nameof(avdName), "Error: Device name is missing or invalid.");
-            }
-
             // Execute the adb command to kill the emulator
             Process.ExecuteCommand($"adb -s {avdName} emu kill");
         }
@@ -134,16 +134,16 @@ public class AndroidDeviceTool
     [Description("Shuts down the specified Android device.")]
     public void ShutdownDevice(string avdName)
     {
+        if (string.IsNullOrEmpty(avdName))
+        {
+            throw new ArgumentNullException(nameof(avdName), "Error: Device name is missing or invalid.");
+        }
+
         try
         {
             if (!Adb.CheckAdbInstalled())
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
-            }
-
-            if (string.IsNullOrEmpty(avdName))
-            {
-                throw new ArgumentNullException(nameof(avdName), "Error: Device name is missing or invalid.");
             }
 
             // Execute the adb command to kill the emulator

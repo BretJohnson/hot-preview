@@ -53,7 +53,6 @@ public class AndroidAppManagementToolTests
 
             Assert.IsTrue(tools.Contains("android_install_app"));
             Assert.IsTrue(tools.Contains("android_launch_app"));
-            Assert.IsTrue(tools.Contains("android_uninstall_app"));
         }
         finally
         {

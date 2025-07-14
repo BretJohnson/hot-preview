@@ -12,7 +12,7 @@ namespace HotPreview.Tooling.McpServer;
 
 [McpServerToolType]
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-public class WindowsCaptureScreen
+public class DesktopCaptureScreen
 {
     /// <summary>
     /// Takes a screenshot of the entire primary screen and saves it to the specified path.

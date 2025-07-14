@@ -48,8 +48,7 @@ public class ToolDiscoveryTests
             "IosDeviceTool",
             "IosUiTool",
             "IosScreenshotTool",
-            "FileSystemTools",
-            "WindowsTools"
+            "DesktopCaptureScreen"
         ];
 
         foreach (string expectedClass in expectedToolClasses)
@@ -133,9 +132,10 @@ public class ToolDiscoveryTests
                 "ios_list_devices",
                 "ios_boot_device",
                 "ios_screenshot",
-                "read_file",
-                "list_directory",
-                "win_cmd_command"
+                "take_screenshot",
+                "take_region_screenshot",
+                "take_application_screenshot",
+                "list_windows"
             ];
 
             HashSet<string?> discoveredToolNames = tools
