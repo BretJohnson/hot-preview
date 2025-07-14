@@ -48,7 +48,6 @@ public class ToolDiscoveryTests
             "IosDeviceTool",
             "IosUiTool",
             "IosScreenshotTool",
-            "FileSystemTools",
             "WindowsShell"
         };
 

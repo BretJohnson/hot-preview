@@ -128,7 +128,7 @@ public class WorkingMcpIntegrationTests
                 .Where(name => !string.IsNullOrEmpty(name))
                 .ToHashSet();
 
-            string[] expectedTools = new[] { "android_list_devices", "read_file", "ios_list_devices" };
+            string[] expectedTools = new[] { "android_list_devices", "ios_list_devices" };
             foreach (var expectedTool in expectedTools)
             {
                 Assert.IsTrue(toolNames.Contains(expectedTool),
@@ -186,15 +186,8 @@ public class WorkingMcpIntegrationTests
         {
             await service.StartAsync(cancellationToken);
 
-            // Test file system tool directly
+            // Test tools directly (without going through MCP protocol)
             using var tempHelper = new TempDirectoryHelper();
-            string testContent = "Direct tool execution test";
-            string testFile = tempHelper.CreateTempFile(content: testContent);
-
-            var fileSystemTool = new FileSystemTools();
-            string result = fileSystemTool.ReadFile(testFile);
-
-            Assert.AreEqual(testContent, result, "Tool should work when called directly");
 
             // Test Android tool directly (will fail without ADB, but should handle gracefully)
             var androidTool = new AndroidDeviceTool();
