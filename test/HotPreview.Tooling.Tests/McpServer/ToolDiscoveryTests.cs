@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ public class ToolDiscoveryTests
     [TestInitialize]
     public void Setup()
     {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _logger = loggerFactory.CreateLogger<McpHttpServerService>();
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -25,11 +26,11 @@ public class ToolDiscoveryTests
     public void DiscoverToolClasses_ShouldFindAllToolClasses()
     {
         // Arrange
-        var assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
+        Assembly? assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
         Assert.IsNotNull(assembly);
 
         // Act
-        var toolClasses = assembly.GetTypes()
+        List<Type> toolClasses = assembly.GetTypes()
             .Where(type => type.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
             .ToList();
 
@@ -37,7 +38,7 @@ public class ToolDiscoveryTests
         Assert.IsTrue(toolClasses.Count > 0, "No tool classes found with McpServerToolTypeAttribute");
 
         // Verify specific expected tool classes
-        var expectedToolClasses = new[]
+        string[] expectedToolClasses = new[]
         {
             "AndroidDeviceTool",
             "AndroidAppManagementTool",
@@ -62,11 +63,11 @@ public class ToolDiscoveryTests
     public void DiscoverToolMethods_ShouldFindAllToolMethods()
     {
         // Arrange
-        var assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
+        Assembly? assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
         Assert.IsNotNull(assembly);
 
         // Act
-        var toolMethods = assembly.GetTypes()
+        List<MethodInfo> toolMethods = assembly.GetTypes()
             .Where(type => type.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
             .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
             .Where(method => method.GetCustomAttribute<McpServerToolAttribute>() != null)
@@ -78,12 +79,12 @@ public class ToolDiscoveryTests
         // Verify each tool method has required attributes
         foreach (var method in toolMethods)
         {
-            var toolAttribute = method.GetCustomAttribute<McpServerToolAttribute>();
+            McpServerToolAttribute? toolAttribute = method.GetCustomAttribute<McpServerToolAttribute>();
             Assert.IsNotNull(toolAttribute, $"Method {method.Name} missing McpServerToolAttribute");
             Assert.IsFalse(string.IsNullOrEmpty(toolAttribute.Name),
                 $"Method {method.Name} has empty tool name");
 
-            var descriptionAttribute = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
+            System.ComponentModel.DescriptionAttribute? descriptionAttribute = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
             Assert.IsNotNull(descriptionAttribute,
                 $"Method {method.Name} missing DescriptionAttribute");
             Assert.IsFalse(string.IsNullOrEmpty(descriptionAttribute.Description),
@@ -95,30 +96,30 @@ public class ToolDiscoveryTests
     public async Task McpServerToolDiscovery_ShouldExposeAllExpectedTools()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act
-            var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
+            JsonDocument toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
 
             // Assert
             Assert.IsNotNull(toolsResponse);
             Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
             Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
 
-            var tools = toolsArray.EnumerateArray().ToList();
+            List<JsonElement> tools = toolsArray.EnumerateArray().ToList();
             Assert.IsTrue(tools.Count > 0, "No tools discovered by MCP server");
 
             // Verify specific expected tools
-            var expectedTools = new[]
+            string[] expectedTools = new[]
             {
                 "android_list_devices",
                 "android_boot_device",
@@ -137,7 +138,7 @@ public class ToolDiscoveryTests
                 "windows_execute_command"
             };
 
-            var discoveredToolNames = tools
+            HashSet<string?> discoveredToolNames = tools
                 .Select(t => t.GetProperty("name").GetString())
                 .ToHashSet();
 
@@ -171,11 +172,11 @@ public class ToolDiscoveryTests
     public void ValidateToolMethodSignatures_ShouldHaveCompatibleParameterTypes()
     {
         // Arrange
-        var assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
+        Assembly? assembly = Assembly.GetAssembly(typeof(AndroidDeviceTool));
         Assert.IsNotNull(assembly);
 
         // Act
-        var toolMethods = assembly.GetTypes()
+        List<MethodInfo> toolMethods = assembly.GetTypes()
             .Where(type => type.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
             .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
             .Where(method => method.GetCustomAttribute<McpServerToolAttribute>() != null)
@@ -184,12 +185,12 @@ public class ToolDiscoveryTests
         // Assert
         foreach (var method in toolMethods)
         {
-            var parameters = method.GetParameters();
+            ParameterInfo[] parameters = method.GetParameters();
 
             // Verify parameter types are MCP-compatible
             foreach (var param in parameters)
             {
-                var paramType = param.ParameterType;
+                Type paramType = param.ParameterType;
 
                 // Check if type is supported by MCP
                 Assert.IsTrue(IsMcpCompatibleType(paramType),

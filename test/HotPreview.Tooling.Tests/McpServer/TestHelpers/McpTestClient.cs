@@ -17,23 +17,23 @@ public class McpTestClient : IDisposable
 
     public async Task<JsonDocument> SendRequestAsync(object request, CancellationToken cancellationToken = default)
     {
-        var json = JsonSerializer.Serialize(request);
+        string json = JsonSerializer.Serialize(request);
 
         _logger.LogDebug("Sending MCP request: {Request}", json);
 
         // Try different possible MCP endpoints in order of preference
-        var endpoints = new[] { "/mcp", "/", "/sse" };
+        string[] endpoints = new[] { "/mcp", "/", "/sse" };
 
-        foreach (var endpoint in endpoints)
+        foreach (string endpoint in endpoints)
         {
             try
             {
-                var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+                StringContent content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                     _logger.LogDebug("Received MCP response from {Endpoint}: {Response}", endpoint, responseContent);
                     return JsonDocument.Parse(responseContent);
                 }
@@ -49,10 +49,10 @@ public class McpTestClient : IDisposable
         // If all endpoints fail, try the root with a GET (in case it's configured differently)
         try
         {
-            var response = await _httpClient.GetAsync("/", cancellationToken);
+            HttpResponseMessage response = await _httpClient.GetAsync("/", cancellationToken);
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 _logger.LogDebug("Received response from GET /: {Response}", responseContent);
 
                 // If it's HTML or plain text, it means MCP endpoints aren't configured properly
@@ -74,7 +74,7 @@ public class McpTestClient : IDisposable
 
     public async Task<T?> SendRequestAsync<T>(object request, CancellationToken cancellationToken = default)
     {
-        using var response = await SendRequestAsync(request, cancellationToken);
+        using JsonDocument response = await SendRequestAsync(request, cancellationToken);
         return JsonSerializer.Deserialize<T>(response.RootElement);
     }
 

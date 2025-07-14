@@ -1,3 +1,4 @@
+using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ public class FileSystemToolsTests
         _tool = new FileSystemTools();
         _tempHelper = new TempDirectoryHelper();
 
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
 
@@ -32,11 +33,11 @@ public class FileSystemToolsTests
     public void ReadFile_WithExistingFile_ShouldReturnContent()
     {
         // Arrange
-        var content = "Hello, World!\nThis is a test file.";
-        var filePath = _tempHelper.CreateTempFile(content: content);
+        string content = "Hello, World!\nThis is a test file.";
+        string filePath = _tempHelper.CreateTempFile(content: content);
 
         // Act
-        var result = _tool.ReadFile(filePath);
+        string result = _tool.ReadFile(filePath);
 
         // Assert
         Assert.AreEqual(content, result);
@@ -46,10 +47,10 @@ public class FileSystemToolsTests
     public void ReadFile_WithNonExistentFile_ShouldReturnError()
     {
         // Arrange
-        var nonExistentPath = Path.Combine(_tempHelper.CreateTempDirectory(), "nonexistent.txt");
+        string nonExistentPath = Path.Combine(_tempHelper.CreateTempDirectory(), "nonexistent.txt");
 
         // Act
-        var result = _tool.ReadFile(nonExistentPath);
+        string result = _tool.ReadFile(nonExistentPath);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Error: File not found"));
@@ -60,11 +61,11 @@ public class FileSystemToolsTests
     public void WriteFile_ShouldCreateFileWithContent()
     {
         // Arrange
-        var content = "Test content to write";
-        var filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.txt");
+        string content = "Test content to write";
+        string filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.txt");
 
         // Act
-        var result = _tool.WriteFile(filePath, content);
+        string result = _tool.WriteFile(filePath, content);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Successfully wrote content"));
@@ -76,15 +77,15 @@ public class FileSystemToolsTests
     public void ReadBinaryFile_WithExistingFile_ShouldReturnBase64()
     {
         // Arrange
-        var binaryData = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F }; // "Hello" in bytes
-        var filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.bin");
+        byte[] binaryData = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F }; // "Hello" in bytes
+        string filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.bin");
         File.WriteAllBytes(filePath, binaryData);
 
         // Act
-        var result = _tool.ReadBinaryFile(filePath);
+        string result = _tool.ReadBinaryFile(filePath);
 
         // Assert
-        var expectedBase64 = Convert.ToBase64String(binaryData);
+        string expectedBase64 = Convert.ToBase64String(binaryData);
         Assert.AreEqual(expectedBase64, result);
     }
 
@@ -92,12 +93,12 @@ public class FileSystemToolsTests
     public void WriteBinaryFile_ShouldCreateFileFromBase64()
     {
         // Arrange
-        var binaryData = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F }; // "Hello" in bytes
-        var base64Content = Convert.ToBase64String(binaryData);
-        var filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.bin");
+        byte[] binaryData = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F }; // "Hello" in bytes
+        string base64Content = Convert.ToBase64String(binaryData);
+        string filePath = Path.Combine(_tempHelper.CreateTempDirectory(), "test.bin");
 
         // Act
-        var result = _tool.WriteBinaryFile(filePath, base64Content);
+        string result = _tool.WriteBinaryFile(filePath, base64Content);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Successfully wrote binary content"));
@@ -109,15 +110,15 @@ public class FileSystemToolsTests
     public void ReadFileLines_WithValidRange_ShouldReturnSpecificLines()
     {
         // Arrange
-        var lines = new[] { "Line 1", "Line 2", "Line 3", "Line 4", "Line 5" };
-        var content = string.Join(Environment.NewLine, lines);
-        var filePath = _tempHelper.CreateTempFile(content: content);
+        string[] lines = new[] { "Line 1", "Line 2", "Line 3", "Line 4", "Line 5" };
+        string content = string.Join(Environment.NewLine, lines);
+        string filePath = _tempHelper.CreateTempFile(content: content);
 
         // Act
-        var result = _tool.ReadFileLines(filePath, 2, 4);
+        string result = _tool.ReadFileLines(filePath, 2, 4);
 
         // Assert
-        var expectedContent = string.Join(Environment.NewLine, lines[1..4]);
+        string expectedContent = string.Join(Environment.NewLine, lines[1..4]);
         Assert.AreEqual(expectedContent, result);
     }
 
@@ -125,13 +126,13 @@ public class FileSystemToolsTests
     public void ReadFileLines_WithInvalidRange_ShouldReturnError()
     {
         // Arrange
-        var filePath = _tempHelper.CreateTempFile(content: "Line 1\nLine 2");
+        string filePath = _tempHelper.CreateTempFile(content: "Line 1\nLine 2");
 
         // Act & Assert
-        var result1 = _tool.ReadFileLines(filePath, 0, 2);
+        string result1 = _tool.ReadFileLines(filePath, 0, 2);
         Assert.IsTrue(result1.StartsWith("Error: Start line must be at least 1"));
 
-        var result2 = _tool.ReadFileLines(filePath, 3, 1);
+        string result2 = _tool.ReadFileLines(filePath, 3, 1);
         Assert.IsTrue(result2.StartsWith("Error: End line must be greater than"));
     }
 
@@ -139,17 +140,17 @@ public class FileSystemToolsTests
     public void WriteFileLines_ShouldReplaceSpecificLines()
     {
         // Arrange
-        var initialContent = "Line 1\nLine 2\nLine 3\nLine 4";
-        var filePath = _tempHelper.CreateTempFile(content: initialContent);
-        var newContent = "New Line 2\nNew Line 3";
+        string initialContent = "Line 1\nLine 2\nLine 3\nLine 4";
+        string filePath = _tempHelper.CreateTempFile(content: initialContent);
+        string newContent = "New Line 2\nNew Line 3";
 
         // Act
-        var result = _tool.WriteFileLines(filePath, newContent, 2);
+        string result = _tool.WriteFileLines(filePath, newContent, 2);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Successfully wrote content"));
-        var fileContent = File.ReadAllText(filePath);
-        var expectedContent = "Line 1\nNew Line 2\nNew Line 3\nLine 4";
+        string fileContent = File.ReadAllText(filePath);
+        string expectedContent = "Line 1\nNew Line 2\nNew Line 3\nLine 4";
         Assert.AreEqual(expectedContent, fileContent);
     }
 
@@ -157,17 +158,17 @@ public class FileSystemToolsTests
     public void InsertFileLines_ShouldInsertContentAtSpecificLine()
     {
         // Arrange
-        var initialContent = "Line 1\nLine 2\nLine 3";
-        var filePath = _tempHelper.CreateTempFile(content: initialContent);
-        var insertContent = "Inserted Line";
+        string initialContent = "Line 1\nLine 2\nLine 3";
+        string filePath = _tempHelper.CreateTempFile(content: initialContent);
+        string insertContent = "Inserted Line";
 
         // Act
-        var result = _tool.InsertFileLines(filePath, insertContent, 2);
+        string result = _tool.InsertFileLines(filePath, insertContent, 2);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Successfully inserted content"));
-        var fileContent = File.ReadAllText(filePath);
-        var expectedContent = "Line 1\nInserted Line\nLine 2\nLine 3";
+        string fileContent = File.ReadAllText(filePath);
+        string expectedContent = "Line 1\nInserted Line\nLine 2\nLine 3";
         Assert.AreEqual(expectedContent, fileContent);
     }
 
@@ -175,15 +176,15 @@ public class FileSystemToolsTests
     public void ListDirectory_WithExistingDirectory_ShouldReturnListing()
     {
         // Arrange
-        var tempDir = _tempHelper.CreateTempDirectory();
-        var subDir = Path.Combine(tempDir, "subdir");
+        string tempDir = _tempHelper.CreateTempDirectory();
+        string subDir = Path.Combine(tempDir, "subdir");
         Directory.CreateDirectory(subDir);
 
         _tempHelper.CreateTempFile(tempDir, "file1.txt", "content1");
         _tempHelper.CreateTempFile(tempDir, "file2.txt", "content2");
 
         // Act
-        var result = _tool.ListDirectory(tempDir);
+        string result = _tool.ListDirectory(tempDir);
 
         // Assert
         Assert.IsTrue(result.Contains("Directory Listing"));
@@ -196,10 +197,10 @@ public class FileSystemToolsTests
     public void ListDirectory_WithNonExistentDirectory_ShouldReturnError()
     {
         // Arrange
-        var nonExistentPath = Path.Combine(_tempHelper.CreateTempDirectory(), "nonexistent");
+        string nonExistentPath = Path.Combine(_tempHelper.CreateTempDirectory(), "nonexistent");
 
         // Act
-        var result = _tool.ListDirectory(nonExistentPath);
+        string result = _tool.ListDirectory(nonExistentPath);
 
         // Assert
         Assert.IsTrue(result.StartsWith("Error: Directory not found"));
@@ -210,29 +211,29 @@ public class FileSystemToolsTests
     public async Task IntegrationTest_FileSystemToolsViaEndToEnd()
     {
         // Arrange
-        var service = new McpHttpServerService(
+        McpHttpServerService service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
 
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act - Test that file system tools are available
-            var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
+            JsonDocument toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
 
             // Assert
             Assert.IsNotNull(toolsResponse);
             Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
             Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
 
-            var tools = toolsArray.EnumerateArray()
+            HashSet<string?> tools = toolsArray.EnumerateArray()
                 .Select(t => t.GetProperty("name").GetString())
                 .ToHashSet();
 
@@ -247,8 +248,8 @@ public class FileSystemToolsTests
             Assert.IsTrue(tools.Contains("list_directory"));
 
             // Test calling a file system tool
-            var testFilePath = _tempHelper.CreateTempFile(content: "Test content");
-            var readResponse = await mcpClient.CallToolAsync("read_file",
+            string testFilePath = _tempHelper.CreateTempFile(content: "Test content");
+            JsonDocument readResponse = await mcpClient.CallToolAsync("read_file",
                 new { filePath = testFilePath }, cancellationToken);
 
             Assert.IsNotNull(readResponse);

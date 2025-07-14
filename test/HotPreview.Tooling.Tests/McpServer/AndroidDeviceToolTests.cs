@@ -1,3 +1,4 @@
+using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ public class AndroidDeviceToolTests
         _mockExecutor = new MockCommandExecutor();
         _tool = new AndroidDeviceTool();
 
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
 
@@ -33,7 +34,7 @@ public class AndroidDeviceToolTests
         // In real implementation, we'd need to inject the command executor
 
         // Act & Assert - Testing the method signature and basic behavior
-        var result = _tool.ListDevices();
+        string result = _tool.ListDevices();
 
         // The method should return a string (not throw)
         Assert.IsNotNull(result);
@@ -43,7 +44,7 @@ public class AndroidDeviceToolTests
     public void ListDevices_WithSingleDevice_ShouldParseDeviceCorrectly()
     {
         // Arrange
-        var deviceOutput = """
+        string deviceOutput = """
         List of devices attached
         emulator-5554    device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emu64xa
         """;
@@ -51,7 +52,7 @@ public class AndroidDeviceToolTests
         _mockExecutor.SetupCommand("adb", new[] { "devices", "-l" }, 0, deviceOutput);
 
         // Act
-        var result = _tool.ListDevices();
+        string result = _tool.ListDevices();
 
         // Assert
         Assert.IsNotNull(result);
@@ -64,7 +65,7 @@ public class AndroidDeviceToolTests
     public void ListDevices_WithMultipleDevices_ShouldParseAllDevices()
     {
         // Arrange
-        var deviceOutput = """
+        string deviceOutput = """
         List of devices attached
         emulator-5554    device product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 device:emu64xa
         RF8N308KFYP      device product:beyond2ltexx model:SM_G975F device:beyond2
@@ -73,7 +74,7 @@ public class AndroidDeviceToolTests
         _mockExecutor.SetupCommand("adb", new[] { "devices", "-l" }, 0, deviceOutput);
 
         // Act
-        var result = _tool.ListDevices();
+        string result = _tool.ListDevices();
 
         // Assert
         Assert.IsNotNull(result);
@@ -87,7 +88,7 @@ public class AndroidDeviceToolTests
     public void BootDevice_WithValidAvdName_ShouldExecuteAdbCommand()
     {
         // Arrange
-        var avdName = "test-emulator";
+        string avdName = "test-emulator";
         _mockExecutor.SetupCommand("adb", new[] { "-s", avdName, "emu", "kill" }, 0, "");
 
         // Act & Assert - Should not throw
@@ -115,7 +116,7 @@ public class AndroidDeviceToolTests
     public void ShutdownDevice_WithValidAvdName_ShouldExecuteAdbCommand()
     {
         // Arrange
-        var avdName = "test-emulator";
+        string avdName = "test-emulator";
         _mockExecutor.SetupCommand("adb", new[] { "-s", avdName, "emu", "kill" }, 0, "");
 
         // Act & Assert - Should not throw for valid input
@@ -143,13 +144,13 @@ public class AndroidDeviceToolTests
     public void ExecAdb_WithValidParameters_ShouldExecuteCommand()
     {
         // Arrange
-        var parameters = "shell input keyevent KEYCODE_HOME";
+        string parameters = "shell input keyevent KEYCODE_HOME";
         _mockExecutor.SetupCommandPrefix("adb", 0, "Command executed successfully");
 
         // Act
         try
         {
-            var result = _tool.ExecAdb(parameters);
+            string result = _tool.ExecAdb(parameters);
             // Should return a string result
             Assert.IsNotNull(result);
         }
@@ -165,22 +166,22 @@ public class AndroidDeviceToolTests
     {
         // This is a more comprehensive test that would test the tool through the MCP server
         // Arrange
-        var service = new McpHttpServerService(
+        McpHttpServerService service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
 
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act - Call the list devices tool
-            var response = await mcpClient.CallToolAsync("android_list_devices", new { }, cancellationToken);
+            JsonDocument response = await mcpClient.CallToolAsync("android_list_devices", new { }, cancellationToken);
 
             // Assert
             Assert.IsNotNull(response);
@@ -189,10 +190,10 @@ public class AndroidDeviceToolTests
             // The tool should return content (even if it's an error about ADB not being installed)
             if (result.TryGetProperty("content", out var content))
             {
-                var contentArray = content.EnumerateArray().ToList();
+                List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
-                var firstContent = contentArray[0];
+                JsonElement firstContent = contentArray[0];
                 Assert.IsTrue(firstContent.TryGetProperty("text", out var text));
                 Assert.IsFalse(string.IsNullOrEmpty(text.GetString()));
             }

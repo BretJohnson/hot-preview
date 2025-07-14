@@ -25,16 +25,16 @@ public class MockCommandExecutor
 
     public void SetupAdbDeviceList(string[] deviceIds)
     {
-        var output = "List of devices attached\n" +
+        string output = "List of devices attached\n" +
                     string.Join("\n", deviceIds.Select(id => $"{id}\tdevice"));
         SetupCommand("adb", new[] { "devices" }, 0, output);
     }
 
     public void SetupIosSimulatorList(params (string id, string name, string state)[] simulators)
     {
-        var devices = simulators.Select(sim =>
+        string[] devices = simulators.Select(sim =>
             $"    {sim.name} ({sim.id}) ({sim.state})").ToArray();
-        var output = "== Devices ==\n-- iOS --\n" + string.Join("\n", devices);
+        string output = "== Devices ==\n-- iOS --\n" + string.Join("\n", devices);
         SetupCommand("xcrun", new[] { "simctl", "list", "devices" }, 0, output);
     }
 
