@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace HotPreview.Tooling.Tests.McpServer;
@@ -18,7 +18,7 @@ public class AndroidDeviceToolTests
     {
         _mockExecutor = new MockCommandExecutor();
         _tool = new AndroidDeviceTool();
-        
+
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -34,7 +34,7 @@ public class AndroidDeviceToolTests
 
         // Act & Assert - Testing the method signature and basic behavior
         var result = _tool.ListDevices();
-        
+
         // The method should return a string (not throw)
         Assert.IsNotNull(result);
     }
@@ -168,7 +168,7 @@ public class AndroidDeviceToolTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
@@ -185,13 +185,13 @@ public class AndroidDeviceToolTests
             // Assert
             Assert.IsNotNull(response);
             Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-            
+
             // The tool should return content (even if it's an error about ADB not being installed)
             if (result.TryGetProperty("content", out var content))
             {
                 var contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
-                
+
                 var firstContent = contentArray[0];
                 Assert.IsTrue(firstContent.TryGetProperty("text", out var text));
                 Assert.IsFalse(string.IsNullOrEmpty(text.GetString()));

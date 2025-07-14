@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -15,7 +15,7 @@ public class AndroidAppManagementToolTests
     public void Setup()
     {
         _mockExecutor = new MockCommandExecutor();
-        
+
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -27,7 +27,7 @@ public class AndroidAppManagementToolTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
@@ -67,7 +67,7 @@ public class AndroidAppManagementToolTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
@@ -79,13 +79,13 @@ public class AndroidAppManagementToolTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act - Call the launch app tool
-            var response = await mcpClient.CallToolAsync("android_launch_app", 
+            var response = await mcpClient.CallToolAsync("android_launch_app",
                 new { packageName = "com.example.testapp" }, cancellationToken);
 
             // Assert
             Assert.IsNotNull(response);
             Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-            
+
             // The tool should return content (even if it's an error about ADB not being installed)
             if (result.TryGetProperty("content", out var content))
             {
@@ -106,9 +106,9 @@ public class AndroidAppManagementToolTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-        
+
         using var tempHelper = new TempDirectoryHelper();
         var apkPath = tempHelper.CreateTempFile(fileName: "test.apk", content: "fake apk content");
 
@@ -121,13 +121,13 @@ public class AndroidAppManagementToolTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act - Call the install app tool
-            var response = await mcpClient.CallToolAsync("android_install_app", 
+            var response = await mcpClient.CallToolAsync("android_install_app",
                 new { apkPath = apkPath }, cancellationToken);
 
             // Assert
             Assert.IsNotNull(response);
             Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-            
+
             // The tool should return content (even if it's an error about ADB not being installed)
             if (result.TryGetProperty("content", out var content))
             {

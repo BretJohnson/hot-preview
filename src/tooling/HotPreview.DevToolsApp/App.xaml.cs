@@ -88,9 +88,9 @@ public partial class App : Application
         };
 
         DevToolsManager.Initialize(SynchronizationContext.Current!);
-        
+
         Host = await builder.NavigateAsync<Shell>();
-        
+
         // Update DevToolsManager with MCP service after Host is created
         var mcpService = Host.Services.GetService<McpHttpServerService>();
         if (mcpService != null)

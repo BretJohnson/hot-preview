@@ -17,7 +17,7 @@ public class TempDirectoryHelper : IDisposable
     {
         directory ??= CreateTempDirectory();
         fileName ??= $"test_{Guid.NewGuid():N}.txt";
-        
+
         var filePath = Path.Combine(directory, fileName);
         if (content != null)
         {
@@ -27,7 +27,7 @@ public class TempDirectoryHelper : IDisposable
         {
             File.Create(filePath).Dispose();
         }
-        
+
         return filePath;
     }
 

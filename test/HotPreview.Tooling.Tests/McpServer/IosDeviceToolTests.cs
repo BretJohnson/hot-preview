@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -17,7 +17,7 @@ public class IosDeviceToolTests
     {
         _mockExecutor = new MockCommandExecutor();
         _tool = new IosDeviceTool();
-        
+
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -168,7 +168,7 @@ public class IosDeviceToolTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try

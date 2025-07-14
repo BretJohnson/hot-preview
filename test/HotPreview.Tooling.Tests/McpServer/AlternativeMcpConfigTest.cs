@@ -1,12 +1,12 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.AspNetCore;
 using ModelContextProtocol.Server;
-using System.Net;
-using System.Text;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -21,7 +21,7 @@ public class AlternativeMcpConfigTest
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
 
         // Configuration 1: Try without WithHttpTransport
-        await TestConfiguration("Config1: Basic MCP", async () =>
+        await TestConfiguration("Config1: Basic MCP", () =>
         {
             var builder = WebApplication.CreateBuilder();
             builder.Services.AddMcpServer()
@@ -30,11 +30,11 @@ public class AlternativeMcpConfigTest
             builder.WebHost.UseUrls("http://localhost:0");
             var app = builder.Build();
             app.MapMcp();
-            return app;
+            return Task.FromResult(app);
         }, cancellationToken);
 
         // Configuration 2: Try with explicit transport configuration
-        await TestConfiguration("Config2: With explicit HTTP transport", async () =>
+        await TestConfiguration("Config2: With explicit HTTP transport", () =>
         {
             var builder = WebApplication.CreateBuilder();
             builder.Services.AddMcpServer()
@@ -44,11 +44,11 @@ public class AlternativeMcpConfigTest
             builder.WebHost.UseUrls("http://localhost:0");
             var app = builder.Build();
             app.MapMcp();
-            return app;
+            return Task.FromResult(app);
         }, cancellationToken);
 
         // Configuration 3: Try mapping to a specific route
-        await TestConfiguration("Config3: Map to specific route", async () =>
+        await TestConfiguration("Config3: Map to specific route", () =>
         {
             var builder = WebApplication.CreateBuilder();
             builder.Services.AddMcpServer()
@@ -58,7 +58,7 @@ public class AlternativeMcpConfigTest
             builder.WebHost.UseUrls("http://localhost:0");
             var app = builder.Build();
             app.MapMcp("/api/mcp");
-            return app;
+            return Task.FromResult(app);
         }, cancellationToken);
 
         Assert.IsTrue(true, "Configuration testing completed");
@@ -67,7 +67,7 @@ public class AlternativeMcpConfigTest
     private async Task TestConfiguration(string configName, Func<Task<WebApplication>> createApp, CancellationToken cancellationToken)
     {
         Console.WriteLine($"\n=== Testing {configName} ===");
-        
+
         WebApplication? app = null;
         try
         {

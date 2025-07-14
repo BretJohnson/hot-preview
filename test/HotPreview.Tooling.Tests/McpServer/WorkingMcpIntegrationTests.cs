@@ -1,9 +1,9 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
+using System.Reflection;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -36,9 +36,9 @@ public class WorkingMcpIntegrationTests
             // Assert - Server should be accessible
             using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
-            
+
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            
+
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
             Assert.IsTrue(content.Contains("healthy"));
             Assert.IsTrue(content.Contains(service.ServerUrl));
@@ -62,16 +62,16 @@ public class WorkingMcpIntegrationTests
 
             using var httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromSeconds(2); // Short timeout for SSE test
-            
+
             try
             {
                 // The SSE endpoint should exist and start a connection
                 var sseResponse = await httpClient.GetAsync($"{service.ServerUrl}/sse", cancellationToken);
-                
+
                 // Assert - SSE endpoint exists (even if it times out or returns an error, it's not 404)
-                Assert.AreNotEqual(HttpStatusCode.NotFound, sseResponse.StatusCode, 
+                Assert.AreNotEqual(HttpStatusCode.NotFound, sseResponse.StatusCode,
                     "SSE endpoint should exist, indicating MCP library is working");
-                
+
                 Console.WriteLine($"SSE endpoint status: {sseResponse.StatusCode}");
             }
             catch (TaskCanceledException)
@@ -131,7 +131,7 @@ public class WorkingMcpIntegrationTests
             var expectedTools = new[] { "android_list_devices", "read_file", "ios_list_devices" };
             foreach (var expectedTool in expectedTools)
             {
-                Assert.IsTrue(toolNames.Contains(expectedTool), 
+                Assert.IsTrue(toolNames.Contains(expectedTool),
                     $"Expected tool '{expectedTool}' should be discoverable");
             }
 
@@ -165,7 +165,7 @@ public class WorkingMcpIntegrationTests
             var results = await Task.WhenAll(tasks);
 
             // Assert all requests succeeded
-            Assert.IsTrue(results.All(success => success), 
+            Assert.IsTrue(results.All(success => success),
                 "All concurrent health check requests should succeed");
         }
         finally
@@ -199,7 +199,7 @@ public class WorkingMcpIntegrationTests
             // Test Android tool directly (will fail without ADB, but should handle gracefully)
             var androidTool = new AndroidDeviceTool();
             var deviceResult = androidTool.ListDevices();
-            
+
             Assert.IsNotNull(deviceResult, "Android tool should return a result");
             Assert.IsTrue(deviceResult.Contains("ADB") || deviceResult.Contains("No devices") || deviceResult.Contains("Error"),
                 "Android tool should handle missing ADB gracefully");
@@ -212,7 +212,7 @@ public class WorkingMcpIntegrationTests
         }
     }
 
-    [TestMethod] 
+    [TestMethod]
     public async Task McpServer_ServiceLifecycle_ShouldBeRobust()
     {
         // Test multiple start/stop cycles
@@ -223,15 +223,15 @@ public class WorkingMcpIntegrationTests
         {
             // Start
             await service.StartAsync(cancellationToken);
-            
+
             // Verify working
             using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, $"Cycle {i + 1}: Health check should work");
-            
+
             // Stop
             await service.StopAsync(cancellationToken);
-            
+
             // Verify stopped (should not be accessible)
             await Task.Delay(100, cancellationToken); // Brief delay for cleanup
         }

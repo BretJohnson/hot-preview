@@ -32,7 +32,7 @@ public static class ConnectionSettingsJson
         {
             ["app"] = appConnectionString
         };
-        
+
         if (!string.IsNullOrEmpty(mcpServerUrl))
         {
             settings["mcp"] = mcpServerUrl;

@@ -1,8 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -39,12 +39,12 @@ public class McpServerIntegrationTests
 
             // Act 2: List available tools
             var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
-            
+
             // Assert: Tools discovered
             Assert.IsNotNull(toolsResponse);
             Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
             Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
-            
+
             var tools = toolsArray.EnumerateArray().ToList();
             Assert.IsTrue(tools.Count > 0, "No tools discovered");
 
@@ -53,7 +53,7 @@ public class McpServerIntegrationTests
             var testContent = "Integration test content";
             var testFile = tempHelper.CreateTempFile(content: testContent);
 
-            var readFileResponse = await mcpClient.CallToolAsync("read_file", 
+            var readFileResponse = await mcpClient.CallToolAsync("read_file",
                 new { filePath = testFile }, cancellationToken);
 
             // Assert: Tool execution successful
@@ -64,7 +64,7 @@ public class McpServerIntegrationTests
             {
                 var contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
-                
+
                 var textContent = contentArray[0].GetProperty("text").GetString();
                 Assert.AreEqual(testContent, textContent);
             }
@@ -91,18 +91,18 @@ public class McpServerIntegrationTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Call tool with invalid parameters
-            var response = await mcpClient.CallToolAsync("read_file", 
+            var response = await mcpClient.CallToolAsync("read_file",
                 new { filePath = "/nonexistent/path/that/does/not/exist.txt" }, cancellationToken);
 
             // Assert: Error handled gracefully
             Assert.IsNotNull(response);
             Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-            
+
             if (result.TryGetProperty("content", out var content))
             {
                 var contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
-                
+
                 var errorText = contentArray[0].GetProperty("text").GetString();
                 Assert.IsTrue(errorText!.Contains("Error") || errorText.Contains("not found"));
             }
@@ -137,12 +137,12 @@ public class McpServerIntegrationTests
 
             // Call 2: Read a file
             var testFile = tempHelper.CreateTempFile(content: "Test content");
-            responses.Add(await mcpClient.CallToolAsync("read_file", 
+            responses.Add(await mcpClient.CallToolAsync("read_file",
                 new { filePath = testFile }, cancellationToken));
 
             // Call 3: List directory
             var testDir = tempHelper.CreateTempDirectory();
-            responses.Add(await mcpClient.CallToolAsync("list_directory", 
+            responses.Add(await mcpClient.CallToolAsync("list_directory",
                 new { directoryPath = testDir }, cancellationToken));
 
             // Assert: All calls successful
@@ -175,13 +175,13 @@ public class McpServerIntegrationTests
             // Act: Send invalid JSON-RPC request
             var invalidRequest = """{"invalid": "request"}""";
             var content = new StringContent(invalidRequest, System.Text.Encoding.UTF8, "application/json");
-            
+
             var response = await httpClient.PostAsync("/mcp", content, cancellationToken);
 
             // Assert: Should get a response (possibly an error)
             // MCP server should handle invalid requests gracefully
             Assert.IsNotNull(response);
-            
+
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             Assert.IsNotNull(responseContent);
         }
@@ -205,7 +205,7 @@ public class McpServerIntegrationTests
 
             // Act: Make concurrent calls from multiple clients
             var tasks = new List<Task<JsonDocument>>();
-            
+
             for (int i = 0; i < 5; i++)
             {
                 tasks.Add(Task.Run(async () =>
@@ -255,16 +255,16 @@ public class McpServerIntegrationTests
             for (int i = 0; i < 3; i++)
             {
                 var response = await httpClient.GetAsync("/health", cancellationToken);
-                
+
                 // Assert
                 Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
-                
+
                 var content = await response.Content.ReadAsStringAsync(cancellationToken);
                 var healthData = JsonSerializer.Deserialize<JsonElement>(content);
-                
+
                 Assert.AreEqual("healthy", healthData.GetProperty("status").GetString());
                 Assert.AreEqual(service.ServerUrl, healthData.GetProperty("url").GetString());
-                
+
                 // Small delay between calls
                 await Task.Delay(100, cancellationToken);
             }
@@ -295,18 +295,18 @@ public class McpServerIntegrationTests
             var testContent = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5";
             var testFile = tempHelper.CreateTempFile(content: testContent);
 
-            var response = await mcpClient.CallToolAsync("read_file_lines", 
+            var response = await mcpClient.CallToolAsync("read_file_lines",
                 new { filePath = testFile, startLine = 2, endLine = 4 }, cancellationToken);
 
             // Assert
             Assert.IsNotNull(response);
             Assert.IsTrue(response.RootElement.TryGetProperty("result", out var result));
-            
+
             if (result.TryGetProperty("content", out var content))
             {
                 var contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
-                
+
                 var textContent = contentArray[0].GetProperty("text").GetString();
                 Assert.AreEqual("Line 2\nLine 3\nLine 4", textContent);
             }

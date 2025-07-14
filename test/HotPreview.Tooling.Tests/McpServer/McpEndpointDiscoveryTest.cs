@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
 using HotPreview.Tooling.McpServer;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -36,7 +36,7 @@ public class McpEndpointDiscoveryTest
             {
                 "/",
                 "/mcp",
-                "/sse", 
+                "/sse",
                 "/health",
                 "/api/mcp",
                 "/v1/mcp"
@@ -57,12 +57,12 @@ public class McpEndpointDiscoveryTest
                     {
                         var jsonContent = new StringContent(
                             """{"jsonrpc":"2.0","id":"test","method":"tools/list","params":{}}""",
-                            System.Text.Encoding.UTF8, 
+                            System.Text.Encoding.UTF8,
                             "application/json");
-                        
+
                         var postResponse = await httpClient.PostAsync($"{baseUrl}{endpoint}", jsonContent, cancellationToken);
                         Console.WriteLine($"POST {endpoint}: {postResponse.StatusCode}");
-                        
+
                         if (postResponse.StatusCode != HttpStatusCode.NotFound)
                         {
                             var content = await postResponse.Content.ReadAsStringAsync(cancellationToken);
@@ -119,7 +119,7 @@ public class McpEndpointDiscoveryTest
                     var content = new StringContent(request, System.Text.Encoding.UTF8, contentType);
                     var response = await httpClient.PostAsync($"{baseUrl}/mcp", content, cancellationToken);
                     Console.WriteLine($"Content-Type {contentType}: {response.StatusCode}");
-                    
+
                     if (response.StatusCode != HttpStatusCode.NotFound)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

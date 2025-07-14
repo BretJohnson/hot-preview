@@ -18,26 +18,26 @@ public class McpTestClient : IDisposable
     public async Task<JsonDocument> SendRequestAsync(object request, CancellationToken cancellationToken = default)
     {
         var json = JsonSerializer.Serialize(request);
-        
+
         _logger.LogDebug("Sending MCP request: {Request}", json);
-        
+
         // Try different possible MCP endpoints in order of preference
         var endpoints = new[] { "/mcp", "/", "/sse" };
-        
+
         foreach (var endpoint in endpoints)
         {
             try
             {
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                     _logger.LogDebug("Received MCP response from {Endpoint}: {Response}", endpoint, responseContent);
                     return JsonDocument.Parse(responseContent);
                 }
-                
+
                 _logger.LogDebug("Endpoint {Endpoint} returned {StatusCode}", endpoint, response.StatusCode);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ public class McpTestClient : IDisposable
                 _logger.LogDebug("Failed to call endpoint {Endpoint}: {Error}", endpoint, ex.Message);
             }
         }
-        
+
         // If all endpoints fail, try the root with a GET (in case it's configured differently)
         try
         {
@@ -54,13 +54,13 @@ public class McpTestClient : IDisposable
             {
                 var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 _logger.LogDebug("Received response from GET /: {Response}", responseContent);
-                
+
                 // If it's HTML or plain text, it means MCP endpoints aren't configured properly
                 if (responseContent.Contains("<!DOCTYPE") || responseContent.Contains("<html"))
                 {
                     throw new InvalidOperationException("MCP endpoints not properly configured - received HTML response");
                 }
-                
+
                 return JsonDocument.Parse(responseContent);
             }
         }
@@ -68,7 +68,7 @@ public class McpTestClient : IDisposable
         {
             _logger.LogDebug("GET / also failed: {Error}", ex.Message);
         }
-        
+
         throw new InvalidOperationException("No working MCP endpoint found. The MCP server may not be properly configured.");
     }
 
@@ -87,7 +87,7 @@ public class McpTestClient : IDisposable
             method = "tools/list",
             @params = new { }
         };
-        
+
         return await SendRequestAsync(request, cancellationToken);
     }
 
@@ -104,7 +104,7 @@ public class McpTestClient : IDisposable
                 arguments = parameters
             }
         };
-        
+
         return await SendRequestAsync(request, cancellationToken);
     }
 

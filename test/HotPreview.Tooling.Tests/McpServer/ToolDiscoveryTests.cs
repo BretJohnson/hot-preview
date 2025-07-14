@@ -1,8 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.Tests.McpServer;
@@ -35,12 +35,12 @@ public class ToolDiscoveryTests
 
         // Assert
         Assert.IsTrue(toolClasses.Count > 0, "No tool classes found with McpServerToolTypeAttribute");
-        
+
         // Verify specific expected tool classes
         var expectedToolClasses = new[]
         {
             "AndroidDeviceTool",
-            "AndroidAppManagementTool", 
+            "AndroidAppManagementTool",
             "AndroidUiTool",
             "AndroidDiagnosticsTool",
             "AndroidScreenshotTool",
@@ -53,7 +53,7 @@ public class ToolDiscoveryTests
 
         foreach (var expectedClass in expectedToolClasses)
         {
-            Assert.IsTrue(toolClasses.Any(t => t.Name == expectedClass), 
+            Assert.IsTrue(toolClasses.Any(t => t.Name == expectedClass),
                 $"Expected tool class {expectedClass} not found");
         }
     }
@@ -80,11 +80,11 @@ public class ToolDiscoveryTests
         {
             var toolAttribute = method.GetCustomAttribute<McpServerToolAttribute>();
             Assert.IsNotNull(toolAttribute, $"Method {method.Name} missing McpServerToolAttribute");
-            Assert.IsFalse(string.IsNullOrEmpty(toolAttribute.Name), 
+            Assert.IsFalse(string.IsNullOrEmpty(toolAttribute.Name),
                 $"Method {method.Name} has empty tool name");
 
             var descriptionAttribute = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
-            Assert.IsNotNull(descriptionAttribute, 
+            Assert.IsNotNull(descriptionAttribute,
                 $"Method {method.Name} missing DescriptionAttribute");
             Assert.IsFalse(string.IsNullOrEmpty(descriptionAttribute.Description),
                 $"Method {method.Name} has empty description");
@@ -121,7 +121,7 @@ public class ToolDiscoveryTests
             var expectedTools = new[]
             {
                 "android_list_devices",
-                "android_boot_device", 
+                "android_boot_device",
                 "android_shutdown_device",
                 "android_execute_adb",
                 "android_install_app",
@@ -185,12 +185,12 @@ public class ToolDiscoveryTests
         foreach (var method in toolMethods)
         {
             var parameters = method.GetParameters();
-            
+
             // Verify parameter types are MCP-compatible
             foreach (var param in parameters)
             {
                 var paramType = param.ParameterType;
-                
+
                 // Check if type is supported by MCP
                 Assert.IsTrue(IsMcpCompatibleType(paramType),
                     $"Method {method.DeclaringType?.Name}.{method.Name} has incompatible parameter type {paramType.Name}");

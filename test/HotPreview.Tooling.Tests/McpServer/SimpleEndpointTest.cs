@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
 using HotPreview.Tooling.McpServer;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 

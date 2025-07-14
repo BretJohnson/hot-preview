@@ -19,9 +19,9 @@ public class McpHttpServerService : IHostedService
     private readonly ILogger<McpHttpServerService> _logger;
     private WebApplication? _app;
     private int _port;
-    
+
     public string ServerUrl => $"http://localhost:{_port}";
-    
+
     public McpHttpServerService(ILogger<McpHttpServerService> logger)
     {
         _logger = logger;
@@ -35,23 +35,23 @@ public class McpHttpServerService : IHostedService
             _logger.LogInformation("Starting MCP HTTP server on port {Port}", _port);
 
             var builder = WebApplication.CreateBuilder();
-            
+
             // Configure MCP server with existing tools and prompts
             builder.Services
                 .AddMcpServer()
                 .WithHttpTransport()
                 .WithToolsFromAssembly()
                 .WithPromptsFromAssembly();
-            
+
 
             // Configure web host
             builder.WebHost.UseUrls($"http://localhost:{_port}");
-            
+
             _app = builder.Build();
-            
+
             // Map MCP endpoints using the library
             _app.MapMcp();
-            
+
             // Add health check endpoint
             _app.MapGet("/health", () => Results.Ok(new { status = "healthy", url = ServerUrl }));
 
@@ -92,7 +92,7 @@ public class McpHttpServerService : IHostedService
                 // Port is in use, try next one
             }
         }
-        
+
         // Fall back to random port
         using var randomListener = new TcpListener(IPAddress.Loopback, 0);
         randomListener.Start();

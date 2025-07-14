@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
@@ -17,7 +17,7 @@ public class FileSystemToolsTests
     {
         _tool = new FileSystemTools();
         _tempHelper = new TempDirectoryHelper();
-        
+
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -178,7 +178,7 @@ public class FileSystemToolsTests
         var tempDir = _tempHelper.CreateTempDirectory();
         var subDir = Path.Combine(tempDir, "subdir");
         Directory.CreateDirectory(subDir);
-        
+
         _tempHelper.CreateTempFile(tempDir, "file1.txt", "content1");
         _tempHelper.CreateTempFile(tempDir, "file2.txt", "content2");
 
@@ -213,7 +213,7 @@ public class FileSystemToolsTests
         var service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
-        
+
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
@@ -248,9 +248,9 @@ public class FileSystemToolsTests
 
             // Test calling a file system tool
             var testFilePath = _tempHelper.CreateTempFile(content: "Test content");
-            var readResponse = await mcpClient.CallToolAsync("read_file", 
+            var readResponse = await mcpClient.CallToolAsync("read_file",
                 new { filePath = testFilePath }, cancellationToken);
-            
+
             Assert.IsNotNull(readResponse);
             Assert.IsTrue(readResponse.RootElement.TryGetProperty("result", out var readResult));
         }
