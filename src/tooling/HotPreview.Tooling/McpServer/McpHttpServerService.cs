@@ -1,16 +1,11 @@
-using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ModelContextProtocol.AspNetCore;
-using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
 
@@ -29,6 +24,11 @@ public class McpHttpServerService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        if (_app is not null)
+        {
+            throw new InvalidOperationException("MCP HTTP server is already running");
+        }
+
         try
         {
             _port = FindAvailablePort(54243);
@@ -42,7 +42,6 @@ public class McpHttpServerService : IHostedService
                 .WithHttpTransport()
                 .WithToolsFromAssembly()
                 .WithPromptsFromAssembly();
-
 
             // Configure web host
             builder.WebHost.UseUrls($"http://localhost:{_port}");

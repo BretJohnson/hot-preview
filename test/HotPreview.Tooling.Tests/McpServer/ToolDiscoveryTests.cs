@@ -37,8 +37,8 @@ public class ToolDiscoveryTests
         Assert.IsTrue(toolClasses.Count > 0, "No tool classes found with McpServerToolTypeAttribute");
 
         // Verify specific expected tool classes
-        var expectedToolClasses = new[]
-        {
+        string[] expectedToolClasses =
+        [
             "AndroidDeviceTool",
             "AndroidAppManagementTool",
             "AndroidUiTool",
@@ -48,10 +48,10 @@ public class ToolDiscoveryTests
             "IosUiTool",
             "IosScreenshotTool",
             "FileSystemTools",
-            "WindowsShell"
-        };
+            "WindowsTools"
+        ];
 
-        foreach (var expectedClass in expectedToolClasses)
+        foreach (string expectedClass in expectedToolClasses)
         {
             Assert.IsTrue(toolClasses.Any(t => t.Name == expectedClass),
                 $"Expected tool class {expectedClass} not found");
@@ -118,8 +118,8 @@ public class ToolDiscoveryTests
             Assert.IsTrue(tools.Count > 0, "No tools discovered by MCP server");
 
             // Verify specific expected tools
-            var expectedTools = new[]
-            {
+            string[] expectedTools =
+            [
                 "android_list_devices",
                 "android_boot_device",
                 "android_shutdown_device",
@@ -129,19 +129,19 @@ public class ToolDiscoveryTests
                 "android_ui_tap",
                 "android_ui_swipe",
                 "android_screenshot",
-                "ios_list_simulators",
-                "ios_boot_simulator",
+                "ios_list_devices",
+                "ios_boot_device",
                 "ios_screenshot",
-                "filesystem_list_files",
-                "filesystem_read_file",
-                "windows_execute_command"
-            };
+                "read_file",
+                "list_directory",
+                "win_cmd_command"
+            ];
 
             var discoveredToolNames = tools
                 .Select(t => t.GetProperty("name").GetString())
                 .ToHashSet();
 
-            foreach (var expectedTool in expectedTools)
+            foreach (string expectedTool in expectedTools)
             {
                 Assert.IsTrue(discoveredToolNames.Contains(expectedTool),
                     $"Expected tool '{expectedTool}' not found in discovered tools. " +

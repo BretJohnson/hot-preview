@@ -22,20 +22,45 @@ public class McpTestClient : IDisposable
         _logger.LogDebug("Sending MCP request: {Request}", json);
 
         // Try different possible MCP endpoints in order of preference
-        var endpoints = new[] { "/mcp", "/", "/sse" };
+        string[] endpoints = ["/", "/sse"];
 
-        foreach (var endpoint in endpoints)
+        foreach (string endpoint in endpoints)
         {
             try
             {
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+
+                // Create request message to set proper Accept headers
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
+                {
+                    Content = content
+                };
+
+                // MCP server requires both application/json and text/event-stream in Accept header
+                requestMessage.Headers.Accept.Clear();
+                requestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                requestMessage.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
+
+                var response = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                    string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                     _logger.LogDebug("Received MCP response from {Endpoint}: {Response}", endpoint, responseContent);
-                    return JsonDocument.Parse(responseContent);
+
+                    // Handle Server-Sent Events format
+                    if (response.Content.Headers.ContentType?.MediaType == "text/event-stream")
+                    {
+                        string? jsonData = ParseServerSentEvents(responseContent);
+                        if (jsonData is not null)
+                        {
+                            return JsonDocument.Parse(jsonData);
+                        }
+                    }
+                    else
+                    {
+                        return JsonDocument.Parse(responseContent);
+                    }
                 }
 
                 _logger.LogDebug("Endpoint {Endpoint} returned {StatusCode}", endpoint, response.StatusCode);
@@ -49,7 +74,12 @@ public class McpTestClient : IDisposable
         // If all endpoints fail, try the root with a GET (in case it's configured differently)
         try
         {
-            var response = await _httpClient.GetAsync("/", cancellationToken);
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/");
+            getRequest.Headers.Accept.Clear();
+            getRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            getRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
+
+            var response = await _httpClient.SendAsync(getRequest, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -106,6 +136,26 @@ public class McpTestClient : IDisposable
         };
 
         return await SendRequestAsync(request, cancellationToken);
+    }
+
+    private static string? ParseServerSentEvents(string sseContent)
+    {
+        // Parse Server-Sent Events format to extract JSON data
+        string[] lines = sseContent.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var line in lines)
+        {
+            if (line.StartsWith("data: "))
+            {
+                string jsonData = line.Substring(6); // Remove "data: " prefix
+                if (jsonData.Trim() != "[DONE]" && !string.IsNullOrWhiteSpace(jsonData))
+                {
+                    return jsonData;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void Dispose()
