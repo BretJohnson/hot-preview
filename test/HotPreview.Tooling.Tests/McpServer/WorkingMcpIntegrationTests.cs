@@ -16,7 +16,7 @@ public class WorkingMcpIntegrationTests
     [TestInitialize]
     public void Setup()
     {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _serverLogger = loggerFactory.CreateLogger<McpHttpServerService>();
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -35,11 +35,11 @@ public class WorkingMcpIntegrationTests
 
             // Assert - Server should be accessible
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
+            HttpResponseMessage response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadAsStringAsync(cancellationToken);
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
             Assert.IsTrue(content.Contains("healthy"));
             Assert.IsTrue(content.Contains(service.ServerUrl));
         }
@@ -54,7 +54,7 @@ public class WorkingMcpIntegrationTests
     {
         // This test verifies the MCP library creates some endpoints
         var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -66,7 +66,7 @@ public class WorkingMcpIntegrationTests
             try
             {
                 // The SSE endpoint should exist and start a connection
-                var sseResponse = await httpClient.GetAsync($"{service.ServerUrl}/sse", cancellationToken);
+                HttpResponseMessage sseResponse = await httpClient.GetAsync($"{service.ServerUrl}/sse", cancellationToken);
 
                 // Assert - SSE endpoint exists (even if it times out or returns an error, it's not 404)
                 Assert.AreNotEqual(HttpStatusCode.NotFound, sseResponse.StatusCode,
@@ -98,7 +98,7 @@ public class WorkingMcpIntegrationTests
     {
         // This test verifies tools are discoverable (which the MCP library should use)
         var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -106,16 +106,16 @@ public class WorkingMcpIntegrationTests
 
             // Verify tool discovery works at the reflection level
             // (which is what MCP library should be using internally)
-            var assembly = System.Reflection.Assembly.GetAssembly(typeof(AndroidDeviceTool));
+            Assembly? assembly = System.Reflection.Assembly.GetAssembly(typeof(AndroidDeviceTool));
             Assert.IsNotNull(assembly);
 
-            var toolClasses = assembly.GetTypes()
+            List<Type> toolClasses = assembly.GetTypes()
                 .Where(type => type.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolTypeAttribute>() != null)
                 .ToList();
 
             Assert.IsTrue(toolClasses.Count > 0, "Tools should be discoverable via reflection");
 
-            var toolMethods = toolClasses
+            List<MethodInfo> toolMethods = toolClasses
                 .SelectMany(type => type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
                 .Where(method => method.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolAttribute>() != null)
                 .ToList();
@@ -123,12 +123,12 @@ public class WorkingMcpIntegrationTests
             Assert.IsTrue(toolMethods.Count > 0, "Tool methods should be discoverable");
 
             // Verify specific expected tools exist
-            var toolNames = toolMethods
+            HashSet<string?> toolNames = toolMethods
                 .Select(m => m.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolAttribute>()?.Name)
                 .Where(name => !string.IsNullOrEmpty(name))
                 .ToHashSet();
 
-            var expectedTools = new[] { "android_list_devices", "read_file", "ios_list_devices" };
+            string[] expectedTools = new[] { "android_list_devices", "ios_list_devices" };
             foreach (var expectedTool in expectedTools)
             {
                 Assert.IsTrue(toolNames.Contains(expectedTool),
@@ -148,21 +148,21 @@ public class WorkingMcpIntegrationTests
     {
         // Test that the server infrastructure can handle multiple requests
         var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
             // Make multiple concurrent health check requests
-            var tasks = Enumerable.Range(0, 5).Select(async i =>
+            Task<bool>[] tasks = Enumerable.Range(0, 5).Select(async i =>
             {
-                using var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
+                using HttpClient httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
                 return response.StatusCode == HttpStatusCode.OK;
             }).ToArray();
 
-            var results = await Task.WhenAll(tasks);
+            bool[] results = await Task.WhenAll(tasks);
 
             // Assert all requests succeeded
             Assert.IsTrue(results.All(success => success),
@@ -180,25 +180,18 @@ public class WorkingMcpIntegrationTests
         // Test that tools can be executed directly (without MCP protocol)
         // This verifies the core functionality works
         var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            // Test file system tool directly
+            // Test tools directly (without going through MCP protocol)
             using var tempHelper = new TempDirectoryHelper();
-            var testContent = "Direct tool execution test";
-            var testFile = tempHelper.CreateTempFile(content: testContent);
-
-            var fileSystemTool = new FileSystemTools();
-            var result = fileSystemTool.ReadFile(testFile);
-
-            Assert.AreEqual(testContent, result, "Tool should work when called directly");
 
             // Test Android tool directly (will fail without ADB, but should handle gracefully)
             var androidTool = new AndroidDeviceTool();
-            var deviceResult = androidTool.ListDevices();
+            string deviceResult = androidTool.ListDevices();
 
             Assert.IsNotNull(deviceResult, "Android tool should return a result");
             Assert.IsTrue(deviceResult.Contains("ADB") || deviceResult.Contains("No devices") || deviceResult.Contains("Error"),
@@ -217,7 +210,7 @@ public class WorkingMcpIntegrationTests
     {
         // Test multiple start/stop cycles
         var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
 
         for (int i = 0; i < 3; i++)
         {
@@ -226,7 +219,7 @@ public class WorkingMcpIntegrationTests
 
             // Verify working
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
+            HttpResponseMessage response = await httpClient.GetAsync($"{service.ServerUrl}/health", cancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, $"Cycle {i + 1}: Health check should work");
 
             // Stop

@@ -18,7 +18,7 @@ public class McpHttpServerServiceTests
     [TestInitialize]
     public void Setup()
     {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _logger = loggerFactory.CreateLogger<McpHttpServerService>();
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -27,8 +27,8 @@ public class McpHttpServerServiceTests
     public async Task StartAsync_ShouldStartServerSuccessfully()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -40,12 +40,12 @@ public class McpHttpServerServiceTests
             Assert.IsTrue(service.ServerUrl.StartsWith("http://localhost:"));
 
             // Verify server is accessible
-            using var client = new HttpClient();
-            var response = await client.GetAsync($"{service.ServerUrl}/health", cancellationToken);
+            using HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync($"{service.ServerUrl}/health", cancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadAsStringAsync(cancellationToken);
-            var healthResponse = JsonSerializer.Deserialize<JsonElement>(content);
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+            JsonElement healthResponse = JsonSerializer.Deserialize<JsonElement>(content);
             Assert.AreEqual("healthy", healthResponse.GetProperty("status").GetString());
         }
         finally
@@ -58,11 +58,11 @@ public class McpHttpServerServiceTests
     public async Task StopAsync_ShouldStopServerGracefully()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         await service.StartAsync(cancellationToken);
-        var serverUrl = service.ServerUrl;
+        string serverUrl = service.ServerUrl;
 
         // Act
         await service.StopAsync(cancellationToken);
@@ -81,8 +81,8 @@ public class McpHttpServerServiceTests
     public async Task ServerUrl_ShouldBeValidHttpUrl()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -105,8 +105,8 @@ public class McpHttpServerServiceTests
     public async Task MultipleStartCalls_ShouldThrowException()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -128,20 +128,20 @@ public class McpHttpServerServiceTests
     public async Task McpEndpoint_ShouldBeAccessible()
     {
         // Arrange
-        var service = new McpHttpServerService(_logger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_logger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
             // Act
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
 
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
-            var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
+            JsonDocument toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
 
             // Assert
             Assert.IsNotNull(toolsResponse);
@@ -159,15 +159,15 @@ public class McpHttpServerServiceTests
     public async Task HostedServiceIntegration_ShouldWorkWithDependencyInjection()
     {
         // Arrange
-        var services = new ServiceCollection();
+        ServiceCollection services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole());
         services.AddSingleton<IHostedService, McpHttpServerService>();
 
-        var serviceProvider = services.BuildServiceProvider();
-        var hostedService = serviceProvider.GetRequiredService<IHostedService>();
-        var mcpService = (McpHttpServerService)hostedService;
+        ServiceProvider serviceProvider = services.BuildServiceProvider();
+        IHostedService hostedService = serviceProvider.GetRequiredService<IHostedService>();
+        McpHttpServerService mcpService = (McpHttpServerService)hostedService;
 
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
@@ -177,7 +177,7 @@ public class McpHttpServerServiceTests
             // Assert
             Assert.IsNotNull(mcpService.ServerUrl);
 
-            using var client = new HttpClient();
+            using HttpClient client = new HttpClient();
             var response = await client.GetAsync($"{mcpService.ServerUrl}/health", cancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }

@@ -15,7 +15,7 @@ public class McpServerIntegrationTests
     [TestInitialize]
     public void Setup()
     {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _serverLogger = loggerFactory.CreateLogger<McpHttpServerService>();
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
@@ -24,8 +24,8 @@ public class McpServerIntegrationTests
     public async Task FullWorkflow_StartServerListToolsCallTool_ShouldWork()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
 
         try
         {
@@ -33,27 +33,27 @@ public class McpServerIntegrationTests
             await service.StartAsync(cancellationToken);
             Assert.IsNotNull(service.ServerUrl);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act 2: List available tools
-            var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
+            JsonDocument toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
 
             // Assert: Tools discovered
             Assert.IsNotNull(toolsResponse);
             Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
             Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
 
-            var tools = toolsArray.EnumerateArray().ToList();
+            List<JsonElement> tools = toolsArray.EnumerateArray().ToList();
             Assert.IsTrue(tools.Count > 0, "No tools discovered");
 
             // Act 3: Call a file system tool (most reliable for testing)
-            using var tempHelper = new TempDirectoryHelper();
-            var testContent = "Integration test content";
-            var testFile = tempHelper.CreateTempFile(content: testContent);
+            using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
+            string testContent = "Integration test content";
+            string testFile = tempHelper.CreateTempFile(content: testContent);
 
-            var readFileResponse = await mcpClient.CallToolAsync("read_file",
+            JsonDocument readFileResponse = await mcpClient.CallToolAsync("read_file",
                 new { filePath = testFile }, cancellationToken);
 
             // Assert: Tool execution successful
@@ -62,10 +62,10 @@ public class McpServerIntegrationTests
 
             if (readResult.TryGetProperty("content", out var content))
             {
-                var contentArray = content.EnumerateArray().ToList();
+                List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
-                var textContent = contentArray[0].GetProperty("text").GetString();
+                string? textContent = contentArray[0].GetProperty("text").GetString();
                 Assert.AreEqual(testContent, textContent);
             }
         }
@@ -79,19 +79,19 @@ public class McpServerIntegrationTests
     public async Task ToolError_ShouldReturnProperErrorResponse()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Call tool with invalid parameters
-            var response = await mcpClient.CallToolAsync("read_file",
+            JsonDocument response = await mcpClient.CallToolAsync("read_file",
                 new { filePath = "/nonexistent/path/that/does/not/exist.txt" }, cancellationToken);
 
             // Assert: Error handled gracefully
@@ -100,10 +100,10 @@ public class McpServerIntegrationTests
 
             if (result.TryGetProperty("content", out var content))
             {
-                var contentArray = content.EnumerateArray().ToList();
+                List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
-                var errorText = contentArray[0].GetProperty("text").GetString();
+                string? errorText = contentArray[0].GetProperty("text").GetString();
                 Assert.IsTrue(errorText!.Contains("Error") || errorText.Contains("not found"));
             }
         }
@@ -117,20 +117,20 @@ public class McpServerIntegrationTests
     public async Task MultipleSequentialCalls_ShouldAllSucceed()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
-            using var tempHelper = new TempDirectoryHelper();
+            using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
 
             // Act: Make multiple sequential calls
-            var responses = new List<JsonDocument>();
+            List<JsonDocument> responses = new List<JsonDocument>();
 
             // Call 1: List tools
             responses.Add(await mcpClient.ListToolsAsync(cancellationToken));
@@ -141,7 +141,7 @@ public class McpServerIntegrationTests
                 new { filePath = testFile }, cancellationToken));
 
             // Call 3: List directory
-            var testDir = tempHelper.CreateTempDirectory();
+            string testDir = tempHelper.CreateTempDirectory();
             responses.Add(await mcpClient.CallToolAsync("list_directory",
                 new { directoryPath = testDir }, cancellationToken));
 
@@ -162,27 +162,27 @@ public class McpServerIntegrationTests
     public async Task InvalidJsonRpcRequest_ShouldReturnError()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
+            using HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Send invalid JSON-RPC request
-            var invalidRequest = """{"invalid": "request"}""";
-            var content = new StringContent(invalidRequest, System.Text.Encoding.UTF8, "application/json");
+            string invalidRequest = """{"invalid": "request"}""";
+            StringContent content = new StringContent(invalidRequest, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await httpClient.PostAsync("/mcp", content, cancellationToken);
+            HttpResponseMessage response = await httpClient.PostAsync("/mcp", content, cancellationToken);
 
             // Assert: Should get a response (possibly an error)
             // MCP server should handle invalid requests gracefully
             Assert.IsNotNull(response);
 
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             Assert.IsNotNull(responseContent);
         }
         finally
@@ -195,23 +195,23 @@ public class McpServerIntegrationTests
     public async Task ConcurrentCalls_ShouldHandleMultipleClients()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
-            using var tempHelper = new TempDirectoryHelper();
+            using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
 
             // Act: Make concurrent calls from multiple clients
-            var tasks = new List<Task<JsonDocument>>();
+            List<Task<JsonDocument>> tasks = new List<Task<JsonDocument>>();
 
             for (int i = 0; i < 5; i++)
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    using var httpClient = new HttpClient();
-                    using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+                    using HttpClient httpClient = new HttpClient();
+                    using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
                     httpClient.BaseAddress = new Uri(service.ServerUrl);
 
                     // Each client calls list tools
@@ -219,7 +219,7 @@ public class McpServerIntegrationTests
                 }));
             }
 
-            var responses = await Task.WhenAll(tasks);
+            JsonDocument[] responses = await Task.WhenAll(tasks);
 
             // Assert: All concurrent calls successful
             Assert.AreEqual(5, responses.Length);
@@ -241,26 +241,26 @@ public class McpServerIntegrationTests
     public async Task HealthEndpoint_ShouldAlwaysBeAccessible()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
+            using HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Call health endpoint multiple times
             for (int i = 0; i < 3; i++)
             {
-                var response = await httpClient.GetAsync("/health", cancellationToken);
+                HttpResponseMessage response = await httpClient.GetAsync("/health", cancellationToken);
 
                 // Assert
                 Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
 
-                var content = await response.Content.ReadAsStringAsync(cancellationToken);
-                var healthData = JsonSerializer.Deserialize<JsonElement>(content);
+                string content = await response.Content.ReadAsStringAsync(cancellationToken);
+                JsonElement healthData = JsonSerializer.Deserialize<JsonElement>(content);
 
                 Assert.AreEqual("healthy", healthData.GetProperty("status").GetString());
                 Assert.AreEqual(service.ServerUrl, healthData.GetProperty("url").GetString());
@@ -279,23 +279,23 @@ public class McpServerIntegrationTests
     public async Task ToolWithComplexParameters_ShouldWork()
     {
         // Arrange
-        var service = new McpHttpServerService(_serverLogger);
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
+        McpHttpServerService service = new McpHttpServerService(_serverLogger);
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(15)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
-            using var tempHelper = new TempDirectoryHelper();
+            using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
 
             // Act: Test file operations with line numbers
-            var testContent = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5";
-            var testFile = tempHelper.CreateTempFile(content: testContent);
+            string testContent = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5";
+            string testFile = tempHelper.CreateTempFile(content: testContent);
 
-            var response = await mcpClient.CallToolAsync("read_file_lines",
+            JsonDocument response = await mcpClient.CallToolAsync("read_file_lines",
                 new { filePath = testFile, startLine = 2, endLine = 4 }, cancellationToken);
 
             // Assert
@@ -304,10 +304,10 @@ public class McpServerIntegrationTests
 
             if (result.TryGetProperty("content", out var content))
             {
-                var contentArray = content.EnumerateArray().ToList();
+                List<JsonElement> contentArray = content.EnumerateArray().ToList();
                 Assert.IsTrue(contentArray.Count > 0);
 
-                var textContent = contentArray[0].GetProperty("text").GetString();
+                string? textContent = contentArray[0].GetProperty("text").GetString();
                 Assert.AreEqual("Line 2\nLine 3\nLine 4", textContent);
             }
         }

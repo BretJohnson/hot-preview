@@ -7,7 +7,7 @@ public class TempDirectoryHelper : IDisposable
 
     public string CreateTempDirectory(string? prefix = null)
     {
-        var tempDir = Path.Combine(Path.GetTempPath(), $"{prefix ?? "mcptest"}_{Guid.NewGuid():N}");
+        string tempDir = Path.Combine(Path.GetTempPath(), $"{prefix ?? "mcptest"}_{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempDir);
         _tempDirectories.Add(tempDir);
         return tempDir;
@@ -18,7 +18,7 @@ public class TempDirectoryHelper : IDisposable
         directory ??= CreateTempDirectory();
         fileName ??= $"test_{Guid.NewGuid():N}.txt";
 
-        var filePath = Path.Combine(directory, fileName);
+        string filePath = Path.Combine(directory, fileName);
         if (content != null)
         {
             File.WriteAllText(filePath, content);
@@ -35,7 +35,7 @@ public class TempDirectoryHelper : IDisposable
     {
         if (_disposed) return;
 
-        foreach (var directory in _tempDirectories)
+        foreach (string directory in _tempDirectories)
         {
             try
             {

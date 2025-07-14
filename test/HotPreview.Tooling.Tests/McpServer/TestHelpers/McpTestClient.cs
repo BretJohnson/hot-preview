@@ -17,7 +17,7 @@ public class McpTestClient : IDisposable
 
     public async Task<JsonDocument> SendRequestAsync(object request, CancellationToken cancellationToken = default)
     {
-        var json = JsonSerializer.Serialize(request);
+        string json = JsonSerializer.Serialize(request);
 
         _logger.LogDebug("Sending MCP request: {Request}", json);
 
@@ -79,10 +79,10 @@ public class McpTestClient : IDisposable
             getRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             getRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
 
-            var response = await _httpClient.SendAsync(getRequest, cancellationToken);
+            HttpResponseMessage response = await _httpClient.SendAsync(getRequest, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 _logger.LogDebug("Received response from GET /: {Response}", responseContent);
 
                 // If it's HTML or plain text, it means MCP endpoints aren't configured properly
@@ -104,7 +104,7 @@ public class McpTestClient : IDisposable
 
     public async Task<T?> SendRequestAsync<T>(object request, CancellationToken cancellationToken = default)
     {
-        using var response = await SendRequestAsync(request, cancellationToken);
+        using JsonDocument response = await SendRequestAsync(request, cancellationToken);
         return JsonSerializer.Deserialize<T>(response.RootElement);
     }
 

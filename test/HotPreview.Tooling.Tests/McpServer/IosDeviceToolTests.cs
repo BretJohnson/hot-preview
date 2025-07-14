@@ -1,3 +1,4 @@
+using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ public class IosDeviceToolTests
         _mockExecutor = new MockCommandExecutor();
         _tool = new IosDeviceTool();
 
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
     }
 
@@ -26,7 +27,7 @@ public class IosDeviceToolTests
     public void ListDevices_WithNoDevices_ShouldReturnNoDevicesMessage()
     {
         // Arrange - This test verifies the method handles empty device list
-        var emptyDevicesJson = """
+        string emptyDevicesJson = """
         {
             "devices": {}
         }
@@ -35,7 +36,7 @@ public class IosDeviceToolTests
         _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "list", "devices", "--json" }, 0, emptyDevicesJson);
 
         // Act
-        var result = _tool.ListDevices();
+        string result = _tool.ListDevices();
 
         // Assert
         Assert.IsNotNull(result);
@@ -47,7 +48,7 @@ public class IosDeviceToolTests
     public void ListDevices_WithValidDevices_ShouldParseCorrectly()
     {
         // Arrange
-        var devicesJson = """
+        string devicesJson = """
         {
             "devices": {
                 "com.apple.CoreSimulator.SimRuntime.iOS-17-0": [
@@ -69,7 +70,7 @@ public class IosDeviceToolTests
         _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "list", "devices", "--json" }, 0, devicesJson);
 
         // Act
-        var result = _tool.ListDevices();
+        string result = _tool.ListDevices();
 
         // Assert
         Assert.IsNotNull(result);
@@ -81,7 +82,7 @@ public class IosDeviceToolTests
     public void GetBootedDevice_WithBootedDevice_ShouldReturnDevice()
     {
         // Arrange
-        var devicesJson = """
+        string devicesJson = """
         {
             "devices": {
                 "com.apple.CoreSimulator.SimRuntime.iOS-17-0": [
@@ -109,7 +110,7 @@ public class IosDeviceToolTests
     public void BootDevice_WithValidDeviceId_ShouldExecuteCommand()
     {
         // Arrange
-        var deviceId = "12345678-1234-1234-1234-123456789012";
+        string deviceId = "12345678-1234-1234-1234-123456789012";
         _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "boot", deviceId }, 0, "");
 
         // Act & Assert - Should not throw for valid input
@@ -137,7 +138,7 @@ public class IosDeviceToolTests
     public void ShutdownDevice_WithValidDeviceId_ShouldExecuteCommand()
     {
         // Arrange
-        var deviceId = "12345678-1234-1234-1234-123456789012";
+        string deviceId = "12345678-1234-1234-1234-123456789012";
         _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "shutdown", deviceId }, 0, "");
 
         // Act & Assert - Should not throw for valid input
@@ -165,29 +166,29 @@ public class IosDeviceToolTests
     public async Task IntegrationTest_IosDeviceToolsViaEndToEnd()
     {
         // Arrange
-        var service = new McpHttpServerService(
+        McpHttpServerService service = new McpHttpServerService(
             LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<McpHttpServerService>());
 
-        var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+        CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
         try
         {
             await service.StartAsync(cancellationToken);
 
-            using var httpClient = new HttpClient();
-            using var mcpClient = new McpTestClient(httpClient, _clientLogger);
+            using HttpClient httpClient = new HttpClient();
+            using McpTestClient mcpClient = new McpTestClient(httpClient, _clientLogger);
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act - Test that iOS tools are available
-            var toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
+            JsonDocument toolsResponse = await mcpClient.ListToolsAsync(cancellationToken);
 
             // Assert
             Assert.IsNotNull(toolsResponse);
             Assert.IsTrue(toolsResponse.RootElement.TryGetProperty("result", out var result));
             Assert.IsTrue(result.TryGetProperty("tools", out var toolsArray));
 
-            var tools = toolsArray.EnumerateArray()
+            HashSet<string?> tools = toolsArray.EnumerateArray()
                 .Select(t => t.GetProperty("name").GetString())
                 .ToHashSet();
 
@@ -198,7 +199,7 @@ public class IosDeviceToolTests
             Assert.IsTrue(tools.Contains("ios_shutdown_device"));
 
             // Test calling ios_list_devices
-            var devicesResponse = await mcpClient.CallToolAsync("ios_list_devices", new { }, cancellationToken);
+            JsonDocument devicesResponse = await mcpClient.CallToolAsync("ios_list_devices", new { }, cancellationToken);
             Assert.IsNotNull(devicesResponse);
             Assert.IsTrue(devicesResponse.RootElement.TryGetProperty("result", out var devicesResult));
         }
