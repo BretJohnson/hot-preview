@@ -219,6 +219,7 @@ public class ToolDiscoveryTests
                type == typeof(double) ||
                type == typeof(bool) ||
                type == typeof(decimal) ||
+               type == typeof(byte[]) ||  // Support for binary data (e.g., screenshots)
                type.IsEnum;
     }
 

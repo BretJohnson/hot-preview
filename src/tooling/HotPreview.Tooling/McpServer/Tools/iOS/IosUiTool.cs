@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -8,6 +9,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class IosUiTool
 {
+    private readonly IProcessService _processService;
+
+    public IosUiTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Simulates a tap gesture on the screen of an iOS device.
     /// This method requires the device's serial number and the screen coordinates (X, Y) as inputs.
@@ -29,7 +37,7 @@ public class IosUiTool
             }
 
             // Perform the tap operation
-            Process.ExecuteCommand($"idb ui tap --udid {deviceId} {x} {y}");
+            _processService.ExecuteCommand($"idb ui tap --udid {deviceId} {x} {y}");
 
             return $"Successfully tapped at ({x}, {y})";
         }
@@ -63,7 +71,7 @@ public class IosUiTool
             }
 
             // Perform the swipe operation
-            Process.ExecuteCommand($"idb ui swipe --udid {deviceId} --duration {durationS} {startX},{startY} {endX},{endY}");
+            _processService.ExecuteCommand($"idb ui swipe --udid {deviceId} --duration {durationS} {startX},{startY} {endX},{endY}");
 
             return $"Successfully swiped from ({startX}, {startY}) to ({endX}, {endY})";
         }
@@ -93,7 +101,7 @@ public class IosUiTool
             }
 
             // Perform the text input operation
-            Process.ExecuteCommand($"idb ui text ${text} --udid {deviceId}");
+            _processService.ExecuteCommand($"idb ui text ${text} --udid {deviceId}");
 
             return "Successfully input text on device.";
         }
@@ -131,7 +139,7 @@ public class IosUiTool
             }
 
             // Execute the key press command
-            Process.ExecuteCommand($"idb ui key --udid {deviceId} {keyCode}");
+            _processService.ExecuteCommand($"idb ui key --udid {deviceId} {keyCode}");
 
             return "Key press operation completed successfully.";
         }

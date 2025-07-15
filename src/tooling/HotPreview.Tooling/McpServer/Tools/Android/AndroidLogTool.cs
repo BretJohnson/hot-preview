@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using HotPreview.Tooling.McpServer.Models;
 using ModelContextProtocol.Server;
 
@@ -10,6 +11,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidLogTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidLogTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Retrieves the system logs from a connected Android device using the logcat tool.
     /// </summary>
@@ -22,7 +30,7 @@ public class AndroidLogTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -36,7 +44,7 @@ public class AndroidLogTool
             }
 
             // Execute the adb logcat command to capture logs from the device
-            string result = Process.ExecuteCommand(adbCommand);
+            string result = _processService.ExecuteCommand(adbCommand);
 
             return result;
         }

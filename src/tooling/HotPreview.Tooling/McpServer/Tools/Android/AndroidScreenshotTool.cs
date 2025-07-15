@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,12 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidScreenshotTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidScreenshotTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
     /// <summary>
     /// Captures a screenshot from the specified Android device and retrieves the image data as a byte array.
     /// </summary>
@@ -24,11 +31,11 @@ public class AndroidScreenshotTool
     /// </exception>
     [McpServerTool(Name = "android_screenshot")]
     [Description("Captures a screenshot from the specified Android device.")]
-    public static byte[]? TakeScreenshot(string deviceSerial)
+    public byte[]? TakeScreenshot(string deviceSerial)
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -42,16 +49,16 @@ public class AndroidScreenshotTool
             string deviceTempFilePath = "/sdcard/screenshot.png";
 
             // Take the screenshot on the device
-            Process.ExecuteCommand($"adb -s {deviceSerial} shell screencap -p {deviceTempFilePath}");
+            _processService.ExecuteCommand($"adb -s {deviceSerial} shell screencap -p {deviceTempFilePath}");
 
             // Define a temporary file path to save the pulled screenshot locally
             string localTempFilePath = Path.GetTempFileName();
 
             // Pull the screenshot from the device to the local machine
-            Process.ExecuteCommand($"adb pull {deviceTempFilePath} \"{localTempFilePath}\"");
+            _processService.ExecuteCommand($"adb pull {deviceTempFilePath} \"{localTempFilePath}\"");
 
             // Delete the screenshot file from the device
-            Process.ExecuteCommand($"adb shell rm {deviceTempFilePath}");
+            _processService.ExecuteCommand($"adb shell rm {deviceTempFilePath}");
 
             // Read the screenshot image data into a byte array
             byte[] imageData = File.ReadAllBytes(localTempFilePath);

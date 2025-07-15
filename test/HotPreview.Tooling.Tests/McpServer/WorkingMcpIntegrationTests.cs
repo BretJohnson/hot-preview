@@ -1,6 +1,8 @@
 using System.Net;
 using System.Reflection;
 using HotPreview.Tooling.McpServer;
+using HotPreview.Tooling.McpServer.Interfaces;
+using HotPreview.Tooling.McpServer.Services;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -190,7 +192,8 @@ public class WorkingMcpIntegrationTests
             using var tempHelper = new TempDirectoryHelper();
 
             // Test Android tool directly (will fail without ADB, but should handle gracefully)
-            var androidTool = new AndroidDeviceTool();
+            IProcessService processService = new ProcessService();
+            var androidTool = new AndroidDeviceTool(processService);
             string deviceResult = androidTool.ListDevices();
 
             Assert.IsNotNull(deviceResult, "Android tool should return a result");

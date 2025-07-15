@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using HotPreview.Tooling.McpServer.Models;
 using ModelContextProtocol.Server;
 
@@ -11,6 +12,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class IosDeviceTool
 {
+    private readonly IProcessService _processService;
+
+    public IosDeviceTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Retrieves and lists all available simulator devices.
     /// </summary>
@@ -27,7 +35,7 @@ public class IosDeviceTool
     {
         try
         {
-            string resultJson = Process.ExecuteCommand("xcrun simctl list devices --json");
+            string resultJson = _processService.ExecuteCommand("xcrun simctl list devices --json");
 
             // Deserialize JSON data into SimulatorDevices object
             var result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
@@ -75,11 +83,11 @@ public class IosDeviceTool
     /// </returns>
     [McpServerTool(Name = "ios_booted_device")]
     [Description("Retrieves the name and ID of the first booted simulator device.")]
-    public static string GetBootedDevice()
+    public string GetBootedDevice()
     {
         try
         {
-            string resultJson = Process.ExecuteCommand("xcrun simctl list devices --json");
+            string resultJson = _processService.ExecuteCommand("xcrun simctl list devices --json");
 
             // Deserialize JSON data into SimulatorDevices object
             var result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
@@ -139,7 +147,7 @@ public class IosDeviceTool
         try
         {
             // Execute the command to boot the simulator device
-            Process.ExecuteCommand($"xcrun simctl boot {deviceId}");
+            _processService.ExecuteCommand($"xcrun simctl boot {deviceId}");
         }
         catch (Exception ex)
         {
@@ -169,7 +177,7 @@ public class IosDeviceTool
         try
         {
             // Execute the command to shut down the simulator device
-            Process.ExecuteCommand($"xcrun simctl shutdown {deviceId}");
+            _processService.ExecuteCommand($"xcrun simctl shutdown {deviceId}");
         }
         catch (Exception ex)
         {

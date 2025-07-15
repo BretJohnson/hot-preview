@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,12 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidUiTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidUiTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
     /// <summary>
     /// Simulates a tap gesture on the screen of an Android device.
     /// This method requires the device's serial number and the screen coordinates (X, Y) as inputs.
@@ -25,7 +32,7 @@ public class AndroidUiTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -36,7 +43,7 @@ public class AndroidUiTool
             }
 
             // Perform the tap operation
-            Process.ExecuteCommand($"adb shell input tap {x} {y}");
+            _processService.ExecuteCommand($"adb shell input tap {x} {y}");
 
             return $"Successfully tapped at ({x}, {y})";
         }
@@ -64,7 +71,7 @@ public class AndroidUiTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -75,7 +82,7 @@ public class AndroidUiTool
             }
 
             // Perform the swipe operation
-            Process.ExecuteCommand($"shell input touchscreen swipe {startX},{startY} {endX},{endY} {durationMs}");
+            _processService.ExecuteCommand($"shell input touchscreen swipe {startX},{startY} {endX},{endY} {durationMs}");
 
             return $"Successfully swiped from ({startX}, {startY}) to ({endX}, {endY})";
         }
@@ -99,7 +106,7 @@ public class AndroidUiTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -110,7 +117,7 @@ public class AndroidUiTool
             }
 
             // Perform the text input operation
-            Process.ExecuteCommand($"adb shell input text {text}");
+            _processService.ExecuteCommand($"adb shell input text {text}");
 
             return "Successfully input text on device.";
         }
@@ -156,7 +163,7 @@ public class AndroidUiTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -179,7 +186,7 @@ public class AndroidUiTool
             var keyName = keyNames.ContainsKey(keyCode) ? keyNames[keyCode] : keyCode.ToString();
 
             // Perform the press key operation
-            Process.ExecuteCommand($"adb shell input keyevent {keyCode}");
+            _processService.ExecuteCommand($"adb shell input keyevent {keyCode}");
 
             return $"Successfully pressed the key {keyName}";
         }

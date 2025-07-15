@@ -1,23 +1,25 @@
 using System.Text.Json;
 using HotPreview.Tooling.McpServer;
+using HotPreview.Tooling.McpServer.Interfaces;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace HotPreview.Tooling.Tests.McpServer;
 
 [TestClass]
 public class IosDeviceToolTests
 {
-    private MockCommandExecutor _mockExecutor = null!;
+    private Mock<IProcessService> _mockProcessService = null!;
     private IosDeviceTool _tool = null!;
     private ILogger<McpTestClient> _clientLogger = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockExecutor = new MockCommandExecutor();
-        _tool = new IosDeviceTool();
+        _mockProcessService = new Mock<IProcessService>();
+        _tool = new IosDeviceTool(_mockProcessService.Object);
 
         ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         _clientLogger = loggerFactory.CreateLogger<McpTestClient>();
@@ -33,15 +35,16 @@ public class IosDeviceToolTests
         }
         """;
 
-        _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "list", "devices", "--json" }, 0, emptyDevicesJson);
+        _mockProcessService.Setup(x => x.ExecuteCommand("xcrun simctl list devices --json"))
+            .Returns(emptyDevicesJson);
 
         // Act
         string result = _tool.ListDevices();
 
         // Assert
         Assert.IsNotNull(result);
-        // In the real implementation with mocked executor, this would return the expected message
-        // For now, we just verify the method doesn't throw
+        // Should return table with no devices or error message
+        Assert.IsTrue(result.Contains("Simulator Devices") || result.Contains("Error") || result.Contains("No simulator devices"));
     }
 
     [TestMethod]
@@ -67,7 +70,8 @@ public class IosDeviceToolTests
         }
         """;
 
-        _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "list", "devices", "--json" }, 0, devicesJson);
+        _mockProcessService.Setup(x => x.ExecuteCommand("xcrun simctl list devices --json"))
+            .Returns(devicesJson);
 
         // Act
         string result = _tool.ListDevices();
@@ -96,10 +100,11 @@ public class IosDeviceToolTests
         }
         """;
 
-        _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "list", "devices", "--json" }, 0, devicesJson);
+        _mockProcessService.Setup(x => x.ExecuteCommand("xcrun simctl list devices --json"))
+            .Returns(devicesJson);
 
         // Act
-        var result = IosDeviceTool.GetBootedDevice();
+        var result = _tool.GetBootedDevice();
 
         // Assert
         Assert.IsNotNull(result);
@@ -111,19 +116,14 @@ public class IosDeviceToolTests
     {
         // Arrange
         string deviceId = "12345678-1234-1234-1234-123456789012";
-        _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "boot", deviceId }, 0, "");
+        _mockProcessService.Setup(x => x.ExecuteCommand($"xcrun simctl boot {deviceId}"))
+            .Returns("");
 
         // Act & Assert - Should not throw for valid input
-        try
-        {
-            _tool.BootDevice(deviceId);
-            // Method should complete without throwing
-        }
-        catch (Exception ex)
-        {
-            // In real implementation with mocked executor, this wouldn't happen
-            Assert.IsTrue(ex.Message.Contains("Error booting the simulator device"));
-        }
+        _tool.BootDevice(deviceId);
+
+        // Verify the command was called
+        _mockProcessService.Verify(x => x.ExecuteCommand($"xcrun simctl boot {deviceId}"), Times.Once);
     }
 
     [TestMethod]
@@ -139,19 +139,14 @@ public class IosDeviceToolTests
     {
         // Arrange
         string deviceId = "12345678-1234-1234-1234-123456789012";
-        _mockExecutor.SetupCommand("xcrun", new[] { "simctl", "shutdown", deviceId }, 0, "");
+        _mockProcessService.Setup(x => x.ExecuteCommand($"xcrun simctl shutdown {deviceId}"))
+            .Returns("");
 
         // Act & Assert - Should not throw for valid input
-        try
-        {
-            _tool.ShutdownDevice(deviceId);
-            // Method should complete without throwing
-        }
-        catch (Exception ex)
-        {
-            // In real implementation with mocked executor, this wouldn't happen
-            Assert.IsTrue(ex.Message.Contains("Error shutting down the simulator device"));
-        }
+        _tool.ShutdownDevice(deviceId);
+
+        // Verify the command was called
+        _mockProcessService.Verify(x => x.ExecuteCommand($"xcrun simctl shutdown {deviceId}"), Times.Once);
     }
 
     [TestMethod]

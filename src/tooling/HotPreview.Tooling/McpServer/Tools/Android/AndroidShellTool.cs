@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -8,6 +9,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidShellTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidShellTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Runs a shell command on the specified device.
     /// </summary>
@@ -25,7 +33,7 @@ public class AndroidShellTool
 
         try
         {
-            string result = Process.ExecuteCommand($"adb -s {deviceSerial} shell {command}");
+            string result = _processService.ExecuteCommand($"adb -s {deviceSerial} shell {command}");
 
             // Check for security validation failure
             if (result.StartsWith("Error: Command rejected", StringComparison.OrdinalIgnoreCase))

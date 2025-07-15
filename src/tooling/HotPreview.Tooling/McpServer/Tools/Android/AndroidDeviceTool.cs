@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using HotPreview.Tooling.McpServer.Models;
 using ModelContextProtocol.Server;
 
@@ -14,6 +15,12 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidDeviceTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidDeviceTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
 
     /*
      To do a prompt like  "click on a green button with a rabbit on it"..
@@ -29,7 +36,7 @@ public class AndroidDeviceTool
         try
         {
             // Execute the adb command to kill the emulator
-            return Process.ExecuteCommand($"adb {parameters}");
+            return _processService.ExecuteCommand($"adb {parameters}");
         }
         catch (Exception ex)
         {
@@ -49,13 +56,13 @@ public class AndroidDeviceTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
-                throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
+                return "Error retrieving device list: ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.";
             }
 
             var devices = new List<AdbDevice>();
-            string result = Process.ExecuteCommand("adb devices -l");
+            string result = _processService.ExecuteCommand("adb devices -l");
 
             string[] lines = result.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
@@ -117,8 +124,13 @@ public class AndroidDeviceTool
 
         try
         {
+            if (!Adb.CheckAdbInstalled(_processService))
+            {
+                throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
+            }
+
             // Execute the adb command to kill the emulator
-            Process.ExecuteCommand($"adb -s {avdName} emu kill");
+            _processService.ExecuteCommand($"adb -s {avdName} emu kill");
         }
         catch (Exception ex)
         {
@@ -141,13 +153,13 @@ public class AndroidDeviceTool
 
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
 
             // Execute the adb command to kill the emulator
-            Process.ExecuteCommand($"adb -s {avdName} emu kill");
+            _processService.ExecuteCommand($"adb -s {avdName} emu kill");
         }
         catch (Exception ex)
         {

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidFilesTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidFilesTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Pushes a local file to an Android device using ADB (Android Debug Bridge).
     /// </summary>
@@ -32,7 +40,7 @@ public class AndroidFilesTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -48,7 +56,7 @@ public class AndroidFilesTool
                 throw new Exception($"Error: Local file {localPath} does not exist.");
             }
 
-            Process.ExecuteCommand($"adb push -s {deviceSerial} {localPath} {devicePath}");
+            _processService.ExecuteCommand($"adb push -s {deviceSerial} {localPath} {devicePath}");
 
             return $"File Uploaded Successfully. The file `{localPath}` has been uploaded to `{devicePath}` on device {deviceSerial}.";
         }
@@ -71,7 +79,7 @@ public class AndroidFilesTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -87,7 +95,7 @@ public class AndroidFilesTool
                 throw new Exception($"Error: Local file {localPath} does not exist.");
             }
 
-            Process.ExecuteCommand($"adb pull -s {deviceSerial} {devicePath} {localPath}");
+            _processService.ExecuteCommand($"adb pull -s {deviceSerial} {devicePath} {localPath}");
 
             return $"File Downloaded Successfully. The file `{devicePath}` has been downloaded to `{localPath}` from device {deviceSerial}.";
         }
@@ -109,7 +117,7 @@ public class AndroidFilesTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -119,7 +127,7 @@ public class AndroidFilesTool
                 throw new Exception($"Error: Device not found.");
             }
 
-            string result = Process.ExecuteCommand($"adb -s {deviceSerial} shell rm {path}");
+            string result = _processService.ExecuteCommand($"adb -s {deviceSerial} shell rm {path}");
 
             return $"File Deleted Successfully: {result}";
 

@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
+using HotPreview.Tooling.McpServer.Interfaces;
+using HotPreview.Tooling.McpServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +37,9 @@ public class McpHttpServerService : IHostedService
             _logger.LogInformation("Starting MCP HTTP server on port {Port}", _port);
 
             var builder = WebApplication.CreateBuilder();
+
+            // Register process service
+            builder.Services.AddSingleton<IProcessService, ProcessService>();
 
             // Configure MCP server with existing tools and prompts
             builder.Services

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,12 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidAppManagementTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidAppManagementTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
     /// <summary>
     /// Installs an application (APK file) on the specified Android device.
     /// </summary>
@@ -20,7 +27,7 @@ public class AndroidAppManagementTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -36,7 +43,7 @@ public class AndroidAppManagementTool
             }
 
             // Execute the adb install command
-            Process.ExecuteCommand($"adb -s {deviceSerial} install \"{appPath}\"");
+            _processService.ExecuteCommand($"adb -s {deviceSerial} install \"{appPath}\"");
         }
         catch (Exception ex)
         {
@@ -55,7 +62,7 @@ public class AndroidAppManagementTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -71,7 +78,7 @@ public class AndroidAppManagementTool
             }
 
             // Execute the ADB command to launch the app
-            Process.ExecuteCommand($"adb -s {deviceSerial} shell monkey -p {packageName} 1");
+            _processService.ExecuteCommand($"adb -s {deviceSerial} shell monkey -p {packageName} 1");
         }
         catch (Exception ex)
         {
@@ -92,7 +99,7 @@ public class AndroidAppManagementTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -104,7 +111,7 @@ public class AndroidAppManagementTool
 
             var packages = new List<string>();
 
-            string result = Process.ExecuteCommand($"adb -s {deviceSerial} shell pm list packages");
+            string result = _processService.ExecuteCommand($"adb -s {deviceSerial} shell pm list packages");
 
             string[] lines = result.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 

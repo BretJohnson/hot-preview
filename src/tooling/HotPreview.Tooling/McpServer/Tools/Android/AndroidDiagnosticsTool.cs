@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,12 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class AndroidDiagnosticsTool
 {
+    private readonly IProcessService _processService;
+
+    public AndroidDiagnosticsTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
     /// <summary>
     /// Captures a comprehensive bug report from a connected Android device.
     /// A bug report includes diagnostic information such as system logs, running processes, and device state.
@@ -25,7 +32,7 @@ public class AndroidDiagnosticsTool
     {
         try
         {
-            if (!Adb.CheckAdbInstalled())
+            if (!Adb.CheckAdbInstalled(_processService))
             {
                 throw new Exception("ADB is not installed or not in PATH. Please install ADB and ensure it is in your PATH.");
             }
@@ -55,7 +62,7 @@ public class AndroidDiagnosticsTool
             }
 
             // Run bug report command using ADB
-            var process = Process.StartProcess($"adb -s {deviceSerial} bugreport {outputPath}");
+            System.Diagnostics.Process process = _processService.StartProcess($"adb -s {deviceSerial} bugreport {outputPath}");
 
             // Wait for process to complete or timeout
             if (!process.WaitForExit(timeoutSeconds * 1000))
