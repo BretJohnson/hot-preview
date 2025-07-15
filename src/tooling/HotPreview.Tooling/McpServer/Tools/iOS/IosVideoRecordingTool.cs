@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using HotPreview.Tooling.McpServer.Helpers;
@@ -64,7 +65,7 @@ public class IosVideoRecordingTool
             command += $" {outputFile}";
 
             // Start the recording process
-            var recordingProcess = _processService.StartProcess(command);
+            Process recordingProcess = _processService.StartProcess(command);
 
             if (recordingProcess == null)
                 throw new Exception("Failed to start the recording process.");
@@ -111,7 +112,7 @@ public class IosVideoRecordingTool
     {
         try
         {
-            var stopRecordingProcess = _processService.StartProcess("pkill -SIGINT -f \"simctl.*recordVideo\"");
+            Process stopRecordingProcess = _processService.StartProcess("pkill -SIGINT -f \"simctl.*recordVideo\"");
 
             if (stopRecordingProcess == null)
                 throw new Exception("Failed to start the pkill process.");
@@ -120,7 +121,7 @@ public class IosVideoRecordingTool
 
             if (stopRecordingProcess.ExitCode != 0)
             {
-                var errorOutput = await stopRecordingProcess.StandardError.ReadToEndAsync();
+                string errorOutput = await stopRecordingProcess.StandardError.ReadToEndAsync();
                 throw new Exception($"pkill command failed with error: {errorOutput}");
             }
 

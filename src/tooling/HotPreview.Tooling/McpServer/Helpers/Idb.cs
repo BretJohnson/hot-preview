@@ -8,7 +8,7 @@ public static class Idb
     {
         try
         {
-            var process = new System.Diagnostics.Process
+            Process process = new()
             {
                 StartInfo = new ProcessStartInfo
                 {

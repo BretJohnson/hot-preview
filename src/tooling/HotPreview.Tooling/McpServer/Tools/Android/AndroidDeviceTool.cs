@@ -92,11 +92,11 @@ public class AndroidDeviceTool
             }
 
             // Format the result as a table
-            var devicesStr = "# Devices\n\n";
+            string devicesStr = "# Devices\n\n";
             devicesStr += "| Serial          | Device           | Product          | Model            |\n";
             devicesStr += "|-----------------|------------------|------------------|------------------|\n";
 
-            foreach (var device in devices)
+            foreach (AdbDevice device in devices)
             {
                 devicesStr += $"| `{device.SerialNumber}` | `{device.Device}` | `{device.Product}` | `{device.Model}` |\n";
             }
@@ -170,7 +170,7 @@ public class AndroidDeviceTool
     // Extracts the value of a specific property from an array of strings.
     private string GetPropertyFromParts(string[] parts, string propertyKey)
     {
-        foreach (var part in parts)
+        foreach (string part in parts)
         {
             if (part.StartsWith(propertyKey, StringComparison.OrdinalIgnoreCase))
             {

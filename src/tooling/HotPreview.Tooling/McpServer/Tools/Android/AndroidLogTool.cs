@@ -93,7 +93,7 @@ public class AndroidLogTool
         };
 
         // Filter logs to include only the specified log level
-        var filteredLogs = logs.Split('\n')
+        List<string> filteredLogs = logs.Split('\n')
             .Where(line => line.Contains($"/{logLevelLetter} "))
             .ToList();
 

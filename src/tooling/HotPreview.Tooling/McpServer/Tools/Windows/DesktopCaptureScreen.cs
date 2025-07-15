@@ -358,7 +358,7 @@ public class DesktopCaptureScreen
             result.AppendLine("| Window Title | Class Name | PID | Size | Visible | Minimized | Current Process |");
             result.AppendLine("|-------------|------------|-----|------|---------|-----------|-----------------|");
 
-            foreach (var window in windows)
+            foreach (WindowInfo window in windows)
             {
                 result.AppendLine($"| {window.Title} | {window.ClassName} | {window.ProcessId} | {window.Width}x{window.Height} | {window.IsVisible} | {window.IsMinimized} | {(window.IsCurrentProcess ? "Yes" : "No")} |");
             }

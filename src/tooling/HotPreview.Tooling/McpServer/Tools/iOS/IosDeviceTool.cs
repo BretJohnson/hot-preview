@@ -38,7 +38,7 @@ public class IosDeviceTool
             string resultJson = _processService.ExecuteCommand("xcrun simctl list devices --json");
 
             // Deserialize JSON data into SimulatorDevices object
-            var result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
+            SimulatorDevices? result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
 
             if (result?.Devices is null || result.Devices.Count == 0)
             {
@@ -51,11 +51,11 @@ public class IosDeviceTool
             devicesTable.AppendLine("|------------------|---------------------|---------------|");
 
             // Process devices and format table rows
-            foreach (var runtime in result.Devices)
+            foreach (KeyValuePair<string, List<SimulatorDevice>> runtime in result.Devices)
             {
                 string runtimeName = runtime.Key.Replace("com.apple.CoreSimulator.SimRuntime.", string.Empty);
 
-                foreach (var device in runtime.Value)
+                foreach (SimulatorDevice device in runtime.Value)
                 {
                     device.Runtime = runtimeName;
                     devicesTable.AppendLine($"| {device.Name,-16} | {device.Udid,-20} | {runtimeName,-13} |");
@@ -90,7 +90,7 @@ public class IosDeviceTool
             string resultJson = _processService.ExecuteCommand("xcrun simctl list devices --json");
 
             // Deserialize JSON data into SimulatorDevices object
-            var result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
+            SimulatorDevices? result = JsonSerializer.Deserialize<SimulatorDevices>(resultJson);
 
             if (result?.Devices is null || result.Devices.Count == 0)
             {
@@ -98,16 +98,16 @@ public class IosDeviceTool
             }
 
             // Process devices and format table rows
-            foreach (var runtime in result.Devices)
+            foreach (KeyValuePair<string, List<SimulatorDevice>> runtime in result.Devices)
             {
                 string runtimeName = runtime.Key.Replace("com.apple.CoreSimulator.SimRuntime.", string.Empty);
 
-                foreach (var device in runtime.Value)
+                foreach (SimulatorDevice device in runtime.Value)
                 {
                     if (device.State == "Booted")
                     {
                         // Format the result as a table
-                        var deviceStr = "# Booted Device\n\n";
+                        string deviceStr = "# Booted Device\n\n";
                         deviceStr += "| Name            | Udid              |\n";
                         deviceStr += "|-----------------|-----------------|\n";
                         deviceStr += $"| {device.Name} | {device.Udid} |\n";

@@ -115,7 +115,7 @@ public class AndroidAppManagementTool
 
             string[] lines = result.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (var line in lines)
+            foreach (string line in lines)
             {
                 if (line.StartsWith("package:"))
                 {
@@ -131,11 +131,11 @@ public class AndroidAppManagementTool
             }
 
             // Format the result as a table
-            var packagesStr = "# Installed Packages\n\n";
+            string packagesStr = "# Installed Packages\n\n";
             packagesStr += "| Package Name |\n";
             packagesStr += "|--------------|\n";
 
-            foreach (var app in packages)
+            foreach (string app in packages)
             {
                 packagesStr += $"| `{app}` |\n";
             }

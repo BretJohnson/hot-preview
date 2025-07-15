@@ -61,11 +61,11 @@ public class AndroidScreenshotLlmTool
                 Temperature = 0.7f,
             };
 
-            var response = await thisServer.AsSamplingChatClient().GetResponseAsync(messages, options, cancellationToken);
+            ChatCompletion response = await thisServer.AsSamplingChatClient().GetResponseAsync(messages, options, cancellationToken);
 
             if (response is not null)
             {
-                var result = response.Text;
+                string result = response.Text;
                 bool.TryParse(result, out bool boolResult);
 
                 return boolResult;

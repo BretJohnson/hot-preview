@@ -173,7 +173,7 @@ public class AndroidUiTool
                 return $"Error: Device {deviceSerial} not connected or not found.";
             }
 
-            var keyNames = new Dictionary<int, string>
+            Dictionary<int, string> keyNames = new()
                 {
                     { 3, "HOME" },
                     { 4, "BACK" },
@@ -183,7 +183,7 @@ public class AndroidUiTool
                     { 82, "MENU" }
                 };
 
-            var keyName = keyNames.ContainsKey(keyCode) ? keyNames[keyCode] : keyCode.ToString();
+            string keyName = keyNames.ContainsKey(keyCode) ? keyNames[keyCode] : keyCode.ToString();
 
             // Perform the press key operation
             _processService.ExecuteCommand($"adb shell input keyevent {keyCode}");
