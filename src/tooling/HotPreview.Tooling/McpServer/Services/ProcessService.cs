@@ -1,10 +1,10 @@
-using HotPreview.Tooling.McpServer.Helpers;
+using System.Diagnostics;
 using HotPreview.Tooling.McpServer.Interfaces;
 
 namespace HotPreview.Tooling.McpServer.Services;
 
 /// <summary>
-/// Default implementation of IProcessService that uses the Process helper class.
+/// Default implementation of IProcessService.
 /// </summary>
 public class ProcessService : IProcessService
 {
@@ -18,7 +18,13 @@ public class ProcessService : IProcessService
     /// </exception>
     public string ExecuteCommand(string command)
     {
-        return Process.ExecuteCommand(command);
+        Process process = StartProcess(command);
+
+        string output = process.StandardOutput.ReadToEnd();
+
+        process.WaitForExit();
+
+        return output;
     }
 
     /// <summary>
@@ -26,13 +32,28 @@ public class ProcessService : IProcessService
     /// </summary>
     /// <param name="command">The shell command to be executed.</param>
     /// <returns>
-    /// The <see cref="System.Diagnostics.Process"/> instance representing the started process.
+    /// The <see cref="Process"/> instance representing the started process.
     /// </returns>
     /// <exception cref="Exception">
     /// Thrown when an error occurs during the process startup.
     /// </exception>
-    public System.Diagnostics.Process StartProcess(string command)
+    public Process StartProcess(string command)
     {
-        return Process.StartProcess(command);
+        Process process = new()
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = OperatingSystem.IsWindows() ? "cmd.exe" : "/bin/bash",
+                Arguments = OperatingSystem.IsWindows() ? $"/C {command}" : $"-c \"{command}\"",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+
+        process.Start();
+
+        return process;
     }
 }
