@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -9,6 +10,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class IosScreenshotTool
 {
+    private readonly IProcessService _processService;
+
+    public IosScreenshotTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Captures a screenshot from the specified iOS device and returns it as a byte array.
     /// </summary>
@@ -27,7 +35,7 @@ public class IosScreenshotTool
     /// </remarks>
     [McpServerTool(Name = "ios_screenshot")]
     [Description("Captures a screenshot from the specified iOS device and returns it as a byte array.")]
-    public static byte[]? TakeScreenshot(string deviceId)
+    public byte[]? TakeScreenshot(string deviceId)
     {
         try
         {
@@ -45,7 +53,7 @@ public class IosScreenshotTool
             string localTempFilePath = Path.GetTempFileName();
 
             // Take the screenshot on the device
-            Process.ExecuteCommand($"idb screenshot --udid {deviceId} \"{localTempFilePath}\"");
+            _processService.ExecuteCommand($"idb screenshot --udid {deviceId} \"{localTempFilePath}\"");
 
             // Read the screenshot image data into a byte array
             byte[] imageData = File.ReadAllBytes(localTempFilePath);

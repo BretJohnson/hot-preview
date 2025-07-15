@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -10,6 +11,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class IosVideoRecordingTool
 {
+    private readonly IProcessService _processService;
+
+    public IosVideoRecordingTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Records a video of the iOS Simulator using simctl directly.
     /// </summary>
@@ -22,7 +30,7 @@ public class IosVideoRecordingTool
     /// <returns>A message indicating the result of the recording operation.</returns>
     [McpServerTool(Name = "ios_video_start")]
     [Description("Records a video of the iOS Simulator.")]
-    public static async Task<string> RecordVideoAsync(
+    public async Task<string> RecordVideoAsync(
         string deviceId,
         string? path = null,
         string codec = "hevc",
@@ -56,7 +64,7 @@ public class IosVideoRecordingTool
             command += $" {outputFile}";
 
             // Start the recording process
-            var recordingProcess = Process.StartProcess(command);
+            var recordingProcess = _processService.StartProcess(command);
 
             if (recordingProcess == null)
                 throw new Exception("Failed to start the recording process.");
@@ -99,11 +107,11 @@ public class IosVideoRecordingTool
     /// <returns>A message indicating the result of the stop recording operation.</returns>
     [McpServerTool(Name = "ios_video_stop")]
     [Description("Stops the simulator video recording.")]
-    public static async Task<string> StopRecordingAsync()
+    public async Task<string> StopRecordingAsync()
     {
         try
         {
-            var stopRecordingProcess = Process.StartProcess("pkill -SIGINT -f \"simctl.*recordVideo\"");
+            var stopRecordingProcess = _processService.StartProcess("pkill -SIGINT -f \"simctl.*recordVideo\"");
 
             if (stopRecordingProcess == null)
                 throw new Exception("Failed to start the pkill process.");

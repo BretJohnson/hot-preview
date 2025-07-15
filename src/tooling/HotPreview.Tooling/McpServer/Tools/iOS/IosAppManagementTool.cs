@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using HotPreview.Tooling.McpServer.Helpers;
+using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
 namespace HotPreview.Tooling.McpServer;
@@ -8,6 +9,13 @@ namespace HotPreview.Tooling.McpServer;
 [McpServerToolType]
 public class IosAppManagementTool
 {
+    private readonly IProcessService _processService;
+
+    public IosAppManagementTool(IProcessService processService)
+    {
+        _processService = processService;
+    }
+
     /// <summary>
     /// Installs an application on a specified simulator device.
     /// </summary>
@@ -36,7 +44,7 @@ public class IosAppManagementTool
             }
 
             // Execute the command to install the application
-            Process.ExecuteCommand($"xcrun simctl install {deviceId} \"{appPath}\"");
+            _processService.ExecuteCommand($"xcrun simctl install {deviceId} \"{appPath}\"");
         }
         catch (Exception ex)
         {
@@ -72,7 +80,7 @@ public class IosAppManagementTool
             }
 
             // Execute the command to launch the application
-            Process.ExecuteCommand($"xcrun simctl launch {deviceId} {bundleId}");
+            _processService.ExecuteCommand($"xcrun simctl launch {deviceId} {bundleId}");
         }
         catch (Exception ex)
         {
