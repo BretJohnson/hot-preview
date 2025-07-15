@@ -39,7 +39,7 @@ public class IosScreenshotTool
     {
         try
         {
-            if (!Idb.CheckIdbInstalled())
+            if (!Idb.CheckIdbInstalled(_processService))
             {
                 throw new Exception("Idb is not installed or not in PATH. Please install Idb and ensure it is in your PATH.");
             }
