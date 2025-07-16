@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ModelContextProtocol.Server;
 
-namespace HotPreview.Tooling.McpServer.Tools.Windows;
+namespace HotPreview.Tooling.McpServer.Tools.Desktop;
 
 [McpServerToolType]
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
