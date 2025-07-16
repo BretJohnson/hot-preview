@@ -6,7 +6,7 @@ using HotPreview.Tooling.McpServer.Helpers;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Server;
 
-namespace HotPreview.Tooling.McpServer;
+namespace HotPreview.Tooling.McpServer.Tools.Android;
 
 [McpServerToolType]
 public class AndroidScreenshotLlmTool

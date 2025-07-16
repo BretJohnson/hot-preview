@@ -7,7 +7,7 @@ using HotPreview.Tooling.McpServer.Interfaces;
 using HotPreview.Tooling.McpServer.Models;
 using ModelContextProtocol.Server;
 
-namespace HotPreview.Tooling.McpServer;
+namespace HotPreview.Tooling.McpServer.Tools.Android;
 
 /// <summary>
 /// Executes ADB command with passed parameters.

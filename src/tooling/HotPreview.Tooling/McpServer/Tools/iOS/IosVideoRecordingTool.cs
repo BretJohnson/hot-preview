@@ -7,7 +7,7 @@ using HotPreview.Tooling.McpServer.Helpers;
 using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
-namespace HotPreview.Tooling.McpServer;
+namespace HotPreview.Tooling.McpServer.Tools.iOS;
 
 [McpServerToolType]
 public class IosVideoRecordingTool

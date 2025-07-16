@@ -5,7 +5,7 @@ using HotPreview.Tooling.McpServer.Helpers;
 using HotPreview.Tooling.McpServer.Interfaces;
 using ModelContextProtocol.Server;
 
-namespace HotPreview.Tooling.McpServer;
+namespace HotPreview.Tooling.McpServer.Tools.Android;
 
 [McpServerToolType]
 public class AndroidAppManagementTool

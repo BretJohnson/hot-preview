@@ -1,6 +1,7 @@
 using System.Text.Json;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.McpServer.Interfaces;
+using HotPreview.Tooling.McpServer.Tools.Android;
 using HotPreview.Tooling.Tests.McpServer.TestHelpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
