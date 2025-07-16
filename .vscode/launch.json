@@ -5,7 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "DevTools Debug",
+            "name": "DevTools App",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-devtoolsapp",
+            "program": "${workspaceFolder}/bin/HotPreview.DevToolsApp/Debug/net9.0-desktop/HotPreview.DevToolsApp.dll",
+            "args": [],
+            "env": {
+                "DOTNET_MODIFIABLE_ASSEMBLIES": "debug"
+            },
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "DevTools CLI",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/src/tooling/HotPreview.DevTools/HotPreview.DevTools.csproj"
