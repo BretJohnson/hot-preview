@@ -19,7 +19,7 @@ public class DesktopCaptureScreen
     /// </summary>
     /// <param name="outputPath">The full path where the screenshot will be saved.</param>
     /// <returns>A status message indicating success or failure.</returns>
-    [McpServerTool(Name = "take_screenshot")]
+    [McpServerTool(Name = "desktop_screenshot")]
     [Description("Takes a screenshot of the entire primary screen and saves it to the specified path on user system.")]
     public string TakeScreenshot(string outputPath)
     {
@@ -51,7 +51,7 @@ public class DesktopCaptureScreen
     /// <param name="width">The width of the region.</param>
     /// <param name="height">The height of the region.</param>
     /// <returns>A status message indicating success or failure.</returns>
-    [McpServerTool(Name = "take_region_screenshot")]
+    [McpServerTool(Name = "desktop_region_screenshot")]
     [Description("Takes a screenshot of a specific region of the screen on user system.")]
     public string TakeRegionScreenshot(string outputPath, int x, int y, int width, int height)
     {
@@ -137,7 +137,7 @@ public class DesktopCaptureScreen
     /// <param name="windowTitle">The title or part of the title of the application window.</param>
     /// <param name="exactMatch">Whether to require an exact match of the window title.</param>
     /// <returns>A status message indicating success or failure.</returns>
-    [McpServerTool(Name = "take_application_screenshot")]
+    [McpServerTool(Name = "desktop_application_screenshot")]
     [Description("Takes a screenshot of a specific application window on user system.")]
     public string TakeApplicationScreenshot(string outputPath, string windowTitle, bool exactMatch = false)
     {
@@ -309,7 +309,7 @@ public class DesktopCaptureScreen
     /// Lists all visible application windows with their titles.
     /// </summary>
     /// <returns>A formatted string containing the list of visible windows.</returns>
-    [McpServerTool(Name = "list_windows")]
+    [McpServerTool(Name = "desktop_list_windows")]
     [Description("Lists all application windows with their titles on user system, highlighting current process.")]
     public string ListWindows()
     {

@@ -52,7 +52,7 @@ public class McpServerIntegrationTests
             using TempDirectoryHelper tempHelper = new TempDirectoryHelper();
             string testScreenshotPath = tempHelper.CreateTempFile(fileName: "test_screenshot.png");
 
-            JsonDocument screenshotResponse = await mcpClient.CallToolAsync("take_screenshot",
+            JsonDocument screenshotResponse = await mcpClient.CallToolAsync("desktop_screenshot",
                 new { outputPath = testScreenshotPath }, cancellationToken);
 
             // Assert: Tool execution successful
@@ -91,7 +91,7 @@ public class McpServerIntegrationTests
             httpClient.BaseAddress = new Uri(service.ServerUrl);
 
             // Act: Call tool with invalid parameters
-            JsonDocument response = await mcpClient.CallToolAsync("take_screenshot",
+            JsonDocument response = await mcpClient.CallToolAsync("desktop_screenshot",
                 new { outputPath = "/invalid/path/that/does/not/exist/screenshot.png" }, cancellationToken);
 
             // Assert: Error handled gracefully
@@ -137,11 +137,11 @@ public class McpServerIntegrationTests
 
             // Call 2: Take a screenshot
             string testScreenshotPath = tempHelper.CreateTempFile(fileName: "test_screenshot.png");
-            responses.Add(await mcpClient.CallToolAsync("take_screenshot",
+            responses.Add(await mcpClient.CallToolAsync("desktop_screenshot",
                 new { outputPath = testScreenshotPath }, cancellationToken));
 
             // Call 3: List windows
-            responses.Add(await mcpClient.CallToolAsync("list_windows", new { }, cancellationToken));
+            responses.Add(await mcpClient.CallToolAsync("desktop_list_windows", new { }, cancellationToken));
 
             // Assert: All calls successful
             foreach (var response in responses)
@@ -292,7 +292,7 @@ public class McpServerIntegrationTests
             // Act: Test desktop capture with region parameters
             string testScreenshotPath = tempHelper.CreateTempFile(fileName: "region_screenshot.png");
 
-            JsonDocument response = await mcpClient.CallToolAsync("take_region_screenshot",
+            JsonDocument response = await mcpClient.CallToolAsync("desktop_region_screenshot",
                 new { outputPath = testScreenshotPath, x = 0, y = 0, width = 100, height = 100 }, cancellationToken);
 
             // Assert

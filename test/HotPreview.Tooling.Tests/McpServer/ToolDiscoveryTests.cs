@@ -133,10 +133,10 @@ public class ToolDiscoveryTests
                 "ios_list_devices",
                 "ios_boot_device",
                 "ios_screenshot",
-                "take_screenshot",
-                "take_region_screenshot",
-                "take_application_screenshot",
-                "list_windows"
+                "desktop_screenshot",
+                "desktop_region_screenshot",
+                "desktop_application_screenshot",
+                "desktop_list_windows"
             ];
 
             HashSet<string?> discoveredToolNames = tools
