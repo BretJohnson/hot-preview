@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace HotPreview.Tooling.McpServer.Interfaces;
 
 /// <summary>

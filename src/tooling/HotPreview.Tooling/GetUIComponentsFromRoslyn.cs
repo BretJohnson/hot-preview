@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using HotPreview;
 using HotPreview.SharedModel;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
