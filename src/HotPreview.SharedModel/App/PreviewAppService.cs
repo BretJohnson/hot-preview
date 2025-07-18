@@ -9,8 +9,6 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 {
     public PreviewApplication PreviewApplication { get; } = previewApplication;
 
-    public abstract Task NavigateToPreviewAsync(string uiComponentName, string previewName);
-
     protected UIComponentReflection GetUIComponent(string uiComponentName)
     {
         return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName) ??
@@ -43,6 +41,18 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
             .ToArray();
 
         return Task.FromResult(uiComponentInfos);
+    }
+
+    public async Task NavigateToPreviewAsync(string uiComponentName, string previewName)
+    {
+        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
+        await PreviewApplication.GetPreviewNavigator().NavigateToPreviewAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
+    }
+
+    public async Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName)
+    {
+        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
+        return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
     protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)

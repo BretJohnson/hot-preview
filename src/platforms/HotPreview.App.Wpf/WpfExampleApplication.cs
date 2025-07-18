@@ -48,4 +48,5 @@ public class WpfPreviewApplication : PreviewApplication
 
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
+    public override IPreviewNavigator GetPreviewNavigator() => PreviewNavigatorService;
 }
