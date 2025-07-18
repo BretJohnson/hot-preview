@@ -63,6 +63,8 @@ public partial class MauiPreviewApplication : PreviewApplication
 
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
+    public override IPreviewNavigator GetPreviewNavigator() => PreviewNavigatorService;
+
     public override string PlatformName { get; set; }
 
     public override string TransformConnectionStringForPlatform(string connectionString)

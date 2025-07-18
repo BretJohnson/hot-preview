@@ -23,6 +23,8 @@ public abstract class PreviewApplication
 
     public abstract PreviewAppService GetPreviewAppService();
 
+    public abstract IPreviewNavigator GetPreviewNavigator();
+
     public void StartToolingConnection()
     {
         if (_toolingConnection is not null)

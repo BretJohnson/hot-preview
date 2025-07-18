@@ -4,9 +4,11 @@ namespace HotPreview.SharedModel.Protocol;
 
 public interface IPreviewAppService
 {
-    public Task NavigateToPreviewAsync(string componentName, string previewName);
+    public Task<UIComponentInfo[]> GetUIComponentsAsync();
 
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName);
 
-    public Task<UIComponentInfo[]> GetUIComponentsAsync();
+    public Task NavigateToPreviewAsync(string componentName, string previewName);
+
+    public Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
 }
