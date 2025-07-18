@@ -163,6 +163,13 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
             return false;
         }
 
+        // Check if UIComponentAttribute explicitly disables auto-generation
+        UIComponentAttribute? uiComponentAttribute = type.GetCustomAttribute<UIComponentAttribute>(false);
+        if (uiComponentAttribute?.AutoGeneratePreview == false)
+        {
+            return false;
+        }
+
         UIComponentKind kind = InferUIComponentKind(type);
 
         if (kind == UIComponentKind.Unknown)
