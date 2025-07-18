@@ -335,16 +335,16 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
                 return false;
             }
 
-            // Check if UIComponentAttribute explicitly disables auto-generation
+            // Check if AutoGeneratePreviewAttribute explicitly disables auto-generation
             foreach (AttributeData attribute in classTypeSymbol.GetAttributes())
             {
-                if (attribute.AttributeClass?.ToDisplayString() == UIComponentAttribute.TypeFullName)
+                if (attribute.AttributeClass?.ToDisplayString() == "HotPreview.AutoGeneratePreviewAttribute")
                 {
-                    // Look for the AutoGeneratePreview parameter (second parameter)
-                    if (attribute.ConstructorArguments.Length >= 2)
+                    // Look for the autoGenerate parameter (first parameter)
+                    if (attribute.ConstructorArguments.Length >= 1)
                     {
-                        TypedConstant autoGeneratePreviewArg = attribute.ConstructorArguments[1];
-                        if (autoGeneratePreviewArg.Value is bool autoGeneratePreview && !autoGeneratePreview)
+                        TypedConstant autoGenerateArg = attribute.ConstructorArguments[0];
+                        if (autoGenerateArg.Value is bool autoGenerate && !autoGenerate)
                         {
                             return false;
                         }

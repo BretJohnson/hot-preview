@@ -17,19 +17,12 @@ public sealed class UIComponentAttribute : Attribute
     /// </summary>
     public string? DisplayName { get; }
 
-    /// <summary>
-    /// Optional flag to control whether auto-generated previews should be created for this component.
-    /// When set to false, auto-generation is disabled. When null (default), auto-generation follows normal rules.
-    /// </summary>
-    public bool? AutoGeneratePreview { get; }
-
     public UIComponentAttribute()
     {
     }
 
-    public UIComponentAttribute(string? displayName = null, bool? autoGeneratePreview = null)
+    public UIComponentAttribute(string? displayName)
     {
         DisplayName = displayName;
-        AutoGeneratePreview = autoGeneratePreview;
     }
 }
