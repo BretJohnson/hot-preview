@@ -25,7 +25,6 @@ namespace HotPreview.Tooling.VisualTestUtils.MagickNet
             ImageSnapshotFormat format = _magickImage.Format switch
             {
                 MagickFormat.Png => ImageSnapshotFormat.PNG,
-                MagickFormat.Jpeg => ImageSnapshotFormat.JPEG,
                 _ => throw new NotSupportedException($"Unexpected image format: {_magickImage.Format}")
             };
 

@@ -6,7 +6,6 @@ public static class ImageSnapshotFormatExtensions
         format switch
         {
             ImageSnapshotFormat.PNG => ".png",
-            ImageSnapshotFormat.JPEG => ".jpg",
             _ => throw new InvalidOperationException($"Invalid ImageFormat value: {format}"),
         };
 
@@ -17,10 +16,6 @@ public static class ImageSnapshotFormatExtensions
         if (fileExtension == ".png")
         {
             return ImageSnapshotFormat.PNG;
-        }
-        else if (fileExtension == ".jpg" || fileExtension == ".jpeg")
-        {
-            return ImageSnapshotFormat.JPEG;
         }
         else
         {
