@@ -21,7 +21,7 @@ public sealed class UIComponentAttribute : Attribute
     {
     }
 
-    public UIComponentAttribute(string? displayName = null)
+    public UIComponentAttribute(string? displayName)
     {
         DisplayName = displayName;
     }
