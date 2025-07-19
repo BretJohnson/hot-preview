@@ -1,4 +1,4 @@
-namespace HotPreview.Tooling.VisualTestUtils;
+namespace HotPreview.Tooling;
 
 public class ImageSnapshot
 {

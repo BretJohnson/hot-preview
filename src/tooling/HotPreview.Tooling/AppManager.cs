@@ -99,4 +99,55 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
             }
         }
     }
+
+    public async Task UpdatePreviewSnapshotsAsync(UIComponentTooling? uiComponent, PreviewTooling? preview)
+    {
+        if (uiComponent is null && preview is not null)
+        {
+            throw new InvalidOperationException("Cannot specify a preview without specifying a UI component");
+        }
+
+        if (UIComponentsManager is null)
+        {
+            throw new InvalidOperationException("App has no UI components loaded");
+        }
+
+        string snapshotsDirectory = Path.Combine(ProjectPath, "snapshots");
+        Directory.CreateDirectory(snapshotsDirectory);
+
+        IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
+            [uiComponent] : UIComponentsManager.UIComponents;
+
+        var tasks = new List<Task>();
+
+        foreach (UIComponentTooling component in componentsToProcess)
+        {
+            IEnumerable<PreviewTooling> previewsToProcess = preview is not null
+                ? [preview]
+                : component.Previews;
+
+            foreach (PreviewTooling previewItem in previewsToProcess)
+            {
+                // Process each app connection in parallel
+                foreach (AppConnectionManager appConnection in AppConnections)
+                {
+                    if (appConnection.UIComponentsManager?.HasPreview(component.Name, previewItem.Name) ?? false)
+                    {
+                        tasks.Add(UpdatePreviewSnapshotForConnectionAsync(appConnection, component, previewItem, snapshotsDirectory));
+                    }
+                }
+            }
+        }
+
+        await Task.WhenAll(tasks);
+    }
+
+    private async Task UpdatePreviewSnapshotForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling component, PreviewTooling preview, string snapshotsDirectory)
+    {
+        var previewPair = new UIComponentPreviewPairTooling(component, preview);
+        ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
+
+        string fileNameBase = $"{component.Name}-{preview.Name}";
+        snapshot.Save(snapshotsDirectory, fileNameBase);
+    }
 }

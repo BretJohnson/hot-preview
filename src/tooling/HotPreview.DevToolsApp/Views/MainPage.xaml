@@ -111,6 +111,11 @@
         <TreeView.ItemTemplate>
           <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
             <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}">
+              <TreeViewItem.ContextFlyout>
+                <MenuFlyout>
+                  <MenuFlyoutItem Text="Update snapshots" Command="{x:Bind UpdateSnapshotCommand}"/>
+                </MenuFlyout>
+              </TreeViewItem.ContextFlyout>
               <StackPanel Orientation="Horizontal">
                 <!-- Icon -->
                 <Viewbox Width="18"

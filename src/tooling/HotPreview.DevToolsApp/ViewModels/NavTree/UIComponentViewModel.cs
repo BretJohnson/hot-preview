@@ -13,6 +13,15 @@ public class UIComponentViewModel(UIComponentTooling uiComponent) : NavTreeItemV
             uiComponent.Previews.Select(preview => new PreviewViewModel(uiComponent, preview)).ToList() :
             null;
 
+    public override ICommand UpdateSnapshotCommand { get; } = new RelayCommand(async () =>
+    {
+        AppManager? appManager = DevToolsManager.Instance.MainPageViewModel.CurrentApp;
+        if (appManager is not null)
+        {
+            await appManager.UpdatePreviewSnapshotsAsync(uiComponent, null);
+        }
+    });
+
     public override void OnItemInvoked()
     {
         if (uiComponent.HasSinglePreview)
