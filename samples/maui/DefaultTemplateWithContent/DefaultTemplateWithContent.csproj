@@ -42,7 +42,9 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
+
+    <UseNuget>false</UseNuget>
+  </PropertyGroup>
 
   <ItemGroup>
 		<!-- App Icon -->
@@ -80,7 +82,9 @@
 	  <ProjectReference Include="..\..\..\src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
 	</ItemGroup>
 
-  <!-- Since we using a project reference instead of referencing the NuGet we need to also import the props -->
-  <Import Project="..\..\..\src\HotPreview\buildTransitive\HotPreview.props" />
+  <ItemGroup Condition="'$(UseNuget)' == 'true'">
+    <PackageReference Include="HotPreview.App.Maui" Version="*-*" /> <!-- Use the latest version including prereleases -->
+  </ItemGroup>
+  <Import Condition="'$(UseNuget)' == 'false'" Project="..\..\..\src\platforms\HotPreview.App.Maui\build\LocalTest.targets" />
 
 </Project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This targets file can be used when testing locally, without using the NuGet package. -->
+<!-- It simulates the NuGet package dependencies and build files. -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\HotPreview\buildTransitive\HotPreview.props" />
+
+  <UsingTask TaskName="HotPreview.AppBuildTasks.GeneratePreviewAppSettingsTask"
+             AssemblyFile="..\..\..\..\bin\HotPreview.AppBuildTasks\Debug\netstandard2.0\HotPreview.AppBuildTasks.dll" />
+  <Import Project=".\HotPreview.App.Maui.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\HotPreview.App.Maui.csproj" />
+  </ItemGroup>
+</Project>
