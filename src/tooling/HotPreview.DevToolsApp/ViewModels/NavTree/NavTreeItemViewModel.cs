@@ -18,6 +18,11 @@ public abstract partial class NavTreeItemViewModel : ObservableObject
     public virtual IReadOnlyList<NavTreeItemViewModel>? Children { get; }
 
     /// <summary>
+    /// Command for updating snapshots. Override in derived classes to implement snapshot functionality.
+    /// </summary>
+    public virtual ICommand? UpdateSnapshotCommand { get; }
+
+    /// <summary>
     /// Called when this item is invoked (selected) in the TreeView.
     /// Override this method in derived classes to implement navigation or other actions.
     /// </summary>

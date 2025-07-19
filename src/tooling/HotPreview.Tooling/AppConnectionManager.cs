@@ -81,4 +81,10 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
 
         _appManager?.UpdateUIComponents();
     }
+
+    public async Task<ImageSnapshot> GetPreviewSnapshotAsync(UIComponentPreviewPairTooling previewPair)
+    {
+        byte[] pngData = await AppService!.GetPreviewSnapshotAsync(previewPair.UIComponent.Name, previewPair.Preview.Name);
+        return new ImageSnapshot(pngData, ImageSnapshotFormat.PNG);
+    }
 }
