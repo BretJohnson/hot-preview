@@ -6,7 +6,6 @@ namespace HotPreview.SharedModel.App;
 public abstract class PreviewReflection : PreviewBase
 {
     private readonly Type? _uiComponentType;
-    //private Dictionary<string, ImageSnapshot?>? _snapshotsByEnvironment;
 
     public PreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
     {

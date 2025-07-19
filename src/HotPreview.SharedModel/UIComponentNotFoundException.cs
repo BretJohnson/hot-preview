@@ -2,9 +2,6 @@ using System;
 
 namespace HotPreview.SharedModel;
 
-public class UIComponentNotFoundException : Exception
+public class UIComponentNotFoundException(string message) : Exception(message)
 {
-    public UIComponentNotFoundException(string message) : base(message)
-    {
-    }
 }

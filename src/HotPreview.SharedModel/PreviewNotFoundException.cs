@@ -2,9 +2,6 @@ using System;
 
 namespace HotPreview.SharedModel;
 
-public class PreviewNotFoundException : Exception
+public class PreviewNotFoundException(string message) : Exception(message)
 {
-    public PreviewNotFoundException(string message) : base(message)
-    {
-    }
 }
