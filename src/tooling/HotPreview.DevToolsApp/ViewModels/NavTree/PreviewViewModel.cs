@@ -1,23 +1,32 @@
 using HotPreview.Tooling;
+using Microsoft.UI.Xaml.Controls;
 
 namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
-public class PreviewViewModel(UIComponentTooling uiComponent, PreviewTooling preview) : NavTreeItemViewModel
+public class PreviewViewModel : NavTreeItemViewModel
 {
-    public UIComponentTooling UIComponent { get; } = uiComponent;
-    public PreviewTooling Preview { get; } = preview;
+    public PreviewViewModel(UIComponentTooling uiComponent, PreviewTooling preview)
+    {
+        UIComponent = uiComponent;
+        Preview = preview;
+
+        UpdateSnapshotsCommand = new RelayCommand(async () =>
+        {
+            AppManager? appManager = DevToolsManager.Instance.MainPageViewModel.CurrentApp;
+            if (appManager is not null)
+            {
+                await appManager.UpdatePreviewSnapshotsAsync(UIComponent, Preview);
+            }
+        });
+    }
+
+    public UIComponentTooling UIComponent { get; }
+    public PreviewTooling Preview { get; }
 
     public override string DisplayName => Preview.DisplayName;
     public override string PathIcon => UIComponent.PathIcon;
 
-    public override ICommand UpdateSnapshotCommand { get; } = new RelayCommand(async () =>
-    {
-        AppManager? appManager = DevToolsManager.Instance.MainPageViewModel.CurrentApp;
-        if (appManager is not null)
-        {
-            await appManager.UpdatePreviewSnapshotsAsync(uiComponent, preview);
-        }
-    });
+    public override ICommand UpdateSnapshotsCommand { get; }
 
     public override void OnItemInvoked()
     {

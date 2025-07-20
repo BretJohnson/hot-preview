@@ -112,42 +112,42 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
             throw new InvalidOperationException("App has no UI components loaded");
         }
 
-        string snapshotsDirectory = Path.Combine(ProjectPath, "snapshots");
+        string projectDirectory = Path.GetDirectoryName(ProjectPath) ?? throw new InvalidOperationException($"Invalid project path: {ProjectPath}");
+        string snapshotsDirectory = Path.Combine(projectDirectory, "snapshots");
         Directory.CreateDirectory(snapshotsDirectory);
 
-        IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
-            [uiComponent] : UIComponentsManager.UIComponents;
-
-        var tasks = new List<Task>();
-
-        foreach (UIComponentTooling component in componentsToProcess)
+        // Process each app connection in parallel
+        List<Task> connectionTasks = [];
+        foreach (AppConnectionManager appConnection in AppConnections)
         {
-            IEnumerable<PreviewTooling> previewsToProcess = preview is not null
-                ? [preview]
-                : component.Previews;
+            connectionTasks.Add(UpdatePreviewSnapshotsForConnectionAsync(appConnection, uiComponent, preview, snapshotsDirectory));
+        }
 
-            foreach (PreviewTooling previewItem in previewsToProcess)
+        await Task.WhenAll(connectionTasks);
+    }
+
+    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory)
+    {
+        IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
+            [uiComponent] : UIComponentsManager!.UIComponents;
+
+        foreach (UIComponentTooling currentUIComponent in componentsToProcess)
+        {
+            IReadOnlyList<PreviewTooling> previewsToProcess = preview is not null
+                ? [preview]
+                : currentUIComponent.Previews;
+
+            foreach (PreviewTooling currentPreview in previewsToProcess)
             {
-                // Process each app connection in parallel
-                foreach (AppConnectionManager appConnection in AppConnections)
+                if (appConnection.UIComponentsManager?.HasPreview(currentUIComponent.Name, currentPreview.Name) ?? false)
                 {
-                    if (appConnection.UIComponentsManager?.HasPreview(component.Name, previewItem.Name) ?? false)
-                    {
-                        tasks.Add(UpdatePreviewSnapshotForConnectionAsync(appConnection, component, previewItem, snapshotsDirectory));
-                    }
+                    var previewPair = new UIComponentPreviewPairTooling(currentUIComponent, currentPreview);
+                    ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
+
+                    string fileNameBase = !currentUIComponent.HasMultiplePreviews ? currentUIComponent.Name : $"{currentUIComponent.Name}-{currentPreview.Name}";
+                    snapshot.Save(snapshotsDirectory, fileNameBase);
                 }
             }
         }
-
-        await Task.WhenAll(tasks);
-    }
-
-    private async Task UpdatePreviewSnapshotForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling component, PreviewTooling preview, string snapshotsDirectory)
-    {
-        var previewPair = new UIComponentPreviewPairTooling(component, preview);
-        ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
-
-        string fileNameBase = $"{component.Name}-{preview.Name}";
-        snapshot.Save(snapshotsDirectory, fileNameBase);
     }
 }

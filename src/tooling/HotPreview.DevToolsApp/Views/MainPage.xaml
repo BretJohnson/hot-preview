@@ -113,7 +113,7 @@
             <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}">
               <TreeViewItem.ContextFlyout>
                 <MenuFlyout>
-                  <MenuFlyoutItem Text="Update snapshots" Command="{x:Bind UpdateSnapshotCommand}"/>
+                  <MenuFlyoutItem Text="Update snapshots" Command="{x:Bind UpdateSnapshotsCommand}"/>
                 </MenuFlyout>
               </TreeViewItem.ContextFlyout>
               <StackPanel Orientation="Horizontal">
