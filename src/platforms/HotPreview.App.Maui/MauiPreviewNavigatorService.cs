@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using HotPreview.SharedModel;
 using HotPreview.SharedModel.App;
@@ -49,8 +50,8 @@ public class MauiPreviewNavigatorService : IPreviewNavigator
                 }
                 else if (previewUI is ContentPage contentPage)
                 {
-                    //MauiPreviewApplication.Instance.Application.MainPage = contentPage;
-                    await Application.Current!.MainPage!.Navigation.PushAsync(contentPage, NavigateAnimationsEnabled);
+                    Application.Current!.MainPage = contentPage;
+                    //await Application.Current!.MainPage!.Navigation.PushAsync(contentPage, NavigateAnimationsEnabled);
                 }
             }
         });
@@ -82,6 +83,8 @@ public class MauiPreviewNavigatorService : IPreviewNavigator
                 }
                 else if (previewUI is ContentPage contentPage)
                 {
+                    Application.Current!.MainPage = contentPage;
+                    await WaitForPageLoadedAsync(contentPage);
                     return await CaptureViewAsPngAsync(contentPage);
                 }
                 else
@@ -90,6 +93,40 @@ public class MauiPreviewNavigatorService : IPreviewNavigator
                 }
             }
         });
+    }
+
+    private static async Task WaitForPageLoadedAsync(ContentPage contentPage)
+    {
+        if (contentPage.IsLoaded)
+        {
+            // Page is already loaded, wait one frame to ensure rendering is complete
+            await Task.Delay(16); // ~1 frame at 60fps
+            return;
+        }
+
+        // Wait for the Loaded event
+        var tcs = new TaskCompletionSource<bool>();
+
+        void OnLoaded(object? sender, EventArgs e)
+        {
+            contentPage.Loaded -= OnLoaded;
+            tcs.SetResult(true);
+        }
+
+        contentPage.Loaded += OnLoaded;
+
+        // Add a timeout to prevent hanging indefinitely
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        cts.Token.Register(() =>
+        {
+            contentPage.Loaded -= OnLoaded;
+            tcs.TrySetException(new TimeoutException("Page failed to load within 5 seconds"));
+        });
+
+        await tcs.Task;
+
+        // Wait one additional frame to ensure rendering is complete
+        await Task.Delay(16); // ~1 frame at 60fps
     }
 
     private static async Task<byte[]> CaptureViewAsPngAsync(IView view)
