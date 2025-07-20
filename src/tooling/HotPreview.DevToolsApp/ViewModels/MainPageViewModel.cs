@@ -1,6 +1,7 @@
 using HotPreview.DevToolsApp.Utilities;
 using HotPreview.DevToolsApp.ViewModels.NavTree;
 using HotPreview.Tooling;
+using HotPreview.Tooling.Services;
 using Microsoft.UI.Xaml.Data;
 
 namespace HotPreview.DevToolsApp.ViewModels;
@@ -9,12 +10,17 @@ namespace HotPreview.DevToolsApp.ViewModels;
 public partial class MainPageViewModel : ObservableObject
 {
     private readonly INavigator _navigator;
+    private readonly StatusReporter _statusReporter;
+    private readonly DevToolsManager _devToolsManager;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
 
     [ObservableProperty]
     private AppManager? _currentApp;
+
+    [ObservableProperty]
+    private string _statusMessage = "Ready";
 
     /// <summary>
     /// Returns true when there is a connected app (CurrentApp is not null).
@@ -23,11 +29,16 @@ public partial class MainPageViewModel : ObservableObject
 
     public string PageTitle => CurrentApp is not null ? CurrentApp.ProjectName : "Hot Preview";
 
-    public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator)
+    public MainPageViewModel(IOptions<AppConfig> appInfo, INavigator navigator, StatusReporter statusReporter, DevToolsManager devToolsManager)
     {
-        DevToolsManager.Instance.MainPageViewModel = this;
+        _devToolsManager = devToolsManager;
+        _devToolsManager.MainPageViewModel = this;
 
         _navigator = navigator;
+        _statusReporter = statusReporter;
+
+        // Subscribe to status updates
+        _statusReporter.StatusChanged += OnStatusChanged;
 
         // Initialize commands
         PlayCommand = new RelayCommand(Play);
@@ -35,7 +46,7 @@ public partial class MainPageViewModel : ObservableObject
 
         // Initialize CurrentApp with the first app, if there is one. Update CurrentApp when AppsManager.Apps changes.
         UpdateCurrentAppFromAppsManager();
-        DevToolsManager.Instance.AppsManager.PropertyChanged += (sender, e) =>
+        _devToolsManager.AppsManager.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(AppsManager.Apps))
             {
@@ -45,6 +56,10 @@ public partial class MainPageViewModel : ObservableObject
 
         // Initialize sample data
         UpdateNavTreeItems();
+
+        // Set initial status message
+        string initialStatus = HaveApp ? $"Connected to {CurrentApp!.ProjectName}" : "No app connected";
+        _statusReporter.UpdateStatus(initialStatus);
     }
 
     public BulkObservableCollection<NavTreeItemViewModel> NavTreeItems { get; } = [];
@@ -55,7 +70,7 @@ public partial class MainPageViewModel : ObservableObject
 
     private void UpdateCurrentAppFromAppsManager()
     {
-        IEnumerable<AppManager> apps = DevToolsManager.Instance.AppsManager.Apps;
+        IEnumerable<AppManager> apps = _devToolsManager.AppsManager.Apps;
 
         // If current app is still in the list, keep it
         if (CurrentApp is not null && apps.Contains(CurrentApp))
@@ -64,7 +79,23 @@ public partial class MainPageViewModel : ObservableObject
         }
 
         // Otherwise, select the first app or null if list is empty
-        CurrentApp = apps.FirstOrDefault();
+        AppManager? newApp = apps.FirstOrDefault();
+
+        if (newApp != null && CurrentApp == null)
+        {
+            _statusReporter.UpdateStatus($"Connected to {newApp.ProjectName}");
+        }
+        else if (newApp == null && CurrentApp != null)
+        {
+            _statusReporter.UpdateStatus("App disconnected");
+        }
+
+        CurrentApp = newApp;
+
+        if (CurrentApp == null)
+        {
+            _statusReporter.UpdateStatus("No app connected");
+        }
     }
 
     partial void OnCurrentAppChanged(AppManager? oldValue, AppManager? newValue)
@@ -102,7 +133,7 @@ public partial class MainPageViewModel : ObservableObject
             List<NavTreeItemViewModel> newNavTreeItems = [];
             foreach (UIComponentTooling uiComponent in uiComponentsManager.SortedUIComponents)
             {
-                newNavTreeItems.Add(new UIComponentViewModel(uiComponent));
+                newNavTreeItems.Add(new UIComponentViewModel(this, uiComponent));
             }
 
             NavTreeItems.ReplaceAll(newNavTreeItems);
@@ -165,12 +196,17 @@ public partial class MainPageViewModel : ObservableObject
 
     private void Play()
     {
-        bool success = DevToolsManager.Instance.Run();
+        _statusReporter.UpdateStatus("Starting project...");
 
-        if (!success)
+        bool success = _devToolsManager.Run();
+
+        if (success)
         {
-            // TODO: Show error message to user (could use a notification service or dialog)
-            // For now, this will be logged by the DevToolsManager
+            _statusReporter.UpdateStatus("Project started successfully");
+        }
+        else
+        {
+            _statusReporter.UpdateStatus("Failed to start project");
         }
     }
 
@@ -182,5 +218,19 @@ public partial class MainPageViewModel : ObservableObject
     partial void OnSearchTextChanged(string value)
     {
         // TODO: Implement search filtering
+    }
+
+    /// <summary>
+    /// Updates the status message displayed in the status bar.
+    /// </summary>
+    /// <param name="message">The status message to display.</param>
+    public void UpdateStatusMessage(string message)
+    {
+        StatusMessage = message;
+    }
+
+    private void OnStatusChanged(object? sender, string message)
+    {
+        StatusMessage = message;
     }
 }

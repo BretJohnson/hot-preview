@@ -1,11 +1,12 @@
 using System.Collections.Concurrent;
+using HotPreview.Tooling.Services;
 
 namespace HotPreview.Tooling;
 
 /// <summary>
 /// The AppsManager is responsible for managing the apps that are connected to the tooling server.
 /// </summary>
-public class AppsManager(SynchronizationContext synchronizationContext) : ToolingObservableObject(synchronizationContext)
+public class AppsManager(UIContextProvider uiContextProvider, StatusReporter statusReporter) : ToolingObservableObject(uiContextProvider.UIContext)
 {
     private readonly ConcurrentDictionary<string, AppManager> _apps = [];
 
@@ -17,6 +18,11 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
     public int AppCount => _apps.Count;
 
     /// <summary>
+    /// Gets the status reporter for updating application status messages.
+    /// </summary>
+    public StatusReporter StatusReporter { get; } = statusReporter;
+
+    /// <summary>
     /// Gets or creates an AppManager for the specified project path.
     /// </summary>
     /// <param name="projectPath">The project path to get or create an AppManager for</param>
@@ -25,7 +31,7 @@ public class AppsManager(SynchronizationContext synchronizationContext) : Toolin
     {
         if (!_apps.TryGetValue(projectPath, out AppManager? appManager))
         {
-            appManager = new AppManager(SynchronizationContext, this, projectPath);
+            appManager = new AppManager(uiContextProvider, this, projectPath, StatusReporter);
             _apps[projectPath] = appManager;
 
             OnPropertyChanged(nameof(Apps));

@@ -16,6 +16,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
     <!-- Header -->
@@ -157,6 +158,29 @@
                    HorizontalAlignment="Center"/>
       </StackPanel>
     </Grid>
+
+    <!-- Status Bar -->
+    <Border Grid.Row="3"
+            Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+            BorderThickness="0,1,0,0"
+            Padding="16,8">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Status Message -->
+        <TextBlock Grid.Column="0"
+                   Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                   FontSize="12"
+                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                   VerticalAlignment="Center"/>
+
+        <!-- Future: Additional status bar buttons will go in Grid.Column="1" -->
+      </Grid>
+    </Border>
 
   </Grid>
 </Page>

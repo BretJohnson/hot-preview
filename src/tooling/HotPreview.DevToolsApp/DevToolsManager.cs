@@ -2,6 +2,7 @@ using System.Diagnostics;
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.Tooling;
 using HotPreview.Tooling.McpServer;
+using HotPreview.Tooling.Services;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -9,38 +10,29 @@ using Microsoft.CodeAnalysis.MSBuild;
 namespace HotPreview.DevToolsApp;
 
 /// <summary>
-/// Singleton manager class for global application state for the HotPreview DevTools app.
+/// Manager class for global application state for the HotPreview DevTools app.
 /// </summary>
 public partial class DevToolsManager : ObservableObject
 {
-    private static DevToolsManager? s_instance;
     private readonly ILogger<DevToolsManager> _logger;
-
     private readonly ToolingAppServerConnectionListener _appServiceConnectionListener;
-    private McpHttpServerService? _mcpHttpServerService;
-
-    /// <summary>
-    /// Gets the singleton instance of the DevToolsManager.
-    /// </summary>
-    public static DevToolsManager Instance => s_instance ??
-        throw new InvalidOperationException("DevToolsManager has not been initialized yet.");
+    private readonly McpHttpServerService _mcpHttpServerService;
 
     public AppsManager AppsManager { get; }
 
-    private DevToolsManager(SynchronizationContext uiThreadSynchronizationContext)
+    public DevToolsManager(UIContextProvider uiContextProvider, StatusReporter statusReporter, McpHttpServerService mcpHttpServerService, ILogger<DevToolsManager> logger)
     {
-        // SynchronizationContext.Current must be for the UI thread
-        AppsManager = new(uiThreadSynchronizationContext);
+        _logger = logger;
+        _mcpHttpServerService = mcpHttpServerService;
 
-        _logger = LoggerFactory.Create(builder => builder.AddDebug()).CreateLogger<DevToolsManager>();
-        _logger.LogWarning("DevToolsManager initialized without application services, using default logger");
+        AppsManager = new(uiContextProvider, statusReporter);
 
         // Initialize the app service connection listener
         _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);
         _appServiceConnectionListener.StartListening();
 
-        // Initial connection settings without MCP URL (will be updated when MCP service starts)
-        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, null);
+        // Initial connection settings with MCP URL
+        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService.ServerUrl);
     }
 
     public MainPageViewModel MainPageViewModel { get; set; } = null!;
@@ -55,31 +47,7 @@ public partial class DevToolsManager : ObservableObject
     /// </summary>
     public void UpdateConnectionSettings()
     {
-        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService?.ServerUrl);
-    }
-
-    /// <summary>
-    /// Initializes the DevToolsManager with services from the application.
-    /// </summary>
-    /// <param name="uiThreadSynchronizationContext">The UI thread synchronization context.</param>
-    public static void Initialize(SynchronizationContext uiThreadSynchronizationContext)
-    {
-        if (s_instance is not null)
-        {
-            throw new InvalidOperationException("DevToolsManager already initialized");
-        }
-
-        s_instance = new DevToolsManager(uiThreadSynchronizationContext);
-    }
-
-    /// <summary>
-    /// Sets the MCP HTTP server service and updates connection settings.
-    /// </summary>
-    /// <param name="mcpHttpServerService">The MCP HTTP server service instance.</param>
-    public void SetMcpService(McpHttpServerService mcpHttpServerService)
-    {
-        _mcpHttpServerService = mcpHttpServerService;
-        UpdateConnectionSettings();
+        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService.ServerUrl);
     }
 
     /// <summary>

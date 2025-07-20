@@ -5,14 +5,17 @@ namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
 public class PreviewViewModel : NavTreeItemViewModel
 {
-    public PreviewViewModel(UIComponentTooling uiComponent, PreviewTooling preview)
+    private readonly MainPageViewModel _mainPageViewModel;
+
+    public PreviewViewModel(MainPageViewModel mainPageViewModel, UIComponentTooling uiComponent, PreviewTooling preview)
     {
+        _mainPageViewModel = mainPageViewModel;
         UIComponent = uiComponent;
         Preview = preview;
 
         UpdateSnapshotsCommand = new RelayCommand(async () =>
         {
-            AppManager? appManager = DevToolsManager.Instance.MainPageViewModel.CurrentApp;
+            AppManager? appManager = _mainPageViewModel.CurrentApp;
             if (appManager is not null)
             {
                 await appManager.UpdatePreviewSnapshotsAsync(UIComponent, Preview);
@@ -31,6 +34,6 @@ public class PreviewViewModel : NavTreeItemViewModel
     public override void OnItemInvoked()
     {
         // Navigate to the preview, for all app connections that have the preview
-        DevToolsManager.Instance.MainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, Preview);
+        _mainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, Preview);
     }
 }

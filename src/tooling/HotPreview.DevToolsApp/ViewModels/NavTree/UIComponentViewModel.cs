@@ -4,13 +4,16 @@ namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
 public class UIComponentViewModel : NavTreeItemViewModel
 {
-    public UIComponentViewModel(UIComponentTooling uiComponent)
+    private readonly MainPageViewModel _mainPageViewModel;
+
+    public UIComponentViewModel(MainPageViewModel mainPageViewModel, UIComponentTooling uiComponent)
     {
+        _mainPageViewModel = mainPageViewModel;
         UIComponent = uiComponent;
 
         UpdateSnapshotsCommand = new RelayCommand(async () =>
         {
-            AppManager? appManager = DevToolsManager.Instance.MainPageViewModel.CurrentApp;
+            AppManager? appManager = _mainPageViewModel.CurrentApp;
             if (appManager is not null)
             {
                 await appManager.UpdatePreviewSnapshotsAsync(UIComponent, null);
@@ -26,7 +29,7 @@ public class UIComponentViewModel : NavTreeItemViewModel
 
     public override IReadOnlyList<NavTreeItemViewModel>? Children =>
         UIComponent.HasMultiplePreviews ?
-            UIComponent.Previews.Select(preview => new PreviewViewModel(UIComponent, preview)).ToList() :
+            UIComponent.Previews.Select(preview => new PreviewViewModel(_mainPageViewModel, UIComponent, preview)).ToList() :
             null;
 
     public override ICommand UpdateSnapshotsCommand { get; }
@@ -36,7 +39,7 @@ public class UIComponentViewModel : NavTreeItemViewModel
         if (UIComponent.HasSinglePreview)
         {
             // Navigate to the preview, for all app connections that have the preview
-            DevToolsManager.Instance.MainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, UIComponent.DefaultPreview);
+            _mainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, UIComponent.DefaultPreview);
         }
     }
 }

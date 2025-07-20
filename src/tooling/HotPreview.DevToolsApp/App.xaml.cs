@@ -1,5 +1,7 @@
+using HotPreview.DevToolsApp.Services;
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.Tooling.McpServer;
+using HotPreview.Tooling.Services;
 using Uno.Resizetizer;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
@@ -24,7 +26,7 @@ public partial class App : Application
     {
         ApplicationView.PreferredLaunchViewSize = new Size(400, 800);
 
-        var builder = this.CreateBuilder(args)
+        IApplicationBuilder builder = this.CreateBuilder(args)
                 // Add navigation support for toolkit controls such as TabBar and NavigationView
                 .UseToolkitNavigation()
                 .Configure(host => host
@@ -69,8 +71,20 @@ public partial class App : Application
                     )
                     .ConfigureServices((context, services) =>
                     {
-                        // Register MCP HTTP server service
-                        services.AddHostedService<McpHttpServerService>();
+                        // Register UI context provider, capturing the UI SynchronizationContext as the ConfigureServices
+                        // code runs on the UI thread so
+                        services.AddSingleton(new UIContextProvider(SynchronizationContext.Current!));
+
+                        // Register MCP HTTP server service, both as a singleton
+                        // (so can pass to the DevToolsManager constructor) and as a hosted service
+                        // (so it starts/stops automatically with the app lifecycle)
+                        services.AddSingleton<McpHttpServerService>();
+                        services.AddHostedService(provider =>
+                            provider.GetService<McpHttpServerService>()!);
+
+                        services.AddSingleton<StatusReporter>();
+
+                        services.AddSingleton<DevToolsManager>();
                     })
                     .UseNavigation(RegisterRoutes)
                 );
@@ -87,17 +101,11 @@ public partial class App : Application
             SingleInstanceManager.ReleaseMutex();
         };
 
-        DevToolsManager.Initialize(SynchronizationContext.Current!);
 
         Host = await builder.NavigateAsync<Shell>();
 
-        // Update DevToolsManager with MCP service after Host is created
-        var mcpService = Host.Services.GetService<McpHttpServerService>();
-        if (mcpService != null)
-        {
-            DevToolsManager.Instance.SetMcpService(mcpService);
-        }
-
+        // Initialize DevToolsManager from DI container
+        DevToolsManager devToolsManager = Host.Services.GetRequiredService<DevToolsManager>();
     }
 
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)

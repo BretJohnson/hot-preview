@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using HotPreview.Tooling.Services;
 
 namespace HotPreview.Tooling;
 
@@ -10,13 +11,17 @@ namespace HotPreview.Tooling;
 /// </summary>
 /// <param name="appsManager">The apps manager that owns this app</param>
 /// <param name="projectPath">The startup project path of the app</param>
-public class AppManager(SynchronizationContext synchronizationContext, AppsManager appsManager, string projectPath) : ToolingObservableObject(synchronizationContext)
+/// <param name="statusReporter">The status reporter for updating application status messages</param>
+public class AppManager(UIContextProvider uiContextProvider, AppsManager appsManager, string projectPath, StatusReporter statusReporter) :
+    ToolingObservableObject(uiContextProvider.UIContext)
 {
     private UIComponentsManagerTooling? _uiComponentsManager;
 
     public AppsManager AppsManager { get; } = appsManager;
 
     public string ProjectPath { get; } = projectPath;
+
+    public StatusReporter StatusReporter { get; } = statusReporter;
 
     /// <summary>
     /// Gets or sets the UIComponentsManager for the app. A property change notification is raised when the UIComponentsManager collection changes.
@@ -112,24 +117,60 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
             throw new InvalidOperationException("App has no UI components loaded");
         }
 
+        StatusReporter.UpdateStatus("Preparing snapshot directory...");
+
         string projectDirectory = Path.GetDirectoryName(ProjectPath) ?? throw new InvalidOperationException($"Invalid project path: {ProjectPath}");
         string snapshotsDirectory = Path.Combine(projectDirectory, "snapshots");
         Directory.CreateDirectory(snapshotsDirectory);
+
+        // Count total previews to process for progress tracking
+        int totalPreviews = CountPreviewsToProcess(uiComponent, preview);
+
+        StatusReporter.UpdateStatus($"Updating {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")}...");
 
         // Process each app connection in parallel
         List<Task> connectionTasks = [];
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            connectionTasks.Add(UpdatePreviewSnapshotsForConnectionAsync(appConnection, uiComponent, preview, snapshotsDirectory));
+            connectionTasks.Add(UpdatePreviewSnapshotsForConnectionAsync(appConnection, uiComponent, preview, snapshotsDirectory, totalPreviews));
         }
 
         await Task.WhenAll(connectionTasks);
+
+        StatusReporter.UpdateStatus($"Successfully updated {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")}");
+
+        // Clear status after a brief delay to let users see the success message
+        await Task.Delay(2000);
+        StatusReporter.ClearStatus();
     }
 
-    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory)
+    private int CountPreviewsToProcess(UIComponentTooling? uiComponent, PreviewTooling? preview)
+    {
+        if (UIComponentsManager is null)
+            return 0;
+
+        IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
+            [uiComponent] : UIComponentsManager.UIComponents;
+
+        int count = 0;
+        foreach (UIComponentTooling currentUIComponent in componentsToProcess)
+        {
+            IReadOnlyList<PreviewTooling> previewsToProcess = preview is not null
+                ? [preview]
+                : currentUIComponent.Previews;
+
+            count += previewsToProcess.Count;
+        }
+
+        return count;
+    }
+
+    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory, int totalPreviews)
     {
         IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
             [uiComponent] : UIComponentsManager!.UIComponents;
+
+        int currentProcessed = 0;
 
         foreach (UIComponentTooling currentUIComponent in componentsToProcess)
         {
@@ -141,6 +182,14 @@ public class AppManager(SynchronizationContext synchronizationContext, AppsManag
             {
                 if (appConnection.UIComponentsManager?.HasPreview(currentUIComponent.Name, currentPreview.Name) ?? false)
                 {
+                    currentProcessed++;
+
+                    string previewDisplayName = !currentUIComponent.HasMultiplePreviews
+                        ? currentUIComponent.DisplayName
+                        : $"{currentUIComponent.DisplayName} - {currentPreview.DisplayName}";
+
+                    StatusReporter.UpdateStatus($"Capturing snapshot {currentProcessed} of {totalPreviews}: {previewDisplayName}");
+
                     var previewPair = new UIComponentPreviewPairTooling(currentUIComponent, currentPreview);
                     ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
 
