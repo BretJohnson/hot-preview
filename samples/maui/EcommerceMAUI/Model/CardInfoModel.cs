@@ -21,7 +21,7 @@ namespace EcommerceMAUI.Model
         {
             get
             {
-                var normalizedCardNumber = CardNumber.Replace("-", string.Empty);
+                var normalizedCardNumber = CardNumber?.Replace("-", string.Empty) ?? string.Empty;
                 if (CreditCardTypeRegexHelper.AmericanExpress.IsMatch(normalizedCardNumber))
                 {
                     return "American Express";
