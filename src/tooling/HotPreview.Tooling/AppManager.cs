@@ -164,7 +164,8 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         return count;
     }
 
-    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory, int totalPreviews)
+    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory,
+        int totalPreviews)
     {
         IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
             [uiComponent] : UIComponentsManager!.UIComponents;
@@ -183,9 +184,18 @@ public class AppManager(AppsManager appsManager, string projectPath) :
                 {
                     currentProcessed++;
 
-                    string previewDisplayName = !currentUIComponent.HasMultiplePreviews
-                        ? currentUIComponent.DisplayName
-                        : $"{currentUIComponent.DisplayName} - {currentPreview.DisplayName}";
+                    string previewDisplayName;
+                    if (uiComponent is null)
+                    {
+                        previewDisplayName = !currentUIComponent.HasMultiplePreviews
+                            ? currentUIComponent.DisplayName
+                            : $"{currentUIComponent.DisplayName} - {currentPreview.DisplayName}";
+                    }
+                    else
+                    {
+                        // If we're only processing a single UI component, then don't include the component name in the display name
+                        previewDisplayName = currentPreview.DisplayName;
+                    }
 
                     StatusReporter.UpdateStatus($"Capturing snapshot {currentProcessed} of {totalPreviews}: {previewDisplayName}");
 
