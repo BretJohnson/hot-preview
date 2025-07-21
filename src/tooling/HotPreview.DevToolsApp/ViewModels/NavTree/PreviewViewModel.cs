@@ -13,14 +13,7 @@ public class PreviewViewModel : NavTreeItemViewModel
         UIComponent = uiComponent;
         Preview = preview;
 
-        UpdateSnapshotsCommand = new RelayCommand(async () =>
-        {
-            AppManager? appManager = _mainPageViewModel.CurrentApp;
-            if (appManager is not null)
-            {
-                await appManager.UpdatePreviewSnapshotsAsync(UIComponent, Preview);
-            }
-        });
+
     }
 
     public UIComponentTooling UIComponent { get; }
@@ -29,7 +22,14 @@ public class PreviewViewModel : NavTreeItemViewModel
     public override string DisplayName => Preview.DisplayName;
     public override string PathIcon => UIComponent.PathIcon;
 
-    public override ICommand UpdateSnapshotsCommand { get; }
+    public override async Task UpdatePreviewSnapshotsAsync()
+    {
+        AppManager? appManager = _mainPageViewModel.CurrentApp;
+        if (appManager is not null)
+        {
+            await appManager.UpdatePreviewSnapshotsAsync(UIComponent, Preview);
+        }
+    }
 
     public override void OnItemInvoked()
     {

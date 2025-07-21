@@ -137,10 +137,6 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         await Task.WhenAll(connectionTasks);
 
         StatusReporter.UpdateStatus($"Successfully updated {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")}");
-
-        // Clear status after a brief delay to let users see the success message
-        await Task.Delay(2000);
-        StatusReporter.ClearStatus();
     }
 
     private int CountPreviewsToProcess(UIComponentTooling? uiComponent, PreviewTooling? preview)

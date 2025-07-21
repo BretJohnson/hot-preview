@@ -111,31 +111,38 @@
 
         <TreeView.ItemTemplate>
           <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
-            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}">
+            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}"
+                          RightTapped="OnTreeViewItemRightTapped">
               <TreeViewItem.ContextFlyout>
                 <MenuFlyout>
-                  <MenuFlyoutItem Text="Update snapshots" Command="{x:Bind UpdateSnapshotsCommand}"/>
+                  <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>
                 </MenuFlyout>
               </TreeViewItem.ContextFlyout>
-              <StackPanel Orientation="Horizontal">
-                <!-- Icon -->
-                <Viewbox Width="18"
-                    Height="18"
-                    Margin="0,0,8,0">
-                  <Canvas Width="24"
-                      Height="24"
-                          VerticalAlignment="Center"
-                      HorizontalAlignment="Center">
-                    <Path Data="{x:Bind PathIcon, Mode=OneTime}"
-                          Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
-                  </Canvas>
-                </Viewbox>
+              <Border x:Name="ItemContentBorder"
+                      Background="Transparent"
+                      CornerRadius="4"
+                      Margin="2,0">
+                <StackPanel Orientation="Horizontal"
+                            Margin="8,4">
+                  <!-- Icon -->
+                  <Viewbox Width="18"
+                      Height="18"
+                      Margin="0,0,8,0">
+                    <Canvas Width="24"
+                        Height="24"
+                            VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                      <Path Data="{x:Bind PathIcon, Mode=OneTime}"
+                            Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+                    </Canvas>
+                  </Viewbox>
 
-                <!-- Display Name -->
-                <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
-                           FontSize="14"
-                           VerticalAlignment="Center"/>
-              </StackPanel>
+                  <!-- Display Name -->
+                  <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
+                             FontSize="14"
+                             VerticalAlignment="Center"/>
+                </StackPanel>
+              </Border>
             </TreeViewItem>
           </DataTemplate>
 
