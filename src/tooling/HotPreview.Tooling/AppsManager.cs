@@ -31,7 +31,7 @@ public class AppsManager(UIContextProvider uiContextProvider, StatusReporter sta
     {
         if (!_apps.TryGetValue(projectPath, out AppManager? appManager))
         {
-            appManager = new AppManager(uiContextProvider, this, projectPath, StatusReporter);
+            appManager = new AppManager(uiContextProvider, this, projectPath);
             _apps[projectPath] = appManager;
 
             OnPropertyChanged(nameof(Apps));

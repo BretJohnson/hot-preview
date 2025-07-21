@@ -11,8 +11,7 @@ namespace HotPreview.Tooling;
 /// </summary>
 /// <param name="appsManager">The apps manager that owns this app</param>
 /// <param name="projectPath">The startup project path of the app</param>
-/// <param name="statusReporter">The status reporter for updating application status messages</param>
-public class AppManager(UIContextProvider uiContextProvider, AppsManager appsManager, string projectPath, StatusReporter statusReporter) :
+public class AppManager(UIContextProvider uiContextProvider, AppsManager appsManager, string projectPath) :
     ToolingObservableObject(uiContextProvider.UIContext)
 {
     private UIComponentsManagerTooling? _uiComponentsManager;
@@ -21,7 +20,7 @@ public class AppManager(UIContextProvider uiContextProvider, AppsManager appsMan
 
     public string ProjectPath { get; } = projectPath;
 
-    public StatusReporter StatusReporter { get; } = statusReporter;
+    public StatusReporter StatusReporter { get; } = appsManager.StatusReporter;
 
     /// <summary>
     /// Gets or sets the UIComponentsManager for the app. A property change notification is raised when the UIComponentsManager collection changes.
