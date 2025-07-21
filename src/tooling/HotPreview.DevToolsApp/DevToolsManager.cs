@@ -25,7 +25,7 @@ public partial class DevToolsManager : ObservableObject
         _logger = logger;
         _mcpHttpServerService = mcpHttpServerService;
 
-        AppsManager = new(uiContextProvider, statusReporter);
+        AppsManager = new(uiContextProvider.UIContext, statusReporter);
 
         // Initialize the app service connection listener
         _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);

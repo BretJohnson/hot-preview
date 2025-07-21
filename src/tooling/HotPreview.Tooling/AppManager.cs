@@ -11,8 +11,8 @@ namespace HotPreview.Tooling;
 /// </summary>
 /// <param name="appsManager">The apps manager that owns this app</param>
 /// <param name="projectPath">The startup project path of the app</param>
-public class AppManager(UIContextProvider uiContextProvider, AppsManager appsManager, string projectPath) :
-    ToolingObservableObject(uiContextProvider.UIContext)
+public class AppManager(AppsManager appsManager, string projectPath) :
+    ToolingObservableObject(appsManager.SynchronizationContext)
 {
     private UIComponentsManagerTooling? _uiComponentsManager;
 

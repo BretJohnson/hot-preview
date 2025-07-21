@@ -6,7 +6,7 @@ namespace HotPreview.Tooling;
 /// <summary>
 /// The AppsManager is responsible for managing the apps that are connected to the tooling server.
 /// </summary>
-public class AppsManager(UIContextProvider uiContextProvider, StatusReporter statusReporter) : ToolingObservableObject(uiContextProvider.UIContext)
+public class AppsManager(SynchronizationContext synchronizationContext, StatusReporter statusReporter) : ToolingObservableObject(synchronizationContext)
 {
     private readonly ConcurrentDictionary<string, AppManager> _apps = [];
 
@@ -31,7 +31,7 @@ public class AppsManager(UIContextProvider uiContextProvider, StatusReporter sta
     {
         if (!_apps.TryGetValue(projectPath, out AppManager? appManager))
         {
-            appManager = new AppManager(uiContextProvider, this, projectPath);
+            appManager = new AppManager(this, projectPath);
             _apps[projectPath] = appManager;
 
             OnPropertyChanged(nameof(Apps));
