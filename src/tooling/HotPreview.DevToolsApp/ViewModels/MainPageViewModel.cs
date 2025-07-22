@@ -144,6 +144,18 @@ public partial class MainPageViewModel : ObservableObject
                 }
             }
 
+            // Add Commands section if there are any commands
+            var commands = uiComponentsManager.Commands.OrderBy(cmd => cmd.DisplayName).ToList();
+            if (commands.Count > 0)
+            {
+                var commandsSection = new SectionItemViewModel("COMMANDS");
+                foreach (PreviewCommandTooling command in commands)
+                {
+                    ((List<NavTreeItemViewModel>)commandsSection.Children).Add(new CommandViewModel(this, command));
+                }
+                newNavTreeItems.Add(commandsSection);
+            }
+
             NavTreeItems.ReplaceAll(newNavTreeItems);
         }
         else

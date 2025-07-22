@@ -4,6 +4,8 @@ namespace HotPreview.SharedModel.App;
 
 public class UIComponentsManagerReflection(
     IReadOnlyDictionary<string, UIComponentReflection> uiComponents,
-    IReadOnlyDictionary<string, UIComponentCategory> categories) : UIComponentsManagerBase<UIComponentReflection, PreviewReflection>(uiComponents, categories)
+    IReadOnlyDictionary<string, UIComponentCategory> categories,
+    IReadOnlyDictionary<string, PreviewCommandReflection> commands) :
+    UIComponentsManagerBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>(uiComponents, categories, commands)
 {
 }

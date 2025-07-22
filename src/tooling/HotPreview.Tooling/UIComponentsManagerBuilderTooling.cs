@@ -7,7 +7,7 @@ namespace HotPreview.Tooling;
 /// This class provides mutable operations to build up the state before creating an immutable manager.
 /// Derives from UIComponentsManagerBuilderBase with the appropriate tooling types.
 /// </summary>
-public class UIComponentsManagerBuilderTooling : UIComponentsManagerBuilderBase<UIComponentTooling, PreviewTooling>
+public class UIComponentsManagerBuilderTooling : UIComponentsManagerBuilderBase<UIComponentTooling, PreviewTooling, PreviewCommandTooling>
 {
     /// <summary>
     /// Creates an immutable UIComponentsManagerTooling from the builder's current state.
@@ -16,6 +16,6 @@ public class UIComponentsManagerBuilderTooling : UIComponentsManagerBuilderBase<
     public virtual UIComponentsManagerTooling ToImmutable()
     {
         Validate();
-        return new UIComponentsManagerTooling(UIComponentsByName, Categories);
+        return new UIComponentsManagerTooling(UIComponentsByName, Categories, CommandsByName);
     }
 }

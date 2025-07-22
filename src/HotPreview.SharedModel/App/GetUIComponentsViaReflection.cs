@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace HotPreview.SharedModel.App;
 
-public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UIComponentReflection, PreviewReflection>
+public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>
 {
     private readonly IServiceProvider? _serviceProvider;
     private readonly IUIComponentExclusionFilter? _exclusionFilter;
@@ -52,7 +52,7 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
     public UIComponentsManagerReflection ToImmutable()
     {
         Validate();
-        return new UIComponentsManagerReflection(UIComponentsByName, Categories);
+        return new UIComponentsManagerReflection(UIComponentsByName, Categories, CommandsByName);
     }
 
     private void AddUIComponentBaseClassesFromAssembly(Assembly assembly)
@@ -124,6 +124,13 @@ public class GetUIComponentsViaReflection : UIComponentsManagerBuilderBase<UICom
                 if (previewAttribute is not null)
                 {
                     AddPreview(new PreviewStaticMethodReflection(previewAttribute, method));
+                }
+
+                PreviewCommandAttribute? commandAttribute = method.GetCustomAttribute<PreviewCommandAttribute>(false);
+
+                if (commandAttribute is not null)
+                {
+                    AddCommand(new PreviewCommandReflection(commandAttribute, method));
                 }
             }
 

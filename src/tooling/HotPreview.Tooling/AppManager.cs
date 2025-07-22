@@ -104,6 +104,24 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         }
     }
 
+    public async Task InvokeCommandAsync(PreviewCommandTooling command)
+    {
+        foreach (AppConnectionManager appConnection in AppConnections)
+        {
+            PreviewCommandTooling? existingCommand = appConnection.UIComponentsManager?.GetCommand(command.Name);
+            if (existingCommand is not null)
+            {
+                if (appConnection.AppService is not null)
+                {
+                    await appConnection.AppService.InvokeCommandAsync(command.Name);
+                    return; // Execute on first connection that has the command
+                }
+            }
+        }
+
+        throw new InvalidOperationException($"Command '{command.Name}' not found in any connected app");
+    }
+
     public async Task UpdatePreviewSnapshotsAsync(UIComponentTooling? uiComponent, PreviewTooling? preview)
     {
         if (uiComponent is null && preview is not null)

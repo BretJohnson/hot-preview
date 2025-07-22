@@ -11,4 +11,8 @@ public interface IPreviewAppService
     public Task NavigateToPreviewAsync(string componentName, string previewName);
 
     public Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
+
+    public Task<string[]> GetCommandsAsync();
+
+    public Task InvokeCommandAsync(string commandName);
 }

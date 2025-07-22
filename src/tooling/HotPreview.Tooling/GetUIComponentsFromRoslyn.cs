@@ -131,6 +131,7 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
         public override void VisitMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
         {
             CheckForPreviewMethod(methodDeclaration);
+            CheckForCommandMethod(methodDeclaration);
             base.VisitMethodDeclaration(methodDeclaration);
         }
 
@@ -227,6 +228,70 @@ public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
 
             PreviewStaticMethodTooling preview = new PreviewStaticMethodTooling(previewFullName, title);
             _builder.AddPreview(uiComponentName, preview);
+        }
+
+        private void CheckForCommandMethod(MethodDeclarationSyntax methodDeclaration)
+        {
+            AttributeSyntax? commandAttribute = methodDeclaration.AttributeLists
+                .SelectMany(attrList => attrList.Attributes)
+                .FirstOrDefault(attr => attr.Name.ToString() == "PreviewCommand");
+            if (commandAttribute is null)
+            {
+                return;
+            }
+
+            IMethodSymbol? attributeSymbol = _semanticModel.GetSymbolInfo(commandAttribute).Symbol as IMethodSymbol;
+            if (attributeSymbol is null)
+            {
+                return;
+            }
+
+            // Verify that the full qualified name of the attribute is correct
+            string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
+            if (fullQualifiedAttributeName != PreviewCommandAttribute.TypeFullName)
+            {
+                return;
+            }
+
+            // Validate that the method has no parameters
+            if (methodDeclaration.ParameterList.Parameters.Count > 0)
+            {
+                // Skip methods with parameters - they're not supported yet
+                return;
+            }
+
+            string? displayName = null;
+            if (commandAttribute.ArgumentList != null)
+            {
+                SeparatedSyntaxList<AttributeArgumentSyntax> attributeArgs = commandAttribute.ArgumentList.Arguments;
+
+                // If the attribute specifies a display name (1st argument), use it
+                if (attributeArgs.Count >= 1)
+                {
+                    AttributeArgumentSyntax firstArgument = attributeArgs[0];
+                    if (firstArgument.Expression is LiteralExpressionSyntax literalExpression &&
+                        literalExpression.Kind() == SyntaxKind.StringLiteralExpression)
+                    {
+                        displayName = literalExpression.Token.ValueText;
+                    }
+                }
+            }
+
+            if (methodDeclaration.Parent is not TypeDeclarationSyntax typeDeclaration)
+            {
+                return;
+            }
+
+            INamedTypeSymbol? parentTypeSymbol = _semanticModel.GetDeclaredSymbol(typeDeclaration);
+            if (parentTypeSymbol is null)
+            {
+                return;
+            }
+
+            string commandFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
+
+            PreviewCommandTooling command = new PreviewCommandTooling(commandFullName, displayName);
+            _builder.AddOrUpdateCommand(command);
         }
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax classDeclaration)

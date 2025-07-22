@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace HotPreview.SharedModel;
 
@@ -10,13 +9,16 @@ namespace HotPreview.SharedModel;
 /// </summary>
 /// <typeparam name="TUIComponent">The type of UI component</typeparam>
 /// <typeparam name="TPreview">The type of preview</typeparam>
-public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
+/// <typeparam name="TCommand">The type of command</typeparam>
+public class UIComponentsManagerBuilderBase<TUIComponent, TPreview, TCommand>
     where TUIComponent : UIComponentBase<TPreview>
     where TPreview : PreviewBase
+    where TCommand : PreviewCommandBase
 {
     protected readonly Dictionary<string, TUIComponent> _uiComponentsByName = [];
     protected readonly Dictionary<string, UIComponentCategory> _categories = [];
     protected readonly Dictionary<(UIComponentKind kind, string platform), List<string>> _baseTypes = [];
+    protected readonly Dictionary<string, TCommand> _commandsByName = [];
 
     /// <summary>
     /// Initializes a new instance of the UIComponentsManagerBuilderBase class.
@@ -31,6 +33,8 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
     public IReadOnlyDictionary<string, TUIComponent> UIComponentsByName => _uiComponentsByName;
 
     public IReadOnlyDictionary<string, UIComponentCategory> Categories => _categories;
+
+    public IReadOnlyDictionary<string, TCommand> CommandsByName => _commandsByName;
 
     /// <summary>
     /// Adds a UI component base type for the specified kind and platform.
@@ -79,6 +83,28 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
     }
 
     /// <summary>
+    /// Adds a command to the builder.
+    /// </summary>
+    /// <param name="command">The command to add</param>
+    /// <exception cref="ArgumentException">Thrown when a command with the same name already exists</exception>
+    public void AddCommand(TCommand command)
+    {
+        if (_commandsByName.ContainsKey(command.Name))
+            throw new ArgumentException($"A command with name '{command.Name}' already exists", nameof(command));
+
+        _commandsByName.Add(command.Name, command);
+    }
+
+    /// <summary>
+    /// Adds or updates a command in the builder.
+    /// </summary>
+    /// <param name="command">The command to add or update</param>
+    public void AddOrUpdateCommand(TCommand command)
+    {
+        _commandsByName[command.Name] = command;
+    }
+
+    /// <summary>
     /// Adds a category to the builder.
     /// </summary>
     /// <param name="category">The category to add</param>
@@ -114,6 +140,17 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview>
     {
         _uiComponentsByName.TryGetValue(name, out TUIComponent? component);
         return component;
+    }
+
+    /// <summary>
+    /// Gets a command by name.
+    /// </summary>
+    /// <param name="name">The name of the command</param>
+    /// <returns>The command if found, otherwise null</returns>
+    public TCommand? GetCommand(string name)
+    {
+        _commandsByName.TryGetValue(name, out TCommand? command);
+        return command;
     }
 
     /// <summary>

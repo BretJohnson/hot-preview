@@ -1,19 +1,27 @@
 using System.Collections.Generic;
 using System.Linq;
+using HotPreview.SharedModel.App;
 
 namespace HotPreview.SharedModel;
 
-public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
+public abstract class UIComponentsManagerBase<TUIComponent, TPreview, TCommand>(
     IReadOnlyDictionary<string, TUIComponent> uiComponents,
-    IReadOnlyDictionary<string, UIComponentCategory> categories) where TUIComponent : UIComponentBase<TPreview> where TPreview : PreviewBase
+    IReadOnlyDictionary<string, UIComponentCategory> categories,
+    IReadOnlyDictionary<string, TCommand> commands)
+    where TUIComponent : UIComponentBase<TPreview>
+    where TPreview : PreviewBase
+    where TCommand : PreviewCommandBase
 {
     private readonly IReadOnlyDictionary<string, TUIComponent> _uiComponentsByName = uiComponents;
     private readonly IReadOnlyDictionary<string, UIComponentCategory> _categories = categories;
+    private readonly IReadOnlyDictionary<string, TCommand> _commandsByName = commands;
     private IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<TUIComponent> UIComponents)>? _categorizedUIComponents;
 
     public IEnumerable<UIComponentCategory> Categories => _categories.Values;
 
     public IEnumerable<TUIComponent> UIComponents => _uiComponentsByName.Values;
+
+    public IEnumerable<TCommand> Commands => _commandsByName.Values;
 
 
     /// <summary>
@@ -89,6 +97,9 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
 
     public TUIComponent? GetUIComponent(string name) =>
         _uiComponentsByName.TryGetValue(name, out TUIComponent? uiComponent) ? uiComponent : null;
+
+    public TCommand? GetCommand(string name) =>
+        _commandsByName.TryGetValue(name, out TCommand? command) ? command : null;
 
     /// <summary>
     /// Returns true if the manager contains the specified UI component and that component contains the specified preview.

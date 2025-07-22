@@ -20,6 +20,17 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName);
     }
 
+    protected PreviewCommandReflection GetCommand(string commandName)
+    {
+        return PreviewApplication.GetUIComponentsManager().GetCommand(commandName) ??
+            throw new ArgumentException($"Command {commandName} not found");
+    }
+
+    protected PreviewCommandReflection? GetCommandIfExists(string commandName)
+    {
+        return PreviewApplication.GetUIComponentsManager().GetCommand(commandName);
+    }
+
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
     {
         UIComponentReflection? component = GetUIComponentIfExists(componentName);
@@ -53,6 +64,32 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
     {
         UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
         return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
+    }
+
+    public Task<string[]> GetCommandsAsync()
+    {
+        UIComponentsManagerReflection uiComponentsManager = PreviewApplication.GetUIComponentsManager();
+
+        string[] commandNames = uiComponentsManager.Commands
+            .Select(command => command.Name)
+            .ToArray();
+
+        return Task.FromResult(commandNames);
+    }
+
+    public Task InvokeCommandAsync(string commandName)
+    {
+        PreviewCommandReflection command = GetCommand(commandName);
+
+        try
+        {
+            command.Execute();
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to execute command {commandName}: {ex.Message}", ex);
+        }
     }
 
     protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)
