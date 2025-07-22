@@ -9,31 +9,16 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
 {
     private readonly IReadOnlyDictionary<string, TUIComponent> _uiComponentsByName = uiComponents;
     private readonly IReadOnlyDictionary<string, UIComponentCategory> _categories = categories;
-    private IReadOnlyList<TUIComponent>? _sortedComponents;
     private IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<TUIComponent> UIComponents)>? _categorizedUIComponents;
 
     public IEnumerable<UIComponentCategory> Categories => _categories.Values;
 
     public IEnumerable<TUIComponent> UIComponents => _uiComponentsByName.Values;
 
-    /// <summary>
-    /// Get all the UI components, sorted alphabetically by display name.
-    /// </summary>
-    public IReadOnlyList<TUIComponent> SortedUIComponents
-    {
-        get
-        {
-            if (_sortedComponents is null)
-            {
-                _sortedComponents = _uiComponentsByName.Values.OrderBy(component => component.DisplayName).ToList();
-            }
-            return _sortedComponents;
-        }
-    }
 
     /// <summary>
     /// Get UI components grouped by category, sorted by category name, with UI components sorted by display name.
-    /// Includes an "Uncategorized" category for components not in any other category.
+    /// Includes "Pages" and "Controls" categories for uncategorized components based on their Kind.
     /// </summary>
     public IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<TUIComponent> UIComponents)> CategorizedUIComponents
     {
@@ -57,19 +42,37 @@ public abstract class UIComponentsManagerBase<TUIComponent, TPreview>(
 
                 result.AddRange(categorizedResult);
 
-                // Add uncategorized components
+                // Add uncategorized components separated by type
                 var categorizedComponentNames = new HashSet<string>(_categories.Values
                     .SelectMany(category => category.UIComponentNames));
 
-                IReadOnlyList<TUIComponent> uncategorizedComponents = _uiComponentsByName.Values
+                var uncategorizedComponents = _uiComponentsByName.Values
                     .Where(component => !categorizedComponentNames.Contains(component.Name))
+                    .ToList();
+
+                // Group uncategorized components by Kind
+                var uncategorizedPages = uncategorizedComponents
+                    .Where(component => component.Kind == UIComponentKind.Page)
                     .OrderBy(component => component.DisplayName)
                     .ToList();
 
-                if (uncategorizedComponents.Count > 0)
+                var uncategorizedControls = uncategorizedComponents
+                    .Where(component => component.Kind == UIComponentKind.Control)
+                    .OrderBy(component => component.DisplayName)
+                    .ToList();
+
+                // Add Pages category if there are uncategorized pages
+                if (uncategorizedPages.Count > 0)
                 {
-                    var uncategorizedCategory = new UIComponentCategory("Uncategorized", []);
-                    result.Add((uncategorizedCategory, uncategorizedComponents));
+                    var pagesCategory = new UIComponentCategory("Pages", []);
+                    result.Add((pagesCategory, uncategorizedPages));
+                }
+
+                // Add Controls category if there are uncategorized controls
+                if (uncategorizedControls.Count > 0)
+                {
+                    var controlsCategory = new UIComponentCategory("Controls", []);
+                    result.Add((controlsCategory, uncategorizedControls));
                 }
 
                 // Sort all categories by name

@@ -3,11 +3,71 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:viewModels="using:HotPreview.DevToolsApp.ViewModels"
       xmlns:converters="using:HotPreview.DevToolsApp.Converters"
+      xmlns:selectors="using:HotPreview.DevToolsApp.Selectors"
       xmlns:utu="using:Uno.Toolkit.UI"
       NavigationCacheMode="Required">
 
   <Page.Resources>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    
+    <!-- Section Header Template -->
+    <DataTemplate x:Key="SectionItemTemplate" x:DataType="viewModels:NavTreeItemViewModel">
+      <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}"
+                    RightTapped="OnTreeViewItemRightTapped">
+        <TreeViewItem.ContextFlyout>
+          <MenuFlyout>
+            <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>
+          </MenuFlyout>
+        </TreeViewItem.ContextFlyout>
+        <Border x:Name="SectionHeaderBorder"
+                Background="Transparent"
+                CornerRadius="0"
+                Margin="-8,8,8,10">
+          <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
+                     FontSize="12"
+                     FontWeight="SemiBold"
+                     Foreground="#9CA3AF"
+                     VerticalAlignment="Center"/>
+        </Border>
+      </TreeViewItem>
+    </DataTemplate>
+
+    <!-- Default Item Template -->
+    <DataTemplate x:Key="DefaultItemTemplate" x:DataType="viewModels:NavTreeItemViewModel">
+      <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}"
+                    RightTapped="OnTreeViewItemRightTapped">
+        <TreeViewItem.ContextFlyout>
+          <MenuFlyout>
+            <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>
+          </MenuFlyout>
+        </TreeViewItem.ContextFlyout>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,2,0,4">
+          <!-- Icon -->
+          <Viewbox Width="18"
+              Height="18"
+              Margin="-8,0,8,0">
+            <Canvas Width="24"
+                Height="24"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+              <Path Data="{x:Bind PathIcon, Mode=OneTime}"
+                    Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+            </Canvas>
+          </Viewbox>
+
+          <!-- Display Name -->
+          <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
+                      FontSize="14"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
+      </TreeViewItem>
+    </DataTemplate>
+
+    <!-- Template Selector -->
+    <selectors:NavTreeItemTemplateSelector x:Key="NavTreeItemTemplateSelector"
+                                           SectionItemTemplate="{StaticResource SectionItemTemplate}"
+                                           DefaultItemTemplate="{StaticResource DefaultItemTemplate}"/>
   </Page.Resources>
 
   <Grid x:Name="PageRoot"
@@ -104,49 +164,13 @@
         <TreeView.ItemContainerStyle>
           <!-- Tighten up the vertical spacing, reducing the default padding -->
           <Style TargetType="TreeViewItem">
-            <Setter Property="Padding"
-                Value="0,2,0,2"/>
+            <Setter Property="Padding" Value="0,2,0,2"/>
           </Style>
         </TreeView.ItemContainerStyle>
 
-        <TreeView.ItemTemplate>
-          <DataTemplate x:DataType="viewModels:NavTreeItemViewModel">
-            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}"
-                          RightTapped="OnTreeViewItemRightTapped">
-              <TreeViewItem.ContextFlyout>
-                <MenuFlyout>
-                  <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>
-                </MenuFlyout>
-              </TreeViewItem.ContextFlyout>
-              <Border x:Name="ItemContentBorder"
-                      Background="Transparent"
-                      CornerRadius="4"
-                      Margin="2,0">
-                <StackPanel Orientation="Horizontal"
-                            Margin="8,4">
-                  <!-- Icon -->
-                  <Viewbox Width="18"
-                      Height="18"
-                      Margin="0,0,8,0">
-                    <Canvas Width="24"
-                        Height="24"
-                            VerticalAlignment="Center"
-                        HorizontalAlignment="Center">
-                      <Path Data="{x:Bind PathIcon, Mode=OneTime}"
-                            Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
-                    </Canvas>
-                  </Viewbox>
-
-                  <!-- Display Name -->
-                  <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
-                             FontSize="14"
-                             VerticalAlignment="Center"/>
-                </StackPanel>
-              </Border>
-            </TreeViewItem>
-          </DataTemplate>
-
-        </TreeView.ItemTemplate>
+        <TreeView.ItemTemplateSelector>
+          <StaticResource ResourceKey="NavTreeItemTemplateSelector"/>
+        </TreeView.ItemTemplateSelector>
 
       </TreeView>
 

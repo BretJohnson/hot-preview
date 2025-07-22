@@ -131,9 +131,17 @@ public partial class MainPageViewModel : ObservableObject
         if (uiComponentsManager is not null)
         {
             List<NavTreeItemViewModel> newNavTreeItems = [];
-            foreach (UIComponentTooling uiComponent in uiComponentsManager.SortedUIComponents)
+            foreach (var (category, components) in uiComponentsManager.CategorizedUIComponents)
             {
-                newNavTreeItems.Add(new UIComponentViewModel(this, uiComponent));
+                if (components.Count > 0)
+                {
+                    var sectionViewModel = new SectionItemViewModel(category.Name.ToUpperInvariant());
+                    foreach (UIComponentTooling uiComponent in components)
+                    {
+                        ((List<NavTreeItemViewModel>)sectionViewModel.Children).Add(new UIComponentViewModel(this, uiComponent));
+                    }
+                    newNavTreeItems.Add(sectionViewModel);
+                }
             }
 
             NavTreeItems.ReplaceAll(newNavTreeItems);

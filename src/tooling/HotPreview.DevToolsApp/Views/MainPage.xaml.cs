@@ -61,6 +61,8 @@ public sealed partial class MainPage : Page
 
     private void OnTreeViewItemRightTapped(object sender, RightTappedRoutedEventArgs e)
     {
+        // TODO: Potentially give visual feedback here, in some better way than what's below
+#if false
         if (sender is TreeViewItem treeViewItem)
         {
             // Prevent the right-click from changing the selection
@@ -80,6 +82,7 @@ public sealed partial class MainPage : Page
                 });
             }
         }
+#endif
     }
 
     private static FrameworkElement? FindChildByName(DependencyObject parent, string name)

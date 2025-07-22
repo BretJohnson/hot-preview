@@ -32,22 +32,16 @@ public class PreviewsViewModel // : INotifyPropertyChanged
             }
         }
 
-        if (HasCategories)
+        // Always use categorized UI components
+        IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<UIComponentReflection> UIComponents)> categorizedUIComponents = uiComponentsManager.CategorizedUIComponents;
+        foreach ((UIComponentCategory category, IReadOnlyList<UIComponentReflection> uiComponents) in categorizedUIComponents)
         {
-            IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<UIComponentReflection> UIComponents)> categorizedUIComponents = uiComponentsManager.CategorizedUIComponents;
-            foreach ((UIComponentCategory category, IReadOnlyList<UIComponentReflection> uiComponents) in categorizedUIComponents)
+            if (HasCategories)
             {
                 previewsItems.Add(new UIComponentCategoryViewModel(category));
-
-                foreach (UIComponentReflection uiComponent in uiComponents)
-                {
-                    AddComponentPreviews(uiComponent);
-                }
             }
-        }
-        else
-        {
-            foreach (UIComponentReflection uiComponent in uiComponentsManager.SortedUIComponents)
+
+            foreach (UIComponentReflection uiComponent in uiComponents)
             {
                 AddComponentPreviews(uiComponent);
             }
