@@ -22,7 +22,7 @@
         <Border x:Name="SectionHeaderBorder"
                 Background="Transparent"
                 CornerRadius="0"
-                Margin="-8,8,8,10">
+                Margin="-8,0,8,0">
           <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
                      FontSize="12"
                      FontWeight="SemiBold"
@@ -42,7 +42,7 @@
           </MenuFlyout>
         </TreeViewItem.ContextFlyout>
         <StackPanel Orientation="Horizontal"
-                    Margin="0,2,0,4">
+                    Margin="0,0,0,0">
           <!-- Icon -->
           <Viewbox Width="18"
               Height="18"
@@ -164,14 +164,13 @@
         <TreeView.ItemContainerStyle>
           <!-- Tighten up the vertical spacing, reducing the default padding -->
           <Style TargetType="TreeViewItem">
-            <Setter Property="Padding" Value="0,2,0,2"/>
+            <Setter Property="Padding" Value="0,0,0,4"/>
           </Style>
         </TreeView.ItemContainerStyle>
 
         <TreeView.ItemTemplateSelector>
           <StaticResource ResourceKey="NavTreeItemTemplateSelector"/>
         </TreeView.ItemTemplateSelector>
-
       </TreeView>
 
       <!-- No App Connected Message -->
