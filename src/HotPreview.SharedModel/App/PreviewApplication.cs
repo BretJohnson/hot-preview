@@ -19,7 +19,7 @@ public abstract class PreviewApplication
         s_instance = instance;
     }
 
-    public abstract UIComponentsManagerReflection GetUIComponentsManager();
+    public abstract PreviewsManagerReflection GetPreviewsManager();
 
     public abstract PreviewAppService GetPreviewAppService();
 

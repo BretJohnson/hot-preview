@@ -119,7 +119,7 @@ public partial class MainPageViewModel : ObservableObject
 
     private void OnCurrentAppPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AppManager.UIComponentsManager))
+        if (e.PropertyName == nameof(AppManager.PreviewsManager))
         {
             UpdateNavTreeItems();
         }
@@ -127,11 +127,11 @@ public partial class MainPageViewModel : ObservableObject
 
     private void UpdateNavTreeItems()
     {
-        UIComponentsManagerTooling? uiComponentsManager = CurrentApp?.UIComponentsManager;
-        if (uiComponentsManager is not null)
+        PreviewsManagerTooling? previewsManager = CurrentApp?.PreviewsManager;
+        if (previewsManager is not null)
         {
             List<NavTreeItemViewModel> newNavTreeItems = [];
-            foreach (var (category, components) in uiComponentsManager.CategorizedUIComponents)
+            foreach (var (category, components) in previewsManager.CategorizedUIComponents)
             {
                 if (components.Count > 0)
                 {
@@ -145,7 +145,7 @@ public partial class MainPageViewModel : ObservableObject
             }
 
             // Add Commands section if there are any commands
-            var commands = uiComponentsManager.Commands.OrderBy(cmd => cmd.DisplayName).ToList();
+            var commands = previewsManager.Commands.OrderBy(cmd => cmd.DisplayName).ToList();
             if (commands.Count > 0)
             {
                 var commandsSection = new SectionItemViewModel("COMMANDS");

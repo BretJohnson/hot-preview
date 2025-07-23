@@ -14,7 +14,7 @@ namespace HotPreview.Tooling;
 public class AppManager(AppsManager appsManager, string projectPath) :
     ToolingObservableObject(appsManager.SynchronizationContext)
 {
-    private UIComponentsManagerTooling? _uiComponentsManager;
+    private PreviewsManagerTooling? _previewsManager;
 
     public AppsManager AppsManager { get; } = appsManager;
 
@@ -23,12 +23,12 @@ public class AppManager(AppsManager appsManager, string projectPath) :
     public StatusReporter StatusReporter { get; } = appsManager.StatusReporter;
 
     /// <summary>
-    /// Gets or sets the UIComponentsManager for the app. A property change notification is raised when the UIComponentsManager collection changes.
+    /// Gets or sets the PreviewsManager for the app. A property change notification is raised when the PreviewsManager collection changes.
     /// </summary>
-    public UIComponentsManagerTooling? UIComponentsManager
+    public PreviewsManagerTooling? PreviewsManager
     {
-        get => _uiComponentsManager;
-        set => SetProperty(ref _uiComponentsManager, value);
+        get => _previewsManager;
+        set => SetProperty(ref _previewsManager, value);
     }
 
     /// <summary>
@@ -69,26 +69,26 @@ public class AppManager(AppsManager appsManager, string projectPath) :
 
     internal void UpdateUIComponents()
     {
-        var uiComponentManagers = new List<UIComponentsManagerTooling>();
+        var previewsManagers = new List<PreviewsManagerTooling>();
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            if (appConnection.UIComponentsManager is not null)
+            if (appConnection.PreviewsManager is not null)
             {
-                uiComponentManagers.Add(appConnection.UIComponentsManager);
+                previewsManagers.Add(appConnection.PreviewsManager);
             }
         }
 
-        if (uiComponentManagers.Count == 0)
+        if (previewsManagers.Count == 0)
         {
-            UIComponentsManager = null;
+            PreviewsManager = null;
         }
-        else if (uiComponentManagers.Count == 1)
+        else if (previewsManagers.Count == 1)
         {
-            UIComponentsManager = uiComponentManagers[0];
+            PreviewsManager = previewsManagers[0];
         }
         else
         {
-            UIComponentsManager = new GetUIComponentsConsolidated(uiComponentManagers).ToImmutable();
+            PreviewsManager = new GetUIComponentsConsolidated(previewsManagers).ToImmutable();
         }
     }
 
@@ -96,7 +96,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
     {
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            if (appConnection.UIComponentsManager?.HasPreview(uiComponent.Name, preview.Name) ?? false)
+            if (appConnection.PreviewsManager?.HasPreview(uiComponent.Name, preview.Name) ?? false)
             {
                 // Fire and forget
                 _ = appConnection.AppService?.NavigateToPreviewAsync(uiComponent.Name, preview.Name);
@@ -108,7 +108,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
     {
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            PreviewCommandTooling? existingCommand = appConnection.UIComponentsManager?.GetCommand(command.Name);
+            PreviewCommandTooling? existingCommand = appConnection.PreviewsManager?.GetCommand(command.Name);
             if (existingCommand is not null)
             {
                 if (appConnection.AppService is not null)
@@ -129,7 +129,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
             throw new InvalidOperationException("Cannot specify a preview without specifying a UI component");
         }
 
-        if (UIComponentsManager is null)
+        if (PreviewsManager is null)
         {
             throw new InvalidOperationException("App has no UI components loaded");
         }
@@ -159,11 +159,11 @@ public class AppManager(AppsManager appsManager, string projectPath) :
 
     private int CountPreviewsToProcess(UIComponentTooling? uiComponent, PreviewTooling? preview)
     {
-        if (UIComponentsManager is null)
+        if (PreviewsManager is null)
             return 0;
 
         IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
-            [uiComponent] : UIComponentsManager.UIComponents;
+            [uiComponent] : PreviewsManager.UIComponents;
 
         int count = 0;
         foreach (UIComponentTooling currentUIComponent in componentsToProcess)
@@ -182,7 +182,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         int totalPreviews)
     {
         IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?
-            [uiComponent] : UIComponentsManager!.UIComponents;
+            [uiComponent] : PreviewsManager!.UIComponents;
 
         int currentProcessed = 0;
 
@@ -194,7 +194,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
 
             foreach (PreviewTooling currentPreview in previewsToProcess)
             {
-                if (appConnection.UIComponentsManager?.HasPreview(currentUIComponent.Name, currentPreview.Name) ?? false)
+                if (appConnection.PreviewsManager?.HasPreview(currentUIComponent.Name, currentPreview.Name) ?? false)
                 {
                     currentProcessed++;
 

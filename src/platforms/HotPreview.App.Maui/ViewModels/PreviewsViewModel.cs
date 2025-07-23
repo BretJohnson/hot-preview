@@ -16,9 +16,9 @@ public class PreviewsViewModel // : INotifyPropertyChanged
 
     private PreviewsViewModel()
     {
-        UIComponentsManagerReflection uiComponentsManager = MauiPreviewApplication.Instance.GetUIComponentsManager();
+        PreviewsManagerReflection previewsManager = MauiPreviewApplication.Instance.GetPreviewsManager();
         var previewsItems = new List<PreviewsItemViewModel>();
-        HasCategories = uiComponentsManager.HasCategories;
+        HasCategories = previewsManager.HasCategories;
 
         void AddComponentPreviews(UIComponentReflection uiComponent)
         {
@@ -33,7 +33,7 @@ public class PreviewsViewModel // : INotifyPropertyChanged
         }
 
         // Always use categorized UI components
-        IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<UIComponentReflection> UIComponents)> categorizedUIComponents = uiComponentsManager.CategorizedUIComponents;
+        IReadOnlyList<(UIComponentCategory Category, IReadOnlyList<UIComponentReflection> UIComponents)> categorizedUIComponents = previewsManager.CategorizedUIComponents;
         foreach ((UIComponentCategory category, IReadOnlyList<UIComponentReflection> uiComponents) in categorizedUIComponents)
         {
             if (HasCategories)

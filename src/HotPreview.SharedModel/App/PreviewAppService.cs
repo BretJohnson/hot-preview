@@ -11,24 +11,24 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 
     protected UIComponentReflection GetUIComponent(string uiComponentName)
     {
-        return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName) ??
+        return PreviewApplication.GetPreviewsManager().GetUIComponent(uiComponentName) ??
             throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
     }
 
     protected UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
     {
-        return PreviewApplication.GetUIComponentsManager().GetUIComponent(uiComponentName);
+        return PreviewApplication.GetPreviewsManager().GetUIComponent(uiComponentName);
     }
 
     protected PreviewCommandReflection GetCommand(string commandName)
     {
-        return PreviewApplication.GetUIComponentsManager().GetCommand(commandName) ??
+        return PreviewApplication.GetPreviewsManager().GetCommand(commandName) ??
             throw new ArgumentException($"Command {commandName} not found");
     }
 
     protected PreviewCommandReflection? GetCommandIfExists(string commandName)
     {
-        return PreviewApplication.GetUIComponentsManager().GetCommand(commandName);
+        return PreviewApplication.GetPreviewsManager().GetCommand(commandName);
     }
 
     public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
@@ -45,9 +45,9 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 
     public Task<UIComponentInfo[]> GetUIComponentsAsync()
     {
-        UIComponentsManagerReflection uiComponentsManager = PreviewApplication.GetUIComponentsManager();
+        PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
-        UIComponentInfo[] uiComponentInfos = uiComponentsManager.UIComponents
+        UIComponentInfo[] uiComponentInfos = previewsManager.UIComponents
             .Select(component => component.GetUIComponentInfo())
             .ToArray();
 
@@ -68,9 +68,9 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 
     public Task<string[]> GetCommandsAsync()
     {
-        UIComponentsManagerReflection uiComponentsManager = PreviewApplication.GetUIComponentsManager();
+        PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
-        string[] commandNames = uiComponentsManager.Commands
+        string[] commandNames = previewsManager.Commands
             .Select(command => command.Name)
             .ToArray();
 

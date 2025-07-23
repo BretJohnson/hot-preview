@@ -3,7 +3,7 @@ using HotPreview.SharedModel.Protocol;
 
 namespace HotPreview.Tooling;
 
-public class GetUIComponentsFromProtocol : UIComponentsManagerBuilderTooling
+public class GetUIComponentsFromProtocol : PreviewsManagerBuilderTooling
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromApp and processes the UI component information from the app,

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotPreview.Tooling;
 
-public class GetUIComponentsFromRoslyn : UIComponentsManagerBuilderTooling
+public class GetUIComponentsFromRoslyn : PreviewsManagerBuilderTooling
 {
     /// <summary>
     /// Initializes a new instance of GetUIComponentsFromRoslyn and processes the compilation to gather UI component information.

@@ -27,7 +27,7 @@ public partial class MauiPreviewApplication : PreviewApplication
 
     public const string MauiPlatformType = "MAUI";
 
-    private readonly Lazy<UIComponentsManagerReflection> _uiComponentsManager;
+    private readonly Lazy<PreviewsManagerReflection> _previewsManager;
 
     private MauiPreviewApplication()
     {
@@ -35,7 +35,7 @@ public partial class MauiPreviewApplication : PreviewApplication
         IElement? applicationElement = Application.Current;
         ServiceProvider = applicationElement?.Handler?.MauiContext?.Services;
 
-        _uiComponentsManager = new Lazy<UIComponentsManagerReflection>(
+        _previewsManager = new Lazy<PreviewsManagerReflection>(
             () => new GetUIComponentsViaReflection(ServiceProvider, MainAssembly, AdditionalAppAssemblies,
                 new MauiUIComponentExclusionFilter()).ToImmutable());
 
@@ -59,7 +59,7 @@ public partial class MauiPreviewApplication : PreviewApplication
         _ = Instance;
     }
 
-    public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
+    public override PreviewsManagerReflection GetPreviewsManager() => _previewsManager.Value;
 
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 

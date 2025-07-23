@@ -87,7 +87,7 @@ public partial class DevToolsManager : ObservableObject
 
 #if LATER
     /// <summary>
-    /// Updates the project path and reloads the UIComponentsManager.
+    /// Updates the project path and reloads the PreviewsManager.
     /// </summary>
     /// <param name="newProjectPath">The new project path to use.</param>
     /// <returns>True if the project was loaded successfully, false otherwise.</returns>
@@ -112,8 +112,8 @@ public partial class DevToolsManager : ObservableObject
             // Update the project path
             ProjectPath = newProjectPath;
 
-            // Reload the UIComponentsManager with the new project
-            _uiComponentsManager = await CreateUIComponentsManagerFromProjectAsync(newProjectPath);
+            // Reload the PreviewsManager with the new project
+            _previewsManager = await CreatePreviewsManagerFromProjectAsync(newProjectPath);
 
             _logger.LogInformation("Project path updated successfully");
             return true;
@@ -127,15 +127,15 @@ public partial class DevToolsManager : ObservableObject
 #endif
 
     /// <summary>
-    /// Creates a UIComponentsManagerTooling from a single project file (.csproj) by loading and analyzing the project.
+    /// Creates a PreviewsManagerTooling from a single project file (.csproj) by loading and analyzing the project.
     /// </summary>
     /// <param name="projectPath">Path to the project file (.csproj)</param>
     /// <param name="includeApparentUIComponentsWithNoPreviews">Whether to include types that could be UI components but have no previews</param>
-    /// <returns>A UIComponentsManagerTooling instance with components from the project</returns>
+    /// <returns>A PreviewsManagerTooling instance with components from the project</returns>
     /// <exception cref="ArgumentException">Thrown when the project path is invalid</exception>
     /// <exception cref="FileNotFoundException">Thrown when the project file is not found</exception>
     /// <exception cref="InvalidOperationException">Thrown when MSBuild cannot be located or project cannot be loaded</exception>
-    public static async Task<UIComponentsManagerTooling> CreateUIComponentsManagerFromProjectAsync(string projectPath,
+    public static async Task<PreviewsManagerTooling> CreatePreviewsManagerFromProjectAsync(string projectPath,
         bool includeApparentUIComponentsWithNoPreviews = false)
     {
         if (string.IsNullOrWhiteSpace(projectPath))

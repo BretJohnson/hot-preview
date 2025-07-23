@@ -4,7 +4,7 @@ using HotPreview.SharedModel.App;
 
 namespace HotPreview.SharedModel;
 
-public abstract class UIComponentsManagerBase<TUIComponent, TPreview, TCommand>(
+public abstract class PreviewsManagerBase<TUIComponent, TPreview, TCommand>(
     IReadOnlyDictionary<string, TUIComponent> uiComponents,
     IReadOnlyDictionary<string, UIComponentCategory> categories,
     IReadOnlyDictionary<string, TCommand> commands)

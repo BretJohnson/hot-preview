@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace HotPreview.SharedModel;
 
 /// <summary>
-/// A builder class for constructing UIComponentsManager instances.
+/// A builder class for constructing PreviewsManager instances.
 /// This class provides mutable operations to build up the state before creating an immutable manager.
 /// </summary>
 /// <typeparam name="TUIComponent">The type of UI component</typeparam>
 /// <typeparam name="TPreview">The type of preview</typeparam>
 /// <typeparam name="TCommand">The type of command</typeparam>
-public class UIComponentsManagerBuilderBase<TUIComponent, TPreview, TCommand>
+public class PreviewsManagerBuilderBase<TUIComponent, TPreview, TCommand>
     where TUIComponent : UIComponentBase<TPreview>
     where TPreview : PreviewBase
     where TCommand : PreviewCommandBase
@@ -21,9 +21,9 @@ public class UIComponentsManagerBuilderBase<TUIComponent, TPreview, TCommand>
     protected readonly Dictionary<string, TCommand> _commandsByName = [];
 
     /// <summary>
-    /// Initializes a new instance of the UIComponentsManagerBuilderBase class.
+    /// Initializes a new instance of the PreviewsManagerBuilderBase class.
     /// </summary>
-    public UIComponentsManagerBuilderBase()
+    public PreviewsManagerBuilderBase()
     {
         // Add default MAUI base types
         AddUIComponentBaseType(UIComponentKind.Page, "MAUI", "Microsoft.Maui.Controls.Page");

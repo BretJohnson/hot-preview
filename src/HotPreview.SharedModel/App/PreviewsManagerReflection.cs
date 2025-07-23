@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace HotPreview.SharedModel.App;
 
-public class UIComponentsManagerReflection(
+public class PreviewsManagerReflection(
     IReadOnlyDictionary<string, UIComponentReflection> uiComponents,
     IReadOnlyDictionary<string, UIComponentCategory> categories,
     IReadOnlyDictionary<string, PreviewCommandReflection> commands) :
-    UIComponentsManagerBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>(uiComponents, categories, commands)
+    PreviewsManagerBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>(uiComponents, categories, commands)
 {
 }

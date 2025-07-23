@@ -22,11 +22,11 @@ public class WpfPreviewApplication : PreviewApplication
 
     public const string WpfPlatformType = "WPF";
 
-    private readonly Lazy<UIComponentsManagerReflection> _uiComponentsManager;
+    private readonly Lazy<PreviewsManagerReflection> _previewsManager;
 
     private WpfPreviewApplication()
     {
-        _uiComponentsManager = new Lazy<UIComponentsManagerReflection>(
+        _previewsManager = new Lazy<PreviewsManagerReflection>(
             () => new GetUIComponentsViaReflection(ServiceProvider, MainAssembly,
                 AdditionalAppAssemblies, null).ToImmutable());
 
@@ -44,7 +44,7 @@ public class WpfPreviewApplication : PreviewApplication
         _ = Instance;
     }
 
-    public override UIComponentsManagerReflection GetUIComponentsManager() => _uiComponentsManager.Value;
+    public override PreviewsManagerReflection GetPreviewsManager() => _previewsManager.Value;
 
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
