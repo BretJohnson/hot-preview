@@ -9,7 +9,7 @@
 
   <Page.Resources>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    
+
     <!-- Section Header Template -->
     <DataTemplate x:Key="SectionItemTemplate" x:DataType="viewModels:NavTreeItemViewModel">
       <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}"
@@ -64,10 +64,37 @@
       </TreeViewItem>
     </DataTemplate>
 
+    <!-- Command Item Template (no context menu) -->
+    <DataTemplate x:Key="CommandItemTemplate" x:DataType="viewModels:NavTreeItemViewModel">
+      <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneTime}">
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,0,0,0">
+          <!-- Icon -->
+          <Viewbox Width="18"
+              Height="18"
+              Margin="-8,0,8,0">
+            <Canvas Width="24"
+                Height="24"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+              <Path Data="{x:Bind PathIcon, Mode=OneTime}"
+                    Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+            </Canvas>
+          </Viewbox>
+
+          <!-- Display Name -->
+          <TextBlock Text="{x:Bind DisplayName, Mode=OneTime}"
+                      FontSize="14"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
+      </TreeViewItem>
+    </DataTemplate>
+
     <!-- Template Selector -->
     <selectors:NavTreeItemTemplateSelector x:Key="NavTreeItemTemplateSelector"
                                            SectionItemTemplate="{StaticResource SectionItemTemplate}"
-                                           DefaultItemTemplate="{StaticResource DefaultItemTemplate}"/>
+                                           DefaultItemTemplate="{StaticResource DefaultItemTemplate}"
+                                           CommandItemTemplate="{StaticResource CommandItemTemplate}"/>
   </Page.Resources>
 
   <Grid x:Name="PageRoot"
