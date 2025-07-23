@@ -66,15 +66,15 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
-    public Task<string[]> GetCommandsAsync()
+    public Task<PreviewCommandInfo[]> GetCommandsAsync()
     {
         PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
-        string[] commandNames = previewsManager.Commands
-            .Select(command => command.Name)
+        PreviewCommandInfo[] commandInfos = previewsManager.Commands
+            .Select(command => new PreviewCommandInfo(command.Name, command.DisplayNameOverride))
             .ToArray();
 
-        return Task.FromResult(commandNames);
+        return Task.FromResult(commandInfos);
     }
 
     public Task InvokeCommandAsync(string commandName)

@@ -10,7 +10,8 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
     /// creating and organizing UI components based on the provided data.
     /// </summary>
     /// <param name="uiComponentInfos">Array of UI component information from the protocol</param>
-    public GetPreviewsFromProtocol(UIComponentInfo[] uiComponentInfos)
+    /// <param name="previewCommandInfos">Array of preview command information from the protocol</param>
+    public GetPreviewsFromProtocol(UIComponentInfo[] uiComponentInfos, PreviewCommandInfo[] previewCommandInfos)
     {
         foreach (UIComponentInfo uiComponentInfo in uiComponentInfos)
         {
@@ -21,6 +22,13 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
 
             // Add the component to the builder
             AddOrUpdateUIComponent(uiComponent);
+        }
+
+        foreach (PreviewCommandInfo previewCommandInfo in previewCommandInfos)
+        {
+            // Create the preview command and add it to the builder
+            var command = new PreviewCommandTooling(previewCommandInfo.Name, previewCommandInfo.DisplayName);
+            AddOrUpdateCommand(command);
         }
     }
 

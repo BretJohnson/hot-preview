@@ -12,7 +12,7 @@ public interface IPreviewAppService
 
     public Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
 
-    public Task<string[]> GetCommandsAsync();
+    public Task<PreviewCommandInfo[]> GetCommandsAsync();
 
     public Task InvokeCommandAsync(string commandName);
 }
