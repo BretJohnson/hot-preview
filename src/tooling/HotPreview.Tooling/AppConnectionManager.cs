@@ -69,7 +69,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager.AddAppConnection(this);
 
         UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
-        PreviewsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
+        PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos).ToImmutable();
 
         _appManager.UpdateUIComponents();
     }
@@ -77,7 +77,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     public async Task NotifyUIComponentsChangedAsync()
     {
         UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
-        PreviewsManager = new GetUIComponentsFromProtocol(uiComponentInfos).ToImmutable();
+        PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos).ToImmutable();
 
         _appManager?.UpdateUIComponents();
     }

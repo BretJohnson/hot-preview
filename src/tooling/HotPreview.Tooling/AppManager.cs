@@ -88,7 +88,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         }
         else
         {
-            PreviewsManager = new GetUIComponentsConsolidated(previewsManagers).ToImmutable();
+            PreviewsManager = new GetPreviewsConsolidated(previewsManagers).ToImmutable();
         }
     }
 

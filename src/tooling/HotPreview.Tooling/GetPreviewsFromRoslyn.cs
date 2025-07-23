@@ -6,16 +6,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotPreview.Tooling;
 
-public class GetUIComponentsFromRoslyn : PreviewsManagerBuilderTooling
+public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
 {
     /// <summary>
-    /// Initializes a new instance of GetUIComponentsFromRoslyn and processes the compilation to gather UI component information.
+    /// Initializes a new instance of GetPreviewsFromRoslyn and processes the compilation to gather UI component information.
     /// </summary>
     /// <param name="compilation">Roslyn compilation</param>
     /// <param name="includeApparentUIComponentsWithNoPreviews">Determines whether to include types that COULD be UIComponents,
     /// because they derive from a UI component class, but don't actually define any previews nor can a preview be constructed
     /// automatically. Can be set by tooling that flags these for the user, to direct them to add a preview.</param>
-    public GetUIComponentsFromRoslyn(Compilation compilation, bool includeApparentUIComponentsWithNoPreviews)
+    public GetPreviewsFromRoslyn(Compilation compilation, bool includeApparentUIComponentsWithNoPreviews)
     {
         IEnumerable<MetadataReference> references = compilation.References;
 
@@ -121,11 +121,11 @@ public class GetUIComponentsFromRoslyn : PreviewsManagerBuilderTooling
 
 
 
-    private class PreviewWalker(Compilation compilation, SemanticModel semanticModel, GetUIComponentsFromRoslyn builder, bool includeUIComponentsWithNoPreviews) : CSharpSyntaxWalker
+    private class PreviewWalker(Compilation compilation, SemanticModel semanticModel, GetPreviewsFromRoslyn builder, bool includeUIComponentsWithNoPreviews) : CSharpSyntaxWalker
     {
         private readonly Compilation _compilation = compilation;
         private readonly SemanticModel _semanticModel = semanticModel;
-        private readonly GetUIComponentsFromRoslyn _builder = builder;
+        private readonly GetPreviewsFromRoslyn _builder = builder;
         private readonly bool _includeApparentUIComponentsWithNoPreviews = includeUIComponentsWithNoPreviews;
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax methodDeclaration)

@@ -27,7 +27,7 @@ public class WpfPreviewApplication : PreviewApplication
     private WpfPreviewApplication()
     {
         _previewsManager = new Lazy<PreviewsManagerReflection>(
-            () => new GetUIComponentsViaReflection(ServiceProvider, MainAssembly,
+            () => new GetPreviewsViaReflection(ServiceProvider, MainAssembly,
                 AdditionalAppAssemblies, null).ToImmutable());
 
         PreviewAppService = new WpfPreviewAppService(this);

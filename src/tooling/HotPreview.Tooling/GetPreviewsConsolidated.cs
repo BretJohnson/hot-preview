@@ -2,14 +2,14 @@ using HotPreview.SharedModel;
 
 namespace HotPreview.Tooling;
 
-public class GetUIComponentsConsolidated : PreviewsManagerBuilderTooling
+public class GetPreviewsConsolidated : PreviewsManagerBuilderTooling
 {
     /// <summary>
-    /// Initializes a new instance of GetUIComponentsConsolidated and consolidates the provided previews managers,
+    /// Initializes a new instance of GetPreviewsConsolidated and consolidates the provided previews managers,
     /// merging UI components with the same name and consolidating their previews.
     /// </summary>
     /// <param name="uiComponentsManagers">List of previews managers to consolidate</param>
-    public GetUIComponentsConsolidated(IList<PreviewsManagerTooling> uiComponentsManagers)
+    public GetPreviewsConsolidated(IList<PreviewsManagerTooling> uiComponentsManagers)
     {
         foreach (PreviewsManagerTooling manager in uiComponentsManagers)
         {

@@ -3,14 +3,14 @@ using HotPreview.SharedModel.Protocol;
 
 namespace HotPreview.Tooling;
 
-public class GetUIComponentsFromProtocol : PreviewsManagerBuilderTooling
+public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
 {
     /// <summary>
-    /// Initializes a new instance of GetUIComponentsFromApp and processes the UI component information from the app,
+    /// Initializes a new instance of GetPreviewsFromProtocol and processes the UI component information from the app,
     /// creating and organizing UI components based on the provided data.
     /// </summary>
     /// <param name="uiComponentInfos">Array of UI component information from the protocol</param>
-    public GetUIComponentsFromProtocol(UIComponentInfo[] uiComponentInfos)
+    public GetPreviewsFromProtocol(UIComponentInfo[] uiComponentInfos)
     {
         foreach (UIComponentInfo uiComponentInfo in uiComponentInfos)
         {

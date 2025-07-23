@@ -5,18 +5,18 @@ using System.Reflection;
 
 namespace HotPreview.SharedModel.App;
 
-public class GetUIComponentsViaReflection : PreviewsManagerBuilderBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>
+public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>
 {
     private readonly IServiceProvider? _serviceProvider;
     private readonly IUIComponentExclusionFilter? _exclusionFilter;
 
     /// <summary>
-    /// Initializes a new instance of GetUIComponentsViaReflection and processes assemblies to discover UI components via reflection.
+    /// Initializes a new instance of GetPreviewsViaReflection and processes assemblies to discover UI components via reflection.
     /// </summary>
     /// <param name="serviceProvider">An optional IServiceProvider instance for dependency injection</param>
     /// <param name="additionalAppAssemblies">Additional app assembly names to scan</param>
     /// <param name="exclusionFilter">Optional filter to exclude certain types</param>
-    public GetUIComponentsViaReflection(IServiceProvider? serviceProvider, Assembly? mainAssembly,
+    public GetPreviewsViaReflection(IServiceProvider? serviceProvider, Assembly? mainAssembly,
         IEnumerable<string> additionalAppAssemblies, IUIComponentExclusionFilter? exclusionFilter)
     {
         _serviceProvider = serviceProvider;

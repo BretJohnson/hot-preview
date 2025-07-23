@@ -154,7 +154,7 @@ public partial class DevToolsManager : ObservableObject
             Compilation compilation = await project.GetCompilationAsync() ??
                 throw new InvalidOperationException($"Failed to get compilation for project: {projectPath}");
 
-            return new GetUIComponentsFromRoslyn(compilation, includeApparentUIComponentsWithNoPreviews).ToImmutable();
+            return new GetPreviewsFromRoslyn(compilation, includeApparentUIComponentsWithNoPreviews).ToImmutable();
         }
         catch (Exception ex)
         {
