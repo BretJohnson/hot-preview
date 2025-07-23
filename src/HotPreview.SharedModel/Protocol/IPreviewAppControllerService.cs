@@ -6,5 +6,5 @@ public interface IPreviewAppControllerService
 {
     public Task RegisterAppAsync(string projectPath, string platformName);
 
-    public Task NotifyUIComponentsChangedAsync();
+    public Task NotifyPreviewsChangedAsync();
 }

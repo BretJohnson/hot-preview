@@ -24,8 +24,6 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
         }
     }
 
-
-
     /// <summary>
     /// Creates a PreviewTooling object from protocol PreviewInfo.
     /// </summary>

@@ -31,7 +31,7 @@ public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentRe
         mainAssembly ??= Assembly.GetEntryAssembly();
         if (mainAssembly is not null)
         {
-            AddUIComponentsFromAssembly(mainAssembly);
+            AddPreviewsFromAssembly(mainAssembly);
         }
 
         HashSet<string> additionalAppAssemblesSet = new(additionalAppAssemblies, StringComparer.OrdinalIgnoreCase);
@@ -40,7 +40,7 @@ public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentRe
             string? name = assembly.GetName().Name;
             if (name is not null && additionalAppAssemblesSet.Contains(name))
             {
-                AddUIComponentsFromAssembly(assembly);
+                AddPreviewsFromAssembly(assembly);
             }
         }
     }
@@ -68,7 +68,7 @@ public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentRe
         }
     }
 
-    private void AddUIComponentsFromAssembly(Assembly assembly)
+    private void AddPreviewsFromAssembly(Assembly assembly)
     {
         IEnumerable<UIComponentCategoryAttribute> uiComponentCategoryAttributes = assembly.GetCustomAttributes<UIComponentCategoryAttribute>();
         foreach (UIComponentCategoryAttribute uiComponentCategoryAttribute in uiComponentCategoryAttributes)
@@ -120,14 +120,12 @@ public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentRe
             foreach (MethodInfo method in methods)
             {
                 PreviewAttribute? previewAttribute = method.GetCustomAttribute<PreviewAttribute>(false);
-
                 if (previewAttribute is not null)
                 {
                     AddPreview(new PreviewStaticMethodReflection(previewAttribute, method));
                 }
 
                 PreviewCommandAttribute? commandAttribute = method.GetCustomAttribute<PreviewCommandAttribute>(false);
-
                 if (commandAttribute is not null)
                 {
                     AddCommand(new PreviewCommandReflection(commandAttribute, method));

@@ -71,15 +71,15 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
         PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos).ToImmutable();
 
-        _appManager.UpdateUIComponents();
+        _appManager.UpdatePreviews();
     }
 
-    public async Task NotifyUIComponentsChangedAsync()
+    public async Task NotifyPreviewsChangedAsync()
     {
         UIComponentInfo[] uiComponentInfos = await AppService!.GetUIComponentsAsync();
         PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos).ToImmutable();
 
-        _appManager?.UpdateUIComponents();
+        _appManager?.UpdatePreviews();
     }
 
     public async Task<ImageSnapshot> GetPreviewSnapshotAsync(UIComponentPreviewPairTooling previewPair)

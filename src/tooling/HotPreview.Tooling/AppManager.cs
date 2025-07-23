@@ -67,7 +67,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         }
     }
 
-    internal void UpdateUIComponents()
+    internal void UpdatePreviews()
     {
         var previewsManagers = new List<PreviewsManagerTooling>();
         foreach (AppConnectionManager appConnection in AppConnections)
@@ -106,20 +106,24 @@ public class AppManager(AppsManager appsManager, string projectPath) :
 
     public async Task InvokeCommandAsync(PreviewCommandTooling command)
     {
+        // Collect all connections that have the command
+        List<Task> commandTasks = [];
         foreach (AppConnectionManager appConnection in AppConnections)
         {
             PreviewCommandTooling? existingCommand = appConnection.PreviewsManager?.GetCommand(command.Name);
-            if (existingCommand is not null)
+            if (existingCommand is not null && appConnection.AppService is not null)
             {
-                if (appConnection.AppService is not null)
-                {
-                    await appConnection.AppService.InvokeCommandAsync(command.Name);
-                    return; // Execute on first connection that has the command
-                }
+                commandTasks.Add(appConnection.AppService.InvokeCommandAsync(command.Name));
             }
         }
 
-        throw new InvalidOperationException($"Command '{command.Name}' not found in any connected app");
+        if (commandTasks.Count == 0)
+        {
+            throw new InvalidOperationException($"Command '{command.Name}' not found in any connected app");
+        }
+
+        // Execute all commands in parallel
+        await Task.WhenAll(commandTasks);
     }
 
     public async Task UpdatePreviewSnapshotsAsync(UIComponentTooling? uiComponent, PreviewTooling? preview)
