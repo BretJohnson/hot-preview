@@ -14,14 +14,16 @@ namespace HotPreview.Tooling.McpServer;
 public class McpHttpServerService : IHostedService
 {
     private readonly ILogger<McpHttpServerService> _logger;
+    private readonly IServiceProvider? _hostServiceProvider;
     private WebApplication? _app;
     private int _port;
 
     public string ServerUrl => $"http://localhost:{_port}";
 
-    public McpHttpServerService(ILogger<McpHttpServerService> logger)
+    public McpHttpServerService(ILogger<McpHttpServerService> logger, IServiceProvider? hostServiceProvider = null)
     {
         _logger = logger;
+        _hostServiceProvider = hostServiceProvider;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -36,10 +38,17 @@ public class McpHttpServerService : IHostedService
             _port = FindAvailablePort(54243);
             _logger.LogInformation("Starting MCP HTTP server on port {Port}", _port);
 
-            var builder = WebApplication.CreateBuilder();
+            WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
             // Register process service
             builder.Services.AddSingleton<IProcessService, ProcessService>();
+
+            // Register AppsManager if available from host service provider (for preview tools)
+            AppsManager? appsManager = _hostServiceProvider?.GetService<AppsManager>();
+            if (appsManager is not null)
+            {
+                builder.Services.AddSingleton(appsManager);
+            }
 
             // Configure MCP server with existing tools and prompts
             builder.Services
@@ -71,7 +80,7 @@ public class McpHttpServerService : IHostedService
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (_app != null)
+        if (_app is not null)
         {
             _logger.LogInformation("Stopping MCP HTTP server");
             await _app.StopAsync(cancellationToken);

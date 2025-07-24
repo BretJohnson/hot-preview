@@ -1,5 +1,6 @@
 using HotPreview.DevToolsApp.Services;
 using HotPreview.DevToolsApp.ViewModels;
+using HotPreview.Tooling;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Services;
 using Uno.Resizetizer;
@@ -85,6 +86,10 @@ public partial class App : Application
                         services.AddSingleton<StatusReporter>();
 
                         services.AddSingleton<DevToolsManager>();
+
+                        // Register AppsManager from DevToolsManager for MCP server access
+                        services.AddSingleton<AppsManager>(provider =>
+                            provider.GetRequiredService<DevToolsManager>().AppsManager);
                     })
                     .UseNavigation(RegisterRoutes)
                 );

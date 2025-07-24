@@ -10,8 +10,6 @@ public class UIComponentViewModel : NavTreeItemViewModel
     {
         _mainPageViewModel = mainPageViewModel;
         UIComponent = uiComponent;
-
-
     }
 
     public UIComponentTooling UIComponent { get; }

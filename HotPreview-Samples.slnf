@@ -3,7 +3,10 @@
     "path": "HotPreview.sln",
     "projects": [
       "samples\\maui\\DefaultTemplateWithContent\\DefaultTemplateWithContent.csproj",
-      "samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj"
+      "samples\\maui\\EcommerceMAUI\\EcommerceMAUI.csproj",
+      "src\\HotPreview.SharedModel\\HotPreview.SharedModel.csproj",
+      "src\\HotPreview\\HotPreview.csproj",
+      "src\\platforms\\HotPreview.App.Maui\\HotPreview.App.Maui.csproj"
     ]
   }
 }
