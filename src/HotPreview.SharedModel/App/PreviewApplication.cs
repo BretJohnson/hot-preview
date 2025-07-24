@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace HotPreview.SharedModel.App;
 
-public abstract class PreviewApplication
+public abstract class PreviewApplication : IDisposable
 {
     private static PreviewApplication? s_instance;
 
@@ -42,6 +42,15 @@ public abstract class PreviewApplication
 
         // Fire and forget
         _ = _toolingConnection.StartConnectionAsync(GetPreviewAppService()).ConfigureAwait(false);
+    }
+
+    public void StopToolingConnection()
+    {
+        if (_toolingConnection is not null)
+        {
+            _toolingConnection.Dispose();
+            _toolingConnection = null;
+        }
     }
 
     public string? ToolingConnectionString { get; set; }
@@ -95,5 +104,19 @@ public abstract class PreviewApplication
     {
         // By default, return the string supplied
         return connectionString;
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            StopToolingConnection();
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }
