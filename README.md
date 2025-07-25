@@ -6,7 +6,7 @@ Previews are similar to stories in [Storybook](https://storybook.js.org/) for Ja
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
 and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) — but for .NET UI.
 
-The framework itself is cross-platform, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
+The framework itself is cross-platfoPrm, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
 Initial support is for .NET MAUI.
 
 ## Benefits
@@ -20,12 +20,12 @@ Quickly visualize UI components with different data inputs and states, ensuring 
 ### 📱 Visualize Multiple Platforms Simultaneously
 Navigate to different screens in your UI and view them on multiple platforms side by side, enabling instant cross-platform comparison and consistency validation:
 
-![Multi-Platform Preview Demo](images/hot-preview-breakout.gif)
+<img src="images/hot-preview-breakout.mp4" alt="Multi-Platform Preview Demo">
 
 *Example: Windows on the left, Android on the right - same UI, different platforms*
 
 ### 🤖 Agentic AI UI Development Workflow *(WIP - Coming Soon)*
-Built-in MCP server (extending the excellent work from [MCP-JavierMobile](https://github.com/taublast/MCP-JavierMobile)) combined with Hot Preview enables AI agents to:
+Built-in MCP server combined with Hot Preview enables AI agents to:
 - Generate previews (visual tests) when creating UI updates
 - Launch the app across multiple platforms simultaneously
 - Navigate to specific previews and capture screenshots
