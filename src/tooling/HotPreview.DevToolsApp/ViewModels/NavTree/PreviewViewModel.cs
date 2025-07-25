@@ -1,5 +1,4 @@
 using HotPreview.Tooling;
-using Microsoft.UI.Xaml.Controls;
 
 namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
@@ -33,6 +32,9 @@ public class PreviewViewModel : NavTreeItemViewModel
 
     public override void OnItemInvoked()
     {
+        // Update status bar to show navigation action
+        _mainPageViewModel.UpdateStatusMessage($"Navigating to preview: {Preview.DisplayName}");
+
         // Navigate to the preview, for all app connections that have the preview
         _mainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, Preview);
     }
