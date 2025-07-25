@@ -24,9 +24,8 @@ Quickstart:
 - Install Hot Preview DevTools with `dotnet tool install -g HotPreview.DevTools`
 - In your app, add a reference to the `HotPreview.App.<platform>` NuGet, e.g.:
     ```XML
-    <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="<latest>" />
+    <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="..." />
     ```
-
 - Build your app for Debug and run it
 
 With that, you should see this:
