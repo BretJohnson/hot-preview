@@ -138,7 +138,7 @@ public partial class MainPageViewModel : ObservableObject
                     var sectionViewModel = new SectionItemViewModel(category.Name.ToUpperInvariant());
                     foreach (UIComponentTooling uiComponent in components)
                     {
-                        ((List<NavTreeItemViewModel>)sectionViewModel.Children).Add(new UIComponentViewModel(this, uiComponent));
+                        sectionViewModel.AddChild(new UIComponentViewModel(this, uiComponent));
                     }
                     newNavTreeItems.Add(sectionViewModel);
                 }
@@ -151,7 +151,7 @@ public partial class MainPageViewModel : ObservableObject
                 var commandsSection = new SectionItemViewModel("COMMANDS");
                 foreach (PreviewCommandTooling command in commands)
                 {
-                    ((List<NavTreeItemViewModel>)commandsSection.Children).Add(new CommandViewModel(this, command));
+                    commandsSection.AddChild(new CommandViewModel(this, command));
                 }
                 newNavTreeItems.Add(commandsSection);
             }
