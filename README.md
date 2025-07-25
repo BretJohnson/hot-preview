@@ -20,7 +20,10 @@ Quickly visualize UI components with different data inputs and states, ensuring 
 ### 📱 Visualize Multiple Platforms Simultaneously
 Navigate to different screens in your UI and view them on multiple platforms side by side, enabling instant cross-platform comparison and consistency validation:
 
-<img src="images/hot-preview-breakout.mp4" alt="Multi-Platform Preview Demo">
+<video width="800" controls autoplay muted loop>
+  <source src="images/hot-preview-breakout.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 *Example: Windows on the left, Android on the right - same UI, different platforms*
 
