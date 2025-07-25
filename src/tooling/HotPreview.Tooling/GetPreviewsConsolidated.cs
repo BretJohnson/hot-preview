@@ -6,7 +6,7 @@ public class GetPreviewsConsolidated : PreviewsManagerBuilderTooling
 {
     /// <summary>
     /// Initializes a new instance of GetPreviewsConsolidated and consolidates the provided previews managers,
-    /// merging UI components with the same name and consolidating their previews.
+    /// merging UI components with the same name and consolidating their previews, and combining commands.
     /// </summary>
     /// <param name="uiComponentsManagers">List of previews managers to consolidate</param>
     public GetPreviewsConsolidated(IList<PreviewsManagerTooling> uiComponentsManagers)
@@ -33,6 +33,12 @@ public class GetPreviewsConsolidated : PreviewsManagerBuilderTooling
                     // Component doesn't exist, add it
                     _uiComponentsByName[uiComponent.Name] = uiComponent;
                 }
+            }
+
+            // Merge commands
+            foreach (PreviewCommandTooling command in manager.Commands)
+            {
+                AddOrUpdateCommand(command);
             }
         }
     }
