@@ -5,8 +5,7 @@ need to run the app, navigate to the page, and supply test data.
 
 Previews are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
-and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) —
-but for .NET UI.
+and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) — but for .NET UI.
 
 The framework itself is cross-platform, intended to work with most .NET UI platforms.
 It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
@@ -16,6 +15,29 @@ Initial support is for .NET MAUI.
 
 Hot Preview is in active development. It works and I encourage you to use it, but
 expect to encounter some issues. Please report them and share other feedback.
+
+## Benefits
+
+### 🚀 Streamlined Navigation
+Jump directly to specific UI pages without navigating through multiple app screens, dramatically reducing development time and eliminating repetitive manual testing workflows.
+
+### 🔄 Multi-state Testing
+Quickly visualize UI components with different data inputs and states, ensuring responsive and robust interfaces across all scenarios. Test edge cases, empty states, loading states, and error conditions without complex setup.
+
+### 📱 Visualize Multiple Platforms Simultaneously
+Navigate to different screens in your UI and view them on multiple platforms side by side, enabling instant cross-platform comparison and consistency validation:
+
+![Multi-Platform Preview Demo](images/hot-preview-breakout.gif)
+
+*Example: Windows on the left, Android on the right - same UI, different platforms*
+
+### 🤖 Agentic AI UI Development Workflow *(WIP - Coming Soon)*
+Built-in MCP server (extending the excellent work from [MCP-JavierMobile](https://github.com/taublast/MCP-JavierMobile)) combined with Hot Preview enables AI agents to:
+- Generate previews (visual tests) when creating UI updates
+- Launch the app across multiple platforms simultaneously
+- Navigate to specific previews and capture screenshots
+- Inspect the resulting screenshots and create UI updates based on visual feedback
+- Iterate until satisfied with the visual outcome
 
 ## How to use
 
