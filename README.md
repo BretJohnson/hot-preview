@@ -1,6 +1,6 @@
 # Overview
 
-HotPreview lets you easily work on pages/controls in your app in isolation, without the
+Hot Preview lets you easily work on pages/controls in your app in isolation, without the
 need to run the app, navigate to the page, and supply any test data.
 
 Previews are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
@@ -12,19 +12,28 @@ The framework itself is cross platform, intended to work with (most) any .NET UI
 it has a platform agnostic piece and platform specific piece, with the platform piece pluggable.
 Initial support is for .NET MAUI.
 
+## Current Status
+
+Hot Preview is in active development. It works and I encourage using it, but
+expect to encounter some issues. Please report them and share other feedback.
+
 ## How to use
 
 Quickstart:
 
-- Install the preview DevTools with `dotnet tool install -g HotPreview.DevTools`
-- Add a reference to the `HotPreview.App.<platform>` NuGet (e.g. `HotPreview.App.Maui` for MAUI) to your app
+- Install Hot Preview DevTools  with `dotnet tool install -g HotPreview.DevTools`
+- In your app, add a reference to the `HotPreview.App.<platform>` NuGet, e.g.:
+    ```XML
+    <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="<latest>" />
+    ```
+
 - Build your app for Debug and run it
 
 With that, you should see this:
-- Building launches HotPreview DevTools, if it's not already running
-- When your app starts, it connects to HotPreview DevTools
-- HotPreview DevTools shows a tree of your UI components and their previews. Initially it will only have auto-generated previews, but you can add your own later.
-- Click on UI components/previews in the to navigate directly to the preview in your app
+- Building launches the Hot Preview DevTools app, if it's not already running
+- When your app starts, it connects to the DevTools app
+- DevTools shows a tree of your UI components and their previews. Initially it will only have auto-generated previews, but you can add your own later.
+- Click on UI components/previews in the to navigate directly to the page/control in your app
 
 Previews are automatically created for:
 
@@ -33,13 +42,12 @@ Previews are automatically created for:
 
 That should get you started. Beyond that you'll probably want to define previews yourself, which lets you:
 
-- Support any UI component, whatever the constructor requirements
+- Support any UI component, whatever the constructor arguments (e.g. you can pass in a view model arg)
 - Provide sample data
 - Define multiple previews for a single UI component with different data
 - Update global app state if needed for a particular preview
 
-Defining your own previews is easy & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static method to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires. These static `[Preview]` methods can actually go
-in any class, but by convention the normally are defined on the UI component class.
+Defining your own previews is easy & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static method to your UI component class (in code behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires. These static `[Preview]` methods can actually go in any class, but by convention the normally are defined on the UI component class. `#if PREVIEWS` allows the preview code to be excluded from release builds.
 
 ```C#
 #if PREVIEWS
