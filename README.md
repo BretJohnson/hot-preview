@@ -1,14 +1,12 @@
 # Overview
 
-Hot Preview lets you easily work on pages and controls in your app in isolation, without the
-need to run the app, navigate to the page, and supply test data.
+Hot Preview lets you easily work on pages and controls in your app in isolation, making UI development and testing faster and more efficient for both humans and AI agents.
 
 Previews are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
 and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) — but for .NET UI.
 
-The framework itself is cross-platform, intended to work with most .NET UI platforms.
-It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
+The framework itself is cross-platform, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
 Initial support is for .NET MAUI.
 
 ## Benefits
