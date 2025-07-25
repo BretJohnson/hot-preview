@@ -1,4 +1,5 @@
 using System.Net.Sockets;
+using HotPreview.Tooling.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HotPreview.Tooling.Tests
@@ -10,7 +11,8 @@ namespace HotPreview.Tooling.Tests
         public async Task ConnectionCount_ReflectsActiveConnections()
         {
             // Arrange
-            var appsManager = new AppsManager(SynchronizationContext.Current ?? new SynchronizationContext());
+            var appsManager = new AppsManager(SynchronizationContext.Current ?? new SynchronizationContext(),
+                new StatusReporter());
             using var listener = new ToolingAppServerConnectionListener(appsManager);
 
             // Act - Start listening
