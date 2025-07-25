@@ -11,11 +11,6 @@ The framework itself is cross-platform, intended to work with most .NET UI platf
 It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
 Initial support is for .NET MAUI.
 
-## Current Status
-
-Hot Preview is in active development. It works and I encourage you to use it, but
-expect to encounter some issues. Please report them and share other feedback.
-
 ## Benefits
 
 ### 🚀 Streamlined Navigation
@@ -38,6 +33,11 @@ Built-in MCP server (extending the excellent work from [MCP-JavierMobile](https:
 - Navigate to specific previews and capture screenshots
 - Inspect the resulting screenshots and create UI updates based on visual feedback
 - Iterate until satisfied with the visual outcome
+
+## Current Status
+
+Hot Preview is in active development. It works and I encourage you to use it, but
+expect to encounter some issues. Please report them and share other feedback.
 
 ## How to use
 
