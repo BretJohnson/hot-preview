@@ -6,7 +6,7 @@ Previews are similar to stories in [Storybook](https://storybook.js.org/) for Ja
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
 and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) — but for .NET UI.
 
-The framework itself is cross-platfoPrm, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
+The framework itself is cross-platform, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
 Initial support is for .NET MAUI.
 
 ## Benefits
@@ -20,10 +20,7 @@ Quickly visualize UI components with different data inputs and states, ensuring 
 ### 📱 Visualize Multiple Platforms Simultaneously
 Navigate to different screens in your UI and view them on multiple platforms side by side, enabling instant cross-platform comparison and consistency validation:
 
-<video width="800" controls autoplay muted loop>
-  <source src="images/hot-preview-breakout.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/3898ea7d-d67e-4fd3-92ed-877fe912a55d
 
 *Example: Windows on the left, Android on the right - same UI, different platforms*
 
