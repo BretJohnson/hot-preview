@@ -44,7 +44,10 @@ expect to encounter some issues. Please report them and share other feedback.
 
 Quickstart:
 
-- Install Hot Preview DevTools with `dotnet tool install -g HotPreview.DevTools`
+- Install Hot Preview DevTools:
+    ```bash
+    dotnet tool install -g HotPreview.DevTools
+    ```
 - In your app, add a reference to the `HotPreview.App.<platform>` NuGet, e.g.:
     ```XML
     <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="..." />
