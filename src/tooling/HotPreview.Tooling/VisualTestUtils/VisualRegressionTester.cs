@@ -104,7 +104,7 @@ namespace HotPreview.Tooling.VisualTestUtils
         /// <param name="cropHeight">Crop rectangle height</param>
         /// <param name="environmentName">Optional environment name (e.g. "windows", "macos", "android"). If specified, the baseline image will be stored in a subdirectory with this name.</param>
         /// <param name="testContext">Optional client provied test context, used to attach screenshots/diff images to failed tests if supported by client test framework</param>
-        public void VerifyMatchesSnapshot(string name, ImageSnapshot actualImage, IImageEditorFactory imageEditorFactory, int cropX, int cropY, int cropWidth, int cropHeight, string? environmentName = null, ITestContext? testContext = null)
+        public void VerifyMatchesSnapshot(string name, ImageSnapshot actualImage, IImageEditorFactory imageEditorFactory, int cropX, int cropY, uint cropWidth, uint cropHeight, string? environmentName = null, ITestContext? testContext = null)
         {
             IImageEditor imageEditor = imageEditorFactory.CreateImageEditor(actualImage);
             imageEditor.Crop(cropX, cropY, cropWidth, cropHeight);

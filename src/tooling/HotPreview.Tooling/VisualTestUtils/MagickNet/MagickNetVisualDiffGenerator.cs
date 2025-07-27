@@ -10,12 +10,10 @@ namespace HotPreview.Tooling.VisualTestUtils.MagickNet
     /// </summary>
     public class MagickNetVisualDiffGenerator : IVisualDiffGenerator
     {
-        private ErrorMetric _errorMetric;
         private Channels _channelsToCompare;
 
-        public MagickNetVisualDiffGenerator(ErrorMetric error = ErrorMetric.Fuzz, Channels channelsToCompare = Channels.RGBA)
+        public MagickNetVisualDiffGenerator(Channels channelsToCompare = Channels.RGBA)
         {
-            _errorMetric = error;
             _channelsToCompare = channelsToCompare;
         }
 
@@ -24,10 +22,12 @@ namespace HotPreview.Tooling.VisualTestUtils.MagickNet
             var magickBaselineImage = new MagickImage(baselineImage.Data);
             var magickActualImage = new MagickImage(actualImage.Data);
 
-            var magickDiffImage = new MagickImage();
+            // Create a copy of the baseline image to use as the diff image
+            MagickImage magickDiffImage = (MagickImage)magickBaselineImage.Clone();
             magickDiffImage.Format = MagickFormat.Png;
 
-            magickBaselineImage.Compare(magickActualImage, _errorMetric, magickDiffImage, _channelsToCompare);
+            // Use Composite with Difference operator to generate the diff
+            magickDiffImage.Composite(magickActualImage, CompositeOperator.Difference, _channelsToCompare);
 
             return new ImageSnapshot(magickDiffImage.ToByteArray(), ImageSnapshotFormat.PNG);
         }

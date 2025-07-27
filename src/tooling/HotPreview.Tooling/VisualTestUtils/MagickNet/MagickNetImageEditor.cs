@@ -11,13 +11,13 @@ namespace HotPreview.Tooling.VisualTestUtils.MagickNet
             _magickImage = new MagickImage(imageSnapshot.Data);
         }
 
-        public void Crop(int x, int y, int width, int height)
+        public void Crop(int x, int y, uint width, uint height)
         {
             _magickImage.Crop(new MagickGeometry(x, y, width, height));
-            _magickImage.RePage();
+            _magickImage.ResetPage();
         }
 
-        public (int width, int height) GetSize() =>
+        public (uint width, uint height) GetSize() =>
             (_magickImage.Width, _magickImage.Height);
 
         public ImageSnapshot GetUpdatedImage()

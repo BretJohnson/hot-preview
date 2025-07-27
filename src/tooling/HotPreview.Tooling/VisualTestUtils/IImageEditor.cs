@@ -10,7 +10,7 @@ namespace HotPreview.Tooling.VisualTestUtils
         /// Get the size of the image, in pixels
         /// </summary>
         /// <returns>image width and height</returns>
-        (int width, int height) GetSize();
+        (uint width, uint height) GetSize();
 
         /// <summary>
         /// Crop the image, updating it to be the subset in the specified rectangle.
@@ -19,7 +19,7 @@ namespace HotPreview.Tooling.VisualTestUtils
         /// <param name="y">crop rectangle top</param>
         /// <param name="width">crop rectangle width</param>
         /// <param name="height">crop rectangle height </param>
-        void Crop(int x, int y, int width, int height);
+        void Crop(int x, int y, uint width, uint height);
 
         /// <summary>
         /// Get the updated image, after any edits have been made.
