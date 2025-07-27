@@ -5,6 +5,7 @@ namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 public class UIComponentViewModel : NavTreeItemViewModel
 {
     private readonly MainPageViewModel _mainPageViewModel;
+    private IReadOnlyList<NavTreeItemViewModel>? _children;
 
     public UIComponentViewModel(MainPageViewModel mainPageViewModel, UIComponentTooling uiComponent)
     {
@@ -18,10 +19,17 @@ public class UIComponentViewModel : NavTreeItemViewModel
 
     public override string PathIcon => UIComponent.PathIcon;
 
-    public override IReadOnlyList<NavTreeItemViewModel>? Children =>
-        UIComponent.HasMultiplePreviews ?
-            UIComponent.Previews.Select(preview => new PreviewViewModel(_mainPageViewModel, UIComponent, preview)).ToList() :
-            null;
+    public override IReadOnlyList<NavTreeItemViewModel>? Children
+    {
+        get
+        {
+            if (_children is null && UIComponent.HasMultiplePreviews)
+            {
+                _children = UIComponent.Previews.Select(preview => new PreviewViewModel(_mainPageViewModel, UIComponent, preview)).ToList();
+            }
+            return _children;
+        }
+    }
 
     public override async Task UpdatePreviewSnapshotsAsync()
     {

@@ -64,6 +64,8 @@ public partial class MainPageViewModel : ObservableObject
 
     public BulkObservableCollection<NavTreeItemViewModel> NavTreeItems { get; } = [];
 
+    public BulkObservableCollection<NavTreeItemViewModel> FilteredNavTreeItems { get; } = [];
+
     public ICommand PlayCommand { get; }
 
     public ICommand SettingsCommand { get; }
@@ -157,10 +159,12 @@ public partial class MainPageViewModel : ObservableObject
             }
 
             NavTreeItems.ReplaceAll(newNavTreeItems);
+            ApplySearchFilter();
         }
         else
         {
             NavTreeItems.Clear();
+            FilteredNavTreeItems.Clear();
         }
     }
 
@@ -237,7 +241,66 @@ public partial class MainPageViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value)
     {
-        // TODO: Implement search filtering
+        ApplySearchFilter();
+    }
+
+    private void ApplySearchFilter()
+    {
+        var filteredItems = NavTreeItems.Where(item => ShouldShowItem(item, SearchText)).ToList();
+
+        // Apply visibility and expansion to all items
+        foreach (NavTreeItemViewModel item in NavTreeItems)
+        {
+            ApplyVisibilityAndExpansion(item, SearchText);
+        }
+
+        FilteredNavTreeItems.ReplaceAll(filteredItems);
+    }
+
+    private static bool ShouldShowItem(NavTreeItemViewModel item, string searchText)
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+            return true;
+
+        return item.MatchesSearch(searchText);
+    }
+
+    private static void ApplyVisibilityAndExpansion(NavTreeItemViewModel item, string searchText)
+    {
+        bool hasMatchingChild = false;
+
+        // First, check children recursively
+        if (item.Children is not null)
+        {
+            foreach (NavTreeItemViewModel child in item.Children)
+            {
+                ApplyVisibilityAndExpansion(child, searchText);
+                if (child.IsVisible)
+                {
+                    hasMatchingChild = true;
+                }
+            }
+
+            // Notify that filtered children may have changed
+            item.NotifyFilteredChildrenChanged();
+        }
+
+        // Determine if this item should be visible
+        bool itemMatches = string.IsNullOrWhiteSpace(searchText) ||
+                          item.DisplayName.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+
+        item.IsVisible = itemMatches || hasMatchingChild;
+
+        // Expand items that have matching children when searching
+        if (!string.IsNullOrWhiteSpace(searchText) && hasMatchingChild && (item is SectionItemViewModel || item is UIComponentViewModel))
+        {
+            item.IsExpanded = true;
+        }
+        else if (string.IsNullOrWhiteSpace(searchText))
+        {
+            // Reset expansion when not searching
+            item.IsExpanded = false;
+        }
     }
 
     /// <summary>
