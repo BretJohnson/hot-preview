@@ -40,6 +40,9 @@ public class McpHttpServerService : IHostedService
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
+            // Configure logging to suppress console output
+            builder.Logging.ClearProviders();
+
             // Register process service
             builder.Services.AddSingleton<IProcessService, ProcessService>();
 

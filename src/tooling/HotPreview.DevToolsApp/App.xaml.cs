@@ -3,6 +3,7 @@ using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.Tooling;
 using HotPreview.Tooling.McpServer;
 using HotPreview.Tooling.Services;
+using Serilog;
 using Uno.Resizetizer;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
@@ -37,6 +38,22 @@ public partial class App : Application
 #endif
                     .UseLogging(configure: (context, logBuilder) =>
                     {
+                        // Configure simple file logging with daily rolling
+                        string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                                     "HotPreview", "Logs", "DevTools-.log");
+                        Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
+
+                        Log.Logger = new LoggerConfiguration()
+                            .WriteTo.File(logPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                            .CreateLogger();
+
+                        // Clear default providers (including console) and only use Serilog
+                        logBuilder.ClearProviders();
+                        logBuilder.AddSerilog(Log.Logger);
+
+                        // Log application startup as the first message
+                        Log.Information("Hot Preview DevTools application starting up...");
+
                         // Configure log levels for different categories of logging
                         logBuilder
                             .SetMinimumLevel(
@@ -100,12 +117,13 @@ public partial class App : Application
 #endif
         MainWindow.SetWindowIcon();
 
-        // Handle window closing to release single instance mutex
+        // Handle window closing to release single instance mutex and cleanup logging
         MainWindow.Closed += (sender, args) =>
         {
+            Log.Information("Hot Preview DevTools application shutting down...");
             SingleInstanceManager.ReleaseMutex();
+            Log.CloseAndFlush();
         };
-
 
         Host = await builder.NavigateAsync<Shell>();
 
