@@ -5,6 +5,11 @@ namespace HotPreview.DevTools;
 
 public static class Program
 {
+    /// <summary>
+    /// Entry point for the "hotpreview" CLI tool, installed via "dotnet tool install".
+    /// This tool acts as a launcher that finds and starts HotPreview.DevToolsApp.
+    /// It may offer other CLI options in the future.
+    /// </summary>
     public static int Main(string[] args)
     {
         try
@@ -17,7 +22,7 @@ public static class Program
                 return 1;
             }
 
-            // Look for the DevToolsApp executable in the tools/app subdirectory
+            // Look for the DevToolsApp assembly in the tools/app subdirectory
             // The CLI tool is installed in tools/net9.0/any, so we need to go up to tools and then to app
             string? parentDirectory = Directory.GetParent(toolDirectory)?.FullName;
             string? toolsDirectory = parentDirectory is not null ? Directory.GetParent(parentDirectory)?.FullName : null;
@@ -28,39 +33,40 @@ public static class Program
             }
 
             string devToolsAppDirectory = Path.Combine(toolsDirectory, "app");
-            string devToolsAppExecutable = Path.Combine(devToolsAppDirectory, "HotPreview.DevToolsApp.exe");
+            string devToolsAppAssembly = Path.Combine(devToolsAppDirectory, "HotPreview.DevToolsApp.dll");
 
-            if (!File.Exists(devToolsAppExecutable))
+            if (!File.Exists(devToolsAppAssembly))
             {
-                Console.Error.WriteLine($"Error: HotPreview.DevToolsApp.exe not found.");
-                Console.Error.WriteLine($"Expected location: {devToolsAppExecutable}");
+                Console.Error.WriteLine($"Error: HotPreview.DevToolsApp.dll not found.");
+                Console.Error.WriteLine($"Expected location: {devToolsAppAssembly}");
                 return 1;
             }
 
-            Console.WriteLine($"Launching HotPreview DevToolsApp from: {devToolsAppExecutable}");
+            Console.WriteLine($"Launching Hot Preview DevTools: dotnet {devToolsAppAssembly}");
 
-            // Launch the DevToolsApp application in the background
+            // Launch the DevTools application, with "dotnet". This works on all platforms (Windows, Linux, macOS),
+            // as compared to directly executing the .exe, which is Windows only.
             var startInfo = new ProcessStartInfo
             {
-                FileName = devToolsAppExecutable,
-                Arguments = string.Join(" ", args),
-                UseShellExecute = true,
+                FileName = "dotnet",
+                Arguments = devToolsAppAssembly,
+                UseShellExecute = false,
                 CreateNoWindow = false
             };
 
             using var process = Process.Start(startInfo);
             if (process is null)
             {
-                Console.Error.WriteLine("Error: Failed to start HotPreview.DevToolsApp.exe.");
+                Console.Error.WriteLine($"Error: Failed to start: dotnet {devToolsAppAssembly}");
                 return 1;
             }
 
-            // Don't wait for the process to exit - run in background
+            // Exit the launcher, while the process keeps running
             return 0;
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error launching HotPreview.DevToolsApp.exe: {ex.Message}");
+            Console.Error.WriteLine($"Error launching Hot Preview DevTools: {ex.Message}");
             return 1;
         }
     }
