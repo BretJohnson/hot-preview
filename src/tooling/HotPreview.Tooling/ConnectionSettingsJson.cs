@@ -20,11 +20,8 @@ public static class ConnectionSettingsJson
 
         string appConnectionString = $"{string.Join(",", addresses)}:{appConnectionPort}";
 
-        string homeDir = Environment.GetFolderPath(
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? Environment.SpecialFolder.UserProfile
-                : Environment.SpecialFolder.Personal);
-        string configDir = Path.Combine(homeDir, ".hotpreview");
+        string localAppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string configDir = Path.Combine(localAppDataDir, "HotPreview");
         Directory.CreateDirectory(configDir);
         string jsonPath = Path.Combine(configDir, fileName);
 
