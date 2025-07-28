@@ -222,7 +222,7 @@ namespace HotPreview.SharedModel
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = "hotpreviewxx",
+                    FileName = "hotpreview",
                     Arguments = "--launch",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -261,7 +261,7 @@ namespace HotPreview.SharedModel
             // For English systems, match on the message.
             catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
             {
-                Log.LogWarning("Hot Preview: hotpreviewAAAA not found.");
+                Log.LogWarning("Hot Preview: hotpreview not found.");
                 Log.LogWarning("Hot Preview: Install it via e.g.: dotnet tool install --global HotPreview.DevTools");
                 return false;
             }
