@@ -54,15 +54,13 @@ namespace HotPreview.AppBuildTasks
                 {
                     if (!LaunchDevToolsAppWithLock())
                     {
-                        Log.LogWarning($"Hot Preview: error launching, but returning true");
-
                         return true;   // Errors already logged, but don't fail the build
                     }
                 }
 
                 if (!File.Exists(jsonPath))
                 {
-                    Log.LogError($"Hot Preview: devtools is running, but the {jsonPath} file doesn't exist.");
+                    Log.LogWarning($"Hot Preview: devtools is running, but the {jsonPath} file doesn't exist.");
                     return false;
                 }
 
@@ -181,7 +179,8 @@ namespace HotPreview.SharedModel
             }
             catch (Exception ex)
             {
-                Log.LogError($"Hot Preview: Failed to create launch lock file: {ex.Message}");
+                Log.LogError($"Hot Preview: Failed to create launch lock file");
+                Log.LogErrorFromException(ex);
                 return false;
             }
         }
@@ -213,7 +212,7 @@ namespace HotPreview.SharedModel
             }
 
             // Timeout reached - the other process might have failed
-            Log.LogError("Hot Preview: Timeout waiting for another build task to launch devtools");
+            Log.LogWarning("Hot Preview: Timeout waiting for another build task to launch devtools");
             return false;
         }
 
