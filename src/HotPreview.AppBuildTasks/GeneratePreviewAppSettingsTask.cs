@@ -50,7 +50,7 @@ namespace HotPreview.AppBuildTasks
                 string jsonPath = DevToolsConnectionJsonPath;
 
                 // Check if the devtools app is running, launching it if not.
-                if (!IsDevToolsAppRunning())
+                if (!File.Exists(jsonPath))
                 {
                     if (!LaunchDevToolsAppWithLock())
                     {
@@ -112,12 +112,12 @@ namespace HotPreview.SharedModel
             }
             catch (Exception ex)
             {
-                Log.LogError($"Hot Preview: Error generating preview app settings");
-                Log.LogErrorFromException(ex);
+                Log.LogWarning($"Hot Preview: Error generating preview app settings: {ex.Message}");
                 return false;
             }
         }
 
+        // TODO: This isn't currently used. Consider making use of it again or remove it.
         private bool IsDevToolsAppRunning()
         {
             try
@@ -179,8 +179,7 @@ namespace HotPreview.SharedModel
             }
             catch (Exception ex)
             {
-                Log.LogError($"Hot Preview: Failed to create launch lock file");
-                Log.LogErrorFromException(ex);
+                Log.LogWarning($"Hot Preview: Failed to create launch lock file: {ex.Message}");
                 return false;
             }
         }
@@ -230,7 +229,7 @@ namespace HotPreview.SharedModel
                     CreateNoWindow = true
                 };
 
-                Log.LogMessage(MessageImportance.High, "Hot Preview: Launching devtools...");
+                Log.LogMessage(MessageImportance.High, "Hot Preview: Launching DevTools...");
 
                 using var process = Process.Start(startInfo);
                 if (process is null)
@@ -254,7 +253,7 @@ namespace HotPreview.SharedModel
                     return false;
                 }
 
-                Log.LogMessage(MessageImportance.High, $"Hot Preview: Launched devtools");
+                Log.LogMessage(MessageImportance.High, $"Hot Preview: Launched DevTools");
                 return true;
             }
             // When the hotpreview executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
@@ -269,7 +268,7 @@ namespace HotPreview.SharedModel
             catch (Exception ex)
             {
                 Log.LogWarning($"Hot Preview: Error launching hotpreview: {ex}");
-                Log.LogWarning("Hot Preview: Ensure it is installed via e.g.: dotnet tool install -g --prerelease HotPreview.DevTools");
+                Log.LogWarning("Hot Preview: Ensure it is installed via e.g.: dotnet tool install --global HotPreview.DevTools");
                 return false;
             }
         }
