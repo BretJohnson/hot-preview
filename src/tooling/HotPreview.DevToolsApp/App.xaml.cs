@@ -51,8 +51,14 @@ public partial class App : Application
                         logBuilder.ClearProviders();
                         logBuilder.AddSerilog(Log.Logger);
 
-                        // Log application startup as the first message
-                        Log.Information("Hot Preview DevTools application starting up...");
+                        // Log application startup with clear visual separation
+                        Log.Information("================================================================================");
+                        Log.Information("HOT PREVIEW DEVTOOLS - APPLICATION STARTUP");
+                        Log.Information("--------------------------------------------------------------------------------");
+                        Log.Information("OS: {OS}", Environment.OSVersion);
+                        Log.Information(".NET: {DotNetVersion}", Environment.Version);
+                        Log.Information("Working Directory: {WorkingDirectory}", Environment.CurrentDirectory);
+                        Log.Information("================================================================================");
 
                         // Configure log levels for different categories of logging
                         logBuilder
@@ -120,7 +126,9 @@ public partial class App : Application
         // Handle window closing to release single instance mutex and cleanup logging
         MainWindow.Closed += (sender, args) =>
         {
-            Log.Information("Hot Preview DevTools application shutting down...");
+            Log.Information("================================================================================");
+            Log.Information("HOT PREVIEW DEVTOOLS - APPLICATION SHUTDOWN");
+            Log.Information("================================================================================");
             SingleInstanceManager.ReleaseMutex();
             Log.CloseAndFlush();
         };
