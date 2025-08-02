@@ -1,4 +1,4 @@
-﻿using DefaultTemplateWithContent.Models;
+using DefaultTemplateWithContent.Models;
 using DefaultTemplateWithContent.PageModels;
 
 namespace DefaultTemplateWithContent.Pages;
@@ -11,9 +11,9 @@ public partial class MainPage : ContentPage
     }
 
     /*
-#if EXAMPLES
-    [Example]
-    public static MainPageModel Example() => new(new MainPageModel(null));
+#if PREVIEWS
+    [Preview]
+    public static MainPageModel Preview() => new(new MainPageModel(null));
 #endif
     */
 }

@@ -1,0 +1,52 @@
+using HotPreview;
+using HotPreview.App.Wpf;
+using HotPreview.SharedModel.App;
+
+[assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
+[assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]
+[assembly: ControlUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Media.Visual")]
+
+namespace HotPreview.App.Wpf;
+
+public class WpfPreviewApplication : PreviewApplication
+{
+    public static WpfPreviewApplication Instance => s_instance.Value;
+
+    private static readonly Lazy<WpfPreviewApplication> s_instance =
+        new(() =>
+        {
+            var instance = new WpfPreviewApplication();
+            InitInstance(instance);
+            return instance;
+        });
+
+    public const string WpfPlatformType = "WPF";
+
+    private readonly Lazy<PreviewsManagerReflection> _previewsManager;
+
+    private WpfPreviewApplication()
+    {
+        _previewsManager = new Lazy<PreviewsManagerReflection>(
+            () => new GetPreviewsViaReflection(ServiceProvider, MainAssembly,
+                AdditionalAppAssemblies, null).ToImmutable());
+
+        PreviewAppService = new WpfPreviewAppService(this);
+    }
+
+    public WpfPreviewAppService PreviewAppService { get; }
+
+    public WpfPreviewNavigatorService PreviewNavigatorService { get; set; } = new WpfPreviewNavigatorService();
+
+    public override string PlatformName { get; set; } = "Windows";
+
+    public static void EnsureInitialized()
+    {
+        _ = Instance;
+    }
+
+    public override PreviewsManagerReflection GetPreviewsManager() => _previewsManager.Value;
+
+    public override PreviewAppService GetPreviewAppService() => PreviewAppService;
+
+    public override IPreviewNavigator GetPreviewNavigator() => PreviewNavigatorService;
+}

@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using EcommerceMAUI.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -71,7 +71,7 @@ namespace EcommerceMAUI.ViewModel
             Products.Add(new ProductListModel() { Name = "B&o Desk Lamp", BrandName = "Bang and Olufsen", Price = 450, ImageUrl = "https://raw.githubusercontent.com/exendahal/ecommerceXF/master/eCommerce/eCommerce.Android/Resources/drawable/Image7.png" });
             Products.Add(new ProductListModel() { Name = "BeoPlay Stand Speaker", BrandName = "Bang and Olufse", Price = 3000, ImageUrl = "https://raw.githubusercontent.com/exendahal/ecommerceXF/master/eCommerce/eCommerce.Android/Resources/drawable/Image8.png" });
             Products.Add(new ProductListModel() { Name = "Airpods", BrandName = "B&o Phone Case", Price = 30, ImageUrl = "https://raw.githubusercontent.com/exendahal/ecommerceXF/master/eCommerce/eCommerce.Android/Resources/drawable/Image9.png" });
-                      
+
             TabPages.Add(new TabPageModel("All", 0, true));
             TabPages.Add(new TabPageModel("Smart Bluetooth Speaker", 1, false));
             TabPages.Add(new TabPageModel("Lamp", 2, false));

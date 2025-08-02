@@ -1,3 +1,3 @@
-﻿#if EXAMPLES
-global using ExampleFramework;
+#if PREVIEWS
+global using HotPreview;
 #endif

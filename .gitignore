@@ -354,3 +354,12 @@ MigrationBackup/
 
 # Analysis results
 *.sarif
+
+# AI TODOs and other transient workflow files
+.llm/
+
+# Hot Preview snapshots - these can be committed for visual regression testing, but aren't here
+**/snapshots/*
+
+# Claude
+.claude/settings.local.json

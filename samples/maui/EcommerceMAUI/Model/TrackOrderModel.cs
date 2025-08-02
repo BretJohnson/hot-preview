@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.ViewModel;
+using EcommerceMAUI.ViewModel;
 using static EcommerceMAUI.Model.TrackOrderModel;
 
 namespace EcommerceMAUI.Model

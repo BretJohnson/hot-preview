@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,7 +28,7 @@ namespace EcommerceMAUI.ViewModel
         }
 
         private void SelectAddress(AddressModel address)
-        {           
+        {
             foreach (var add in Addressess)
             {
                 if (add.AddressType == address.AddressType)

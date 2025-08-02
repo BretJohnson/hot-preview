@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Use a separate, simpler, Directory.Build.targets file for samples -->
+<Project>
+</Project>

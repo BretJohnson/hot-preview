@@ -1,0 +1,50 @@
+﻿<Project Sdk="Uno.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-desktop</TargetFramework>
+
+    <OutputType>WinExe</OutputType>
+    <UnoSingleProject>true</UnoSingleProject>
+
+    <!-- Display name -->
+    <ApplicationTitle>Hot Preview DevTools</ApplicationTitle>
+    <!-- App Identifier -->
+    <ApplicationId>com.companyname.HotPreview.DevToolsApp</ApplicationId>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <!-- Package Publisher -->
+    <ApplicationPublisher>bret</ApplicationPublisher>
+    <!-- Package Description -->
+    <Description>Hot Preview DevToolsApp, powered by Uno Platform.</Description>
+
+    <!--
+      UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
+      https://aka.platform.uno/singleproject-features
+    -->
+    <UnoFeatures>
+      Lottie;
+      Hosting;
+      Toolkit;
+      Logging;
+      Mvvm;
+      Configuration;
+      Navigation;
+      ThemeService;
+      SkiaRenderer;
+    </UnoFeatures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <UnoIcon Include="Assets\Icons\icon.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotPreview.Tooling\HotPreview.Tooling.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
+  </ItemGroup>
+
+</Project>

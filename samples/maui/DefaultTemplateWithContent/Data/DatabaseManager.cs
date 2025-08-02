@@ -25,7 +25,7 @@ public class DatabaseManager
             await connection.OpenAsync();
             return connection;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine($"Error opening database connection: {e.Message}");
             connection?.Dispose();

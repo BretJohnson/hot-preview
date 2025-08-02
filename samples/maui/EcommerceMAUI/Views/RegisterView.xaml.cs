@@ -4,9 +4,9 @@ namespace EcommerceMAUI.Views;
 
 public partial class RegisterView : ContentPage
 {
-	public RegisterView()
-	{
-		InitializeComponent();
+    public RegisterView()
+    {
+        InitializeComponent();
         BindingContext = new RegisterViewModel();
     }
 }

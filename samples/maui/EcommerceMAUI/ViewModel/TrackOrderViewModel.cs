@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using static EcommerceMAUI.Model.TrackOrderModel;
@@ -13,7 +13,7 @@ namespace EcommerceMAUI.ViewModel
             get => _TrackStatus;
             set => SetProperty(ref _TrackStatus, value);
 
-        }  
+        }
         public Track TrackOrderData { get; set; }
         public string PageTitle
         {

@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using EcommerceMAUI.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -11,7 +11,7 @@ namespace EcommerceMAUI.ViewModel
         readonly private AddressModel _PrimaryAddress;
         readonly private ObservableCollection<ProductListModel> _Products = [];
         private CardInfoModel _SelectedCard;
-        
+
         private bool _IsLoaded = false;
         public bool IsLoaded
         {

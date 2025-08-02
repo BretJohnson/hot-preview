@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using EcommerceMAUI.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -39,7 +39,7 @@ namespace EcommerceMAUI.ViewModel
         {
             await PopulateDataAsync();
         }
-      
+
         async Task PopulateDataAsync()
         {
             //await Task.Delay(500);

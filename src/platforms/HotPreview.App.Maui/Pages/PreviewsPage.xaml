@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:HotPreview.App.Maui.ViewModels"
+             xmlns:pages="clr-namespace:HotPreview.App.Maui.Pages"
+             x:Class="HotPreview.App.Maui.Pages.PreviewsPage"
+             x:DataType="local:PreviewsViewModel"
+             Shell.PresentationMode="NotAnimated"
+             Title="UI Previews">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="uiComponentTemplate"
+                      x:DataType="local:UIComponentViewModel">
+            <HorizontalStackLayout Margin="0,4,0,0">
+                <!-- TODO: Add back icon support -->
+                <!-- <Image WidthRequest="20" Source="{Binding Icon}" /> -->
+                <Label Text="{Binding DisplayName}"
+                       Margin="4,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </DataTemplate>
+        <DataTemplate x:Key="previewTemplate"
+                      x:DataType="local:PreviewViewModel">
+            <Label Text="{Binding DisplayName}"
+                   Margin="30,2,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TapCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </DataTemplate>
+        <pages:PreviewItemDataTemplateSelector x:Key="previewItemDataTemplateSelector"
+                                               UIComponentTemplate="{StaticResource uiComponentTemplate}"
+                                               PreviewTemplate="{StaticResource previewTemplate}"/>
+    </ContentPage.Resources>
+
+    <ScrollView Orientation="Vertical">
+        <VerticalStackLayout>
+            <Label
+                Text="Previews"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                FontSize="20"
+                Margin="0,0,0,-5"/>
+            <CollectionView Margin="10,5,0,0"
+                            ItemsSource="{Binding PreviewsItems}"
+                            ItemTemplate="{StaticResource previewItemDataTemplateSelector}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

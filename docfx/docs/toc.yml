@@ -1,5 +1,11 @@
 items:
-- name: Features
-  href: features.md
 - name: Getting Started
   href: getting-started.md
+- name: Attributes Reference
+  href: attributes.md
+- name: Features
+  href: features.md
+- name: Architecture
+  href: architecture.md
+- name: Sample Applications
+  href: samples.md

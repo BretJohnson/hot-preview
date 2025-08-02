@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>HotPreview.Tooling.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="ModelContextProtocol.AspNetCore" Version="0.3.0-preview.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\tooling\HotPreview.Tooling\HotPreview.Tooling.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,67 @@
+<Project DefaultTargets="BuildPackages">
+  <Import Project="Directory.Build.props" />
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+  </PropertyGroup>
+
+  <!-- List of projects that produce NuGet packages -->
+  <ItemGroup>
+    <PackableProject Include="src\HotPreview\HotPreview.csproj" />
+    <PackableProject Include="src\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
+    <PackableProject Include="src\tooling\HotPreview.DevTools\HotPreview.DevTools.csproj" />
+    <PackableProject Include="src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
+    <PackableProject Include="src\platforms\HotPreview.App.Wpf\HotPreview.App.Wpf.csproj" />
+  </ItemGroup>
+
+  <!-- Clean package output directory -->
+  <Target Name="CleanPackageOutput">
+    <!-- Clear cached packages from NuGet cache -->
+    <PropertyGroup>
+      <NuGetPackagesPath Condition="'$(NUGET_PACKAGES)' != ''">$(NUGET_PACKAGES)</NuGetPackagesPath>
+      <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(USERPROFILE)' != ''">$(USERPROFILE)\.nuget\packages</NuGetPackagesPath>
+      <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(HOME)' != ''">$(HOME)/.nuget/packages</NuGetPackagesPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.sharedmodel" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.devtools" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.app.maui" />
+      <CachedPackageDirectories Include="$(NuGetPackagesPath)\hotpreview.app.wpf" />
+    </ItemGroup>
+
+    <Message Text="Clearing cached packages from NuGet cache: $(NuGetPackagesPath)" Importance="high" />
+    <RemoveDir Directories="@(CachedPackageDirectories)" Condition="Exists('%(Identity)')" ContinueOnError="true" />
+
+    <Message Text="Cleaning package output directory: $(PackageOutputPath)" Importance="high" />
+    <RemoveDir Directories="$(PackageOutputPath)" Condition="Exists('$(PackageOutputPath)')" />
+  </Target>
+
+  <!-- Main target that builds packages -->
+  <Target Name="BuildPackages" DependsOnTargets="CleanPackageOutput">
+    <Message Text="Building all NuGet packages in $(Configuration) configuration..." Importance="high" />
+
+    <!-- Build AppBuildTasks first as it's needed by SharedModel -->
+    <MSBuild Projects="src\HotPreview.AppBuildTasks\HotPreview.AppBuildTasks.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+
+    <!-- Also explicitly build HotPreview.DevToolsApp, which is included in HotPreview.DevTools -->
+    <MSBuild Projects="src\tooling\HotPreview.DevToolsApp\HotPreview.DevToolsApp.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+
+    <!-- Pack all projects -->
+    <MSBuild Projects="@(PackableProject)"
+             Targets="Pack"
+             Properties="Configuration=$(Configuration)"
+             ContinueOnError="false" />
+
+    <Message Text="Packages built to: $(PackageOutputPath)" Importance="high" />
+  </Target>
+
+  <!-- Alias common target names to BuildPackages -->
+  <Target Name="Build" DependsOnTargets="BuildPackages" />
+  <Target Name="Pack" DependsOnTargets="BuildPackages" />
+</Project>

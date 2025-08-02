@@ -47,7 +47,7 @@ if ($x86) {
 $testBinLog = Join-Path $ArtifactStagingFolder (Join-Path build_logs test.binlog)
 $testDiagLog = Join-Path $ArtifactStagingFolder (Join-Path test_logs diag.log)
 
-& $dotnet test $RepoRoot `
+& $dotnet test $RepoRoot\HotPreview-CI.slnf `
     --no-build `
     -c $Configuration `
     --filter "TestCategory!=FailsInCloudTest" `

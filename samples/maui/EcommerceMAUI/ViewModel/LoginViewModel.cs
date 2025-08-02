@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Helpers;
+using EcommerceMAUI.Helpers;
 using EcommerceMAUI.Views;
 using System.Windows.Input;
 
@@ -36,17 +36,17 @@ namespace EcommerceMAUI.ViewModel
 
         private void LoginWithGoogle()
         {
-           
+
         }
 
         private void LoginWithFacebook()
         {
-           
+
         }
 
         private void ForgotPassword()
         {
-           
+
         }
 
         private async void SignUp()
@@ -55,7 +55,7 @@ namespace EcommerceMAUI.ViewModel
         }
 
         private async void Login()
-        {           
+        {
             Application.Current.MainPage = new AppShell();
             await ToastHelper.ShowToast("Welcome");
 

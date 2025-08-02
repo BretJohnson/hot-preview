@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
@@ -20,7 +20,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<!-- https://github.com/CommunityToolkit/Maui/issues/2205 -->
-		<NoWarn>XC0103</NoWarn>
+		<NoWarn>$(NoWarn);XC0103</NoWarn>
 		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 
 		<!-- Display name -->
@@ -42,10 +42,8 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>$(DefineConstants);EXAMPLES</DefineConstants>
+    <UseNuget>false</UseNuget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -80,8 +78,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\ExampleFramework.Maui\ExampleFramework.Maui.csproj" />
-	  <ProjectReference Include="..\..\..\src\ExampleFramework\ExampleFramework.csproj" />
+	  <ProjectReference Include="..\..\..\src\HotPreview\HotPreview.csproj" />
+	  <ProjectReference Include="..\..\..\src\platforms\HotPreview.App.Maui\HotPreview.App.Maui.csproj" />
 	</ItemGroup>
+
+  <ItemGroup Condition="'$(UseNuget)' == 'true'">
+    <PackageReference Include="HotPreview.App.Maui" Version="*-*" /> <!-- Use the latest version including prereleases -->
+  </ItemGroup>
+  <Import Condition="'$(UseNuget)' == 'false'" Project="..\..\..\src\platforms\HotPreview.App.Maui\build\LocalTest.targets" />
 
 </Project>

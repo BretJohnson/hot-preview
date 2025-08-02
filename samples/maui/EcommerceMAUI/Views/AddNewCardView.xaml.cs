@@ -4,10 +4,10 @@ namespace EcommerceMAUI.Views;
 
 public partial class AddNewCardView : ContentPage
 {
-	public AddNewCardView()
-	{
-		InitializeComponent();
-		BindingContext = new AddNewCardViewModel();
+    public AddNewCardView()
+    {
+        InitializeComponent();
+        BindingContext = new AddNewCardViewModel();
 
     }
 }

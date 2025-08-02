@@ -2,10 +2,10 @@ namespace EcommerceMAUI.Views;
 
 public partial class ScanCameraView : ContentPage
 {
-	public ScanCameraView()
-	{
-		InitializeComponent();
-	}
+    public ScanCameraView()
+    {
+        InitializeComponent();
+    }
     private void CameraViewCamerasLoaded(object sender, EventArgs e)
     {
         if (cameraView.Cameras.Count > 0)

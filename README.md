@@ -1,47 +1,80 @@
 # Overview
 
-The Example Framework lets you easily work on pages/controls in your app in isolation, without the
-need to run the app, navigate to the page, and supply any test data.
+Hot Preview lets you easily work on pages and controls in your app in isolation, making UI development and testing faster and more efficient for both humans and AI agents.
 
-Examples are similar stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
+Previews are similar to stories in [Storybook](https://storybook.js.org/) for JavaScript and Previews in
 [SwiftUI/Xcode](https://developer.apple.com/documentation/xcode/previewing-your-apps-interface-in-xcode)
-and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) -
-but for .NET UI.
+and [Jetpack Compose/Android Studio](https://developer.android.com/develop/ui/compose/tooling/previews) — but for .NET UI.
 
-The framework itself is cross platform, intended to work with (most) any .NET UI platform -
-it has a platform agnostic piece and platform specific piece, with the platform piece pluggable.
+The framework itself is cross-platform, intended to work with most .NET UI platforms. It has a platform-agnostic piece and a platform-specific piece, with the platform piece being pluggable.
 Initial support is for .NET MAUI.
 
-## How to use (MAUI version)
+## Benefits
 
-Add a reference to the `ExampleFramework.Maui` NuGet to your app (once that NuGet is published - it isn't yet so you'll need to use this repo instead).
+### 🚀 Streamlined Navigation
+Jump directly to specific UI pages without navigating through multiple app screens, dramatically reducing development time and eliminating repetitive manual testing workflows.
 
-Add this line to your `App` constructor (needed for now):
+### 🔄 Multi-state Testing
+Quickly visualize UI components with different data inputs and states, ensuring responsive and robust interfaces across all scenarios. Test edge cases, empty states, loading states, and error conditions without complex setup.
 
-```
-#if EXAMPLES
-    MauiExampleApplication.EnsureInitialized();
-#endif
-```
+### 📱 Visualize Multiple Platforms Simultaneously
+Navigate to different screens in your UI and view them on multiple platforms side by side, enabling instant cross-platform comparison and consistency validation:
 
-With just that, if you open your app in a tool that supports it (like what we're addning to Visual Studio) you we'll see examples automatically created for some of pages/controls.
-Examples are automatically created for:
+https://github.com/user-attachments/assets/3898ea7d-d67e-4fd3-92ed-877fe912a55d
 
-- Pages: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required).,
-- Controls: Dervies from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters.
+*Example: Windows on the left, Android on the right - same UI, different platforms*
+
+### 🤖 Agentic AI UI Development Workflow *(WIP - Coming Soon)*
+Built-in MCP server combined with Hot Preview enables AI agents to:
+- Generate previews (visual tests) when creating UI updates
+- Launch the app across multiple platforms simultaneously
+- Navigate to specific previews and capture screenshots
+- Inspect the resulting screenshots and create UI updates based on visual feedback
+- Iterate until satisfied with the visual outcome
+
+## Current Status
+
+Hot Preview is in active development. It works and I encourage you to use it, but
+expect to encounter some issues. Please report them and share other feedback.
+
+## How to use
+
+Quickstart:
+
+- Install Hot Preview DevTools:
+    ```bash
+    dotnet tool install -g HotPreview.DevTools
+    ```
+- In your app, add a reference to the `HotPreview.App.<platform>` NuGet, e.g.:
+    ```XML
+    <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="..." />
+    ```
+- Build your app for Debug and run it
+
+With that, you should see this:
+- Building launches the Hot Preview DevTools app, if it's not already running
+- When your app starts, it connects to the DevTools app
+- DevTools shows a tree of your UI components and their previews. Initially, it will only have auto-generated previews, but you can add your own later.
+- Click on UI components/previews in the tree to navigate directly to the page/control in your app
+
+Previews are automatically created for:
+
+- **Pages**: Derives (directly or indirectly) from `Microsoft.Maui.Controls.Page` and has a constructor that takes no parameters (no view model required) or with parameters that can be resolved via dependency injection (via ActivatorUtilities.CreateInstance).
+- **Controls**: Derives from `Microsoft.Maui.Controls.View` (and isn't a page), again with a constructor that takes no parameters or with parameters that can be resolved via dependency injection (via ActivatorUtilities.CreateInstance).
 
 That should get you started. Beyond that, you'll probably want to define previews yourself, which lets you:
 
-- Support any UI component (not just with zero argument constructors)
+- Support any UI component, regardless of constructor arguments (e.g., you can pass in a view model argument)
 - Provide sample data
-- Define multiple examples for a single UI component
+- Define multiple previews for a single UI component with different data
+- Update global app state if needed for a particular preview
 
-Defining your own examples isn't hard & is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static to your UI component class (in code behind with XAML) with the `[Example]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires.
+Defining your own previews is easy and is similar to what's done in SwiftUI and Jetpack Compose. To do it, add a static method to your UI component class (in code-behind with XAML) with the `[Preview]` attribute, like below. Instantiate the control, passing in a view model with sample data or whatever the constructor requires. These static `[Preview]` methods can actually go in any class, but by convention they are normally defined on the UI component class. `#if PREVIEWS` allows the preview code to be excluded from release builds.
 
 ```C#
-#if EXAMPLES
-    [Example]
-    public static ConfirmAddressView Example() => new(ExampleData.GetExampleProducts(1), new DeliveryTypeModel(),
+#if PREVIEWS
+    [Preview]
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), new DeliveryTypeModel(),
         new AddressModel()
         {
             StreetOne = "21, Alex Davidson Avenue",
@@ -55,28 +88,28 @@ Defining your own examples isn't hard & is similar to what's done in SwiftUI and
 You can define multiple methods for multiple previews, like:
 
 ```C#
-#if EXAMPLES
-    [Example("0 cards")]
+#if PREVIEWS
+    [Preview("0 cards")]
     public static CardView NoCards() => new(PreviewData.GetPreviewCards(0));
 
-    [Example("1 card")]
+    [Preview("1 card")]
     public static CardView SingleCard() => new(PreviewData.GetPreviewCards(1));
 
-    [Example("2 cards")]
+    [Preview("2 cards")]
     public static CardView TwoCards() => new(PreviewData.GetPreviewCards(2));
 
-    [Example("6 cards")]
+    [Preview("6 cards")]
     public static CardView SixCards() => new(PreviewData.GetPreviewCards(6));
 #endif
 ```
 
-The `[Example]` argument is the optional display name - without that, the name
-is method name.
+The `[Preview]` argument is the optional display name — without that, the name
+is the method name.
 
-Names really just matter when you have a multiple examples. If there's just one,
-then by convention it's named `Example`, but it doesn't matter as the tooling
+Names really only matter when you have multiple previews. If there's just one,
+then by convention it's named `Preview`, but it doesn't matter since the tooling
 displays the UI component name instead.
 
-## How to build
+## Building this repo and contributing updates
 
-In brief, run `init.ps1` then open the solution. For details see [Contibuting](Contributing.md)
+See [Contributing](CONTRIBUTING.md)

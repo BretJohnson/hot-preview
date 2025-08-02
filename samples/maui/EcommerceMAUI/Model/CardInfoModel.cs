@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Helpers;
+using EcommerceMAUI.Helpers;
 using EcommerceMAUI.Helpers.ExtensionMethods;
 using EcommerceMAUI.ViewModel;
 
@@ -21,7 +21,7 @@ namespace EcommerceMAUI.Model
         {
             get
             {
-                var normalizedCardNumber = CardNumber.Replace("-", string.Empty);
+                var normalizedCardNumber = CardNumber?.Replace("-", string.Empty) ?? string.Empty;
                 if (CreditCardTypeRegexHelper.AmericanExpress.IsMatch(normalizedCardNumber))
                 {
                     return "American Express";
@@ -58,7 +58,7 @@ namespace EcommerceMAUI.Model
             get
             {
                 switch (CardType)
-                { 
+                {
                      case "American Express":
                         return "AmericanExpress".ToColorFromResourceKey();
                      case "Diners Club":
@@ -116,7 +116,7 @@ namespace EcommerceMAUI.Model
                 else
                 {
                     return "FA6Regular";
-                }                
+                }
             }
         }
         public string MaskedCardNumber

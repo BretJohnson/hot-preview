@@ -1,4 +1,4 @@
-﻿
+
 namespace EcommerceMAUI.Model
 {
     public class CategoriesModel

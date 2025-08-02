@@ -1,4 +1,4 @@
-﻿namespace EcommerceMAUI.Helpers.ExtensionMethods
+namespace EcommerceMAUI.Helpers.ExtensionMethods
 {
     internal static class StringExtensions
     {

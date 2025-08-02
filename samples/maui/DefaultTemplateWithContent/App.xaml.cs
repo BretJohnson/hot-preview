@@ -1,4 +1,4 @@
-﻿namespace DefaultTemplateWithContent;
+namespace DefaultTemplateWithContent;
 
 public partial class App : Application
 {

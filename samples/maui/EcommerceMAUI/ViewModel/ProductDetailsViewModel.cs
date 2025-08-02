@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.Model;
+using EcommerceMAUI.Model;
 using System.Windows.Input;
 
 namespace EcommerceMAUI.ViewModel
@@ -6,7 +6,7 @@ namespace EcommerceMAUI.ViewModel
     public class ProductDetailsViewModel : BaseViewModel
     {
         double lastScrollIndex;
-        double currentScrollIndex;       
+        double currentScrollIndex;
 
         private bool _IsFooterVisible = false;
         public bool IsFooterVisible
@@ -125,7 +125,7 @@ namespace EcommerceMAUI.ViewModel
 
         private void AddToCart()
         {
-           
-        }       
+
+        }
     }
 }

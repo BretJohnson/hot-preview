@@ -1,6 +1,6 @@
-﻿using EcommerceMAUI.Views;
-using ExampleFramework.App;
-using ExampleFramework.Maui;
+using EcommerceMAUI.Views;
+using HotPreview.SharedModel;
+using HotPreview.App.Maui;
 
 namespace EcommerceMAUI;
 
@@ -8,8 +8,8 @@ public partial class App : Application
 {
     public App()
     {
-#if EXAMPLES
-        MauiExampleApplication.EnsureInitialized();
+#if PREVIEWS
+        MauiPreviewApplication.EnsureInitialized();
 #endif
 
         InitializeComponent();

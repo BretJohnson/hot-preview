@@ -1,4 +1,4 @@
-﻿namespace EcommerceMAUI.Model
+namespace EcommerceMAUI.Model
 {
     public class MenuItems
     {

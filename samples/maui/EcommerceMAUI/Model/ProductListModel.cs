@@ -1,4 +1,4 @@
-﻿using EcommerceMAUI.ViewModel;
+using EcommerceMAUI.ViewModel;
 using System.Collections.ObjectModel;
 
 namespace EcommerceMAUI.Model
@@ -50,8 +50,8 @@ namespace EcommerceMAUI.Model
             }
         }
 
-#if EXAMPLES
-        public static ObservableCollection<ProductListModel> GetExampleProducts()
+#if PREVIEWS
+        public static ObservableCollection<ProductListModel> GetPreviewProducts()
         {
             return new ObservableCollection<ProductListModel>
             {

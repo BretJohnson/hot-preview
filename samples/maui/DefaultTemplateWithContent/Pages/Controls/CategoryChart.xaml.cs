@@ -7,8 +7,8 @@ public partial class CategoryChart
         InitializeComponent();
     }
 
-#if EXAMPLES
-    [Example]
-    public static CategoryChart Example() => CreateViewWithBindingToService<CategoryChart, MainPageModel>();
+#if PREVIEWS
+    [Preview]
+    public static CategoryChart Preview() => CreateViewWithBindingToService<CategoryChart, MainPageModel>();
 #endif
 }

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -24,8 +24,8 @@ public static class MauiProgram
             });
 
 #if DEBUG
-		builder.Logging.AddDebug();
-		builder.Services.AddLogging(configure => configure.AddDebug());
+        builder.Logging.AddDebug();
+        builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
         builder.Services.AddSingleton<DatabaseManager>();

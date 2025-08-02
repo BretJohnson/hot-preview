@@ -1,0 +1,193 @@
+using System;
+using System.Collections.Generic;
+
+namespace HotPreview.SharedModel;
+
+/// <summary>
+/// A builder class for constructing PreviewsManager instances.
+/// This class provides mutable operations to build up the state before creating an immutable manager.
+/// </summary>
+/// <typeparam name="TUIComponent">The type of UI component</typeparam>
+/// <typeparam name="TPreview">The type of preview</typeparam>
+/// <typeparam name="TCommand">The type of command</typeparam>
+public class PreviewsManagerBuilderBase<TUIComponent, TPreview, TCommand>
+    where TUIComponent : UIComponentBase<TPreview>
+    where TPreview : PreviewBase
+    where TCommand : PreviewCommandBase
+{
+    protected readonly Dictionary<string, TUIComponent> _uiComponentsByName = [];
+    protected readonly Dictionary<string, UIComponentCategory> _categories = [];
+    protected readonly Dictionary<(UIComponentKind kind, string platform), List<string>> _baseTypes = [];
+    protected readonly Dictionary<string, TCommand> _commandsByName = [];
+
+    /// <summary>
+    /// Initializes a new instance of the PreviewsManagerBuilderBase class.
+    /// </summary>
+    public PreviewsManagerBuilderBase()
+    {
+        // Add default MAUI base types
+        AddUIComponentBaseType(UIComponentKind.Page, "MAUI", "Microsoft.Maui.Controls.Page");
+        AddUIComponentBaseType(UIComponentKind.Control, "MAUI", "Microsoft.Maui.Controls.View");
+    }
+
+    public IReadOnlyDictionary<string, TUIComponent> UIComponentsByName => _uiComponentsByName;
+
+    public IReadOnlyDictionary<string, UIComponentCategory> Categories => _categories;
+
+    public IReadOnlyDictionary<string, TCommand> CommandsByName => _commandsByName;
+
+    /// <summary>
+    /// Adds a UI component base type for the specified kind and platform.
+    /// </summary>
+    /// <param name="kind">The kind of UI component (Page or Control)</param>
+    /// <param name="platform">The platform name</param>
+    /// <param name="baseType">The base type name</param>
+    public void AddUIComponentBaseType(UIComponentKind kind, string platform, string baseType)
+    {
+        if (kind == UIComponentKind.Unknown)
+            throw new ArgumentException($"Cannot add base type for unknown UI component kind", nameof(kind));
+
+        (UIComponentKind kind, string platform) key = (kind, platform);
+        if (!_baseTypes.TryGetValue(key, out List<string>? baseTypesList))
+        {
+            baseTypesList = new List<string>();
+            _baseTypes[key] = baseTypesList;
+        }
+
+        if (!baseTypesList.Contains(baseType))
+        {
+            baseTypesList.Add(baseType);
+        }
+    }
+
+    /// <summary>
+    /// Adds a UI component to the builder.
+    /// </summary>
+    /// <param name="component">The component to add</param>
+    /// <exception cref="ArgumentException">Thrown when a component with the same name already exists</exception>
+    public void AddUIComponent(TUIComponent component)
+    {
+        if (_uiComponentsByName.ContainsKey(component.Name))
+            throw new ArgumentException($"A component with name '{component.Name}' already exists", nameof(component));
+
+        _uiComponentsByName.Add(component.Name, component);
+    }
+
+    /// <summary>
+    /// Adds or updates a UI component in the builder.
+    /// </summary>
+    /// <param name="component">The component to add or update</param>
+    public void AddOrUpdateUIComponent(TUIComponent component)
+    {
+        _uiComponentsByName[component.Name] = component;
+    }
+
+    /// <summary>
+    /// Adds a command to the builder.
+    /// </summary>
+    /// <param name="command">The command to add</param>
+    /// <exception cref="ArgumentException">Thrown when a command with the same name already exists</exception>
+    public void AddCommand(TCommand command)
+    {
+        if (_commandsByName.ContainsKey(command.Name))
+            throw new ArgumentException($"A command with name '{command.Name}' already exists", nameof(command));
+
+        _commandsByName.Add(command.Name, command);
+    }
+
+    /// <summary>
+    /// Adds or updates a command in the builder.
+    /// </summary>
+    /// <param name="command">The command to add or update</param>
+    public void AddOrUpdateCommand(TCommand command)
+    {
+        _commandsByName[command.Name] = command;
+    }
+
+    /// <summary>
+    /// Adds a category to the builder.
+    /// </summary>
+    /// <param name="category">The category to add</param>
+    public void AddCategory(UIComponentCategory category)
+    {
+        _categories[category.Name] = category;
+    }
+
+    /// <summary>
+    /// Adds a category if it doesn't exist, or updates it with the additional uiComponentNames if it does.
+    /// </summary>
+    /// <param name="categoryName">The name of the category</param>
+    public void AddOrUpdateCategory(string categoryName, IReadOnlyList<string> uiComponentNames)
+    {
+        if (!_categories.TryGetValue(categoryName, out UIComponentCategory? category))
+        {
+            category = new UIComponentCategory(categoryName, uiComponentNames);
+        }
+        else
+        {
+            category = category.WithAddedUIComponentNames(uiComponentNames);
+        }
+
+        _categories[categoryName] = category;
+    }
+
+    /// <summary>
+    /// Gets a UI component by name.
+    /// </summary>
+    /// <param name="name">The name of the component</param>
+    /// <returns>The component if found, otherwise null</returns>
+    public TUIComponent? GetUIComponent(string name)
+    {
+        _uiComponentsByName.TryGetValue(name, out TUIComponent? component);
+        return component;
+    }
+
+    /// <summary>
+    /// Gets a command by name.
+    /// </summary>
+    /// <param name="name">The name of the command</param>
+    /// <returns>The command if found, otherwise null</returns>
+    public TCommand? GetCommand(string name)
+    {
+        _commandsByName.TryGetValue(name, out TCommand? command);
+        return command;
+    }
+
+    /// <summary>
+    /// Checks if a type name is a registered UI component base type.
+    /// </summary>
+    /// <param name="typeName">The type name to check</param>
+    /// <param name="kind">The UI component kind if found</param>
+    /// <returns>True if the type is a registered base type, false otherwise</returns>
+    public bool IsUIComponentBaseType(string typeName, out UIComponentKind kind)
+    {
+        foreach (KeyValuePair<(UIComponentKind kind, string platform), List<string>> kvp in _baseTypes)
+        {
+            if (kvp.Value.Contains(typeName))
+            {
+                kind = kvp.Key.kind;
+                return true;
+            }
+        }
+
+        kind = UIComponentKind.Unknown;
+        return false;
+    }
+
+    /// <summary>
+    /// Validates the builder state before building.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when the builder state is invalid</exception>
+    public void Validate()
+    {
+        // Check for components with categories that don't exist
+        foreach (TUIComponent component in _uiComponentsByName.Values)
+        {
+            if (component.Category != null && !_categories.ContainsKey(component.Category.Name))
+            {
+                throw new InvalidOperationException(
+                    $"Component '{component.Name}' references category '{component.Category.Name}' which doesn't exist in the builder");
+            }
+        }
+    }
+}

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Use a separate, simpler, Directory.Build.props file for samples -->
 <Project>
-  <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('xunit.runner.json')" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RepoRootPath>$(MSBuildThisFileDirectory)..\</RepoRootPath>
+        <BaseIntermediateOutputPath>$(RepoRootPath)obj\$([MSBuild]::MakeRelative($(RepoRootPath), $(MSBuildProjectDirectory)))\</BaseIntermediateOutputPath>
+        <BaseOutputPath Condition=" '$(BaseOutputPath)' == '' ">$(RepoRootPath)bin\$(MSBuildProjectName)\</BaseOutputPath>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
 
-  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..))" />
+        <!-- Suppress the following warnings:
+          CS8002: Referenced assembly does not have a strong name -->
+        <NoWarn>$(NoWarn);CS8002</NoWarn>
 
-  <PropertyGroup>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-
+        <!-- Add local package source if it exists. The samples use public NuGets by default,
+             but you can run tools/Build-LocalNuGets.ps1 to build local NuGets and it will use those instead. -->
+        <RestoreAdditionalProjectSources Condition="Exists('$(RepoRootPath)bin\Packages\$(Configuration)')">
+            $(RepoRootPath)bin\Packages\$(Configuration)
+        </RestoreAdditionalProjectSources>
+    </PropertyGroup>
 </Project>
