@@ -45,6 +45,7 @@ This file provides guidance to AI agents and LLMs when working with code in this
 - **Namespace**: Match folder structure
 - **Access modifiers**: Always explicit, prefer most restrictive appropriate level
 - **Control flow**: Always use braces, even for single-line statements
+- **Variable declarations**: Avoid `var` unless the type is obvious from the right-hand side (e.g., `new SomeType()`, LINQ queries with obvious types)
 
 ```csharp
 // Preferred - always use braces
