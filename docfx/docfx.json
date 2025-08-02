@@ -3,7 +3,13 @@
 		{
 			"src": [
 				{
-					"src": "../src/Library",
+					"src": "../src/HotPreview",
+					"files": [
+						"**/*.csproj"
+					]
+				},
+				{
+					"src": "../src/HotPreview.SharedModel",
 					"files": [
 						"**/*.csproj"
 					]
@@ -26,7 +32,8 @@
 		"resource": [
 			{
 				"files": [
-					"images/**"
+					"images/**",
+					"../images/**"
 				]
 			}
 		],
@@ -39,8 +46,8 @@
 			"modern"
 		],
 		"globalMetadata": {
-			"_appName": "Library",
-			"_appTitle": "Library",
+			"_appName": "Hot Preview",
+			"_appTitle": "Hot Preview Documentation",
 			"_enableSearch": true,
 			"pdf": false
 		}
