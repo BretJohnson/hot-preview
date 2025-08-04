@@ -1,5 +1,5 @@
 using System;
-using HotPreview;
+using System.Reflection;
 using HotPreview.SharedModel.Protocol;
 
 namespace HotPreview.SharedModel.App;
@@ -15,7 +15,7 @@ public abstract class PreviewReflection : PreviewBase
         if (attributeType.IsGenericType && attributeType.GetGenericTypeDefinition() == typeof(PreviewAttribute<>))
         {
             // Use reflection to get the UIComponentType property value
-            var uiComponentTypeProperty = attributeType.GetProperty("UIComponentType");
+            PropertyInfo uiComponentTypeProperty = attributeType.GetProperty("UIComponentType");
             _uiComponentType = (Type?)uiComponentTypeProperty?.GetValue(previewAttribute);
         }
         else
