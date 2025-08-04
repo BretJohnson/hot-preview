@@ -15,7 +15,7 @@ namespace HotPreview;
 /// If not specified, the name of the method (or class, for class-based previews) is used, converted to start case
 /// (e.g. "MyPreview" becomes "My Preview"). Storybook also uses this start case convention.</param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class PreviewAttribute(string? displayName = null) : Attribute
+public class PreviewAttribute(string? displayName = null) : Attribute
 {
     /// <summary>
     /// Optional override for the display name of the preview, determining how it appears in the navigation UI.
@@ -23,6 +23,14 @@ public sealed class PreviewAttribute(string? displayName = null) : Attribute
     /// start case (e.g. "MyPreview" becomes "My Preview"). Storybook also uses this start case convention.
     /// </summary>
     public string? DisplayName { get; } = displayName;
+
+    public Type? UIComponentType { get; } = null;
+
+    protected PreviewAttribute(string? displayName, Type? uiComponentType) : this(displayName)
+    {
+        DisplayName = displayName;
+        UIComponentType = uiComponentType;
+    }
 }
 
 /// <summary>
@@ -41,14 +49,6 @@ public sealed class PreviewAttribute(string? displayName = null) : Attribute
 /// If not specified, the name of the method (or class, for class-based previews) is used, converted to start case
 /// (e.g. "MyPreview" becomes "My Preview"). Storybook also uses this same start case convention.</param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class PreviewAttribute<TUIComponent>(string? displayName = null) : Attribute
+public sealed class PreviewAttribute<TUIComponent>(string? displayName = null) : PreviewAttribute(displayName, typeof(TUIComponent))
 {
-    /// <summary>
-    /// Optional override for the display name of the preview, determining how it appears in the navigation UI.
-    /// If not specified, the name of the method (or class, for class-based previews) is used, converted to
-    /// start case (e.g. "MyPreview" becomes "My Preview"). Storybook also uses this start case convention.
-    /// </summary>
-    public string? DisplayName { get; } = displayName;
-
-    public Type UIComponentType { get; } = typeof(TUIComponent);
 }
