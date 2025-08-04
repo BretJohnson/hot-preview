@@ -3,8 +3,7 @@ name: 📚 Docs
 on:
   push:
     branches:
-      # Disabled - was main
-      - for-now-never-run-docs-action
+      - main
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
