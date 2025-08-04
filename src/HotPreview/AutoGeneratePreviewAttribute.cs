@@ -6,8 +6,10 @@ namespace HotPreview;
 /// An attribute that controls whether auto-generated previews should be created for a UI component.
 /// When present on a class and the autoGenerate property is false, auto-generation is disabled.
 /// </summary>
+/// <param name="autoGenerate">Controls whether auto-generated previews should be created for this component.
+/// When set to false, auto-generation is disabled.</param>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class AutoGeneratePreviewAttribute : Attribute
+public sealed class AutoGeneratePreviewAttribute(bool autoGenerate) : Attribute
 {
     public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(AutoGeneratePreviewAttribute));
 
@@ -15,10 +17,5 @@ public sealed class AutoGeneratePreviewAttribute : Attribute
     /// Controls whether auto-generated previews should be created for this component.
     /// When set to false, auto-generation is disabled.
     /// </summary>
-    public bool AutoGenerate { get; }
-
-    public AutoGeneratePreviewAttribute(bool autoGenerate)
-    {
-        AutoGenerate = autoGenerate;
-    }
+    public bool AutoGenerate { get; } = autoGenerate;
 }
