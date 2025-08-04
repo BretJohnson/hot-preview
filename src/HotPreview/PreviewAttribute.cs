@@ -17,8 +17,6 @@ namespace HotPreview;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class PreviewAttribute(string? displayName = null) : Attribute
 {
-    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(PreviewAttribute));
-
     /// <summary>
     /// Optional override for the display name of the preview, determining how it appears in the navigation UI.
     /// If not specified, the name of the method (or class, for class-based previews) is used, converted to
@@ -45,8 +43,6 @@ public sealed class PreviewAttribute(string? displayName = null) : Attribute
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class PreviewAttribute<TUIComponent>(string? displayName = null) : Attribute
 {
-    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(PreviewAttribute));
-
     /// <summary>
     /// Optional override for the display name of the preview, determining how it appears in the navigation UI.
     /// If not specified, the name of the method (or class, for class-based previews) is used, converted to

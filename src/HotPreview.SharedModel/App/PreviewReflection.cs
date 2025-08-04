@@ -1,4 +1,5 @@
 using System;
+using HotPreview;
 using HotPreview.SharedModel.Protocol;
 
 namespace HotPreview.SharedModel.App;
@@ -9,7 +10,19 @@ public abstract class PreviewReflection : PreviewBase
 
     public PreviewReflection(PreviewAttribute previewAttribute) : base(previewAttribute.DisplayName)
     {
-        _uiComponentType = previewAttribute.UIComponentType;
+        // Check if this is the generic PreviewAttribute<TUIComponent> which has UIComponentType
+        Type attributeType = previewAttribute.GetType();
+        if (attributeType.IsGenericType && attributeType.GetGenericTypeDefinition() == typeof(PreviewAttribute<>))
+        {
+            // Use reflection to get the UIComponentType property value
+            var uiComponentTypeProperty = attributeType.GetProperty("UIComponentType");
+            _uiComponentType = (Type?)uiComponentTypeProperty?.GetValue(previewAttribute);
+        }
+        else
+        {
+            // Non-generic PreviewAttribute doesn't specify a UI component type
+            _uiComponentType = null;
+        }
     }
 
     public PreviewReflection(Type uiComponentType) : base(null)

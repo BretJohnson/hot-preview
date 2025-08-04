@@ -71,11 +71,11 @@ public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
         foreach (AttributeData attribute in attributes)
         {
             string? attributeTypeName = attribute.AttributeClass?.ToDisplayString();
-            if (attributeTypeName == PageUIComponentBaseTypeAttribute.TypeFullName)
+            if (attributeTypeName == typeof(PageUIComponentBaseTypeAttribute).FullName!)
             {
                 AddUIComponentBaseTypeFromAttribute(attribute, UIComponentKind.Page);
             }
-            else if (attributeTypeName == ControlUIComponentBaseTypeAttribute.TypeFullName)
+            else if (attributeTypeName == typeof(ControlUIComponentBaseTypeAttribute).FullName!)
             {
                 AddUIComponentBaseTypeFromAttribute(attribute, UIComponentKind.Control);
             }
@@ -153,7 +153,7 @@ public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != PreviewAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != typeof(PreviewAttribute).FullName!)
             {
                 return;
             }
@@ -248,7 +248,7 @@ public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != PreviewCommandAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != typeof(PreviewCommandAttribute).FullName!)
             {
                 return;
             }
@@ -353,7 +353,7 @@ public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
 
             // Verify that the full qualified name of the attribute is correct
             string fullQualifiedAttributeName = attributeSymbol.ContainingType.ToDisplayString();
-            if (fullQualifiedAttributeName != UIComponentAttribute.TypeFullName)
+            if (fullQualifiedAttributeName != typeof(UIComponentAttribute).FullName!)
             {
                 return;
             }

@@ -7,8 +7,6 @@ namespace HotPreview;
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class PreviewCommandAttribute : Attribute
 {
-    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(PreviewCommandAttribute));
-
     /// <summary>
     /// Optional display name for the command, determining how it appears in navigation UI.
     /// "/" delimiters can be used to indicate hierarchy.

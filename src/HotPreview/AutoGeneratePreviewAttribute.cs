@@ -9,8 +9,6 @@ namespace HotPreview;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class AutoGeneratePreviewAttribute(bool autoGenerate) : Attribute
 {
-    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(AutoGeneratePreviewAttribute));
-
     /// <summary>
     /// Controls whether auto-generated previews should be created for this component.
     /// When set to false, auto-generation is disabled.
