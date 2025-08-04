@@ -1,5 +1,3 @@
-using System;
-
 namespace HotPreview;
 
 public class NameUtilities

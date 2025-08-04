@@ -1,5 +1,3 @@
-using System;
-
 namespace HotPreview;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
