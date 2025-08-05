@@ -29,6 +29,7 @@ This file provides guidance to AI agents and LLMs when working with code in this
 - **Line endings**: CRLF on Windows, LF on other platforms
 - **Nullable reference types**: Enabled by default (`<Nullable>enable</Nullable>`)
 - **Implicit usings**: Enabled by default (except where explicitly disabled)
+- **Doc Comments**: Wrap XML documentation comments at 120  characters. If there are multiple paragraphs, use <para> tags for them. Don't use <para> for single paragraphs.
 
 #### Naming Conventions
 - **Classes/Methods/Properties**: PascalCase
