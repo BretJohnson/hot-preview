@@ -12,8 +12,6 @@ namespace HotPreview;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class UIComponentAttribute(string? displayName = null) : Attribute
 {
-    public static string TypeFullName => NameUtilities.NormalizeTypeFullName(typeof(UIComponentAttribute));
-
     /// <summary>
     /// Optional override for the display name for the UI component. If not specified, the name of the class is used
     /// (with no namespace).
