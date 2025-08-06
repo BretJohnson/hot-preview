@@ -3,7 +3,7 @@ namespace HotPreview;
 /// <summary>
 /// Provides utility methods for working with names and type names.
 /// </summary>
-public class NameUtilities
+internal class NameUtilities
 {
     public static string GetUnqualifiedName(string name)
     {
