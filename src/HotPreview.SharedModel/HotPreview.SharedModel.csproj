@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="HotPreview.SharedModel.Tests" />
+    <InternalsVisibleTo Include="HotPreview.App.Wpf" />
+    <InternalsVisibleTo Include="HotPreview.App.Maui" />
+    <InternalsVisibleTo Include="HotPreview.Tooling" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
     <PackageReference Include="StreamJsonRpc" Version="2.22.11" />
   </ItemGroup>

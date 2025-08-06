@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace HotPreview.SharedModel.Protocol;
 
-public interface IPreviewAppControllerService
+internal interface IPreviewAppControllerService
 {
     public Task RegisterAppAsync(string projectPath, string platformName);
 

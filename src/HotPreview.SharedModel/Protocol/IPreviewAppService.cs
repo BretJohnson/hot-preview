@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace HotPreview.SharedModel.Protocol;
 
-public interface IPreviewAppService
+internal interface IPreviewAppService
 {
     public Task<UIComponentInfo[]> GetUIComponentsAsync();
 

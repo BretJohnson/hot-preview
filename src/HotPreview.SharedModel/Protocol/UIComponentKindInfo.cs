@@ -2,7 +2,7 @@ using System;
 
 namespace HotPreview.SharedModel.Protocol;
 
-public static class UIComponentKindInfo
+internal static class UIComponentKindInfo
 {
     public const string Page = "page";
     public const string Control = "control";

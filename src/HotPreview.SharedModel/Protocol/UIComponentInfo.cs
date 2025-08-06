@@ -1,6 +1,6 @@
 namespace HotPreview.SharedModel.Protocol;
 
-public record UIComponentInfo(
+internal record UIComponentInfo(
     string Name,
     string UIComponentKindInfo,
     string? DisplayName,
