@@ -61,13 +61,3 @@ jobs:
     - name: 📢 Publish artifacts
       uses: ./.github/actions/publish-artifacts
       if: cancelled() == false
-  docs:
-    name: 📃 Docs
-    if: false   # Disable docs for now
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-    - name: 🔗 Markup Link Checker (mlc)
-      uses: becheran/mlc@88c9db09b8dabab813a2edd13f955b36aa73657a # v0.22.0
-      with:
-        args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx

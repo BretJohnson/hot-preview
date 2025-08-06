@@ -34,6 +34,11 @@ jobs:
     - run: dotnet docfx docs/docfx.json
       name: 📚 Generate documentation
 
+    # TODO: Consider adding these steps in the future, to check for broken links and other errors
+    #- name: 🔗 Markup Link Checker (mlc)
+    #  uses: becheran/mlc@88c9db09b8dabab813a2edd13f955b36aa73657a # v0.22.0
+    #    args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx
+
     - name: Upload artifact
       uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
       with:
