@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="HotPreview.SharedModel" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Include the props file in the NuGet package, so PREVIEWS is defined by default for Debug for all client builds -->
     <None Include="buildTransitive\HotPreview.props" Pack="true" PackagePath="buildTransitive\HotPreview.props" />
   </ItemGroup>

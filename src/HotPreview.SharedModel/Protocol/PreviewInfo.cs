@@ -1,6 +1,6 @@
 namespace HotPreview.SharedModel.Protocol;
 
-internal record PreviewInfo(
+public record PreviewInfo(
     string PreviewType,
     string Name,
     string? DisplayName,
