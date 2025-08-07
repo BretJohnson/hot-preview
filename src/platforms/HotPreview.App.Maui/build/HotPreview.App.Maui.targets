@@ -9,7 +9,7 @@
       ProjectPath="$(MSBuildProjectFullPath)"
       OutputPath="$(IntermediateOutputPath)PreviewAppInitializer.g.cs"
       PlatformPreviewApplication="HotPreview.App.Maui.MauiPreviewApplication.Instance" />
-    <ItemGroup>
+    <ItemGroup Condition="Exists('$(IntermediateOutputPath)PreviewAppInitializer.g.cs')">
       <Compile Include="$(IntermediateOutputPath)PreviewAppInitializer.g.cs" />
     </ItemGroup>
   </Target>
