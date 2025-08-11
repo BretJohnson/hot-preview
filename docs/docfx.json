@@ -26,8 +26,13 @@
 		"resource": [
 			{
 				"files": [
-					"images/**",
-					"../images/**"
+					"images/**"
+				]
+			},
+			{
+				"src": "../",
+				"files": [
+					"images/**"
 				]
 			}
 		],

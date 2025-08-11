@@ -67,7 +67,7 @@ Add a static method with the `[Preview]` attribute to your UI component class:
 ```csharp
 #if PREVIEWS
     [Preview]
-    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1), 
+    public static ConfirmAddressView Preview() => new(PreviewData.GetPreviewProducts(1),
         new DeliveryTypeModel(),
         new AddressModel()
         {
@@ -124,4 +124,4 @@ Once your app is running with DevTools:
 
 - [Learn about all available attributes](attributes.md)
 - [Explore advanced features](features.md)
-- [Check out the API reference](../api/)
+- [Check out the API reference](~/api/HotPreview.yml)

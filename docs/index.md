@@ -31,4 +31,4 @@ Get started with HotPreview in minutes:
 - 📱 **Cross-platform Preview** - View UI on multiple platforms simultaneously
 - 🤖 **AI Integration** - Built-in MCP server for agentic AI workflows *(Coming Soon)*
 
-[Get Started →](docs/getting-started.md) | [API Reference →](api/)
+[Get Started →](docs/getting-started.md) | [API Reference →](~/api/HotPreview.yml)
