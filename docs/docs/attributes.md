@@ -1,6 +1,6 @@
-# HotPreview Attributes Reference
+# Hot Preview Attributes Reference
 
-HotPreview provides several attributes to control how your UI components are discovered, displayed, and organized in the DevTools interface. This reference covers all available attributes and their usage.
+Hot  Preview provides several attributes to control how your UI components are discovered, displayed, and organized in the DevTools interface. This reference covers all available attributes and their usage.
 
 ## Core Attributes
 
@@ -32,10 +32,10 @@ The `PreviewAttribute` comes in two forms:
 #### Constructors
 
 ```csharp
-[Preview()]                           // Basic preview with automatic type inference
-[Preview("Display Name")]             // Named preview with automatic type inference
-[Preview<MyComponent>()]              // Explicit component type
-[Preview<MyComponent>("Display Name")] // Named with explicit type
+[Preview]                             // Typical preview - default display name, automatic UI component type inference
+[Preview("Display Name")]             // Overridden display name, with automatic UI component type inference
+[Preview<MyComponent>]                // Explicitly specified UI component type
+[Preview<MyComponent>("Display Name")]  // Overridden display name, with explicit UI component type
 ```
 
 #### Usage Examples
@@ -47,29 +47,23 @@ The `PreviewAttribute` comes in two forms:
     public static CardView Preview() => new(PreviewData.GetCards(3));
 
     // Named previews with automatic type inference
-    [Preview("Empty State")]
+    [Preview("0 cards")]
     public static CardView NoCards() => new(PreviewData.GetCards(0));
 
-    [Preview("Cards/Single Card")]
+    [Preview("1 Card")]
     public static CardView SingleCard() => new(PreviewData.GetCards(1));
 
-    [Preview("Cards/Multiple Cards")]
+    [Preview("6 Cards")]
     public static CardView MultipleCards() => new(PreviewData.GetCards(6));
 
-    // Void method - type inferred from containing class
-    [Preview("Navigate to Product")]
-    public static void NavigateToProduct()
+    // void method - UI component type inferred from containing class
+    public static void AppNeedsUpdateState()
     {
-        // Navigation logic - type inferred from containing class
     }
 
-    // Explicit type specification using generic attribute
-    [Preview<ProductView>("Custom Layout")]
-    public static ProductView CustomProductLayout() => new(PreviewData.GetProduct());
-
-    // Generic attribute when method is in different class
-    [Preview<CartView>("Shopping Cart Preview")]
-    public static CartView CreateCartPreview() => new(PreviewData.GetCart());
+    // Explicit UI component type specification using generic attribute
+    [Preview<ProductView>]
+    public static CustomProductLayoutView CustomProductLayout() => new(PreviewData.GetProduct());
 #endif
 ```
 
@@ -93,14 +87,9 @@ Normally UI components don't need to be defined explicitly (defining a preview i
 #### Usage Examples
 
 ```csharp
+// Explicit display name for UI component
 [UIComponent("Shopping Cart")]
 public partial class CartView : ContentView
-{
-    // Component implementation
-}
-
-[UIComponent] // Uses class name as display name
-public partial class ProductCard : ContentView
 {
     // Component implementation
 }
@@ -123,24 +112,16 @@ The `[PreviewCommand]` attribute defines commands that can be executed from the 
 
 ```csharp
 #if PREVIEWS
-    [PreviewCommand("Reset App State")]
-    public static void ResetAppState()
-    {
-        // Reset global state for testing
-        App.Current.MainPage = new AppShell();
-    }
-
-    [PreviewCommand("Data/Load Sample Data")]
-    public static void LoadSampleData()
-    {
-        // Load test data
-        DataService.LoadSampleData();
-    }
-
-    [PreviewCommand] // Uses method name as display name
+    [PreviewCommand]
     public static void ClearCache()
     {
         // Clear application cache
+    }
+
+    [PreviewCommand("Reset Application State"]
+    public static void ResetAppState()
+    {
+        // Reset global state for testing
     }
 #endif
 ```
@@ -157,6 +138,7 @@ Controls whether auto-generated previews should be created for a UI component.
 #### Overview
 
 When present on a class and the `autoGenerate` property is `false`, auto-generation is disabled. This attribute provides explicit control over the auto-generation behavior for UI components.
+It's appropriate to use if the auto-generated preview doesn't work properly, so you don't want to see it in the UI, and you don't want to define a explicit preview for the component.
 
 #### Parameters
 
@@ -171,15 +153,7 @@ When present on a class and the `autoGenerate` property is `false`, auto-generat
 [AutoGeneratePreview(false)]
 public partial class ComplexView : ContentView
 {
-    // This component won't get auto-generated previews
-    // You must define custom [Preview] methods
-}
-
-// Explicitly enable auto-generation
-[AutoGeneratePreview(true)]
-public partial class SimpleView : ContentView
-{
-    // Auto-generated previews will be created
+    // This component won't get an auto-generated preview, even if it has a parameterless constructor
 }
 ```
 
@@ -261,119 +235,3 @@ Specifies the base type for page UI components on a specific platform.
 [assembly: PageUIComponentBaseType("MAUI", "Microsoft.Maui.Controls.Page")]
 [assembly: PageUIComponentBaseType("WPF", "System.Windows.Window")]
 ```
-
-## Recent Improvements
-
-### Enhanced Type Inference
-
-The `PreviewAttribute` now provides improved type inference capabilities:
-
-- **Automatic inference**: UI component types are automatically inferred from method return types
-- **Void method support**: For void methods, the type is inferred from the containing class
-- **Generic attribute**: Use `PreviewAttribute<TUIComponent>` for explicit type specification
-- **Flexible usage**: Works with both static methods and class-based previews
-
-### Simplified Auto-Generation Control
-
-Auto-generation control has been streamlined:
-
-- **Dedicated attribute**: `AutoGeneratePreviewAttribute` provides explicit control over auto-generation
-- **Clear semantics**: `false` disables auto-generation, `true` enables it
-- **Separation of concerns**: Auto-generation control is separate from UI component definition
-
-### Improved Documentation Standards
-
-All attributes now follow consistent documentation standards:
-
-- **Comprehensive parameter documentation**: All parameters include detailed descriptions
-- **Clear usage examples**: Examples demonstrate real-world usage patterns
-- **Consistent formatting**: XML documentation follows project standards for clarity
-
-## Best Practices
-
-### Naming Conventions
-
-- Use descriptive names that clearly indicate the preview state or variant
-- Use "/" delimiters to create hierarchical organization in DevTools
-- Keep names concise but meaningful
-- Follow start case convention (e.g., "My Preview" instead of "myPreview")
-
-### Preview Organization
-
-```csharp
-#if PREVIEWS
-    // Group related previews using hierarchy
-    [Preview("States/Loading")]
-    public static ProductView LoadingState() => new(isLoading: true);
-
-    [Preview("States/Error")]
-    public static ProductView ErrorState() => new(hasError: true);
-
-    [Preview("States/Empty")]
-    public static ProductView EmptyState() => new(isEmpty: true);
-
-    // Organize by data variations
-    [Preview("Data/Single Item")]
-    public static CartView SingleItem() => new(PreviewData.GetCart(1));
-
-    [Preview("Data/Multiple Items")]
-    public static CartView MultipleItems() => new(PreviewData.GetCart(5));
-
-    // Use generic attribute when type needs explicit specification
-    [Preview<ProductView>("Cross-Component/Product in Cart Context")]
-    public static CartView ProductInCartContext() => new(PreviewData.GetCartWithProduct());
-
-    // Void methods with type inference from containing class
-    [Preview("Navigation/Navigate to Details")]
-    public static void NavigateToDetails()
-    {
-        // Navigation logic - type inferred from containing class
-    }
-#endif
-```
-
-### Conditional Compilation
-
-Always wrap preview code in conditional compilation directives:
-
-```csharp
-#if PREVIEWS
-    [Preview]
-    public static MyView Preview() => new(PreviewData.GetSampleData());
-
-    [PreviewCommand("Reset State")]
-    public static void ResetState() => AppState.Reset();
-#endif
-```
-
-### Assembly Configuration
-
-Set up assembly-level attributes to customize component discovery:
-
-```csharp
-// Configure platform-specific base types
-[assembly: ControlUIComponentBaseType("MAUI", "Microsoft.Maui.Controls.View")]
-[assembly: PageUIComponentBaseType("MAUI", "Microsoft.Maui.Controls.Page")]
-
-// Organize components into logical categories
-[assembly: UIComponentCategory("Layout", typeof(HeaderView), typeof(SidebarView))]
-[assembly: UIComponentCategory("Data Display", typeof(ProductCard), typeof(UserProfile))]
-```
-
-## Troubleshooting
-
-### Common Issues
-
-- **Previews not appearing**: Ensure you're building in Debug mode and the `PREVIEWS` symbol is defined
-- **Categories not working**: Check that assembly-level attributes are properly declared in `AssemblyInfo.cs` or source files
-- **Auto-generation issues**: Use `[AutoGeneratePreview(false)]` to disable automatic preview creation for complex components
-- **Type inference problems**: Use the generic `PreviewAttribute<TUIComponent>` when automatic type inference doesn't work as expected
-- **Void method previews**: Ensure void preview methods are in the correct class context for proper type inference
-
-### Migration Notes
-
-If you're updating from older versions:
-
-- **Generic syntax**: Use `[Preview<MyComponent>()]` instead of `[Preview(typeof(MyComponent))]` for explicit type specification
-- **Auto-generation control**: Use `[AutoGeneratePreview(false)]` instead of the removed `UIComponentAttribute.AutoGeneratePreview` property
-- **Documentation**: All attributes now have comprehensive XML documentation for better IntelliSense support
