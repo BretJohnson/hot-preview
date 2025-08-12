@@ -1,5 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace HotPreview.SharedModel.Protocol;
 
 public record PreviewCommandInfo(
-    string Name,
-    string? DisplayName);
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("displayName")] string? DisplayName
+);

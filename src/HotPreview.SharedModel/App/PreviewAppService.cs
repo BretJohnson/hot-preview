@@ -31,19 +31,13 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName);
     }
 
-    public Task<string[]> GetUIComponentPreviewsAsync(string componentName)
+    public Task<UIComponentInfo?> GetComponentAsync(string componentName)
     {
         UIComponentReflection? component = GetUIComponentIfExists(componentName);
-        if (component is null)
-        {
-            return Task.FromResult(Array.Empty<string>());
-        }
-
-        string[] previewNames = component.Previews.Select(preview => preview.Name).ToArray();
-        return Task.FromResult(previewNames);
+        return Task.FromResult(component?.GetUIComponentInfo());
     }
 
-    public Task<UIComponentInfo[]> GetUIComponentsAsync()
+    public Task<UIComponentInfo[]> GetComponentsAsync()
     {
         PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
@@ -71,10 +65,16 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
         PreviewCommandInfo[] commandInfos = previewsManager.Commands
-            .Select(command => new PreviewCommandInfo(command.Name, command.DisplayNameOverride))
+            .Select(command => command.GetPreviewCommandInfo())
             .ToArray();
 
         return Task.FromResult(commandInfos);
+    }
+
+    public Task<PreviewCommandInfo?> GetCommandAsync(string commandName)
+    {
+        PreviewCommandReflection? command = GetCommandIfExists(commandName);
+        return Task.FromResult(command?.GetPreviewCommandInfo());
     }
 
     public Task InvokeCommandAsync(string commandName)

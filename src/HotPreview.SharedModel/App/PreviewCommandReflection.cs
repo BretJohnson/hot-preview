@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using HotPreview.SharedModel.Protocol;
 
 namespace HotPreview.SharedModel.App;
 
@@ -26,4 +27,13 @@ public class PreviewCommandReflection(PreviewCommandAttribute commandAttribute, 
     /// full qualified method name.
     /// </summary>
     public override string Name => MethodInfo.DeclaringType!.FullName + "." + MethodInfo.Name;
+
+    /// <summary>
+    /// Gets the preview command information including name and display name.
+    /// </summary>
+    /// <returns>A PreviewCommandInfo record with the command details, for use in the JSON RPC protocol</returns>
+    public PreviewCommandInfo GetPreviewCommandInfo()
+    {
+        return new PreviewCommandInfo(Name, DisplayNameOverride);
+    }
 }

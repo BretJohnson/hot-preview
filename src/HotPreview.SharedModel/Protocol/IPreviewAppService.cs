@@ -1,18 +1,28 @@
 using System.Threading.Tasks;
+using StreamJsonRpc;
 
 namespace HotPreview.SharedModel.Protocol;
 
 public interface IPreviewAppService
 {
-    public Task<UIComponentInfo[]> GetUIComponentsAsync();
+    [JsonRpcMethod("components/list")]
+    public Task<UIComponentInfo[]> GetComponentsAsync();
 
-    public Task<string[]> GetUIComponentPreviewsAsync(string componentName);
+    [JsonRpcMethod("components/get")]
+    public Task<UIComponentInfo?> GetComponentAsync(string componentName);
 
+    [JsonRpcMethod("previews/navigate")]
     public Task NavigateToPreviewAsync(string componentName, string previewName);
 
+    [JsonRpcMethod("previews/snapshot")]
     public Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
 
+    [JsonRpcMethod("commands/list")]
     public Task<PreviewCommandInfo[]> GetCommandsAsync();
 
+    [JsonRpcMethod("commands/get")]
+    public Task<PreviewCommandInfo?> GetCommandAsync(string commandName);
+
+    [JsonRpcMethod("commands/invoke")]
     public Task InvokeCommandAsync(string commandName);
 }

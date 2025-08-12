@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace HotPreview.SharedModel.Protocol;
 
 public record UIComponentInfo(
-    string Name,
-    string UIComponentKindInfo,
-    string? DisplayName,
-    PreviewInfo[] Previews);
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("uiComponentKind")] string UIComponentKindInfo,
+    [property: JsonPropertyName("displayName")] string? DisplayName,
+    [property: JsonPropertyName("previews")] PreviewInfo[] Previews
+);
