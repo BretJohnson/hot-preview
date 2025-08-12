@@ -46,9 +46,13 @@ graph LR
 ```csharp
 public interface IPreviewAppService
 {
-    Task<PreviewInfo[]> GetPreviewsAsync();
-    Task NavigateToPreviewAsync(string previewId);
-    Task ExecuteCommandAsync(string commandId);
+    Task<UIComponentInfo[]> GetComponentsAsync();
+    Task<UIComponentInfo?> GetComponentAsync(string componentName);
+    Task NavigateToPreviewAsync(string componentName, string previewName);
+    Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName);
+    Task<PreviewCommandInfo[]> GetCommandsAsync();
+    Task<PreviewCommandInfo?> GetCommandAsync(string commandName);
+    Task InvokeCommandAsync(string commandName);
 }
 ```
 
@@ -91,31 +95,34 @@ public interface IPreviewAppService
 
 ## Communication Protocol
 
-### JSON-RPC Over Pipes
+### JSON-RPC Over TCP
 
-HotPreview uses JSON-RPC over named pipes for communication between DevTools and applications.
+HotPreview uses JSON-RPC over TCP for communication between DevTools and applications.
 
 **Message Flow:**
-1. **App Startup:** Application connects to DevTools via named pipe
+1. **App Startup:** Application connects to DevTools via TCP
 2. **Discovery:** DevTools requests component and preview information
 3. **Navigation:** User clicks component, DevTools sends navigation command
 4. **Command Execution:** User triggers command, DevTools forwards to app
 
 **Example Messages:**
 ```json
-// Get Previews Request
+// Get Components Request
 {
+  "jsonrpc": "2.0",
   "id": 1,
-  "method": "getPreviewsAsync",
+  "method": "components/list",
   "params": {}
 }
 
 // Navigate to Preview Request
 {
+  "jsonrpc": "2.0",
   "id": 2,
-  "method": "navigateToPreviewAsync",
+  "method": "previews/navigate",
   "params": {
-    "previewId": "MyApp.Views.ProductCard.Preview"
+    "componentName": "MyApp.Views.ProductCard",
+    "previewName": "DefaultPreview"
   }
 }
 ```

@@ -132,7 +132,7 @@ Captures a visual snapshot of a specific preview.
   "id": 4,
   "method": "previews/snapshot",
   "params": {
-    "uiComponentName": "MyApp.Views.ProductCard",
+    "componentName": "MyApp.Views.ProductCard",
     "previewName": "DefaultPreview"
   }
 }
@@ -249,6 +249,15 @@ Registers an application with the tool, providing project and platform informati
 }
 ```
 
+**Response:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": null
+}
+```
+
 ##### notifications/components/listChanged
 Notifies the tool that the available components/previews have changed (e.g., due to code changes).
 
@@ -259,6 +268,15 @@ Notifies the tool that the available components/previews have changed (e.g., due
   "id": 2,
   "method": "notifications/components/listChanged",
   "params": {}
+}
+```
+
+**Response:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": null
 }
 ```
 

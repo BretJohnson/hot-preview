@@ -15,7 +15,7 @@ public interface IPreviewAppService
     public Task NavigateToPreviewAsync(string componentName, string previewName);
 
     [JsonRpcMethod("previews/snapshot")]
-    public Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName);
+    public Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName);
 
     [JsonRpcMethod("commands/list")]
     public Task<PreviewCommandInfo[]> GetCommandsAsync();

@@ -9,15 +9,15 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 {
     public PreviewApplication PreviewApplication { get; } = previewApplication;
 
-    protected UIComponentReflection GetUIComponent(string uiComponentName)
+    protected UIComponentReflection GetUIComponent(string componentName)
     {
-        return PreviewApplication.GetPreviewsManager().GetUIComponent(uiComponentName) ??
-            throw new UIComponentNotFoundException($"UIComponent {uiComponentName} not found");
+        return PreviewApplication.GetPreviewsManager().GetUIComponent(componentName) ??
+            throw new UIComponentNotFoundException($"UIComponent {componentName} not found");
     }
 
-    protected UIComponentReflection? GetUIComponentIfExists(string uiComponentName)
+    protected UIComponentReflection? GetUIComponentIfExists(string componentName)
     {
-        return PreviewApplication.GetPreviewsManager().GetUIComponent(uiComponentName);
+        return PreviewApplication.GetPreviewsManager().GetUIComponent(componentName);
     }
 
     protected PreviewCommandReflection GetCommand(string commandName)
@@ -48,15 +48,15 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return Task.FromResult(uiComponentInfos);
     }
 
-    public async Task NavigateToPreviewAsync(string uiComponentName, string previewName)
+    public async Task NavigateToPreviewAsync(string componentName, string previewName)
     {
-        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
+        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(componentName, previewName);
         await PreviewApplication.GetPreviewNavigator().NavigateToPreviewAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
-    public async Task<byte[]> GetPreviewSnapshotAsync(string uiComponentName, string previewName)
+    public async Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName)
     {
-        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(uiComponentName, previewName);
+        UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(componentName, previewName);
         return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
@@ -92,10 +92,10 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         }
     }
 
-    protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string uiComponentName, string previewName)
+    protected UIComponentPreviewPairReflection GetUIComponentPreviewPair(string componentName, string previewName)
     {
-        UIComponentReflection uiComponent = GetUIComponent(uiComponentName);
-        PreviewReflection preview = uiComponent.GetPreview(previewName) ?? throw new PreviewNotFoundException($"Preview {previewName} not found for UIComponent {uiComponentName}");
+        UIComponentReflection uiComponent = GetUIComponent(componentName);
+        PreviewReflection preview = uiComponent.GetPreview(previewName) ?? throw new PreviewNotFoundException($"Preview {previewName} not found for UIComponent {componentName}");
         return new UIComponentPreviewPairReflection(uiComponent, preview);
     }
 }
