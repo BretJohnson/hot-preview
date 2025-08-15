@@ -110,6 +110,10 @@ Names really only matter when you have multiple previews. If there's just one,
 then by convention it's named `Preview`, but it doesn't matter since the tooling
 displays the UI component name instead.
 
+## Documentation
+
+For complete documentation, including detailed attribute references and advanced usage, visit: https://bretjohnson.github.io/hot-preview/
+
 ## Building this repo and contributing updates
 
 See [Contributing](CONTRIBUTING.md)
