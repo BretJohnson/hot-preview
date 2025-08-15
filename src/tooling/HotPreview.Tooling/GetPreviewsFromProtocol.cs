@@ -16,7 +16,7 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
         foreach (UIComponentInfo uiComponentInfo in uiComponentInfos)
         {
             // Create the UI component and add it to the builder
-            UIComponentKind componentKind = UIComponentKindInfo.ToUIComponentKind(uiComponentInfo.UIComponentKindInfo);
+            UIComponentKind componentKind = UIComponentKindInfo.ToUIComponentKind(uiComponentInfo.UIComponentKind);
             var uiComponent = new UIComponentTooling(componentKind, uiComponentInfo.Name, uiComponentInfo.DisplayName,
                 uiComponentInfo.Previews.Select(CreatePreview).ToList());
 

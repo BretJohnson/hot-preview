@@ -4,6 +4,8 @@
 
 The Component Preview Protocol (CPP) is an open protocol designed to enable different tools to work with UI components and previews across various platforms and technologies. Similar to Storybook's [Component Story Format (CSF)](https://storybook.js.org/docs/8/api/csf), CPP provides a standardized way to define, discover, and interact with UI component previews. However, unlike CSF which is JavaScript-specific, CPP is language-agnostic and operates cross-process using JSON-RPC, similar to the Model Context Protocol (MCP).
 
+**JSON Schema**: The complete protocol specification is available as a [JSON Schema](cpp-protocol-schema.json) that formally defines all request/response structures, data types, and validation rules.
+
 CPP enables:
 - **Cross-platform component discovery**: Find UI components and their previews across different platforms (.NET MAUI, WPF, etc.)
 - **Tool interoperability**: Allow different development tools to work with the same component definitions

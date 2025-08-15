@@ -23,7 +23,7 @@ public class UIComponentReflection(Type type, UIComponentKind kind, string? disp
     {
         return new UIComponentInfo(
             Name: Name,
-            UIComponentKindInfo: UIComponentKindInfo.FromUIComponentKind(Kind),
+            UIComponentKind: UIComponentKindInfo.FromUIComponentKind(Kind),
             DisplayName: DisplayNameOverride,
             Previews: Previews.Select(preview => preview.GetPreviewInfo()).ToArray());
     }
