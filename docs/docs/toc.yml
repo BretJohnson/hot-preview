@@ -1,13 +1,7 @@
 items:
-- name: Getting Started
-  href: getting-started.md
 - name: Attributes Reference
   href: attributes.md
-- name: Features
-  href: features.md
 - name: Architecture
   href: architecture.md
 - name: CPP (Component Preview Protocol)
   href: cpp-protocol.md
-- name: Sample Applications
-  href: samples.md

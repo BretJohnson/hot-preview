@@ -61,7 +61,7 @@ The `PreviewAttribute` comes in two forms:
     {
     }
 
-    // Explicit UI component type specification using generic attribute
+    // Explicit UI component type, since UI component type differs from return type
     [Preview<ProductView>]
     public static CustomProductLayoutView CustomProductLayout() => new(PreviewData.GetProduct());
 #endif
@@ -76,7 +76,7 @@ The `[UIComponent]` attribute allows you to explicitly mark classes as UI compon
 
 #### Overview
 
-Normally UI components don't need to be defined explicitly (defining a preview is sufficient), but this attribute can be used to define a display name for the component.
+Normally UI components don't need to be defined explicitly (having a preview, explicitly defined or auto-generated, is sufficient), but this attribute can be used to define a display name for the component.
 
 #### Parameters
 
@@ -97,7 +97,7 @@ public partial class CartView : ContentView
 
 ### PreviewCommandAttribute
 
-The `[PreviewCommand]` attribute defines commands that can be executed from the DevTools interface.
+The `[PreviewCommand]` attribute defines commands that can be executed from the DevTools interface or, later, as MCP tool commands.
 
 **Target:** Methods
 **Namespace:** `HotPreview`

@@ -7,7 +7,7 @@ HotPreview is designed as a cross-platform UI component preview system for .NET,
 ```mermaid
 graph LR
     subgraph "DevTools Process"
-        DT["DevTools<br/>(Uno+Skia)"]
+        DT["DevTools<br/>(Uno with Skia controls)"]
     end
 
     subgraph "Your App Process"
@@ -16,7 +16,7 @@ graph LR
         YA -.-> HPL
     end
 
-    DT -.->|"JSON-RPC Protocol"| YA
+    DT -.->|"CPP JSON-RPC Protocol"| YA
 ```
 
 ## Core Components
@@ -77,7 +77,7 @@ public interface IPreviewAppService
 **Purpose:** Visual development environment and tooling
 
 #### DevTools Application (`HotPreview.DevToolsApp`)
-- **Uno+Skia Desktop App:** Main user interface
+- **Uno Desktop App:** Main user interface
 - **Connection Management:** Handles multiple app connections
 - **Component Tree View:** Hierarchical navigation interface
 - **Command Execution:** UI for running preview commands
@@ -93,7 +93,7 @@ public interface IPreviewAppService
 - **MCP Server:** AI integration capabilities
 - **Visual Testing:** Screenshot and comparison utilities
 
-## Communication Protocol
+## CPP - Component Preview Protocol
 
 ### JSON-RPC Over TCP
 
@@ -127,6 +127,8 @@ HotPreview uses JSON-RPC over TCP for communication between DevTools and applica
 }
 ```
 
+For the complete protocol specification, including all method definitions, data types, and validation rules, see the [Component Preview Protocol (CPP) documentation](cpp-protocol.md).
+
 ## Component Discovery
 
 ### Runtime Discovery (Reflection)
@@ -154,6 +156,9 @@ public static PreviewInfo[] GetPreviews(Assembly assembly)
 ### Build-Time Discovery (Roslyn)
 
 **Location:** `HotPreview.Tooling/GetPreviewsFromRoslyn.cs`
+
+Note: Currently this code is not used, with runtime discovery used exclusively, but
+it may be used for future  scenarios.
 
 **Process:**
 1. **Source Analysis:** Parse C# source files using Roslyn
@@ -212,6 +217,8 @@ public class MauiPreviewApplication : PreviewApplication
 
 ## AI Integration (MCP Server)
 
+Note: This feature is a work in progress and not yet fully implemented.
+
 ### Model Context Protocol
 
 **Location:** `HotPreview.Tooling/McpServer/`
@@ -268,34 +275,3 @@ To add support for a new platform:
    ```
 
 3. **Create Package:** Distribute as `HotPreview.App.MyPlatform`
-
-### Custom Discovery
-
-Extend component discovery:
-
-```csharp
-public class CustomComponentDiscovery : IComponentDiscovery
-{
-    public PreviewInfo[] DiscoverPreviews(Assembly assembly)
-    {
-        // Custom discovery logic
-    }
-}
-```
-
-## Performance Considerations
-
-### Memory Management
-- **Lazy Loading:** Components loaded on-demand
-- **Weak References:** Prevent memory leaks in long-running sessions
-- **Resource Cleanup:** Proper disposal of platform resources
-
-### Communication Optimization
-- **Batch Operations:** Reduce JSON-RPC round trips
-- **Incremental Updates:** Send only changed data
-- **Connection Pooling:** Reuse connections across sessions
-
-### Scalability
-- **Concurrent Discovery:** Parallel component analysis
-- **Caching:** Cache discovered components and metadata
-- **Selective Loading:** Load only visible components in DevTools
