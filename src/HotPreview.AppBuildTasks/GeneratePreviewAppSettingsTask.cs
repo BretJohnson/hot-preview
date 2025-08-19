@@ -60,7 +60,7 @@ namespace HotPreview.AppBuildTasks
 
                 if (!File.Exists(jsonPath))
                 {
-                    Log.LogWarning($"Hot Preview: devtools is running, but the {jsonPath} file doesn't exist.");
+                    Log.LogWarning($"Hot Preview: DevTools is running, but the {jsonPath} file doesn't exist.");
                     return false;
                 }
 
@@ -110,13 +110,13 @@ namespace HotPreview.SharedModel
                 File.WriteAllText(outputPath, content);
 
                 string relativeOutputPath = Path.Combine(Path.GetFileName(Path.GetDirectoryName(outputPath)) ?? "", Path.GetFileName(outputPath));
-                Log.LogMessage(MessageImportance.High, $"Hot Preview: Generating tooling connection settings in {relativeOutputPath}");
+                Log.LogMessage(MessageImportance.High, $"Hot Preview: Generating DevTools connection settings in {relativeOutputPath}");
 
                 return true;
             }
             catch (Exception ex)
             {
-                Log.LogWarning($"Hot Preview: Error generating preview app settings: {ex.Message}");
+                Log.LogWarning($"Hot Preview: Error generating DevTools connection settings: {ex.Message}");
                 return false;
             }
         }
@@ -138,7 +138,7 @@ namespace HotPreview.SharedModel
                     return false; // App is launching, treat as not running
                 }
 
-                Log.LogMessage(MessageImportance.High, "Hot Preview: devtools is already running");
+                Log.LogMessage(MessageImportance.High, "Hot Preview: DevTools is already running");
                 return true;
             }
             catch
@@ -169,7 +169,7 @@ namespace HotPreview.SharedModel
                 string lockContent = $"Launched by process {Process.GetCurrentProcess().ProcessName} {Process.GetCurrentProcess().Id} at {DateTime.UtcNow:O}";
                 using var lockFile = LockFile.Create(lockFilePath, lockContent);
 
-                Log.LogMessage(MessageImportance.Low, "Hot Preview: Acquired launch lock, launching devtools app...");
+                Log.LogMessage(MessageImportance.Low, "Hot Preview: Acquired launch lock, launching DevTools app...");
 
                 // Launch the app while holding the exclusive lock
                 return LaunchDevToolsApp();
@@ -178,7 +178,7 @@ namespace HotPreview.SharedModel
             }
             catch (IOException ex) when (ex.HResult == unchecked((int)0x80070020)) // File is being used by another process
             {
-                Log.LogMessage(MessageImportance.Low, "Hot Preview: Another process is launching devtools app, waiting...");
+                Log.LogMessage(MessageImportance.Low, "Hot Preview: Another process is launching DevTools app, waiting...");
                 return WaitForLaunchCompletion(lockFilePath);
             }
             catch (Exception ex)
@@ -201,12 +201,12 @@ namespace HotPreview.SharedModel
                     // Lock file is gone, check if the settings file exists
                     if (File.Exists(DevToolsConnectionJsonPath))
                     {
-                        Log.LogMessage(MessageImportance.Low, "Hot Preview: devtools launched by a different build task");
+                        Log.LogMessage(MessageImportance.Low, "Hot Preview: DevTools launched by a different build task");
                         return true;
                     }
                     else
                     {
-                        Log.LogWarning("Hot Preview: A different build task finished launching devtools but the settings file doesn't exist");
+                        Log.LogWarning("Hot Preview: A different build task finished launching DevTools but the settings file doesn't exist");
                         return false;
                     }
                 }
@@ -215,7 +215,7 @@ namespace HotPreview.SharedModel
             }
 
             // Timeout reached - the other process might have failed
-            Log.LogWarning("Hot Preview: Timeout waiting for another build task to launch devtools");
+            Log.LogWarning("Hot Preview: Timeout waiting for another build task to launch DevTools");
             return false;
         }
 
@@ -225,7 +225,7 @@ namespace HotPreview.SharedModel
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = "hotpreview",
+                    FileName = "hot-preview",
                     Arguments = "--launch",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -238,7 +238,7 @@ namespace HotPreview.SharedModel
                 using var process = Process.Start(startInfo);
                 if (process is null)
                 {
-                    Log.LogWarning("Hot Preview: Failed to start hotpreview process");
+                    Log.LogWarning("Hot Preview: Failed to start hot-preview process");
                     return false;
                 }
 
@@ -247,7 +247,7 @@ namespace HotPreview.SharedModel
                 if (process.ExitCode != 0)
                 {
                     string errorOutput = process.StandardError.ReadToEnd();
-                    Log.LogWarning($"Hot Preview: hotpreview failed with exit code {process.ExitCode}: {errorOutput}");
+                    Log.LogWarning($"Hot Preview: hot-preview failed with exit code {process.ExitCode}: {errorOutput}");
                     return false;
                 }
 
@@ -257,21 +257,21 @@ namespace HotPreview.SharedModel
                     return false;
                 }
 
-                Log.LogMessage(MessageImportance.High, $"Hot Preview: Launched DevTools");
+                Log.LogMessage(MessageImportance.Low, $"Hot Preview: Launched DevTools");
                 return true;
             }
-            // When the hotpreview executable is not found, an E_FAIL Win32Exception is thrown with the messaage below.
+            // When the hot-preview executable is not found, an E_FAIL Win32Exception is thrown with the message below.
             // For English systems, match on the message.
             catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
             {
-                Log.LogWarning("Hot Preview: hotpreview not found.");
+                Log.LogWarning("Hot Preview: hot-preview not found.");
                 Log.LogWarning("Hot Preview: Install it via e.g.: dotnet tool install --global HotPreview.DevTools");
                 return false;
             }
             // In other cases, including non-English systems, log a more generic message that covers the not installed case too.
             catch (Exception ex)
             {
-                Log.LogWarning($"Hot Preview: Error launching hotpreview: {ex}");
+                Log.LogWarning($"Hot Preview: Error launching hot-preview: {ex}");
                 Log.LogWarning("Hot Preview: Ensure it is installed via e.g.: dotnet tool install --global HotPreview.DevTools");
                 return false;
             }
@@ -294,7 +294,7 @@ namespace HotPreview.SharedModel
             }
 
             // Timeout reached - log error message
-            Log.LogWarning($"Hot Preview: hotpreview launched but the {jsonPath} file didn't get created");
+            Log.LogWarning($"Hot Preview: hot-preview launched but the {jsonPath} file didn't get created");
             return false;
         }
     }
