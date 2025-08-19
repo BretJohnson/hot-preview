@@ -108,6 +108,10 @@ namespace HotPreview.SharedModel
 """;
 
                 File.WriteAllText(outputPath, content);
+
+                string relativeOutputPath = Path.Combine(Path.GetFileName(Path.GetDirectoryName(outputPath)) ?? "", Path.GetFileName(outputPath));
+                Log.LogMessage(MessageImportance.High, $"Hot Preview: Generating tooling connection settings in {relativeOutputPath}");
+
                 return true;
             }
             catch (Exception ex)
