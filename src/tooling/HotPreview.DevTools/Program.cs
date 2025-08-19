@@ -6,7 +6,7 @@ namespace HotPreview.DevTools;
 public static class Program
 {
     /// <summary>
-    /// Entry point for the "hotpreview" CLI tool, installed via "dotnet tool install".
+    /// Entry point for the "hot-preview" CLI tool, installed via "dotnet tool install".
     /// This tool acts as a launcher that finds and starts HotPreview.DevToolsApp.
     /// It may offer other CLI options in the future.
     /// </summary>

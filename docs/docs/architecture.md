@@ -185,7 +185,7 @@ it may be used for future  scenarios.
 **Integration Points:**
 ```xml
 <Target Name="LaunchDevTools" BeforeTargets="Build" Condition="$(Configuration) == 'Debug'">
-  <Exec Command="hotpreview" ContinueOnError="true" />
+  <Exec Command="hot-preview" ContinueOnError="true" />
 </Target>
 ```
 

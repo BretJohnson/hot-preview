@@ -8,13 +8,13 @@
     <RootNamespace>HotPreview.DevTools</RootNamespace>
     <AssemblyName>HotPreview.DevTools</AssemblyName>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>hotpreview</ToolCommandName>
+    <ToolCommandName>hot-preview</ToolCommandName>
   </PropertyGroup>
 
   <PropertyGroup>
     <Title>HotPreview DevTools</Title>
     <PackageDescription>A .NET global tool for launching Hot Preview DevTools - a visual development environment for UI component previews</PackageDescription>
-    <PackageTags>hotpreview;preview;ui;components;devtools;maui;wpf;uno;tool</PackageTags>
+    <PackageTags>hotpreview;hot-preview;preview;ui;components;devtools;maui;wpf;uno;tool</PackageTags>
   </PropertyGroup>
 
   <!-- Include DevTools files directly in the project -->
