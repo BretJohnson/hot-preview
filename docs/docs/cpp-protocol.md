@@ -17,7 +17,7 @@ CPP enables:
 CPP uses JSON-RPC 2.0 over TCP for communication between tools (like HotPreview DevTools) and applications. The protocol defines two main service interfaces:
 
 1. **IPreviewAppService**: Implemented by applications to expose their components and previews
-2. **IPreviewAppControllerService**: Implemented by tools to receive notifications from applications
+2. **IPreviewAppToolingService**: Implemented by tools to receive notifications from applications
 
 ## JSON-RPC Schema
 
@@ -28,7 +28,7 @@ The main service interface that applications must implement to expose their UI c
 #### Methods
 
 ##### components/list
-Retrieves all available UI components and their associated previews.
+Gets all available UI components and their previews in the application.
 
 **Request:**
 ```json
@@ -64,7 +64,7 @@ Retrieves all available UI components and their associated previews.
 ```
 
 ##### components/get
-Retrieves information for a specific UI component.
+Gets information about a specific UI component by name.
 
 **Request:**
 ```json
@@ -100,7 +100,7 @@ Retrieves information for a specific UI component.
 ```
 
 ##### previews/navigate
-Navigates the application to display a specific preview.
+Navigates to a specific preview for a UI component in the app.
 
 **Request:**
 ```json
@@ -125,7 +125,7 @@ Navigates the application to display a specific preview.
 ```
 
 ##### previews/snapshot
-Captures a visual snapshot of a specific preview.
+Captures a visual snapshot for a specific preview.
 
 **Request:**
 ```json
@@ -152,7 +152,7 @@ Captures a visual snapshot of a specific preview.
 **Note:** The snapshot result is returned as a base64-encoded byte array representing the PNG image data.
 
 ##### commands/list
-Retrieves all available preview commands.
+Gets all available commands in the application. Commands trigger some action in the app, typically updating global state. Commands are global, not associated with a specific component.
 
 **Request:**
 ```json
@@ -179,7 +179,7 @@ Retrieves all available preview commands.
 ```
 
 ##### commands/get
-Retrieves information for a specific command.
+Gets information about a specific command by name.
 
 **Request:**
 ```json
@@ -206,7 +206,7 @@ Retrieves information for a specific command.
 ```
 
 ##### commands/invoke
-Executes a preview command.
+Invokes a command by name.
 
 **Request:**
 ```json
@@ -229,14 +229,14 @@ Executes a preview command.
 }
 ```
 
-### IPreviewAppControllerService Interface
+### IPreviewAppToolingService Interface
 
-The controller service interface that tools implement to receive notifications from applications.
+The tooling service interface that tools implement to receive notifications from applications.
 
 #### Methods
 
 ##### registerApp
-Registers an application with the tool, providing project and platform information.
+Registers an application with the tooling service.
 
 **Request:**
 ```json
@@ -261,7 +261,7 @@ Registers an application with the tool, providing project and platform informati
 ```
 
 ##### notifications/components/listChanged
-Notifies the tool that the available components/previews have changed (e.g., due to code changes).
+Notifies the tooling service that the list of available components or previews has changed, so it should requery to get the latest information.
 
 **Request:**
 ```json

@@ -13,7 +13,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
     private readonly string _connectionString = connectionString;
     private TcpClient? _tcpClient;
     private JsonRpc? _rpc;
-    private IPreviewAppControllerService? _appControllerService;
+    private IPreviewAppToolingService? _appToolingService;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _connectionTask;
     private bool _disposed;
@@ -87,7 +87,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
         NetworkStream networkStream = _tcpClient.GetStream();
 
         _rpc = new JsonRpc(networkStream, networkStream, appService);
-        _appControllerService = _rpc.Attach<IPreviewAppControllerService>();
+        _appToolingService = _rpc.Attach<IPreviewAppToolingService>();
 
         PreviewApplication previewApplication = PreviewApplication.GetInstance();
         if (previewApplication.EnableJsonRpcTracing)
@@ -106,7 +106,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
             throw;
         }
 
-        await _appControllerService.RegisterAppAsync(previewApplication.ProjectPath!,
+        await _appToolingService.RegisterAppAsync(previewApplication.ProjectPath!,
             previewApplication.PlatformName).ConfigureAwait(false);
     }
 
@@ -177,7 +177,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
 
         _rpc = null;
         _tcpClient = null;
-        _appControllerService = null;
+        _appToolingService = null;
     }
 
     public void Dispose()

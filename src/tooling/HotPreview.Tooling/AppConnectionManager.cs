@@ -5,7 +5,7 @@ using StreamJsonRpc;
 namespace HotPreview.Tooling;
 
 public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpClient) :
-    IPreviewAppControllerService
+    IPreviewAppToolingService
 {
     private readonly AppsManager _appsManager = appsManager;
     private readonly TcpClient _tcpClient = tcpClient;
@@ -25,7 +25,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
 
             _rpc = new JsonRpc(connectionStream, connectionStream);
 
-            _rpc.AddLocalRpcTarget<IPreviewAppControllerService>(this, null);
+            _rpc.AddLocalRpcTarget<IPreviewAppToolingService>(this, null);
             AppService = _rpc.Attach<IPreviewAppService>();
 
             try
@@ -77,7 +77,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     }
 
     [JsonRpcMethod("notifications/components/listChanged")]
-    public async Task NotifyPreviewsChangedAsync()
+    public async Task NotifyComponentsChangedAsync()
     {
         UIComponentInfo[] uiComponentInfos = await AppService!.GetComponentsAsync();
         PreviewCommandInfo[] previewCommandInfos = await AppService!.GetCommandsAsync();
