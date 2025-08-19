@@ -56,6 +56,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         }
     }
 
+    [JsonRpcMethod("registerApp")]
     public async Task RegisterAppAsync(string projectPath, string platformName)
     {
         if (_appManager is not null)
@@ -75,6 +76,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager.UpdatePreviews();
     }
 
+    [JsonRpcMethod("notifications/components/listChanged")]
     public async Task NotifyPreviewsChangedAsync()
     {
         UIComponentInfo[] uiComponentInfos = await AppService!.GetComponentsAsync();

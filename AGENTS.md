@@ -47,6 +47,7 @@ This file provides guidance to AI agents and LLMs when working with code in this
 - **Access modifiers**: Always explicit, prefer most restrictive appropriate level
 - **Control flow**: Always use braces, even for single-line statements
 - **Variable declarations**: Avoid `var` unless the type is obvious from the right-hand side (e.g., `new SomeType()`, LINQ queries with obvious types)
+- **JSON RPC Methods**: All JSON RPC methods must have the `JsonRpcMethod` attribute on both the interface method and implementation, and they must match
 
 ```csharp
 // Preferred - always use braces
