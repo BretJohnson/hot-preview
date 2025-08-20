@@ -202,28 +202,14 @@ public class AppManager(AppsManager appsManager, string projectPath) :
                 {
                     currentProcessed++;
 
-                    string previewDisplayName;
-                    if (uiComponent is null)
-                    {
-                        previewDisplayName = !currentUIComponent.HasMultiplePreviews
-                            ? currentUIComponent.DisplayName
-                            : $"{currentUIComponent.DisplayName} - {currentPreview.DisplayName}";
-                    }
-                    else
-                    {
-                        // If we're only processing a single UI component, then don't include the component name in the display name
-                        previewDisplayName = currentPreview.DisplayName;
-                    }
+                    string snapshotFileNameBase = PreviewsManager!.GetSnapshotFileNameBase(currentUIComponent, currentPreview);
 
-                    StatusReporter.UpdateStatus($"Capturing snapshot {currentProcessed} of {totalPreviews}: {previewDisplayName}");
+                    StatusReporter.UpdateStatus($"Capturing snapshot {currentProcessed} of {totalPreviews}: {snapshotFileNameBase}");
 
                     var previewPair = new UIComponentPreviewPairTooling(currentUIComponent, currentPreview);
                     ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
 
-                    string componentShortName = PreviewsManager!.GetUIComponentShortName(currentUIComponent.Name);
-                    string previewShortName = currentUIComponent.GetPreviewShortName(currentPreview.Name);
-                    string fileNameBase = !currentUIComponent.HasMultiplePreviews ? componentShortName : $"{componentShortName}-{previewShortName}";
-                    snapshot.Save(snapshotsDirectory, fileNameBase);
+                    snapshot.Save(snapshotsDirectory, snapshotFileNameBase);
                 }
             }
         }

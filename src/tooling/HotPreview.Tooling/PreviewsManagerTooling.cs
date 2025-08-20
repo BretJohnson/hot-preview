@@ -93,4 +93,19 @@ public class PreviewsManagerTooling(
         // Fallback to full name if no shorter unique name found
         return uiComponentName;
     }
+
+    /// <summary>
+    /// Gets the base file name for snapshots of a UI component preview.
+    /// Returns the component short name for single preview components, 
+    /// or componentShortName-previewShortName for components with multiple previews.
+    /// </summary>
+    /// <param name="uiComponent">The UI component.</param>
+    /// <param name="preview">The preview.</param>
+    /// <returns>The base file name for snapshots.</returns>
+    public string GetSnapshotFileNameBase(UIComponentTooling uiComponent, PreviewTooling preview)
+    {
+        string componentShortName = GetUIComponentShortName(uiComponent.Name);
+        string previewShortName = uiComponent.GetPreviewShortName(preview.Name);
+        return !uiComponent.HasMultiplePreviews ? componentShortName : $"{componentShortName}-{previewShortName}";
+    }
 }
