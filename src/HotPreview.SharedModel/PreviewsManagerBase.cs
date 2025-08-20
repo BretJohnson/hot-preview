@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -145,12 +146,13 @@ public abstract class PreviewsManagerBase<TUIComponent, TPreview, TCommand>(
     /// This is used for snapshot file names, to keep them short but ensure there are no collisions.
     /// </summary>
     /// <param name="uiComponentName">The full name of the UI component.</param>
-    /// <returns>The shortest unique name, or null if the component doesn't exist.</returns>
-    public string? GetUIComponentShortName(string uiComponentName)
+    /// <returns>The shortest unique name.</returns>
+    /// <exception cref="ArgumentException">Thrown when the UI component doesn't exist.</exception>
+    public string GetUIComponentShortName(string uiComponentName)
     {
-        if (string.IsNullOrEmpty(uiComponentName) || !_uiComponentsByName.ContainsKey(uiComponentName))
+        if (!_uiComponentsByName.ContainsKey(uiComponentName))
         {
-            return null;
+            throw new ArgumentException($"UI component '{uiComponentName}' not found.", nameof(uiComponentName));
         }
 
         PopulateUIComponentsBySimpleName();

@@ -123,7 +123,7 @@ public class PreviewsManagerBaseTests
     }
 
     [TestMethod]
-    public void GetUIComponentShortName_WithNullOrEmpty_ReturnsNull()
+    public void GetUIComponentShortName_WithNonExistentComponent_ThrowsArgumentException()
     {
         // Arrange
         var components = new Dictionary<string, TestUIComponent>
@@ -133,23 +133,8 @@ public class PreviewsManagerBaseTests
         var manager = CreateManager(components);
 
         // Act & Assert
-        Assert.IsNull(manager.GetUIComponentShortName(null!));
-        Assert.IsNull(manager.GetUIComponentShortName(""));
-        Assert.IsNull(manager.GetUIComponentShortName("   "));
-    }
-
-    [TestMethod]
-    public void GetUIComponentShortName_WithNonExistentComponent_ReturnsNull()
-    {
-        // Arrange
-        var components = new Dictionary<string, TestUIComponent>
-        {
-            ["MyApp.Button"] = new TestUIComponent("MyApp.Button")
-        };
-        var manager = CreateManager(components);
-
-        // Act & Assert
-        Assert.IsNull(manager.GetUIComponentShortName("NonExistent.Component"));
+        Assert.ThrowsException<ArgumentException>(() => manager.GetUIComponentShortName(""));
+        Assert.ThrowsException<ArgumentException>(() => manager.GetUIComponentShortName("NonExistent.Component"));
     }
 
     [TestMethod]
@@ -164,9 +149,9 @@ public class PreviewsManagerBaseTests
         var manager = CreateManager(components);
 
         // Act - Call multiple times to test caching
-        string? result1 = manager.GetUIComponentShortName("A.B.Button");
-        string? result2 = manager.GetUIComponentShortName("A.B.Button");
-        string? result3 = manager.GetUIComponentShortName("X.Y.Button");
+        string result1 = manager.GetUIComponentShortName("A.B.Button");
+        string result2 = manager.GetUIComponentShortName("A.B.Button");
+        string result3 = manager.GetUIComponentShortName("X.Y.Button");
 
         // Assert
         Assert.AreEqual("B.Button", result1);

@@ -220,7 +220,8 @@ public class AppManager(AppsManager appsManager, string projectPath) :
                     var previewPair = new UIComponentPreviewPairTooling(currentUIComponent, currentPreview);
                     ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
 
-                    string fileNameBase = !currentUIComponent.HasMultiplePreviews ? currentUIComponent.Name : $"{currentUIComponent.Name}-{currentPreview.Name}";
+                    string componentShortName = PreviewsManager!.GetUIComponentShortName(currentUIComponent.Name);
+                    string fileNameBase = !currentUIComponent.HasMultiplePreviews ? componentShortName : $"{componentShortName}-{currentPreview.Name}";
                     snapshot.Save(snapshotsDirectory, fileNameBase);
                 }
             }
