@@ -137,7 +137,7 @@ public partial class MainPageViewModel : ObservableObject
             {
                 if (components.Count > 0)
                 {
-                    var sectionViewModel = new SectionItemViewModel(category.Name.ToUpperInvariant());
+                    var sectionViewModel = new SectionItemViewModel(category.Name.ToUpperInvariant(), "", this, category);
                     foreach (UIComponentTooling uiComponent in components)
                     {
                         sectionViewModel.AddChild(new UIComponentViewModel(this, uiComponent));
@@ -150,7 +150,7 @@ public partial class MainPageViewModel : ObservableObject
             var commands = previewsManager.Commands.OrderBy(cmd => cmd.DisplayName).ToList();
             if (commands.Count > 0)
             {
-                var commandsSection = new SectionItemViewModel("COMMANDS");
+                var commandsSection = new SectionItemViewModel("COMMANDS", "", this);
                 foreach (PreviewCommandTooling command in commands)
                 {
                     commandsSection.AddChild(new CommandViewModel(this, command));
@@ -177,7 +177,7 @@ public partial class MainPageViewModel : ObservableObject
         NavTreeItems.Add(new UIComponentViewModel("Introduction", "📄"));
 
         // APPLICATION section
-        var applicationSection = new SectionItemViewModel("APPLICATION", "");
+        var applicationSection = new SectionItemViewModel("APPLICATION", "", this);
         applicationSection.IsExpanded = true;
 
         // ProductCard
@@ -203,7 +203,7 @@ public partial class MainPageViewModel : ObservableObject
         NavTreeItems.Add(applicationSection);
 
         // DESIGN SYSTEM section
-        var designSystemSection = new SectionItemViewModel("DESIGN SYSTEM", "");
+        var designSystemSection = new SectionItemViewModel("DESIGN SYSTEM", "", this);
         designSystemSection.IsExpanded = true;
 
         designSystemSection.Children.Add(new UIComponentViewModel("ActivityList", "📁"));

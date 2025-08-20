@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using HotPreview.SharedModel;
 using HotPreview.Tooling.Services;
 
 namespace HotPreview.Tooling;
@@ -126,7 +127,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         await Task.WhenAll(commandTasks);
     }
 
-    public async Task UpdatePreviewSnapshotsAsync(UIComponentTooling? uiComponent, PreviewTooling? preview)
+    public async Task UpdateSnapshotsAsync(UIComponentTooling? uiComponent, PreviewTooling? preview)
     {
         if (uiComponent is null && preview is not null)
         {
@@ -153,12 +154,82 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         List<Task> connectionTasks = [];
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            connectionTasks.Add(UpdatePreviewSnapshotsForConnectionAsync(appConnection, uiComponent, preview, snapshotsDirectory, totalPreviews));
+            connectionTasks.Add(UpdateSnapshotsForConnectionAsync(appConnection, uiComponent, preview, snapshotsDirectory, totalPreviews));
         }
 
         await Task.WhenAll(connectionTasks);
 
         StatusReporter.UpdateStatus($"Successfully updated {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")}");
+    }
+
+    public async Task UpdateCategorySnapshotsAsync(UIComponentCategory category)
+    {
+        if (PreviewsManager is null)
+        {
+            throw new InvalidOperationException("App has no UI components loaded");
+        }
+
+        StatusReporter.UpdateStatus("Preparing snapshot directory...");
+
+        string projectDirectory = Path.GetDirectoryName(ProjectPath) ?? throw new InvalidOperationException($"Invalid project path: {ProjectPath}");
+        string snapshotsDirectory = Path.Combine(projectDirectory, "snapshots");
+        Directory.CreateDirectory(snapshotsDirectory);
+
+        // Find components in the specified category using CategorizedUIComponents
+        IEnumerable<UIComponentTooling> categoryComponents = PreviewsManager.CategorizedUIComponents
+            .Where(categoryTuple => categoryTuple.Category.Equals(category))
+            .SelectMany(categoryTuple => categoryTuple.UIComponents);
+
+        // Count total previews to process for progress tracking
+        int totalPreviews = CountPreviewsForComponents(categoryComponents);
+
+        StatusReporter.UpdateStatus($"Updating {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")} for category '{category.Name}'...");
+
+        // Process each app connection in parallel
+        List<Task> connectionTasks = [];
+        foreach (AppConnectionManager appConnection in AppConnections)
+        {
+            connectionTasks.Add(UpdateCategorySnapshotsForConnectionAsync(appConnection, categoryComponents, snapshotsDirectory, totalPreviews));
+        }
+
+        await Task.WhenAll(connectionTasks);
+
+        StatusReporter.UpdateStatus($"Successfully updated {totalPreviews} snapshot{(totalPreviews == 1 ? "" : "s")} for category '{category.Name}'");
+    }
+
+    private static int CountPreviewsForComponents(IEnumerable<UIComponentTooling> components)
+    {
+        int count = 0;
+        foreach (UIComponentTooling component in components)
+        {
+            count += component.Previews.Count;
+        }
+        return count;
+    }
+
+    private async Task UpdateCategorySnapshotsForConnectionAsync(AppConnectionManager appConnection, IEnumerable<UIComponentTooling> categoryComponents, string snapshotsDirectory, int totalPreviews)
+    {
+        int currentProcessed = 0;
+
+        foreach (UIComponentTooling currentUIComponent in categoryComponents)
+        {
+            foreach (PreviewTooling currentPreview in currentUIComponent.Previews)
+            {
+                if (appConnection.PreviewsManager?.HasPreview(currentUIComponent.Name, currentPreview.Name) ?? false)
+                {
+                    currentProcessed++;
+
+                    string snapshotFileNameBase = PreviewsManager!.GetSnapshotFileNameBase(currentUIComponent, currentPreview);
+
+                    StatusReporter.UpdateStatus($"Capturing snapshot {currentProcessed} of {totalPreviews}: {snapshotFileNameBase}");
+
+                    var previewPair = new UIComponentPreviewPairTooling(currentUIComponent, currentPreview);
+                    ImageSnapshot snapshot = await appConnection.GetPreviewSnapshotAsync(previewPair);
+
+                    snapshot.Save(snapshotsDirectory, snapshotFileNameBase);
+                }
+            }
+        }
     }
 
     private int CountPreviewsToProcess(UIComponentTooling? uiComponent, PreviewTooling? preview)
@@ -182,7 +253,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         return count;
     }
 
-    private async Task UpdatePreviewSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory,
+    private async Task UpdateSnapshotsForConnectionAsync(AppConnectionManager appConnection, UIComponentTooling? uiComponent, PreviewTooling? preview, string snapshotsDirectory,
         int totalPreviews)
     {
         IEnumerable<UIComponentTooling> componentsToProcess = uiComponent is not null ?

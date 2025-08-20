@@ -26,7 +26,7 @@ public class PreviewViewModel : NavTreeItemViewModel
         AppManager? appManager = _mainPageViewModel.CurrentApp;
         if (appManager is not null)
         {
-            await appManager.UpdatePreviewSnapshotsAsync(UIComponent, Preview);
+            await appManager.UpdateSnapshotsAsync(UIComponent, Preview);
         }
     }
 
