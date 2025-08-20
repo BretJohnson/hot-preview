@@ -23,7 +23,7 @@ public abstract class UIComponentBase<TPreview>(UIComponentKind kind, string? di
     /// isn't necessarily unique. It defaults to the class name (with no namespace qualifier) but can be
     /// overridden by the developer.
     /// </summary>
-    public string DisplayName => DisplayNameOverride ?? NameUtilities.GetUnqualifiedName(Name);
+    public string DisplayName => DisplayNameOverride ?? NameUtilities.GetSimpleName(Name);
 
     public string? DisplayNameOverride { get; } = displayNameOverride;
 

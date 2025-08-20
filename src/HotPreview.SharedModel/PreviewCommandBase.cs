@@ -12,7 +12,7 @@ public abstract class PreviewCommandBase(string? displayNameOverride)
     /// isn't necessarily unique. It defaults to the command method name (with no namespace) but can
     /// be overridden by the developer.
     /// </summary>
-    public string DisplayName => _displayNameOverride ?? NameUtilities.GetUnqualifiedName(Name);
+    public string DisplayName => _displayNameOverride ?? NameUtilities.GetSimpleName(Name);
 
     public string? DisplayNameOverride => _displayNameOverride;
 

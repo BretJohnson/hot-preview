@@ -11,7 +11,7 @@ public abstract class PreviewBase(string? displayNameOverride)
     /// isn't necessarily unique. It defaults to the preview method/class name (with no namespace) but can
     /// be overridden by the developer.
     /// </summary>
-    public string DisplayName => _displayNameOverride ?? StringUtilities.StartCase(NameUtilities.GetUnqualifiedName(Name));
+    public string DisplayName => _displayNameOverride ?? StringUtilities.StartCase(NameUtilities.GetSimpleName(Name));
 
     public string? DisplayNameOverride => _displayNameOverride;
 
