@@ -1,5 +1,5 @@
-using HotPreview.Tooling;
 using HotPreview.SharedModel;
+using HotPreview.Tooling;
 
 namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
