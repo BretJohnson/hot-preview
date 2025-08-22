@@ -2,18 +2,12 @@ using HotPreview.Tooling;
 
 namespace HotPreview.DevToolsApp.ViewModels.NavTree;
 
-public class UIComponentViewModel : NavTreeItemViewModel
+public class UIComponentViewModel(MainPageViewModel mainPageViewModel, UIComponentTooling uiComponent) : NavTreeItemViewModel
 {
-    private readonly MainPageViewModel _mainPageViewModel;
+    private readonly MainPageViewModel _mainPageViewModel = mainPageViewModel;
     private IReadOnlyList<NavTreeItemViewModel>? _children;
 
-    public UIComponentViewModel(MainPageViewModel mainPageViewModel, UIComponentTooling uiComponent)
-    {
-        _mainPageViewModel = mainPageViewModel;
-        UIComponent = uiComponent;
-    }
-
-    public UIComponentTooling UIComponent { get; }
+    public UIComponentTooling UIComponent { get; } = uiComponent;
 
     public override string DisplayName => UIComponent.DisplayName;
 
