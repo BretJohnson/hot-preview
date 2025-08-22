@@ -7,7 +7,7 @@ public class SectionItemViewModel : NavTreeItemViewModel
 {
     private readonly MainPageViewModel? _mainPageViewModel;
     private readonly UIComponentCategory? _category;
-    private List<NavTreeItemViewModel> _children = [];
+    private readonly List<NavTreeItemViewModel> _children = [];
 
     public SectionItemViewModel(string displayName, string icon = "", MainPageViewModel? mainPageViewModel = null, UIComponentCategory? category = null)
     {

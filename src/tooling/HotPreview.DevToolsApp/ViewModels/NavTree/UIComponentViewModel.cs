@@ -45,7 +45,7 @@ public class UIComponentViewModel : NavTreeItemViewModel
         if (UIComponent.HasSinglePreview)
         {
             // Update status bar to show navigation action
-            _mainPageViewModel.UpdateStatusMessage($"Navigating to preview: {UIComponent.DefaultPreview.DisplayName}");
+            _mainPageViewModel.UpdateStatusMessage($"Navigating to preview: {UIComponent.DisplayName}");
 
             // Navigate to the preview, for all app connections that have the preview
             _mainPageViewModel.CurrentApp?.NavigateToPreview(UIComponent, UIComponent.DefaultPreview);

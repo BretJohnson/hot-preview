@@ -65,7 +65,7 @@ public abstract class PreviewsManagerBase<TUIComponent, TPreview, TCommand>(
                     .ToList();
 
                 var uncategorizedControls = uncategorizedComponents
-                    .Where(component => component.Kind == UIComponentKind.Control)
+                    .Where(component => component.Kind == UIComponentKind.Control || component.Kind == UIComponentKind.Unknown)
                     .OrderBy(component => component.DisplayName)
                     .ToList();
 
