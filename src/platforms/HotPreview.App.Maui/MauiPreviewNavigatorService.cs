@@ -33,7 +33,8 @@ public class MauiPreviewNavigatorService : IPreviewNavigator
                     Content = (View)previewUI
                 };
 
-                await Application.Current!.MainPage!.Navigation.PushAsync(controlsPage, NavigateAnimationsEnabled);
+                Application.Current!.MainPage = controlsPage;
+                //await Application.Current!.MainPage!.Navigation.PushAsync(controlsPage, NavigateAnimationsEnabled);
             }
             else
             {
