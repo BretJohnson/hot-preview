@@ -105,13 +105,13 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         }
     }
 
-    public async Task InvokeCommandAsync(CommandTooling command)
+    public async Task InvokeCommandAsync(PreviewCommandTooling command)
     {
         // Collect all connections that have the command
         List<Task> commandTasks = [];
         foreach (AppConnectionManager appConnection in AppConnections)
         {
-            CommandTooling? existingCommand = appConnection.PreviewsManager?.GetCommand(command.Name);
+            PreviewCommandTooling? existingCommand = appConnection.PreviewsManager?.GetCommand(command.Name);
             if (existingCommand is not null && appConnection.AppService is not null)
             {
                 commandTasks.Add(appConnection.AppService.InvokeCommandAsync(command.Name));

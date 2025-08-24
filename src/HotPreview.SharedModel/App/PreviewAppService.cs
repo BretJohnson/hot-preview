@@ -21,13 +21,13 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return PreviewApplication.GetPreviewsManager().GetUIComponent(componentName);
     }
 
-    protected CommandReflection GetCommand(string commandName)
+    protected PreviewCommandReflection GetCommand(string commandName)
     {
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName) ??
             throw new ArgumentException($"Command {commandName} not found");
     }
 
-    protected CommandReflection? GetCommandIfExists(string commandName)
+    protected PreviewCommandReflection? GetCommandIfExists(string commandName)
     {
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName);
     }
@@ -48,8 +48,8 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
             .Select(component => component.GetUIComponentInfo())
             .ToArray();
 
-        CommandInfo[] commandInfos = previewsManager.Commands
-            .Select(command => command.GetCommandInfo())
+        PreviewCommandInfo[] commandInfos = previewsManager.Commands
+            .Select(command => command.GetPreviewCommandInfo())
             .ToArray();
 
         return Task.FromResult(new AppInfo(uiComponentInfos, commandInfos));
@@ -71,16 +71,16 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
 
 
     [JsonRpcMethod("commands/get")]
-    public Task<CommandInfo?> GetCommandAsync(string commandName)
+    public Task<PreviewCommandInfo?> GetCommandAsync(string commandName)
     {
-        CommandReflection? command = GetCommandIfExists(commandName);
-        return Task.FromResult(command?.GetCommandInfo());
+        PreviewCommandReflection? command = GetCommandIfExists(commandName);
+        return Task.FromResult(command?.GetPreviewCommandInfo());
     }
 
     [JsonRpcMethod("commands/invoke")]
     public Task InvokeCommandAsync(string commandName)
     {
-        CommandReflection command = GetCommand(commandName);
+        PreviewCommandReflection command = GetCommand(commandName);
 
         try
         {

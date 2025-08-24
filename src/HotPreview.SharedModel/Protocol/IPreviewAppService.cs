@@ -43,7 +43,7 @@ public interface IPreviewAppService
     /// <param name="commandName">The name of the command to retrieve.</param>
     /// <returns>The command information, or null if not found.</returns>
     [JsonRpcMethod("commands/get")]
-    public Task<CommandInfo?> GetCommandAsync(string commandName);
+    public Task<PreviewCommandInfo?> GetCommandAsync(string commandName);
 
     /// <summary>
     /// Invokes a command by name.

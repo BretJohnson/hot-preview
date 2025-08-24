@@ -36,7 +36,7 @@ public class GetPreviewsConsolidated : PreviewsManagerBuilderTooling
             }
 
             // Merge commands
-            foreach (CommandTooling command in manager.Commands)
+            foreach (PreviewCommandTooling command in manager.Commands)
             {
                 AddOrUpdateCommand(command);
             }

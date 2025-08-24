@@ -7,7 +7,7 @@ namespace HotPreview.SharedModel.App;
 /// <summary>
 /// Reflection-based command implementation for static methods marked with [PreviewCommand].
 /// </summary>
-public class CommandReflection(PreviewCommandAttribute commandAttribute, MethodInfo methodInfo) : CommandBase(commandAttribute.DisplayName)
+public class PreviewCommandReflection(PreviewCommandAttribute commandAttribute, MethodInfo methodInfo) : PreviewCommandBase(commandAttribute.DisplayName)
 {
     public MethodInfo MethodInfo { get; } = methodInfo;
 
@@ -29,11 +29,11 @@ public class CommandReflection(PreviewCommandAttribute commandAttribute, MethodI
     public override string Name => MethodInfo.DeclaringType!.FullName + "." + MethodInfo.Name;
 
     /// <summary>
-    /// Gets the command information including name and display name.
+    /// Gets the preview command information including name and display name.
     /// </summary>
-    /// <returns>A CommandInfo record with the command details, for use in the JSON RPC protocol</returns>
-    public CommandInfo GetCommandInfo()
+    /// <returns>A PreviewCommandInfo record with the command details, for use in the JSON RPC protocol</returns>
+    public PreviewCommandInfo GetPreviewCommandInfo()
     {
-        return new CommandInfo(Name, DisplayNameOverride);
+        return new PreviewCommandInfo(Name, DisplayNameOverride);
     }
 }

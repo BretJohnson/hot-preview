@@ -151,7 +151,7 @@ public partial class MainPageViewModel : ObservableObject
             if (commands.Count > 0)
             {
                 var commandsSection = new SectionItemViewModel("COMMANDS", "", this);
-                foreach (CommandTooling command in commands)
+                foreach (PreviewCommandTooling command in commands)
                 {
                     commandsSection.AddChild(new CommandViewModel(this, command));
                 }

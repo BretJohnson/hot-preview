@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,7 @@ public abstract class PreviewsManagerBase<TUIComponent, TPreview, TCommand>(
     IReadOnlyDictionary<string, TCommand> commands)
     where TUIComponent : UIComponentBase<TPreview>
     where TPreview : PreviewBase
-    where TCommand : CommandBase
+    where TCommand : PreviewCommandBase
 {
     private readonly IReadOnlyDictionary<string, TUIComponent> _uiComponentsByName = uiComponents;
     private readonly IReadOnlyDictionary<string, UIComponentCategory> _categories = categories;

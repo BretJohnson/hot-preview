@@ -3,7 +3,7 @@ namespace HotPreview.SharedModel;
 /// <summary>
 /// Base class for command reflection, representing commands that can be executed from the DevTools UI.
 /// </summary>
-public abstract class CommandBase(string? displayNameOverride)
+public abstract class PreviewCommandBase(string? displayNameOverride)
 {
     private readonly string? _displayNameOverride = displayNameOverride;
 

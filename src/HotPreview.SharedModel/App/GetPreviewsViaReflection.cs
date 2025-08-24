@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace HotPreview.SharedModel.App;
 
-public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentReflection, PreviewReflection, CommandReflection>
+public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentReflection, PreviewReflection, PreviewCommandReflection>
 {
     private readonly IServiceProvider? _serviceProvider;
     private readonly IUIComponentExclusionFilter? _exclusionFilter;
@@ -128,7 +128,7 @@ public class GetPreviewsViaReflection : PreviewsManagerBuilderBase<UIComponentRe
                 PreviewCommandAttribute? commandAttribute = method.GetCustomAttribute<PreviewCommandAttribute>(false);
                 if (commandAttribute is not null)
                 {
-                    AddCommand(new CommandReflection(commandAttribute, method));
+                    AddCommand(new PreviewCommandReflection(commandAttribute, method));
                 }
             }
 
