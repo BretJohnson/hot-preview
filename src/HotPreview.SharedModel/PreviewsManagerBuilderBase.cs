@@ -13,7 +13,7 @@ namespace HotPreview.SharedModel;
 public class PreviewsManagerBuilderBase<TUIComponent, TPreview, TCommand>
     where TUIComponent : UIComponentBase<TPreview>
     where TPreview : PreviewBase
-    where TCommand : PreviewCommandBase
+    where TCommand : CommandBase
 {
     protected readonly Dictionary<string, TUIComponent> _uiComponentsByName = [];
     protected readonly Dictionary<string, UIComponentCategory> _categories = [];

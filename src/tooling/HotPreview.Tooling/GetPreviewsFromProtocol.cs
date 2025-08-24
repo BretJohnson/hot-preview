@@ -23,10 +23,10 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
             AddOrUpdateUIComponent(uiComponent);
         }
 
-        foreach (PreviewCommandInfo previewCommandInfo in appInfo.Commands)
+        foreach (CommandInfo commandInfo in appInfo.Commands)
         {
-            // Create the preview command and add it to the builder
-            var command = new PreviewCommandTooling(previewCommandInfo.Name, previewCommandInfo.DisplayName);
+            // Create the command and add it to the builder
+            var command = new CommandTooling(commandInfo.Name, commandInfo.DisplayName);
             AddOrUpdateCommand(command);
         }
     }

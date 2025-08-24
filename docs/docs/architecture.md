@@ -50,8 +50,8 @@ public interface IPreviewAppService
     Task<UIComponentInfo?> GetComponentAsync(string componentName);
     Task NavigateToPreviewAsync(string componentName, string previewName);
     Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName);
-    Task<PreviewCommandInfo[]> GetCommandsAsync();
-    Task<PreviewCommandInfo?> GetCommandAsync(string commandName);
+    Task<CommandInfo[]> GetCommandsAsync();
+    Task<CommandInfo?> GetCommandAsync(string commandName);
     Task InvokeCommandAsync(string commandName);
 }
 ```

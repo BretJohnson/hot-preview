@@ -8,13 +8,13 @@ public class CommandViewModel : NavTreeItemViewModel
     private DateTime _lastClickTime = DateTime.MinValue;
     private const int DOUBLE_CLICK_INTERVAL_MS = 500;
 
-    public CommandViewModel(MainPageViewModel mainPageViewModel, PreviewCommandTooling command)
+    public CommandViewModel(MainPageViewModel mainPageViewModel, CommandTooling command)
     {
         _mainPageViewModel = mainPageViewModel;
         Command = command;
     }
 
-    public PreviewCommandTooling Command { get; }
+    public CommandTooling Command { get; }
 
     public override string DisplayName => Command.DisplayName;
     public override string PathIcon => "M8 2L16 12H12V22L4 12H8V2Z"; // Lightning bolt icon for commands

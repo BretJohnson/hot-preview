@@ -4,5 +4,5 @@ namespace HotPreview.SharedModel.Protocol;
 
 public record AppInfo(
     [property: JsonPropertyName("components")] UIComponentInfo[] Components,
-    [property: JsonPropertyName("commands")] PreviewCommandInfo[] Commands
+    [property: JsonPropertyName("commands")] CommandInfo[] Commands
 );

@@ -290,11 +290,11 @@ interface PreviewInfo {
 }
 ```
 
-### PreviewCommandInfo
+### CommandInfo
 Represents information about an executable command.
 
 ```typescript
-interface PreviewCommandInfo {
+interface CommandInfo {
   name: string;              // Fully qualified command name
   displayName?: string;      // Optional display name override
 }
@@ -306,7 +306,7 @@ Represents the application information containing all components and commands.
 ```typescript
 interface AppInfo {
   components: UIComponentInfo[];    // Array of available UI components
-  commands: PreviewCommandInfo[];   // Array of available preview commands
+  commands: CommandInfo[];   // Array of available commands
 }
 ```
 

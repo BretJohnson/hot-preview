@@ -8,7 +8,7 @@ namespace HotPreview.Tooling;
 public class PreviewsManagerTooling(
     IReadOnlyDictionary<string, UIComponentTooling> uiComponents,
     IReadOnlyDictionary<string, UIComponentCategory> categories,
-    IReadOnlyDictionary<string, PreviewCommandTooling> commands) : PreviewsManagerBase<UIComponentTooling, PreviewTooling, PreviewCommandTooling>(uiComponents, categories, commands)
+    IReadOnlyDictionary<string, CommandTooling> commands) : PreviewsManagerBase<UIComponentTooling, PreviewTooling, CommandTooling>(uiComponents, categories, commands)
 {
     private Dictionary<string, List<UIComponentTooling>>? _uiComponentsBySimpleName;
 

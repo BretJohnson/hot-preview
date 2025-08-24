@@ -290,7 +290,7 @@ public class GetPreviewsFromRoslyn : PreviewsManagerBuilderTooling
 
             string commandFullName = $"{parentTypeSymbol.ToDisplayString()}.{methodDeclaration.Identifier.Text}";
 
-            PreviewCommandTooling command = new PreviewCommandTooling(commandFullName, displayName);
+            CommandTooling command = new CommandTooling(commandFullName, displayName);
             _builder.AddOrUpdateCommand(command);
         }
 
