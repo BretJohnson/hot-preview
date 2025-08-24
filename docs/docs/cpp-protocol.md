@@ -61,12 +61,6 @@ Gets the application information containing all available UI components and prev
         ]
       }
     ],
-    "categories": [
-      {
-        "name": "Forms",
-        "uiComponentNames": ["MyApp.Views.ProductCard"]
-      }
-    ],
     "commands": [
       {
         "name": "MyApp.Commands.RefreshData",
