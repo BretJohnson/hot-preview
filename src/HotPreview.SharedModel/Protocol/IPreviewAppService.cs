@@ -6,11 +6,11 @@ namespace HotPreview.SharedModel.Protocol;
 public interface IPreviewAppService
 {
     /// <summary>
-    /// Gets all available UI components and their previews in the application.
+    /// Gets the application information containing all available UI components and preview commands in the application.
     /// </summary>
-    /// <returns>An array of UI component information objects.</returns>
-    [JsonRpcMethod("components/list")]
-    public Task<UIComponentInfo[]> GetComponentsAsync();
+    /// <returns>An AppInfo object containing components and commands.</returns>
+    [JsonRpcMethod("appinfo/get")]
+    public Task<AppInfo> GetAppInfoAsync();
 
     /// <summary>
     /// Gets information about a specific UI component by name.
@@ -36,14 +36,6 @@ public interface IPreviewAppService
     /// <returns>A byte array containing the snapshot image data.</returns>
     [JsonRpcMethod("previews/snapshot")]
     public Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName);
-
-    /// <summary>
-    /// Gets all available commands in the application. Commands trigger some action in the app, typically updating global state.
-    /// Commands are global, not associated with a specific component.
-    /// </summary>
-    /// <returns>An array of commands.</returns>
-    [JsonRpcMethod("commands/list")]
-    public Task<PreviewCommandInfo[]> GetCommandsAsync();
 
     /// <summary>
     /// Gets information about a specific command by name.

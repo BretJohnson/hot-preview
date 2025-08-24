@@ -6,14 +6,13 @@ namespace HotPreview.Tooling;
 public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
 {
     /// <summary>
-    /// Initializes a new instance of GetPreviewsFromProtocol and processes the UI component information from the app,
-    /// creating and organizing UI components based on the provided data.
+    /// Initializes a new instance of GetPreviewsFromProtocol and processes the application information from the app,
+    /// creating and organizing UI components and commands based on the provided data.
     /// </summary>
-    /// <param name="uiComponentInfos">Array of UI component information from the protocol</param>
-    /// <param name="previewCommandInfos">Array of preview command information from the protocol</param>
-    public GetPreviewsFromProtocol(UIComponentInfo[] uiComponentInfos, PreviewCommandInfo[] previewCommandInfos)
+    /// <param name="appInfo">Application information from the protocol containing components and commands</param>
+    public GetPreviewsFromProtocol(AppInfo appInfo)
     {
-        foreach (UIComponentInfo uiComponentInfo in uiComponentInfos)
+        foreach (UIComponentInfo uiComponentInfo in appInfo.Components)
         {
             // Create the UI component and add it to the builder
             UIComponentKind componentKind = UIComponentKindInfo.ToUIComponentKind(uiComponentInfo.UIComponentKind);
@@ -24,7 +23,7 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
             AddOrUpdateUIComponent(uiComponent);
         }
 
-        foreach (PreviewCommandInfo previewCommandInfo in previewCommandInfos)
+        foreach (PreviewCommandInfo previewCommandInfo in appInfo.Commands)
         {
             // Create the preview command and add it to the builder
             var command = new PreviewCommandTooling(previewCommandInfo.Name, previewCommandInfo.DisplayName);

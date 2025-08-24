@@ -14,9 +14,9 @@ internal interface IPreviewAppToolingService
     public Task RegisterAppAsync(string projectPath, string platformName);
 
     /// <summary>
-    /// Notifies the tooling service that the list of available components or previews has changed,
+    /// Notifies the tooling service that the application information has changed,
     /// so it should requery to get the latest information.
     /// </summary>
-    [JsonRpcMethod("notifications/components/listChanged")]
-    public Task NotifyComponentsChangedAsync();
+    [JsonRpcMethod("notifications/appinfo/changed")]
+    public Task NotifyAppInfoChangedAsync();
 }
