@@ -21,13 +21,13 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return PreviewApplication.GetPreviewsManager().GetUIComponent(componentName);
     }
 
-    protected PreviewCommandReflection GetCommand(string commandName)
+    protected CommandReflection GetCommand(string commandName)
     {
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName) ??
             throw new ArgumentException($"Command {commandName} not found");
     }
 
-    protected PreviewCommandReflection? GetCommandIfExists(string commandName)
+    protected CommandReflection? GetCommandIfExists(string commandName)
     {
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName);
     }
@@ -39,8 +39,8 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return Task.FromResult(component?.GetUIComponentInfo());
     }
 
-    [JsonRpcMethod("components/list")]
-    public Task<UIComponentInfo[]> GetComponentsAsync()
+    [JsonRpcMethod("appinfo/get")]
+    public Task<AppInfo> GetAppInfoAsync()
     {
         PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
@@ -48,7 +48,15 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
             .Select(component => component.GetUIComponentInfo())
             .ToArray();
 
-        return Task.FromResult(uiComponentInfos);
+        UIComponentCategoryInfo[] categoryInfos = previewsManager.Categories
+            .Select(category => category.GetUIComponentCategoryInfo())
+            .ToArray();
+
+        CommandInfo[] commandInfos = previewsManager.Commands
+            .Select(command => command.GetCommandInfo())
+            .ToArray();
+
+        return Task.FromResult(new AppInfo(uiComponentInfos, categoryInfos, commandInfos));
     }
 
     [JsonRpcMethod("previews/navigate")]
@@ -65,29 +73,18 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
-    [JsonRpcMethod("commands/list")]
-    public Task<PreviewCommandInfo[]> GetCommandsAsync()
-    {
-        PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
-
-        PreviewCommandInfo[] commandInfos = previewsManager.Commands
-            .Select(command => command.GetPreviewCommandInfo())
-            .ToArray();
-
-        return Task.FromResult(commandInfos);
-    }
 
     [JsonRpcMethod("commands/get")]
-    public Task<PreviewCommandInfo?> GetCommandAsync(string commandName)
+    public Task<CommandInfo?> GetCommandAsync(string commandName)
     {
-        PreviewCommandReflection? command = GetCommandIfExists(commandName);
-        return Task.FromResult(command?.GetPreviewCommandInfo());
+        CommandReflection? command = GetCommandIfExists(commandName);
+        return Task.FromResult(command?.GetCommandInfo());
     }
 
     [JsonRpcMethod("commands/invoke")]
     public Task InvokeCommandAsync(string commandName)
     {
-        PreviewCommandReflection command = GetCommand(commandName);
+        CommandReflection command = GetCommand(commandName);
 
         try
         {

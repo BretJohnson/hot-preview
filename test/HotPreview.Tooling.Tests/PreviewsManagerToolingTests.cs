@@ -10,7 +10,7 @@ public class PreviewsManagerToolingTests
     private PreviewsManagerTooling CreateManager(Dictionary<string, UIComponentTooling> components)
     {
         var categories = new Dictionary<string, UIComponentCategory>();
-        var commands = new Dictionary<string, PreviewCommandTooling>();
+        var commands = new Dictionary<string, CommandTooling>();
         return new PreviewsManagerTooling(components, categories, commands);
     }
 
