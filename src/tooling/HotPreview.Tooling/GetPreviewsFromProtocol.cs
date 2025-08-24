@@ -1,3 +1,4 @@
+using System.Linq;
 using HotPreview.SharedModel;
 using HotPreview.SharedModel.Protocol;
 
@@ -21,6 +22,12 @@ public class GetPreviewsFromProtocol : PreviewsManagerBuilderTooling
 
             // Add the component to the builder
             AddOrUpdateUIComponent(uiComponent);
+        }
+
+        foreach (UIComponentCategoryInfo categoryInfo in appInfo.Categories)
+        {
+            // Add the category to the builder
+            AddOrUpdateCategory(categoryInfo.Name, categoryInfo.UIComponentNames);
         }
 
         foreach (CommandInfo commandInfo in appInfo.Commands)

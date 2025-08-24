@@ -48,11 +48,15 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
             .Select(component => component.GetUIComponentInfo())
             .ToArray();
 
+        UIComponentCategoryInfo[] categoryInfos = previewsManager.Categories
+            .Select(category => category.GetUIComponentCategoryInfo())
+            .ToArray();
+
         CommandInfo[] commandInfos = previewsManager.Commands
             .Select(command => command.GetCommandInfo())
             .ToArray();
 
-        return Task.FromResult(new AppInfo(uiComponentInfos, commandInfos));
+        return Task.FromResult(new AppInfo(uiComponentInfos, categoryInfos, commandInfos));
     }
 
     [JsonRpcMethod("previews/navigate")]
