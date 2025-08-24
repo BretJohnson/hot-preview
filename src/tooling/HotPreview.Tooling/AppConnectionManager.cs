@@ -69,9 +69,8 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager = _appsManager.GetOrCreateApp(projectPath);
         _appManager.AddAppConnection(this);
 
-        UIComponentInfo[] uiComponentInfos = await AppService!.GetComponentsAsync();
-        PreviewCommandInfo[] previewCommandInfos = await AppService!.GetCommandsAsync();
-        PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos, previewCommandInfos).ToImmutable();
+        AppInfo appInfo = await AppService!.GetAppInfoAsync();
+        PreviewsManager = new GetPreviewsFromProtocol(appInfo).ToImmutable();
 
         _appManager.UpdatePreviews();
     }
@@ -79,9 +78,8 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     [JsonRpcMethod("notifications/components/listChanged")]
     public async Task NotifyComponentsChangedAsync()
     {
-        UIComponentInfo[] uiComponentInfos = await AppService!.GetComponentsAsync();
-        PreviewCommandInfo[] previewCommandInfos = await AppService!.GetCommandsAsync();
-        PreviewsManager = new GetPreviewsFromProtocol(uiComponentInfos, previewCommandInfos).ToImmutable();
+        AppInfo appInfo = await AppService!.GetAppInfoAsync();
+        PreviewsManager = new GetPreviewsFromProtocol(appInfo).ToImmutable();
 
         _appManager?.UpdatePreviews();
     }
