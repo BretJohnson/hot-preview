@@ -19,11 +19,23 @@ public class UIComponentViewModel(MainPageViewModel mainPageViewModel, UICompone
         {
             string fullName = UIComponent.Name;
             string? displayOverride = UIComponent.DisplayNameOverride;
-            if (!string.IsNullOrWhiteSpace(displayOverride))
+
+            string tooltip = !string.IsNullOrWhiteSpace(displayOverride)
+                ? $"{fullName} [{displayOverride}]"
+                : fullName;
+
+            // If there is exactly one preview and its name differs from the component name,
+            // add an extra line showing the preview's full name.
+            if (UIComponent.HasSinglePreview)
             {
-                return $"{fullName} [{displayOverride}]";
+                PreviewTooling defaultPreview = UIComponent.DefaultPreview;
+                if (defaultPreview.Name != UIComponent.Name)
+                {
+                    tooltip += "\nPreview: " + defaultPreview.Name;
+                }
             }
-            return fullName;
+
+            return tooltip;
         }
     }
 
