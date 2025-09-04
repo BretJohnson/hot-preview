@@ -13,8 +13,10 @@
 
     <!-- Tooltip Style for nav tree items -->
     <Style x:Key="NavToolTipStyle" TargetType="ToolTip">
-      <Setter Property="Padding" Value="12,10"/>
-      <Setter Property="CornerRadius" Value="6"/>
+      <!-- Match VS Code tooltip density: slightly wider, compact vertical padding; leaner bottom padding -->
+      <Setter Property="Padding" Value="10,2,10,0"/>
+      <!-- VS Code-like subtle rounding -->
+      <Setter Property="CornerRadius" Value="3"/>
       <Setter Property="MaxWidth" Value="520"/>
       <Setter Property="Placement" Value="Right"/>
       <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"/>
@@ -24,7 +26,7 @@
 
     <!-- UI Component Tooltip Template -->
     <DataTemplate x:Key="UIComponentToolTipTemplate" x:DataType="nav:UIComponentViewModel">
-      <StackPanel Spacing="4">
+      <StackPanel Spacing="3">
         <TextBlock Text="{x:Bind UIComponent.Name}"
                    FontFamily="Cascadia Code, Consolas, Courier New"
                    TextWrapping="WrapWholeWords"
@@ -51,7 +53,7 @@
 
     <!-- Preview Tooltip Template -->
     <DataTemplate x:Key="PreviewToolTipTemplate" x:DataType="nav:PreviewViewModel">
-      <StackPanel Spacing="4">
+      <StackPanel Spacing="3">
         <TextBlock Text="{x:Bind Preview.Name}"
                    FontFamily="Cascadia Code, Consolas, Courier New"
                    TextWrapping="WrapWholeWords"
