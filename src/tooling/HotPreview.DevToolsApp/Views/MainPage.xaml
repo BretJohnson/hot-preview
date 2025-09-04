@@ -17,7 +17,6 @@
       <Setter Property="CornerRadius" Value="6"/>
       <Setter Property="MaxWidth" Value="520"/>
       <Setter Property="Placement" Value="Right"/>
-      <Setter Property="HorizontalOffset" Value="6"/>
       <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"/>
       <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
@@ -30,7 +29,7 @@
                    FontFamily="Cascadia Code, Consolas, Courier New"
                    TextWrapping="WrapWholeWords"
                    IsTextSelectionEnabled="True"/>
-        <TextBlock x:Load="{x:Bind UIComponent.HasSinglePreview && UIComponent.DefaultPreview.Name != UIComponent.Name}"
+        <TextBlock x:Load="{x:Bind HasDifferentDefaultPreviewName}"
                    TextWrapping="WrapWholeWords"
                    IsTextSelectionEnabled="True">
           <Run Text="Preview: "
@@ -39,7 +38,7 @@
           <Run Text="{x:Bind UIComponent.DefaultPreview.Name}"
                FontFamily="Cascadia Code, Consolas, Courier New"/>
         </TextBlock>
-        <TextBlock x:Load="{x:Bind UIComponent.DisplayNameOverride != null}"
+        <TextBlock x:Load="{x:Bind HasDisplayNameOverride}"
                    TextWrapping="WrapWholeWords"
                    IsTextSelectionEnabled="True">
           <Run Text="Display: "
@@ -57,7 +56,7 @@
                    FontFamily="Cascadia Code, Consolas, Courier New"
                    TextWrapping="WrapWholeWords"
                    IsTextSelectionEnabled="True"/>
-        <TextBlock x:Load="{x:Bind Preview.DisplayNameOverride != null}"
+        <TextBlock x:Load="{x:Bind HasDisplayNameOverride}"
                    TextWrapping="WrapWholeWords"
                    IsTextSelectionEnabled="True">
           <Run Text="Display: "

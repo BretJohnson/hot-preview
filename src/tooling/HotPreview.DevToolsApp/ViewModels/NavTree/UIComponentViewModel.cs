@@ -13,6 +13,12 @@ public class UIComponentViewModel(MainPageViewModel mainPageViewModel, UICompone
 
     public override string PathIcon => UIComponent.PathIcon;
 
+    // Helper flags for XAML x:Bind (Uno's x:Bind has limited expression support)
+    public bool HasDifferentDefaultPreviewName =>
+        UIComponent.HasSinglePreview && UIComponent.DefaultPreview.Name != UIComponent.Name;
+
+    public bool HasDisplayNameOverride => !string.IsNullOrEmpty(UIComponent.DisplayNameOverride);
+
     public override string? ToolTipText
     {
         get

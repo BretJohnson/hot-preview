@@ -21,6 +21,9 @@ public class PreviewViewModel : NavTreeItemViewModel
     public override string DisplayName => Preview.DisplayName;
     public override string PathIcon => UIComponent.PathIcon;
 
+    // Helper flag for XAML x:Bind
+    public bool HasDisplayNameOverride => !string.IsNullOrEmpty(Preview.DisplayNameOverride);
+
     public override string? ToolTipText
     {
         get
