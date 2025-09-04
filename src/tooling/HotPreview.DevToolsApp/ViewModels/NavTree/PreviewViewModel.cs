@@ -21,6 +21,20 @@ public class PreviewViewModel : NavTreeItemViewModel
     public override string DisplayName => Preview.DisplayName;
     public override string PathIcon => UIComponent.PathIcon;
 
+    public override string? ToolTipText
+    {
+        get
+        {
+            string fullName = Preview.Name;
+            string? displayOverride = Preview.DisplayNameOverride;
+            if (!string.IsNullOrWhiteSpace(displayOverride))
+            {
+                return $"{fullName} [{displayOverride}]";
+            }
+            return fullName;
+        }
+    }
+
     public override async Task UpdatePreviewSnapshotsAsync()
     {
         AppManager? appManager = _mainPageViewModel.CurrentApp;

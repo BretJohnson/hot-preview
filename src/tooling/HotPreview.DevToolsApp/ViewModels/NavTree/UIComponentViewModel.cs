@@ -13,6 +13,20 @@ public class UIComponentViewModel(MainPageViewModel mainPageViewModel, UICompone
 
     public override string PathIcon => UIComponent.PathIcon;
 
+    public override string? ToolTipText
+    {
+        get
+        {
+            string fullName = UIComponent.Name;
+            string? displayOverride = UIComponent.DisplayNameOverride;
+            if (!string.IsNullOrWhiteSpace(displayOverride))
+            {
+                return $"{fullName} [{displayOverride}]";
+            }
+            return fullName;
+        }
+    }
+
     public override IReadOnlyList<NavTreeItemViewModel>? Children
     {
         get

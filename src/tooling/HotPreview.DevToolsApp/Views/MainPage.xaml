@@ -39,7 +39,8 @@
       <TreeViewItem ItemsSource="{x:Bind FilteredChildren, Mode=OneWay}"
                     RightTapped="OnTreeViewItemRightTapped"
                     Visibility="{x:Bind converters:Converters.ToVisibility(IsVisible), Mode=OneWay}"
-                    IsExpanded="{x:Bind IsExpanded, Mode=OneWay}">
+                    IsExpanded="{x:Bind IsExpanded, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind ToolTipText, Mode=OneWay}">
         <TreeViewItem.ContextFlyout>
           <MenuFlyout>
             <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>

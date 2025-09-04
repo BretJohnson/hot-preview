@@ -22,6 +22,11 @@ public abstract partial class NavTreeItemViewModel : ObservableObject
     public virtual IReadOnlyList<NavTreeItemViewModel>? Children { get; }
 
     /// <summary>
+    /// Tooltip text for this nav tree item. Null or empty means no tooltip.
+    /// </summary>
+    public virtual string? ToolTipText => null;
+
+    /// <summary>
     /// Returns children that are currently visible based on the IsVisible property.
     /// Used for filtering in search scenarios.
     /// </summary>
