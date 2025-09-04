@@ -2,6 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:viewModels="using:HotPreview.DevToolsApp.ViewModels"
+      xmlns:nav="using:HotPreview.DevToolsApp.ViewModels.NavTree"
       xmlns:converters="using:HotPreview.DevToolsApp.Converters"
       xmlns:selectors="using:HotPreview.DevToolsApp.Selectors"
       xmlns:utu="using:Uno.Toolkit.UI"
@@ -9,6 +10,63 @@
 
   <Page.Resources>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+    <!-- Tooltip Style for nav tree items -->
+    <Style x:Key="NavToolTipStyle" TargetType="ToolTip">
+      <Setter Property="Padding" Value="12,10"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="MaxWidth" Value="520"/>
+      <Setter Property="Placement" Value="Right"/>
+      <Setter Property="HorizontalOffset" Value="6"/>
+      <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!-- UI Component Tooltip Template -->
+    <DataTemplate x:Key="UIComponentToolTipTemplate" x:DataType="nav:UIComponentViewModel">
+      <StackPanel Spacing="4">
+        <TextBlock Text="{x:Bind UIComponent.Name}"
+                   FontFamily="Cascadia Code, Consolas, Courier New"
+                   TextWrapping="WrapWholeWords"
+                   IsTextSelectionEnabled="True"/>
+        <TextBlock x:Load="{x:Bind UIComponent.HasSinglePreview && UIComponent.DefaultPreview.Name != UIComponent.Name}"
+                   TextWrapping="WrapWholeWords"
+                   IsTextSelectionEnabled="True">
+          <Run Text="Preview: "
+               Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+               FontWeight="SemiBold"/>
+          <Run Text="{x:Bind UIComponent.DefaultPreview.Name}"
+               FontFamily="Cascadia Code, Consolas, Courier New"/>
+        </TextBlock>
+        <TextBlock x:Load="{x:Bind UIComponent.DisplayNameOverride != null}"
+                   TextWrapping="WrapWholeWords"
+                   IsTextSelectionEnabled="True">
+          <Run Text="Display: "
+               Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+               FontWeight="SemiBold"/>
+          <Run Text="{x:Bind UIComponent.DisplayNameOverride}"/>
+        </TextBlock>
+      </StackPanel>
+    </DataTemplate>
+
+    <!-- Preview Tooltip Template -->
+    <DataTemplate x:Key="PreviewToolTipTemplate" x:DataType="nav:PreviewViewModel">
+      <StackPanel Spacing="4">
+        <TextBlock Text="{x:Bind Preview.Name}"
+                   FontFamily="Cascadia Code, Consolas, Courier New"
+                   TextWrapping="WrapWholeWords"
+                   IsTextSelectionEnabled="True"/>
+        <TextBlock x:Load="{x:Bind Preview.DisplayNameOverride != null}"
+                   TextWrapping="WrapWholeWords"
+                   IsTextSelectionEnabled="True">
+          <Run Text="Display: "
+               Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+               FontWeight="SemiBold"/>
+          <Run Text="{x:Bind Preview.DisplayNameOverride}"/>
+        </TextBlock>
+      </StackPanel>
+    </DataTemplate>
 
     <!-- Section Header Template -->
     <DataTemplate x:Key="SectionItemTemplate" x:DataType="viewModels:NavTreeItemViewModel">
@@ -39,8 +97,16 @@
       <TreeViewItem ItemsSource="{x:Bind FilteredChildren, Mode=OneWay}"
                     RightTapped="OnTreeViewItemRightTapped"
                     Visibility="{x:Bind converters:Converters.ToVisibility(IsVisible), Mode=OneWay}"
-                    IsExpanded="{x:Bind IsExpanded, Mode=OneWay}"
-                    ToolTipService.ToolTip="{x:Bind ToolTipText, Mode=OneWay}">
+                    IsExpanded="{x:Bind IsExpanded, Mode=OneWay}">
+        <ToolTipService.ToolTip>
+          <ToolTip Style="{StaticResource NavToolTipStyle}">
+            <ContentPresenter Content="{Binding}">
+              <ContentPresenter.ContentTemplateSelector>
+                <StaticResource ResourceKey="NavTreeToolTipTemplateSelector"/>
+              </ContentPresenter.ContentTemplateSelector>
+            </ContentPresenter>
+          </ToolTip>
+        </ToolTipService.ToolTip>
         <TreeViewItem.ContextFlyout>
           <MenuFlyout>
             <MenuFlyoutItem Text="Update snapshots" Click="OnUpdateSnapshotsClicked"/>
@@ -102,6 +168,10 @@
                                            SectionItemTemplate="{StaticResource SectionItemTemplate}"
                                            DefaultItemTemplate="{StaticResource DefaultItemTemplate}"
                                            CommandItemTemplate="{StaticResource CommandItemTemplate}"/>
+    <!-- Tooltip Template Selector -->
+    <selectors:NavTreeToolTipTemplateSelector x:Key="NavTreeToolTipTemplateSelector"
+                                              UIComponentTemplate="{StaticResource UIComponentToolTipTemplate}"
+                                              PreviewTemplate="{StaticResource PreviewToolTipTemplate}"/>
   </Page.Resources>
 
   <Grid x:Name="PageRoot"
