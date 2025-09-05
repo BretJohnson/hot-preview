@@ -1,8 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Threading;
+using HotPreview.SharedModel.Protocol;
 using Microsoft.Build.Framework;
+using StreamJsonRpc;
 
 namespace HotPreview.AppBuildTasks
 {
@@ -28,8 +33,6 @@ namespace HotPreview.AppBuildTasks
 
         private static string DevToolsLaunchingLockFilePath => Path.Combine(HotPreviewConfigDir, "devtools-launching.lock");
 
-        private static string DevToolsConnectionJsonPath => Path.Combine(HotPreviewConfigDir, "devToolsConnectionSettings.json");
-
         public override bool Execute()
         {
             try
@@ -43,43 +46,26 @@ namespace HotPreview.AppBuildTasks
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // Get the connection string from devToolsConnectionSettings.json. That file exists while
-                // DevToolsApp is running, which we'll launch if needed.
-
-                string connectionString = "";
-                string jsonPath = DevToolsConnectionJsonPath;
-
-                // Check if the devtools app is running, launching it if not.
-                if (!File.Exists(jsonPath))
+                // Ensure DevTools is running and retrieve its connection info via JSON-RPC over TCP
+                string connectionString = string.Empty;
+                if (!TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan.FromMilliseconds(750)))
                 {
                     if (!LaunchDevToolsAppWithLock())
                     {
                         return true;   // Errors already logged, but don't fail the build
                     }
-                }
 
-                if (!File.Exists(jsonPath))
-                {
-                    Log.LogWarning($"Hot Preview: DevTools is running, but the {jsonPath} file doesn't exist.");
-                    return false;
-                }
-
-                try
-                {
-                    string jsonContent = File.ReadAllText(jsonPath);
-                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
+                    // Wait for DevTools to report ready over the socket
+                    if (!WaitForSocketReady(out info, TimeSpan.FromSeconds(10)))
                     {
-                        if (doc.RootElement.TryGetProperty("app", out JsonElement appElement) &&
-                            appElement.ValueKind == JsonValueKind.String)
-                        {
-                            connectionString = appElement.GetString() ?? "";
-                        }
+                        Log.LogWarning("Hot Preview: DevTools did not report ready over the TCP endpoint");
+                        // Leave connectionString empty; the preview app will run without tooling connection
                     }
                 }
-                catch
+
+                if (info is not null && !string.IsNullOrWhiteSpace(info.AppConnectionString))
                 {
-                    // If any error occurs, use empty string as fallback
-                    connectionString = "";
+                    connectionString = info.AppConnectionString ?? string.Empty;
                 }
 
                 string content = $$"""
@@ -109,7 +95,7 @@ namespace HotPreview.SharedModel
 
                 File.WriteAllText(outputPath, content);
 
-                string relativeOutputPath = Path.Combine(Path.GetFileName(Path.GetDirectoryName(outputPath)) ?? "", Path.GetFileName(outputPath));
+                string relativeOutputPath = Path.Combine(Path.GetFileName(Path.GetDirectoryName(outputPath)) ?? string.Empty, Path.GetFileName(outputPath));
                 Log.LogMessage(MessageImportance.High, $"Hot Preview: Generating DevTools connection settings in {relativeOutputPath}");
 
                 return true;
@@ -117,32 +103,6 @@ namespace HotPreview.SharedModel
             catch (Exception ex)
             {
                 Log.LogWarning($"Hot Preview: Error generating DevTools connection settings: {ex.Message}");
-                return false;
-            }
-        }
-
-        // TODO: This isn't currently used. Consider making use of it again or remove it.
-        private bool IsDevToolsAppRunning()
-        {
-            try
-            {
-                Process[] processes = Process.GetProcessesByName("HotPreview.DevToolsApp");
-                if (processes.Length == 0)
-                {
-                    return false;
-                }
-
-                // Check if the app is currently launching - if so, treat it as not running
-                if (File.Exists(DevToolsLaunchingLockFilePath))
-                {
-                    return false; // App is launching, treat as not running
-                }
-
-                Log.LogMessage(MessageImportance.High, "Hot Preview: DevTools is already running");
-                return true;
-            }
-            catch
-            {
                 return false;
             }
         }
@@ -198,17 +158,14 @@ namespace HotPreview.SharedModel
                 // Check if the lock file is gone (launch completed)
                 if (!File.Exists(lockFilePath))
                 {
-                    // Lock file is gone, check if the settings file exists
-                    if (File.Exists(DevToolsConnectionJsonPath))
+                    // Lock file is gone, wait briefly for the TCP endpoint to be ready
+                    if (WaitForSocketReady(out _, TimeSpan.FromSeconds(5)))
                     {
                         Log.LogMessage(MessageImportance.Low, "Hot Preview: DevTools launched by a different build task");
                         return true;
                     }
-                    else
-                    {
-                        Log.LogWarning("Hot Preview: A different build task finished launching DevTools but the settings file doesn't exist");
-                        return false;
-                    }
+                    Log.LogWarning("Hot Preview: A different build task finished launching DevTools but it did not report readiness");
+                    return false;
                 }
 
                 Thread.Sleep(200); // Check every 200ms
@@ -216,6 +173,88 @@ namespace HotPreview.SharedModel
 
             // Timeout reached - the other process might have failed
             Log.LogWarning("Hot Preview: Timeout waiting for another build task to launch DevTools");
+            return false;
+        }
+
+        // Uses shared DTO: HotPreview.SharedModel.Protocol.ToolingInfo
+
+        private bool TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan timeout)
+        {
+            info = null;
+            try
+            {
+                // First try localhost
+                if (TryConnectAndQuery("127.0.0.1", timeout, out info))
+                {
+                    return true;
+                }
+
+                // If running under WSL, try Windows host IP from /etc/resolv.conf
+                if (IsRunningUnderWSL())
+                {
+                    string? hostIp = GetWindowsHostIpFromResolvConf();
+                    if (!string.IsNullOrWhiteSpace(hostIp) && TryConnectAndQuery(hostIp!, timeout, out info))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (TimeoutException)
+            {
+                return false;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.LogMessage(MessageImportance.Low, $"Hot Preview: Socket RPC error: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static bool TryConnectAndQuery(string host, TimeSpan timeout, out ToolingInfo? info)
+        {
+            info = null;
+            try
+            {
+                using var client = new TcpClient();
+                Task connectTask = client.ConnectAsync(host, 54242);
+                if (!connectTask.Wait((int)timeout.TotalMilliseconds))
+                {
+                    return false;
+                }
+                using NetworkStream ns = client.GetStream();
+                using var rpc = new JsonRpc(ns, ns);
+                rpc.StartListening();
+                info = rpc.InvokeWithParameterObjectAsync<ToolingInfo>("getToolingInfo", argument: null, cancellationToken: CancellationToken.None).GetAwaiter().GetResult();
+                return info is not null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool WaitForSocketReady(out ToolingInfo? info, TimeSpan timeout)
+        {
+            var sw = Stopwatch.StartNew();
+            info = null;
+            while (sw.Elapsed < timeout)
+            {
+                if (TryGetToolingInfoViaSocket(out ToolingInfo? i, TimeSpan.FromMilliseconds(500)) && i is not null)
+                {
+                    if (!string.IsNullOrWhiteSpace(i.AppConnectionString))
+                    {
+                        info = i;
+                        return true;
+                    }
+                }
+                Thread.Sleep(200);
+            }
             return false;
         }
 
@@ -251,9 +290,10 @@ namespace HotPreview.SharedModel
                     return false;
                 }
 
-                // Wait for the connection settings file to exist or 5 seconds timeout
-                if (!WaitForConnectionSettingsFile())
+                // Wait for DevTools to report ready over TCP
+                if (!WaitForSocketReady(out _, TimeSpan.FromSeconds(10)))
                 {
+                    Log.LogWarning("Hot Preview: DevTools launched but did not report readiness over the TCP endpoint");
                     return false;
                 }
 
@@ -277,25 +317,37 @@ namespace HotPreview.SharedModel
             }
         }
 
-        private bool WaitForConnectionSettingsFile()
+        private static bool IsRunningUnderWSL()
         {
-            string jsonPath = DevToolsConnectionJsonPath;
-
-            var timeout = TimeSpan.FromSeconds(5);
-            var stopwatch = Stopwatch.StartNew();
-
-            while (stopwatch.Elapsed < timeout)
+            try
             {
-                if (File.Exists(jsonPath))
-                {
-                    return true;
-                }
-                Thread.Sleep(100); // Check every 100ms
+                return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WSL_DISTRO_NAME"));
             }
+            catch { return false; }
+        }
 
-            // Timeout reached - log error message
-            Log.LogWarning($"Hot Preview: hot-preview launched but the {jsonPath} file didn't get created");
-            return false;
+        private static string? GetWindowsHostIpFromResolvConf()
+        {
+            try
+            {
+                foreach (string line in File.ReadAllLines("/etc/resolv.conf"))
+                {
+                    if (line.StartsWith("nameserver ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string[] parts = line.Split(new[] { ' ', '	' }, StringSplitOptions.RemoveEmptyEntries);
+                        string ip = parts.Length >= 2 ? parts[1] : "";
+                        if (!string.IsNullOrWhiteSpace(ip))
+                        {
+                            return ip;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+            return null;
         }
     }
 }

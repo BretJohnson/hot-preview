@@ -6,6 +6,12 @@ namespace HotPreview.SharedModel.Protocol;
 internal interface IPreviewAppToolingService
 {
     /// <summary>
+    /// Returns version and connection information for the DevTools application.
+    /// </summary>
+    [JsonRpcMethod("getToolingInfo")]
+    public Task<ToolingInfo> GetToolingInfoAsync();
+
+    /// <summary>
     /// Registers an application with the tooling service.
     /// </summary>
     /// <param name="projectPath">The file system path to the project.</param>

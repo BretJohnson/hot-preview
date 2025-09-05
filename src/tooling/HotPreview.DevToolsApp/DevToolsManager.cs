@@ -30,9 +30,6 @@ public partial class DevToolsManager : ObservableObject
         // Initialize the app service connection listener
         _appServiceConnectionListener = new ToolingAppServerConnectionListener(AppsManager);
         _appServiceConnectionListener.StartListening();
-
-        // Initial connection settings with MCP URL
-        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService.ServerUrl);
     }
 
     public MainPageViewModel MainPageViewModel { get; set; } = null!;
@@ -47,8 +44,19 @@ public partial class DevToolsManager : ObservableObject
     /// </summary>
     public void UpdateConnectionSettings()
     {
-        ConnectionSettingsJson.WriteSettings("devToolsConnectionSettings.json", _appServiceConnectionListener.Port, _mcpHttpServerService.ServerUrl);
+        // No-op: settings are provided via the JSON-RPC discovery API.
     }
+
+    /// <summary>
+    /// The TCP port the preview apps connect to (ToolingAppServerConnectionListener).
+    /// Returns -1 until the listener is initialized.
+    /// </summary>
+    public int AppConnectionPort => _appServiceConnectionListener.Port;
+
+    /// <summary>
+    /// The HTTP URL for the embedded MCP server, if available.
+    /// </summary>
+    public string McpServerUrl => _mcpHttpServerService.ServerUrl;
 
     /// <summary>
     /// Runs the project by launching the csproj file.

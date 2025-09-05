@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Sockets;
 using HotPreview.SharedModel.Protocol;
 using StreamJsonRpc;
@@ -88,5 +89,58 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     {
         byte[] pngData = await AppService!.GetPreviewSnapshotAsync(previewPair.UIComponent.Name, previewPair.Preview.Name);
         return new ImageSnapshot(pngData, ImageSnapshotFormat.PNG);
+    }
+
+    [JsonRpcMethod("getToolingInfo")]
+    public Task<ToolingInfo> GetToolingInfoAsync()
+    {
+        int listenerPort = -1;
+        try
+        {
+            if (_tcpClient.Client.LocalEndPoint is IPEndPoint ep)
+            {
+                listenerPort = ep.Port;
+            }
+        }
+        catch
+        {
+        }
+
+        if (listenerPort <= 0)
+        {
+            throw new InvalidOperationException("DevTools listener port could not be determined from the accepted connection.");
+        }
+
+        string connectionString = BuildConnectionString(listenerPort);
+
+        ToolingInfo info = new()
+        {
+            ProtocolVersion = ToolingInfo.CurrentProtocolVersion,
+            AppConnectionString = connectionString,
+            McpUrl = null // Optional: can be populated later if needed
+        };
+
+        return Task.FromResult(info);
+    }
+
+    private static string BuildConnectionString(int port)
+    {
+        List<string> addresses = ["127.0.0.1"];
+
+        try
+        {
+            addresses.AddRange(System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
+                .Where(ni => ni.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
+                .SelectMany(ni => ni.GetIPProperties().UnicastAddresses)
+                .Where(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !System.Net.IPAddress.IsLoopback(ip.Address))
+                .Select(ip => ip.Address.ToString())
+                .Distinct());
+        }
+        catch
+        {
+            // Fallback to loopback only
+        }
+
+        return $"{string.Join(",", addresses)}:{port}";
     }
 }

@@ -20,9 +20,9 @@ public class ToolingAppServerConnectionListener : IDisposable
         }
         catch (SocketException)
         {
-            // If the default port is in use, fall back to an arbitrary port
-            _listener = new TcpListener(IPAddress.Any, 0);
-            _listener.Start();
+            // If the default port is in use, do not fall back.
+            // A fixed port is required for discovery by build tooling.
+            throw;
         }
     }
 

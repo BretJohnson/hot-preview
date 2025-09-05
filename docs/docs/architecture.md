@@ -67,7 +67,7 @@ public interface IPreviewAppService
 - `PreviewsPage` - UI for displaying component tree
 - Platform-specific resource handling
 
-#### WPF Implementation (`HotPreview.App.Wpf`) *(Planned)*
+#### WPF Implementation (`HotPreview.App.Wpf`) (Planned)
 - Similar structure adapted for WPF platform
 - Windows-specific navigation and rendering
 
@@ -127,7 +127,7 @@ HotPreview uses JSON-RPC over TCP for communication between DevTools and applica
 }
 ```
 
-For the complete protocol specification, including all method definitions, data types, and validation rules, see the [Component Preview Protocol (CPP) documentation](cpp-protocol.md).
+For the complete protocol specification, including all method definitions, data types, and validation rules, see the Component Preview Protocol (CPP) documentation in `docs/docs/cpp-protocol.md`.
 
 ## Component Discovery
 
@@ -157,8 +157,7 @@ public static PreviewInfo[] GetPreviews(Assembly assembly)
 
 **Location:** `HotPreview.Tooling/GetPreviewsFromRoslyn.cs`
 
-Note: Currently this code is not used, with runtime discovery used exclusively, but
-it may be used for future  scenarios.
+Note: Currently this code is not used, with runtime discovery used exclusively, but it may be used for future scenarios.
 
 **Process:**
 1. **Source Analysis:** Parse C# source files using Roslyn
@@ -188,6 +187,28 @@ it may be used for future  scenarios.
   <Exec Command="hot-preview" ContinueOnError="true" />
 </Target>
 ```
+
+### DevTools Connection (TCP + JSON-RPC)
+
+DevTools exposes discovery information over JSON-RPC on a fixed TCP port used by the MSBuild task to:
+(1) detect if DevTools is running and reachable, launching it if not
+(2) obtain the app connection string for embedding into the generated `PreviewApplicationInitializer.g.cs`.
+
+- Endpoint: JSON-RPC over TCP on `127.0.0.1:54242`
+- Method: `getToolingInfo` (no parameters)
+- Response (ToolingInfo):
+  - `protocolVersion`: discovery protocol version string
+  - `appConnectionString`: string `host1,host2,...,hostN:port` used by preview apps to connect
+  - `mcpUrl`: optional HTTP URL of the embedded MCP server
+
+Build-time flow:
+- The task connects to `127.0.0.1:54242` and invokes `getToolingInfo`. If it succeeds and `appConnectionString` is non-empty, it uses it directly.
+- If the socket is unavailable, the task launches DevTools via the `hot-preview` CLI (with a file lock to avoid duplicates), then polls the endpoint until information is available.
+- The generated `PreviewApplicationInitializer` embeds the connection string and starts the tooling connection only if one is available.
+
+Windows/WSL2 note:
+- First try `127.0.0.1:54242` (covers WSL2→WSL2 and Windows→Windows).
+- If that fails and the build runs under WSL2 (`WSL_DISTRO_NAME` is set), read the Windows host IP from `/etc/resolv.conf` (first `nameserver`) and retry `hostIp:54242` (covers WSL2→Windows).
 
 ## Platform Abstraction
 
