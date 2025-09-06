@@ -2,6 +2,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
+    <!-- Ensure transitive compile-time assemblies are copied to output for ILRepack -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- Ensure downstream projects compile against the implementation assembly (with merged types) -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <!-- Toggle ILRepack; set to false to disable merging locally -->
+    <HotPreviewRepack>true</HotPreviewRepack>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +19,18 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
-    <PackageReference Include="StreamJsonRpc" Version="2.22.11" />
+    <!-- Keep StreamJsonRpc for compile-time, but do not expose it transitively in the nupkg -->
+    <PackageReference Include="StreamJsonRpc" Version="2.22.11">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Resolve transitive dependency needed by ILRepack when reading StreamJsonRpc metadata -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- MSBuild task to run ILRepack as part of build -->
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.31">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -25,5 +42,30 @@
     <None Include="..\..\bin\HotPreview.AppBuildTasks\$(Configuration)\netstandard2.0\HotPreview.AppBuildTasks.dll" Pack="true" PackagePath="buildTransitive\HotPreview.AppBuildTasks.dll" />
     <None Include="buildTransitive\HotPreview.SharedModel.targets" Pack="true" PackagePath="buildTransitive\HotPreview.SharedModel.targets" />
   </ItemGroup>
+
+  <!-- Repack StreamJsonRpc (and its direct dependency Nerdbank.Streams) into this assembly -->
+  <Target Name="RepackHotPreviewSharedModel" AfterTargets="Build" Condition="'$(HotPreviewRepack)' != 'false'">
+    <ItemGroup>
+      <_IlRepackInputs Include="$(TargetPath)" />
+      <_IlRepackInputs Include="$(TargetDir)StreamJsonRpc.dll" Condition="Exists('$(TargetDir)StreamJsonRpc.dll')" />
+      <_IlRepackInputs Include="$(TargetDir)Microsoft.VisualStudio.Validation.dll" Condition="Exists('$(TargetDir)Microsoft.VisualStudio.Validation.dll')" />
+      <_IlRepackInternalizeExclude Include="StreamJsonRpc.JsonRpc" />
+      <_IlRepackInternalizeExclude Include="StreamJsonRpc.JsonRpcMethodAttribute" />
+      <_IlRepackInternalizeExclude Include="StreamJsonRpc.RemoteInvocationException" />
+    </ItemGroup>
+
+    <!-- Only run if StreamJsonRpc was resolved to a local copy -->
+    <ILRepack
+      Parallel="true"
+      DebugInfo="true"
+      InputAssemblies="@(_IlRepackInputs)"
+      OutputFile="$(TargetPath)"
+      Internalize="true"
+      RenameInternalized="true"
+      InternalizeExclude="@(_IlRepackInternalizeExclude)"
+      TargetKind="SameAsPrimaryAssembly"
+      LibraryPath="$(TargetDir)">
+    </ILRepack>
+  </Target>
 
 </Project>

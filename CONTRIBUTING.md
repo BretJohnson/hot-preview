@@ -11,6 +11,7 @@ with any additional questions or comments.
 
 * Use Windows PowerShell or [PowerShell Core][pwsh] (including on Linux/OSX) to run .ps1 scripts.
   Some scripts set environment variables to help you, but they are only retained if you use PowerShell as your shell.
+* Debugging tip: if you need to step into StreamJsonRpc code, disable ILRepack for `HotPreview.SharedModel` by building with `-p:HotPreviewRepack=false`. When disabled, `HotPreview.Tooling` and `HotPreview.AppBuildTasks` automatically add a local StreamJsonRpc reference for compile/runtime.
 
 ## Prerequisites
 
@@ -38,6 +39,28 @@ to the feeds that packages for this repo come from, if any.
 This repository can be built on Windows, Linux, and OSX.
 
 Building, testing, and packing this repository can be done by using the standard dotnet CLI commands (e.g. `dotnet build`, `dotnet test`, `dotnet pack`, etc.).
+
+### ILRepack in HotPreview.SharedModel
+
+HotPreview.SharedModel merges StreamJsonRpc into its output using ILRepack so consumers do not need a direct StreamJsonRpc dependency.
+
+- The ILRepack step runs AfterTargets=Build and overwrites the output DLL.
+- Public types kept from StreamJsonRpc: `StreamJsonRpc.JsonRpc`, `StreamJsonRpc.JsonRpcMethodAttribute`, `StreamJsonRpc.RemoteInvocationException`.
+- All other StreamJsonRpc types are internalized and renamed to avoid conflicts.
+- Downstream projects should not reference StreamJsonRpc directly; they compile against the types exposed by HotPreview.SharedModel.
+- For net9.0 projects, we disable PolySharp source generator in `HotPreview.Tooling` to avoid duplicate BCL polyfill types during compile.
+
+If you encounter build issues after updating StreamJsonRpc, ensure that:
+
+- The merge inputs in `src/HotPreview.SharedModel/HotPreview.SharedModel.csproj` include any new public types referenced by consumer projects.
+- The `InternalizeExclude` list covers any StreamJsonRpc public types that must remain visible to consumers.
+
+#### Temporarily disabling ILRepack (for local debugging)
+
+You can disable the repack step to step into StreamJsonRpc with original symbols:
+
+- Build with: `dotnet build -p:HotPreviewRepack=false`
+- When disabled, `HotPreview.Tooling` and `HotPreview.AppBuildTasks` automatically add a local `StreamJsonRpc` package reference for compile/runtime.
 
 [pwsh]: https://docs.microsoft.com/powershell/scripting/install/installing-powershell?view=powershell-6
 

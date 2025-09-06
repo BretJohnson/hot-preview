@@ -1,0 +1,3 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Intentionally empty: presence of this file disables the default ILRepack target from the NuGet task -->
+</Project>

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.14.0" />
-    <PackageReference Include="StreamJsonRpc" Version="2.22.11" />
     <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.7.0" />
     <PackageReference Include="Microsoft.Extensions.AI" Version="9.7.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
@@ -20,8 +19,25 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.3" />
   </ItemGroup>
 
+  <!-- When ILRepack is disabled in SharedModel, bring StreamJsonRpc back for local builds/tests -->
+  <ItemGroup Condition="'$(HotPreviewRepack)' == 'false'">
+    <PackageReference Include="StreamJsonRpc" Version="2.22.11" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\HotPreview\HotPreview.csproj" />
     <ProjectReference Include="..\..\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
   </ItemGroup>
+
+  <!-- Avoid PolySharp polyfills in net9.0, which can clash with merged types -->
+  <ItemGroup>
+    <PackageReference Remove="PolySharp" />
+  </ItemGroup>
+
+  <Target Name="RemovePolySharpAnalyzer" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="'%(Analyzer.Identity)' != '' and $([System.String]::Copy('%(Analyzer.Identity)').Contains('PolySharp.SourceGenerators'))" />
+    </ItemGroup>
+  </Target>
+
 </Project>
