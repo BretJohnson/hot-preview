@@ -1,10 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Text.Json;
-using System.Threading;
 using HotPreview.SharedModel.Protocol;
 using Microsoft.Build.Framework;
 
@@ -45,26 +41,19 @@ namespace HotPreview.AppBuildTasks
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // Ensure DevTools is running and retrieve its connection info via JSON-RPC over TCP
-                string connectionString = string.Empty;
-                if (!TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan.FromMilliseconds(750)))
+                // Get connection info from a running DevTools instance; otherwise fall back to a default.
+                string connectionString;
+                if (TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan.FromMilliseconds(750)) &&
+                    info is not null && !string.IsNullOrWhiteSpace(info.AppConnectionString))
                 {
-                    if (!LaunchDevToolsAppWithLock())
-                    {
-                        return true;   // Errors already logged, but don't fail the build
-                    }
-
-                    // Wait for DevTools to report ready over the socket
-                    if (!WaitForSocketReady(out info, TimeSpan.FromSeconds(10)))
-                    {
-                        Log.LogWarning("Hot Preview: DevTools did not report ready over the TCP endpoint");
-                        // Leave connectionString empty; the preview app will run without tooling connection
-                    }
+                    connectionString = info.AppConnectionString!;
+                    Log.LogMessage(MessageImportance.Low, "Hot Preview: Using connection info from running DevTools");
                 }
-
-                if (info is not null && !string.IsNullOrWhiteSpace(info.AppConnectionString))
+                else
                 {
-                    connectionString = info.AppConnectionString ?? string.Empty;
+                    // DevTools not running; compute the default connection string using the same logic DevTools uses
+                    connectionString = BuildDefaultConnectionString();
+                    Log.LogMessage(MessageImportance.Low, $"Hot Preview: Using default connection string '{connectionString}'");
                 }
 
                 string content = $$"""
@@ -145,6 +134,32 @@ namespace HotPreview.SharedModel
                 Log.LogWarning($"Hot Preview: Failed to create launch lock file: {ex.Message}");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Builds the default connection string, matching the logic used by DevTools.
+        /// Format: "ip1,ip2,...,ipN:port" with IPv4 addresses and the default port 54242.
+        /// </summary>
+        private static string BuildDefaultConnectionString()
+        {
+            const int defaultPort = 54242; // ToolingAppServerConnectionListener.DefaultPort
+            List<string> addresses = ["127.0.0.1"];
+
+            try
+            {
+                addresses.AddRange(System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
+                    .Where(ni => ni.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
+                    .SelectMany(ni => ni.GetIPProperties().UnicastAddresses)
+                    .Where(ip => ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !System.Net.IPAddress.IsLoopback(ip.Address))
+                    .Select(ip => ip.Address.ToString())
+                    .Distinct());
+            }
+            catch
+            {
+                // Fallback to loopback only
+            }
+
+            return $"{string.Join(",", addresses)}:{defaultPort}";
         }
 
         private bool WaitForLaunchCompletion(string lockFilePath)
