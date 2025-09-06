@@ -38,44 +38,61 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
         if (!int.TryParse(parts[1], out int port))
             throw new FormatException($"Connection string '{_connectionString}' port must be a valid integer.");
 
-        DateTime connectionStartTime = DateTime.UtcNow;
-        int attemptCount = 0;
+        // First connection attempt: do not retry
+        try
+        {
+            await EstablishConnectionAsync(host, port, appService, cancellationToken).ConfigureAwait(false);
+            Debug.WriteLine($"Hot Preview: Tooling connection established to {host}:{port}.");
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+        catch
+        {
+            CleanupCurrentConnection();
+            Debug.WriteLine($"Hot Preview: Couldn't connect to tooling on {host}:{port}");
+            Debug.WriteLine($"Hot Preview: To use DevTools, run 'hot-preview' from a terminal (after 'dotnet tool install --global HotPreview.DevTools'), then relaunch the app.");
+            return;
+        }
 
+        // Monitor connection, and on disconnection try to reconnect with retries
         while (!cancellationToken.IsCancellationRequested)
         {
-            try
-            {
-                attemptCount++;
-                await EstablishConnectionAsync(host, port, appService, cancellationToken).ConfigureAwait(false);
-
-                // If we get here, connection was successful. Monitor for disconnection.
-                await MonitorConnectionAsync(cancellationToken).ConfigureAwait(false);
-
-                // Connection lost, prepare for reconnection
-                CleanupCurrentConnection();
-            }
-            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-            {
+            await MonitorConnectionAsync(cancellationToken).ConfigureAwait(false);
+            if (cancellationToken.IsCancellationRequested)
                 break;
-            }
-            catch (Exception)
+
+            // Disconnected: start reconnection loop with backoff and limited time
+            Debug.WriteLine("Hot Preview: Tooling connection lost; attempting to reconnect...");
+            CleanupCurrentConnection();
+
+            DateTime reconnectStartTime = DateTime.UtcNow;
+            while (!cancellationToken.IsCancellationRequested)
             {
-                CleanupCurrentConnection();
-
-                if (cancellationToken.IsCancellationRequested)
-                    break;
+                try
+                {
+                    await EstablishConnectionAsync(host, port, appService, cancellationToken).ConfigureAwait(false);
+                    Debug.WriteLine("Hot Preview: Tooling reconnection succeeded.");
+                    break; // Reconnected
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch
+                {
+                    CleanupCurrentConnection();
+                    TimeSpan elapsed = DateTime.UtcNow - reconnectStartTime;
+                    int delayMs = CalculateRetryDelay(elapsed);
+                    if (delayMs < 0)
+                    {
+                        // Give up silently per requirements.
+                        return;
+                    }
+                    await Task.Delay(delayMs, cancellationToken).ConfigureAwait(false);
+                }
             }
-
-            // Calculate delay based on elapsed time since first connection attempt
-            TimeSpan elapsed = DateTime.UtcNow - connectionStartTime;
-            int delayMs = CalculateRetryDelay(elapsed);
-
-            if (delayMs < 0)
-            {
-                break;
-            }
-
-            await Task.Delay(delayMs, cancellationToken).ConfigureAwait(false);
         }
     }
 
