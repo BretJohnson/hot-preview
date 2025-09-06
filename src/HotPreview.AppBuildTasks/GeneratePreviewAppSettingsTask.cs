@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Sockets;
 using HotPreview.SharedModel.Protocol;
@@ -26,7 +25,7 @@ namespace HotPreview.AppBuildTasks
             }
         }
 
-        private static string DevToolsLaunchingLockFilePath => Path.Combine(HotPreviewConfigDir, "devtools-launching.lock");
+        // DevTools launch coordination no longer required; connection discovery is passive.
 
         public override bool Execute()
         {
@@ -74,7 +73,7 @@ namespace HotPreview.SharedModel
                 previewApp.MainAssembly = typeof(PreviewApplicationInitializer).Assembly;
                 previewApp.ProjectPath = @"{{projectPath.Replace("\"", "\"\"")}}";
                 previewApp.ToolingConnectionString = @"{{connectionString.Replace("\"", "\"\"")}}";
-                {{(connectionString != "" ? "previewApp.StartToolingConnection();" : "// No tooling connection, so not starting connection")}}
+                previewApp.StartToolingConnection();
             }
         }
     }
@@ -95,46 +94,6 @@ namespace HotPreview.SharedModel
             }
         }
 
-        /// <summary>
-        /// Launches the DevTools app with file-based locking to handle concurrent execution.
-        /// Different processes (like MSBuild and devenv when doing a rebuild all in VS) may execute
-        /// this task during the build. This method uses an exclusive file lock to ensure the app
-        /// is only launched once, with any other launch attempts waiting on the first one to complete.
-        /// </summary>
-        private bool LaunchDevToolsAppWithLock()
-        {
-            string lockFilePath = DevToolsLaunchingLockFilePath;
-            string lockFileDirectory = Path.GetDirectoryName(lockFilePath);
-
-            if (!Directory.Exists(lockFileDirectory))
-            {
-                Directory.CreateDirectory(lockFileDirectory);
-            }
-
-            // Try to create and hold an exclusive lock on the file
-            try
-            {
-                string lockContent = $"Launched by process {Process.GetCurrentProcess().ProcessName} {Process.GetCurrentProcess().Id} at {DateTime.UtcNow:O}";
-                using var lockFile = LockFile.Create(lockFilePath, lockContent);
-
-                Log.LogMessage(MessageImportance.Low, "Hot Preview: Acquired launch lock, launching DevTools app...");
-
-                // Launch the app while holding the exclusive lock
-                return LaunchDevToolsApp();
-
-                // Lock file will be automatically deleted when disposed
-            }
-            catch (IOException ex) when (ex.HResult == unchecked((int)0x80070020)) // File is being used by another process
-            {
-                Log.LogMessage(MessageImportance.Low, "Hot Preview: Another process is launching DevTools app, waiting...");
-                return WaitForLaunchCompletion(lockFilePath);
-            }
-            catch (Exception ex)
-            {
-                Log.LogWarning($"Hot Preview: Failed to create launch lock file: {ex.Message}");
-                return false;
-            }
-        }
 
         /// <summary>
         /// Builds the default connection string, matching the logic used by DevTools.
@@ -160,34 +119,6 @@ namespace HotPreview.SharedModel
             }
 
             return $"{string.Join(",", addresses)}:{defaultPort}";
-        }
-
-        private bool WaitForLaunchCompletion(string lockFilePath)
-        {
-            var timeout = TimeSpan.FromSeconds(10); // Longer timeout for waiting on another process
-            var stopwatch = Stopwatch.StartNew();
-
-            while (stopwatch.Elapsed < timeout)
-            {
-                // Check if the lock file is gone (launch completed)
-                if (!File.Exists(lockFilePath))
-                {
-                    // Lock file is gone, wait briefly for the TCP endpoint to be ready
-                    if (WaitForSocketReady(out _, TimeSpan.FromSeconds(5)))
-                    {
-                        Log.LogMessage(MessageImportance.Low, "Hot Preview: DevTools launched by a different build task");
-                        return true;
-                    }
-                    Log.LogWarning("Hot Preview: A different build task finished launching DevTools but it did not report readiness");
-                    return false;
-                }
-
-                Thread.Sleep(200); // Check every 200ms
-            }
-
-            // Timeout reached - the other process might have failed
-            Log.LogWarning("Hot Preview: Timeout waiting for another build task to launch DevTools");
-            return false;
         }
 
         private bool TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan timeout)
@@ -264,64 +195,7 @@ namespace HotPreview.SharedModel
             return false;
         }
 
-        private bool LaunchDevToolsApp()
-        {
-            try
-            {
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = "hot-preview",
-                    Arguments = "--launch",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
 
-                Log.LogMessage(MessageImportance.High, "Hot Preview: Launching DevTools...");
-
-                using var process = Process.Start(startInfo);
-                if (process is null)
-                {
-                    Log.LogWarning("Hot Preview: Failed to start hot-preview process");
-                    return false;
-                }
-
-                process.WaitForExit();
-
-                if (process.ExitCode != 0)
-                {
-                    string errorOutput = process.StandardError.ReadToEnd();
-                    Log.LogWarning($"Hot Preview: hot-preview failed with exit code {process.ExitCode}: {errorOutput}");
-                    return false;
-                }
-
-                // Wait for DevTools to report ready over TCP
-                if (!WaitForSocketReady(out _, TimeSpan.FromSeconds(10)))
-                {
-                    Log.LogWarning("Hot Preview: DevTools launched but did not report readiness over the TCP endpoint");
-                    return false;
-                }
-
-                Log.LogMessage(MessageImportance.Low, $"Hot Preview: Launched DevTools");
-                return true;
-            }
-            // When the hot-preview executable is not found, an E_FAIL Win32Exception is thrown with the message below.
-            // For English systems, match on the message.
-            catch (Win32Exception ex) when (ex.Message.Contains("The system cannot find the file specified"))
-            {
-                Log.LogWarning("Hot Preview: hot-preview not found.");
-                Log.LogWarning("Hot Preview: Install it via e.g.: dotnet tool install --global HotPreview.DevTools");
-                return false;
-            }
-            // In other cases, including non-English systems, log a more generic message that covers the not installed case too.
-            catch (Exception ex)
-            {
-                Log.LogWarning($"Hot Preview: Error launching hot-preview: {ex}");
-                Log.LogWarning("Hot Preview: Ensure it is installed via e.g.: dotnet tool install --global HotPreview.DevTools");
-                return false;
-            }
-        }
 
         private static bool IsRunningUnderWSL()
         {
