@@ -41,13 +41,10 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
             // Handle JSON-RPC method calls and notifications on this connection
             await _rpc.Completion;
         }
-        catch (IOException)
+        catch (Exception)
         {
-            // The client disconnected abruptly
-        }
-        catch (StreamJsonRpc.RemoteInvocationException)
-        {
-            // There was an error in the JSON-RPC protocol
+            // IOException: The client disconnected abruptly
+            // StreamJsonRpc.RemoteInvocationException: There was an error in the JSON-RPC protocol
         }
         finally
         {

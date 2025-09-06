@@ -45,7 +45,6 @@ Building, testing, and packing this repository can be done by using the standard
 HotPreview.SharedModel merges StreamJsonRpc into its output using ILRepack so consumers do not need a direct StreamJsonRpc dependency.
 
 - The ILRepack step runs AfterTargets=Build and overwrites the output DLL.
-- Public types kept from StreamJsonRpc: `StreamJsonRpc.RemoteInvocationException`.
 - All other StreamJsonRpc types are internalized and renamed to avoid conflicts.
 - Downstream projects should not reference StreamJsonRpc directly; they compile against the types exposed by HotPreview.SharedModel.
 - For net9.0 projects, we disable PolySharp source generator in `HotPreview.Tooling` to avoid duplicate BCL polyfill types during compile.

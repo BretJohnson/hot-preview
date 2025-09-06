@@ -51,7 +51,6 @@
       <_IlRepackInputs Include="$(TargetPath)" />
       <_IlRepackInputs Include="$(TargetDir)StreamJsonRpc.dll" Condition="Exists('$(TargetDir)StreamJsonRpc.dll')" />
       <_IlRepackInputs Include="$(TargetDir)Microsoft.VisualStudio.Validation.dll" Condition="Exists('$(TargetDir)Microsoft.VisualStudio.Validation.dll')" />
-      <_IlRepackInternalizeExclude Include="StreamJsonRpc.RemoteInvocationException" />
       <!-- Prevent renaming of the auto-generated resource accessor to keep manifest resource lookup working -->
       <_IlRepackInternalizeExclude Include="StreamJsonRpc.Resources" />
     </ItemGroup>
