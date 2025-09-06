@@ -1,16 +1,15 @@
 using System.Net;
 using System.Net.Sockets;
 using HotPreview.SharedModel.Protocol;
-using StreamJsonRpc;
 
 namespace HotPreview.Tooling;
 
 public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpClient) :
-    IPreviewAppToolingService
+    PreviewAppToolingServiceBase
 {
     private readonly AppsManager _appsManager = appsManager;
     private readonly TcpClient _tcpClient = tcpClient;
-    private JsonRpc? _rpc;
+    private HotPreviewJsonRpc? _rpc;
     private AppManager? _appManager;
 
     public IPreviewAppService? AppService { get; private set; }
@@ -24,9 +23,9 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         {
             NetworkStream connectionStream = _tcpClient.GetStream();
 
-            _rpc = new JsonRpc(connectionStream, connectionStream);
+            _rpc = new HotPreviewJsonRpc(connectionStream, connectionStream);
 
-            _rpc.AddLocalRpcTarget<IPreviewAppToolingService>(this, null);
+            _rpc.AddLocalRpcTarget<IPreviewAppToolingService>(this);
             AppService = _rpc.Attach<IPreviewAppService>();
 
             try
@@ -46,7 +45,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         {
             // The client disconnected abruptly
         }
-        catch (RemoteInvocationException)
+        catch (StreamJsonRpc.RemoteInvocationException)
         {
             // There was an error in the JSON-RPC protocol
         }
@@ -57,8 +56,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         }
     }
 
-    [JsonRpcMethod("registerApp")]
-    public async Task RegisterAppAsync(string projectPath, string platformName)
+    public override async Task RegisterAppAsync(string projectPath, string platformName)
     {
         if (_appManager is not null)
         {
@@ -76,8 +74,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         _appManager.UpdatePreviews();
     }
 
-    [JsonRpcMethod("notifications/components/listChanged")]
-    public async Task NotifyComponentsChangedAsync()
+    public override async Task NotifyComponentsChangedAsync()
     {
         AppInfo appInfo = await AppService!.GetAppInfoAsync();
         PreviewsManager = new GetPreviewsFromProtocol(appInfo).ToImmutable();
@@ -91,8 +88,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         return new ImageSnapshot(pngData, ImageSnapshotFormat.PNG);
     }
 
-    [JsonRpcMethod("getToolingInfo")]
-    public Task<ToolingInfo> GetToolingInfoAsync()
+    public override Task<ToolingInfo> GetToolingInfoAsync()
     {
         int listenerPort = -1;
         try
@@ -113,12 +109,11 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
 
         string connectionString = BuildConnectionString(listenerPort);
 
-        ToolingInfo info = new()
-        {
-            ProtocolVersion = ToolingInfo.CurrentProtocolVersion,
-            AppConnectionString = connectionString,
-            McpUrl = null // Optional: can be populated later if needed
-        };
+        ToolingInfo info = new(
+            ToolingInfo.CurrentProtocolVersion,
+            connectionString,
+            null // Optional: can be populated later if needed
+        );
 
         return Task.FromResult(info);
     }

@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using HotPreview.SharedModel.Protocol;
-using StreamJsonRpc;
 
 namespace HotPreview.SharedModel.App;
 
-public abstract class PreviewAppService(PreviewApplication previewApplication) : IPreviewAppService
+public abstract class PreviewAppService(PreviewApplication previewApplication) : PreviewAppServiceBase
 {
     public PreviewApplication PreviewApplication { get; } = previewApplication;
 
@@ -32,15 +31,13 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return PreviewApplication.GetPreviewsManager().GetCommand(commandName);
     }
 
-    [JsonRpcMethod("components/get")]
-    public Task<UIComponentInfo?> GetComponentAsync(string componentName)
+    public override Task<UIComponentInfo?> GetComponentAsync(string componentName)
     {
         UIComponentReflection? component = GetUIComponentIfExists(componentName);
         return Task.FromResult(component?.GetUIComponentInfo());
     }
 
-    [JsonRpcMethod("appinfo/get")]
-    public Task<AppInfo> GetAppInfoAsync()
+    public override Task<AppInfo> GetAppInfoAsync()
     {
         PreviewsManagerReflection previewsManager = PreviewApplication.GetPreviewsManager();
 
@@ -59,30 +56,26 @@ public abstract class PreviewAppService(PreviewApplication previewApplication) :
         return Task.FromResult(new AppInfo(uiComponentInfos, categoryInfos, commandInfos));
     }
 
-    [JsonRpcMethod("previews/navigate")]
-    public async Task NavigateToPreviewAsync(string componentName, string previewName)
+    public override async Task NavigateToPreviewAsync(string componentName, string previewName)
     {
         UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(componentName, previewName);
         await PreviewApplication.GetPreviewNavigator().NavigateToPreviewAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
-    [JsonRpcMethod("previews/snapshot")]
-    public async Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName)
+    public override async Task<byte[]> GetPreviewSnapshotAsync(string componentName, string previewName)
     {
         UIComponentPreviewPairReflection uiComponentPreviewPair = GetUIComponentPreviewPair(componentName, previewName);
         return await PreviewApplication.GetPreviewNavigator().GetPreviewSnapshotAsync(uiComponentPreviewPair.UIComponent, uiComponentPreviewPair.Preview).ConfigureAwait(false);
     }
 
 
-    [JsonRpcMethod("commands/get")]
-    public Task<CommandInfo?> GetCommandAsync(string commandName)
+    public override Task<CommandInfo?> GetCommandAsync(string commandName)
     {
         CommandReflection? command = GetCommandIfExists(commandName);
         return Task.FromResult(command?.GetCommandInfo());
     }
 
-    [JsonRpcMethod("commands/invoke")]
-    public Task InvokeCommandAsync(string commandName)
+    public override Task InvokeCommandAsync(string commandName)
     {
         CommandReflection command = GetCommand(commandName);
 

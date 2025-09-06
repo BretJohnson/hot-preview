@@ -29,15 +29,4 @@
     <ProjectReference Include="..\..\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
   </ItemGroup>
 
-  <!-- Avoid PolySharp polyfills in net9.0, which can clash with merged types -->
-  <ItemGroup>
-    <PackageReference Remove="PolySharp" />
-  </ItemGroup>
-
-  <Target Name="RemovePolySharpAnalyzer" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="@(Analyzer)" Condition="'%(Analyzer.Identity)' != '' and $([System.String]::Copy('%(Analyzer.Identity)').Contains('PolySharp.SourceGenerators'))" />
-    </ItemGroup>
-  </Target>
-
 </Project>

@@ -18,11 +18,6 @@
     <PackageReference Include="System.Text.Json" Version="9.0.6" />
   </ItemGroup>
 
-  <!-- When ILRepack is disabled in SharedModel, bring StreamJsonRpc back for local builds/tests -->
-  <ItemGroup Condition="'$(HotPreviewRepack)' == 'false'">
-    <PackageReference Include="StreamJsonRpc" Version="2.22.11" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\HotPreview.SharedModel\HotPreview.SharedModel.csproj" />
   </ItemGroup>

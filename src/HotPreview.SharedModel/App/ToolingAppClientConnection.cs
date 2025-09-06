@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using HotPreview.SharedModel.Protocol;
-using StreamJsonRpc;
 
 namespace HotPreview.SharedModel.App;
 
@@ -12,7 +11,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
 {
     private readonly string _connectionString = connectionString;
     private TcpClient? _tcpClient;
-    private JsonRpc? _rpc;
+    private HotPreviewJsonRpc? _rpc;
     private IPreviewAppToolingService? _appToolingService;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _connectionTask;
@@ -86,7 +85,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
         await _tcpClient.ConnectAsync(host, port).ConfigureAwait(false);
         NetworkStream networkStream = _tcpClient.GetStream();
 
-        _rpc = new JsonRpc(networkStream, networkStream, appService);
+        _rpc = new HotPreviewJsonRpc(networkStream, networkStream, appService);
         _appToolingService = _rpc.Attach<IPreviewAppToolingService>();
 
         PreviewApplication previewApplication = PreviewApplication.GetInstance();

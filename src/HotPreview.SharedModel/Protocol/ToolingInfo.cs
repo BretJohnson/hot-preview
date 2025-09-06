@@ -2,11 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace HotPreview.SharedModel.Protocol;
 
-public record class ToolingInfo
+public class ToolingInfo(string protocolVersion, string? appConnectionString, string? mcpUrl)
 {
     public const string CurrentProtocolVersion = "1.1";
 
-    [JsonPropertyName("protocolVersion")] public string ProtocolVersion { get; init; } = CurrentProtocolVersion;
-    [JsonPropertyName("appConnectionString")] public string? AppConnectionString { get; init; }
-    [JsonPropertyName("mcpUrl")] public string? McpUrl { get; init; }
+    [JsonPropertyName("protocolVersion")] public string ProtocolVersion { get; } = protocolVersion;
+    [JsonPropertyName("appConnectionString")] public string? AppConnectionString { get; } = appConnectionString;
+    [JsonPropertyName("mcpUrl")] public string? McpUrl { get; } = mcpUrl;
 }

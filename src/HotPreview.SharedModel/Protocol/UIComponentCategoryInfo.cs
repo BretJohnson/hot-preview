@@ -2,7 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace HotPreview.SharedModel.Protocol;
 
-public record UIComponentCategoryInfo(
-    [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("uiComponentNames")] string[] UIComponentNames
-);
+public class UIComponentCategoryInfo(string name, string[] uiComponentNames)
+{
+    [JsonPropertyName("name")] public string Name { get; } = name;
+    [JsonPropertyName("uiComponentNames")] public string[] UIComponentNames { get; } = uiComponentNames;
+}

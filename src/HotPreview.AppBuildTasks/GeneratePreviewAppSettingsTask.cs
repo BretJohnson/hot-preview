@@ -7,20 +7,19 @@ using System.Text.Json;
 using System.Threading;
 using HotPreview.SharedModel.Protocol;
 using Microsoft.Build.Framework;
-using StreamJsonRpc;
 
 namespace HotPreview.AppBuildTasks
 {
     public class GeneratePreviewAppSettingsTask : Microsoft.Build.Utilities.Task
     {
         [Required]
-        public required string ProjectPath { get; set; }
+        public string ProjectPath { get; set; } = "";
 
         [Required]
-        public required string OutputPath { get; set; }
+        public string OutputPath { get; set; } = "";
 
         [Required]
-        public required string PlatformPreviewApplication { get; set; }
+        public string PlatformPreviewApplication { get; set; } = "";
 
         private static string HotPreviewConfigDir
         {
@@ -176,8 +175,6 @@ namespace HotPreview.SharedModel
             return false;
         }
 
-        // Uses shared DTO: HotPreview.SharedModel.Protocol.ToolingInfo
-
         private bool TryGetToolingInfoViaSocket(out ToolingInfo? info, TimeSpan timeout)
         {
             info = null;
@@ -201,22 +198,14 @@ namespace HotPreview.SharedModel
 
                 return false;
             }
-            catch (TimeoutException)
-            {
-                return false;
-            }
-            catch (IOException)
-            {
-                return false;
-            }
             catch (Exception ex)
             {
-                Log.LogMessage(MessageImportance.Low, $"Hot Preview: Socket RPC error: {ex.Message}");
+                Log.LogWarning($"Hot Preview: Socket RPC error: {ex.Message}");
                 return false;
             }
         }
 
-        private static bool TryConnectAndQuery(string host, TimeSpan timeout, out ToolingInfo? info)
+        private bool TryConnectAndQuery(string host, TimeSpan timeout, out ToolingInfo? info)
         {
             info = null;
             try
@@ -227,14 +216,16 @@ namespace HotPreview.SharedModel
                 {
                     return false;
                 }
+
                 using NetworkStream ns = client.GetStream();
-                using var rpc = new JsonRpc(ns, ns);
+                using var rpc = new HotPreviewJsonRpc(ns, ns);
                 rpc.StartListening();
                 info = rpc.InvokeWithParameterObjectAsync<ToolingInfo>("getToolingInfo", argument: null, cancellationToken: CancellationToken.None).GetAwaiter().GetResult();
                 return info is not null;
             }
-            catch
+            catch (Exception ex)
             {
+                Log.LogWarning($"Hot Preview: Error connecting to DevTools app: {ex.Message}");
                 return false;
             }
         }
