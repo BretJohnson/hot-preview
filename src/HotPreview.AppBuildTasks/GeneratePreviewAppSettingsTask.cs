@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Net.Sockets;
 using HotPreview.SharedModel.Protocol;
 using Microsoft.Build.Framework;
@@ -15,17 +14,6 @@ namespace HotPreview.AppBuildTasks
 
         [Required]
         public string PlatformPreviewApplication { get; set; } = "";
-
-        private static string HotPreviewConfigDir
-        {
-            get
-            {
-                string localAppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                return Path.Combine(localAppDataDir, "HotPreview");
-            }
-        }
-
-        // DevTools launch coordination no longer required; connection discovery is passive.
 
         public override bool Execute()
         {
@@ -175,27 +163,6 @@ namespace HotPreview.SharedModel
                 return false;
             }
         }
-
-        private bool WaitForSocketReady(out ToolingInfo? info, TimeSpan timeout)
-        {
-            var sw = Stopwatch.StartNew();
-            info = null;
-            while (sw.Elapsed < timeout)
-            {
-                if (TryGetToolingInfoViaSocket(out ToolingInfo? i, TimeSpan.FromMilliseconds(500)) && i is not null)
-                {
-                    if (!string.IsNullOrWhiteSpace(i.AppConnectionString))
-                    {
-                        info = i;
-                        return true;
-                    }
-                }
-                Thread.Sleep(200);
-            }
-            return false;
-        }
-
-
 
         private static bool IsRunningUnderWSL()
         {
