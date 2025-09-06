@@ -14,7 +14,6 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
     private HotPreviewJsonRpc? _rpc;
     private IPreviewAppToolingService? _appToolingService;
     private CancellationTokenSource? _cancellationTokenSource;
-    private Task? _connectionTask;
     private bool _disposed;
 
     public async Task StartConnectionAsync(PreviewAppService appService)
@@ -23,12 +22,8 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
             throw new ObjectDisposedException(nameof(ToolingAppClientConnection));
 
         _cancellationTokenSource = new CancellationTokenSource();
-        _connectionTask = StartConnectionWithRetryAsync(appService, _cancellationTokenSource.Token);
-        await _connectionTask.ConfigureAwait(false);
-    }
+        CancellationToken cancellationToken = _cancellationTokenSource.Token;
 
-    private async Task StartConnectionWithRetryAsync(PreviewAppService appService, CancellationToken cancellationToken)
-    {
         // Parse _connectionString in the format "host:port"
         string[] parts = _connectionString.Split(':');
         if (parts.Length != 2)
@@ -87,7 +82,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
                     int delayMs = CalculateRetryDelay(elapsed);
                     if (delayMs < 0)
                     {
-                        // Give up silently per requirements.
+                        // Give up silently
                         return;
                     }
                     await Task.Delay(delayMs, cancellationToken).ConfigureAwait(false);
@@ -120,6 +115,37 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
         {
             _rpc.Dispose();
             throw;
+        }
+
+        // Query tooling info and validate protocol compatibility before registering.
+        ToolingInfo toolingInfo = await _appToolingService.GetToolingInfoAsync().ConfigureAwait(false);
+
+        if (Version.TryParse(ToolingInfo.CurrentProtocolVersion, out Version? appProtocol) &&
+            Version.TryParse(toolingInfo.ProtocolVersion, out Version? toolingProtocol))
+        {
+            int majorCompare = toolingProtocol.Major.CompareTo(appProtocol.Major);
+            if (majorCompare == 0)
+            {
+                int fullCompare = toolingProtocol.CompareTo(appProtocol);
+                if (fullCompare > 0)
+                {
+                    Debug.WriteLine("Hot Preview: DevTools protocol is newer than the app NuGet; compatible, but consider updating the Hot Preview NuGet packages.");
+                }
+                else if (fullCompare < 0)
+                {
+                    Debug.WriteLine("Hot Preview: DevTools protocol is older than the app NuGet; compatible, but consider updating the Hot Preview tooling (dotnet tool update --global HotPreview.DevTools).");
+                }
+            }
+            else if (majorCompare > 0)
+            {
+                Debug.WriteLine("Hot Preview: DevTools protocol is newer and not compatible with this app. Update the Hot Preview NuGet in the app to use DevTools.");
+                throw new InvalidOperationException("Hot Preview protocol major version mismatch (tooling > app)");
+            }
+            else
+            {
+                Debug.WriteLine("Hot Preview: DevTools protocol is older and not compatible with this app. Update the Hot Preview tooling: dotnet tool update --global HotPreview.DevTools.");
+                throw new InvalidOperationException("Hot Preview protocol major version mismatch (tooling < app)");
+            }
         }
 
         await _appToolingService.RegisterAppAsync(previewApplication.ProjectPath!,
