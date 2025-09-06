@@ -83,6 +83,7 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
                     if (delayMs < 0)
                     {
                         // Give up silently
+                        Debug.WriteLine("Hot Preview: Tooling reconnect failed; giving up.");
                         return;
                     }
                     await Task.Delay(delayMs, cancellationToken).ConfigureAwait(false);
@@ -117,8 +118,17 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
             throw;
         }
 
-        // Query tooling info and validate protocol compatibility before registering.
-        ToolingInfo toolingInfo = await _appToolingService.GetToolingInfoAsync().ConfigureAwait(false);
+        // Query tooling info and validate protocol compatibility before registering
+        ToolingInfo toolingInfo;
+        try
+        {
+            toolingInfo = await _appToolingService.GetToolingInfoAsync().ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("Hot Preview: error getting tooling info. Update the Hot Preview tooling if needed: dotnet tool update --global HotPreview.DevTools");
+            throw new OperationCanceledException("Could not get Hot Preview protocol version", e);
+        }
 
         if (Version.TryParse(ToolingInfo.CurrentProtocolVersion, out Version? appProtocol) &&
             Version.TryParse(toolingInfo.ProtocolVersion, out Version? toolingProtocol))
@@ -129,22 +139,22 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
                 int fullCompare = toolingProtocol.CompareTo(appProtocol);
                 if (fullCompare > 0)
                 {
-                    Debug.WriteLine("Hot Preview: DevTools protocol is newer than the app NuGet; compatible, but consider updating the Hot Preview NuGet packages.");
+                    Debug.WriteLine("Hot Preview: tooling is newer than the Hot Preview NuGet. Consider updating the NuGet.");
                 }
                 else if (fullCompare < 0)
                 {
-                    Debug.WriteLine("Hot Preview: DevTools protocol is older than the app NuGet; compatible, but consider updating the Hot Preview tooling (dotnet tool update --global HotPreview.DevTools).");
+                    Debug.WriteLine("Hot Preview: tooling is older than the Hot Preview NuGet. Consider updating the Hot Preview tooling: 'dotnet tool update --global HotPreview.DevTools'.");
                 }
             }
             else if (majorCompare > 0)
             {
-                Debug.WriteLine("Hot Preview: DevTools protocol is newer and not compatible with this app. Update the Hot Preview NuGet in the app to use DevTools.");
-                throw new InvalidOperationException("Hot Preview protocol major version mismatch (tooling > app)");
+                Debug.WriteLine("Hot Preview: tooling is newer and not compatible with this app. Update the app's Hot Preview NuGet.");
+                throw new OperationCanceledException("Hot Preview protocol major version mismatch (tooling > app)");
             }
             else
             {
-                Debug.WriteLine("Hot Preview: DevTools protocol is older and not compatible with this app. Update the Hot Preview tooling: dotnet tool update --global HotPreview.DevTools.");
-                throw new InvalidOperationException("Hot Preview protocol major version mismatch (tooling < app)");
+                Debug.WriteLine("Hot Preview: tooling is older and not compatible with this app. Update the Hot Preview tooling: 'dotnet tool update --global HotPreview.DevTools'.");
+                throw new OperationCanceledException("Hot Preview protocol major version mismatch (tooling < app)");
             }
         }
 
@@ -175,24 +185,14 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
     {
         double totalSeconds = elapsed.TotalSeconds;
 
-        if (totalSeconds < 5)
+        // Retry every 2 seconds, giving up after 10 seconds
+        if (totalSeconds < 10)
         {
-            // Retry every 1 second for first 5 seconds
-            return 1000;
-        }
-        else if (totalSeconds < 20)
-        {
-            // Retry every 2 seconds from 5-20 seconds
             return 2000;
-        }
-        else if (totalSeconds < 60)
-        {
-            // Retry every 4 seconds from 20-60 seconds
-            return 4000;
         }
         else
         {
-            // Stop retrying after 60 seconds
+            // Stop retrying
             return -1;
         }
     }
