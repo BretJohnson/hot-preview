@@ -104,6 +104,7 @@ public class AppManager(AppsManager appsManager, string projectPath) :
                 {
                     TryBringAppWindowToForeground(appConnection);
                 }
+
                 // Fire and forget
                 _ = appConnection.AppService?.NavigateToPreviewAsync(uiComponent.Name, preview.Name);
             }
@@ -173,6 +174,11 @@ public class AppManager(AppsManager appsManager, string projectPath) :
             CommandTooling? existingCommand = appConnection.PreviewsManager?.GetCommand(command.Name);
             if (existingCommand is not null && appConnection.AppService is not null)
             {
+                if (Settings.BringAppToFrontOnNavigate)
+                {
+                    TryBringAppWindowToForeground(appConnection);
+                }
+
                 commandTasks.Add(appConnection.AppService.InvokeCommandAsync(command.Name));
             }
         }

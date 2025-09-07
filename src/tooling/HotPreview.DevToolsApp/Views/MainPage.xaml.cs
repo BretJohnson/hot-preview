@@ -144,9 +144,9 @@ public sealed partial class MainPage : Page
     private async void OnAboutMenuItemClick(object sender, RoutedEventArgs e)
     {
         string version = GetVersionString();
-        ContentDialog dialog = new ContentDialog
+        var dialog = new ContentDialog
         {
-            Title = "HotPreview DevTools",
+            Title = "Hot Preview DevTools",
             Content = $"Version {version}",
             PrimaryButtonText = "OK",
             XamlRoot = this.XamlRoot
