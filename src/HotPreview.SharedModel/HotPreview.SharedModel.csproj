@@ -47,11 +47,16 @@
     <None Include="$(TargetPath)" Pack="true" PackagePath="buildTransitive\HotPreview.SharedModel.dll" />
   </ItemGroup>
 
-  <!-- Repack StreamJsonRpc (and its direct dependency Nerdbank.Streams) into this assembly -->
+  <!-- Repack StreamJsonRpc and its runtime dependencies into this assembly -->
   <Target Name="RepackHotPreviewSharedModel" AfterTargets="Build" Condition="'$(HotPreviewRepack)' != 'false'">
     <ItemGroup>
       <_IlRepackInputs Include="$(TargetPath)" />
       <_IlRepackInputs Include="$(TargetDir)StreamJsonRpc.dll" Condition="Exists('$(TargetDir)StreamJsonRpc.dll')" />
+      <!-- StreamJsonRpc transitive dependencies required at runtime -->
+      <_IlRepackInputs Include="$(TargetDir)Nerdbank.Streams.dll" Condition="Exists('$(TargetDir)Nerdbank.Streams.dll')" />
+      <_IlRepackInputs Include="$(TargetDir)Microsoft.VisualStudio.Threading.dll" Condition="Exists('$(TargetDir)Microsoft.VisualStudio.Threading.dll')" />
+      <_IlRepackInputs Include="$(TargetDir)Microsoft.NET.StringTools.dll" Condition="Exists('$(TargetDir)Microsoft.NET.StringTools.dll')" />
+      <_IlRepackInputs Include="$(TargetDir)System.Threading.Tasks.Dataflow.dll" Condition="Exists('$(TargetDir)System.Threading.Tasks.Dataflow.dll')" />
       <_IlRepackInputs Include="$(TargetDir)Microsoft.VisualStudio.Validation.dll" Condition="Exists('$(TargetDir)Microsoft.VisualStudio.Validation.dll')" />
       <!-- Prevent renaming of the auto-generated resource accessor to keep manifest resource lookup working -->
       <_IlRepackInternalizeExclude Include="StreamJsonRpc.Resources" />
