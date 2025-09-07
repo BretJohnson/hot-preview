@@ -1,8 +1,8 @@
+using System.Reflection;
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.DevToolsApp.ViewModels.NavTree;
-using Microsoft.UI.Xaml.Input;
-using System.Reflection;
 using HotPreview.Tooling;
+using Microsoft.UI.Xaml.Input;
 
 namespace HotPreview.DevToolsApp.Views;
 

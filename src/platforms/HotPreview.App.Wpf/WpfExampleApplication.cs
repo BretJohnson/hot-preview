@@ -1,7 +1,7 @@
+using System;
 using HotPreview;
 using HotPreview.App.Wpf;
 using HotPreview.SharedModel.App;
-using System;
 
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]

@@ -1,8 +1,8 @@
+using System;
 using Microsoft.Maui;
 using Microsoft.UI.Input;
 using Windows.System;
 using Windows.UI.Core;
-using System;
 
 namespace HotPreview.App.Maui;
 
