@@ -120,13 +120,6 @@ public sealed partial class MainPage : Page
         {
             _settingsFlyout = new MenuFlyout();
 
-            var aboutItem = new MenuFlyoutItem
-            {
-                Text = "About"
-            };
-            aboutItem.Click += OnAboutMenuItemClick;
-            _settingsFlyout.Items.Add(aboutItem);
-
             _bringToFrontToggleItem = new ToggleMenuFlyoutItem
             {
                 Text = "Bring app to front on navigate",
@@ -134,6 +127,15 @@ public sealed partial class MainPage : Page
             };
             _bringToFrontToggleItem.Click += OnBringToFrontToggleClick;
             _settingsFlyout.Items.Add(_bringToFrontToggleItem);
+
+            _settingsFlyout.Items.Add(new MenuFlyoutSeparator());
+
+            var aboutItem = new MenuFlyoutItem
+            {
+                Text = "About"
+            };
+            aboutItem.Click += OnAboutMenuItemClick;
+            _settingsFlyout.Items.Add(aboutItem);
         }
 
         _settingsFlyout.ShowAt(fe);
