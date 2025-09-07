@@ -43,6 +43,8 @@
     <!-- Include the AppBuildTasks assembly and associated targets file in the NuGet package, so the platform NuGets can use the task -->
     <None Include="..\..\bin\HotPreview.AppBuildTasks\$(Configuration)\netstandard2.0\HotPreview.AppBuildTasks.dll" Pack="true" PackagePath="buildTransitive\HotPreview.AppBuildTasks.dll" />
     <None Include="buildTransitive\HotPreview.SharedModel.targets" Pack="true" PackagePath="buildTransitive\HotPreview.SharedModel.targets" />
+    <!-- Also include HotPreview.SharedModel.dll next to the task so MSBuild can resolve the dependency when executing the task -->
+    <None Include="$(TargetPath)" Pack="true" PackagePath="buildTransitive\HotPreview.SharedModel.dll" />
   </ItemGroup>
 
   <!-- Repack StreamJsonRpc (and its direct dependency Nerdbank.Streams) into this assembly -->
