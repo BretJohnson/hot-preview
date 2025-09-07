@@ -1,4 +1,4 @@
-﻿<Page x:Class="HotPreview.DevToolsApp.Views.MainPage"
+<Page x:Class="HotPreview.DevToolsApp.Views.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:viewModels="using:HotPreview.DevToolsApp.ViewModels"
@@ -217,35 +217,13 @@
                      VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- Play Button (removed) -->
-        <Button Grid.Column="1"
-                Background="Transparent"
-                BorderThickness="0"
-                Margin="0,0,8,0"
-                Visibility="Collapsed"
-                Command="{Binding PlayCommand}">
-          <TextBlock Text="▶"
-                     FontSize="16"
-                     Foreground="White"/>
-          <FlyoutBase.AttachedFlyout>
-            <MenuFlyout>
-              <MenuFlyoutItem Text="About" Click="OnAboutMenuItemClick"/>
-              <ToggleMenuFlyoutItem x:Name="BringToFrontToggleMenuItem"
-                                     Text="Bring app to front on navigate"
-                                     Click="OnBringToFrontToggleClick"/>
-            </MenuFlyout>
-          </FlyoutBase.AttachedFlyout>
-        </Button>
 
         <!-- Settings Button -->
         <Button Grid.Column="1"
-        
                 Background="Transparent"
                 BorderThickness="0"
                 Click="OnSettingsButtonClick">
-          <TextBlock Text="⚙"
-                     FontSize="16"
-                     Foreground="White"/>
+          <SymbolIcon Symbol="Setting" Foreground="White"/>
         </Button>
       </Grid>
     </Border>
@@ -328,3 +306,7 @@
 
   </Grid>
 </Page>
+
+
+
+
