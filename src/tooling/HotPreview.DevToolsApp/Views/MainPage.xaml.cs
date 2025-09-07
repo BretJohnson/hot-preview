@@ -1,11 +1,18 @@
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.DevToolsApp.ViewModels.NavTree;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Windows.Storage;
+using System.Reflection;
 
 namespace HotPreview.DevToolsApp.Views;
 
 public sealed partial class MainPage : Page
 {
+    private const string BringToFrontSettingKey = "BringAppToFrontOnNavigate";
+    private MenuFlyout? _settingsFlyout;
+    private ToggleMenuFlyoutItem? _bringToFrontToggleItem;
     public MainPage()
     {
         this.InitializeComponent();
@@ -103,6 +110,107 @@ public sealed partial class MainPage : Page
             }
         }
         return null;
+    }
+
+    private void OnSettingsButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement fe)
+        {
+            return;
+        }
+
+        if (_settingsFlyout is null)
+        {
+            _settingsFlyout = new MenuFlyout();
+
+            MenuFlyoutItem aboutItem = new MenuFlyoutItem
+            {
+                Text = "About"
+            };
+            aboutItem.Click += OnAboutMenuItemClick;
+            _settingsFlyout.Items.Add(aboutItem);
+
+            _bringToFrontToggleItem = new ToggleMenuFlyoutItem
+            {
+                Text = "Bring app to front on navigate",
+                IsChecked = LoadBringToFrontSetting()
+            };
+            _bringToFrontToggleItem.Click += OnBringToFrontToggleClick;
+            _settingsFlyout.Items.Add(_bringToFrontToggleItem);
+        }
+
+        _settingsFlyout.ShowAt(fe);
+    }
+
+    private async void OnAboutMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        string version = GetVersionString();
+        ContentDialog dialog = new ContentDialog
+        {
+            Title = "HotPreview DevTools",
+            Content = $"Version {version}",
+            PrimaryButtonText = "OK",
+            XamlRoot = this.XamlRoot
+        };
+
+        await dialog.ShowAsync();
+    }
+
+    private void OnBringToFrontToggleClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is ToggleMenuFlyoutItem toggle)
+        {
+            SaveBringToFrontSetting(toggle.IsChecked);
+        }
+    }
+
+    private static bool LoadBringToFrontSetting()
+    {
+        try
+        {
+            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
+            object? value = settings.Values[BringToFrontSettingKey];
+            if (value is bool b)
+            {
+                return b;
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+        return false;
+    }
+
+    private static void SaveBringToFrontSetting(bool isChecked)
+    {
+        try
+        {
+            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
+            settings.Values[BringToFrontSettingKey] = isChecked;
+        }
+        catch
+        {
+            // ignore
+        }
+    }
+
+    private static string GetVersionString()
+    {
+        try
+        {
+            Assembly asm = typeof(MainPage).Assembly;
+            AssemblyInformationalVersionAttribute? info = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (info is not null && !string.IsNullOrWhiteSpace(info.InformationalVersion))
+            {
+                return info.InformationalVersion;
+            }
+            return asm.GetName().Version?.ToString() ?? "unknown";
+        }
+        catch
+        {
+            return "unknown";
+        }
     }
 
     private async void OnUpdateSnapshotsClicked(object sender, RoutedEventArgs e)

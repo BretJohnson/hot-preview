@@ -192,7 +192,6 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Title with Logo -->
@@ -218,22 +217,32 @@
                      VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- Play Button -->
+        <!-- Play Button (removed) -->
         <Button Grid.Column="1"
                 Background="Transparent"
                 BorderThickness="0"
                 Margin="0,0,8,0"
+                Visibility="Collapsed"
                 Command="{Binding PlayCommand}">
           <TextBlock Text="▶"
                      FontSize="16"
                      Foreground="White"/>
+          <FlyoutBase.AttachedFlyout>
+            <MenuFlyout>
+              <MenuFlyoutItem Text="About" Click="OnAboutMenuItemClick"/>
+              <ToggleMenuFlyoutItem x:Name="BringToFrontToggleMenuItem"
+                                     Text="Bring app to front on navigate"
+                                     Click="OnBringToFrontToggleClick"/>
+            </MenuFlyout>
+          </FlyoutBase.AttachedFlyout>
         </Button>
 
         <!-- Settings Button -->
-        <Button Grid.Column="2"
+        <Button Grid.Column="1"
+        
                 Background="Transparent"
                 BorderThickness="0"
-                Command="{Binding SettingsCommand}">
+                Click="OnSettingsButtonClick">
           <TextBlock Text="⚙"
                      FontSize="16"
                      Foreground="White"/>
