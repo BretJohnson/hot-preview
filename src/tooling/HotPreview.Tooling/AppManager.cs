@@ -100,7 +100,10 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         {
             if (appConnection.PreviewsManager?.HasPreview(uiComponent.Name, preview.Name) ?? false)
             {
-                TryBringAppWindowToForeground(appConnection);
+                if (Settings.BringAppToFrontOnNavigate)
+                {
+                    TryBringAppWindowToForeground(appConnection);
+                }
                 // Fire and forget
                 _ = appConnection.AppService?.NavigateToPreviewAsync(uiComponent.Name, preview.Name);
             }

@@ -1,16 +1,13 @@
 using HotPreview.DevToolsApp.ViewModels;
 using HotPreview.DevToolsApp.ViewModels.NavTree;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Windows.Storage;
 using System.Reflection;
+using HotPreview.Tooling;
 
 namespace HotPreview.DevToolsApp.Views;
 
 public sealed partial class MainPage : Page
 {
-    private const string BringToFrontSettingKey = "BringAppToFrontOnNavigate";
     private MenuFlyout? _settingsFlyout;
     private ToggleMenuFlyoutItem? _bringToFrontToggleItem;
     public MainPage()
@@ -123,7 +120,7 @@ public sealed partial class MainPage : Page
         {
             _settingsFlyout = new MenuFlyout();
 
-            MenuFlyoutItem aboutItem = new MenuFlyoutItem
+            var aboutItem = new MenuFlyoutItem
             {
                 Text = "About"
             };
@@ -133,7 +130,7 @@ public sealed partial class MainPage : Page
             _bringToFrontToggleItem = new ToggleMenuFlyoutItem
             {
                 Text = "Bring app to front on navigate",
-                IsChecked = LoadBringToFrontSetting()
+                IsChecked = Settings.BringAppToFrontOnNavigate
             };
             _bringToFrontToggleItem.Click += OnBringToFrontToggleClick;
             _settingsFlyout.Items.Add(_bringToFrontToggleItem);
@@ -160,38 +157,7 @@ public sealed partial class MainPage : Page
     {
         if (sender is ToggleMenuFlyoutItem toggle)
         {
-            SaveBringToFrontSetting(toggle.IsChecked);
-        }
-    }
-
-    private static bool LoadBringToFrontSetting()
-    {
-        try
-        {
-            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
-            object? value = settings.Values[BringToFrontSettingKey];
-            if (value is bool b)
-            {
-                return b;
-            }
-        }
-        catch
-        {
-            // ignore
-        }
-        return false;
-    }
-
-    private static void SaveBringToFrontSetting(bool isChecked)
-    {
-        try
-        {
-            ApplicationDataContainer settings = ApplicationData.Current.LocalSettings;
-            settings.Values[BringToFrontSettingKey] = isChecked;
-        }
-        catch
-        {
-            // ignore
+            Settings.BringAppToFrontOnNavigate = toggle.IsChecked;
         }
     }
 
