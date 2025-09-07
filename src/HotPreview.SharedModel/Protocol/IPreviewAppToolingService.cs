@@ -16,8 +16,9 @@ internal interface IPreviewAppToolingService
     /// </summary>
     /// <param name="projectPath">The file system path to the project.</param>
     /// <param name="platformName">The name of the platform (e.g., MAUI, WPF).</param>
+    /// <param name="desktopAppProcessId">The OS process ID for the app on desktop platforms (Windows/macOS). Otherwise null.</param>
     [JsonRpcMethod("registerApp")]
-    public Task RegisterAppAsync(string projectPath, string platformName);
+    public Task RegisterAppAsync(string projectPath, string platformName, long? desktopAppProcessId);
 
     /// <summary>
     /// Notifies the tooling service that the list of available components or previews has changed,

@@ -15,6 +15,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
     public IPreviewAppService? AppService { get; private set; }
 
     public string? PlatformName { get; set; }
+    public long? DesktopAppProcessId { get; private set; }
     public PreviewsManagerTooling? PreviewsManager { get; private set; }
 
     internal async Task HandleConnectionAsync()
@@ -53,7 +54,7 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         }
     }
 
-    public override async Task RegisterAppAsync(string projectPath, string platformName)
+    public override async Task RegisterAppAsync(string projectPath, string platformName, long? desktopAppProcessId)
     {
         if (_appManager is not null)
         {
@@ -61,6 +62,9 @@ public sealed class AppConnectionManager(AppsManager appsManager, TcpClient tcpC
         }
 
         PlatformName = platformName;
+        DesktopAppProcessId = (desktopAppProcessId.HasValue && desktopAppProcessId.Value > 0)
+            ? desktopAppProcessId.Value
+            : null;
 
         _appManager = _appsManager.GetOrCreateApp(projectPath);
         _appManager.AddAppConnection(this);

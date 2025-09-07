@@ -234,7 +234,8 @@ Registers an application with the tooling service.
   "method": "registerApp",
   "params": {
     "projectPath": "/projects/myProject/myProject.csproj",
-    "platformName": "MAUI"
+    "platformName": "MAUI",
+    "desktopAppProcessId": 12345
   }
 }
 ```
@@ -247,6 +248,9 @@ Registers an application with the tooling service.
   "result": null
 }
 ```
+
+Field notes:
+- desktopAppProcessId: On Windows and macOS, this is the app's OS process ID (64-bit integer). On other platforms, this should be null or omitted.
 
 ##### notifications/appinfo/changed
 Notifies the tooling service that the application information has changed, so it should requery to get the latest information.

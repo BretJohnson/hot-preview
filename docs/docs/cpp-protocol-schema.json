@@ -581,6 +581,10 @@
                   "type": "string",
                   "description": "Platform name (e.g., MAUI, WPF, etc.)",
                   "minLength": 1
+                },
+                "desktopAppProcessId": {
+                  "description": "On Windows and macOS, the app's OS process ID as a 64-bit integer. Otherwise null.",
+                  "oneOf": [ { "type": "integer" }, { "type": "null" } ]
                 }
               },
               "required": ["projectPath", "platformName"],
@@ -597,7 +601,8 @@
           "method": "registerApp",
           "params": {
             "projectPath": "/projects/myProject/myProject.csproj",
-            "platformName": "MAUI"
+            "platformName": "MAUI",
+            "desktopAppProcessId": 12345
           }
         }
       ]

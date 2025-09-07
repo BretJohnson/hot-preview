@@ -1,6 +1,7 @@
 using HotPreview;
 using HotPreview.App.Wpf;
 using HotPreview.SharedModel.App;
+using System;
 
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Controls.Page")]
 [assembly: PageUIComponentBaseType(WpfPreviewApplication.WpfPlatformType, "System.Windows.Window")]
@@ -49,4 +50,9 @@ public class WpfPreviewApplication : PreviewApplication
     public override PreviewAppService GetPreviewAppService() => PreviewAppService;
 
     public override IPreviewNavigator GetPreviewNavigator() => PreviewNavigatorService;
+
+    public override long? GetDesktopAppProcessId()
+    {
+        return Environment.ProcessId;
+    }
 }

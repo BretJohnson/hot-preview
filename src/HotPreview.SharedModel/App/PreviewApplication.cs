@@ -68,6 +68,11 @@ public abstract class PreviewApplication : IDisposable
     public Assembly? MainAssembly { get; set; }
 
     /// <summary>
+    /// Returns the OS process id for the running app on desktop platforms (Windows/macOS). Otherwise null.
+    /// </summary>
+    public virtual long? GetDesktopAppProcessId() => null;
+
+    /// <summary>
     /// The app's service provider, which when present can be used to instantiate
     /// UI components via dependency injection.
     /// </summary>

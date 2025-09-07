@@ -14,9 +14,8 @@ public abstract class PreviewAppToolingServiceBase : IPreviewAppToolingService
     public abstract Task<ToolingInfo> GetToolingInfoAsync();
 
     [JsonRpcMethod("registerApp")]
-    public abstract Task RegisterAppAsync(string projectPath, string platformName);
+    public abstract Task RegisterAppAsync(string projectPath, string platformName, long? desktopAppProcessId);
 
     [JsonRpcMethod("notifications/components/listChanged")]
     public abstract Task NotifyComponentsChangedAsync();
 }
-

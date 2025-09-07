@@ -82,7 +82,6 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
                     int delayMs = CalculateRetryDelay(elapsed);
                     if (delayMs < 0)
                     {
-                        // Give up silently
                         Debug.WriteLine("Hot Preview: Tooling reconnect failed; giving up.");
                         return;
                     }
@@ -158,8 +157,10 @@ public sealed class ToolingAppClientConnection(string connectionString) : IDispo
             }
         }
 
-        await _appToolingService.RegisterAppAsync(previewApplication.ProjectPath!,
-            previewApplication.PlatformName).ConfigureAwait(false);
+        await _appToolingService.RegisterAppAsync(
+            previewApplication.ProjectPath!,
+            previewApplication.PlatformName,
+            previewApplication.GetDesktopAppProcessId()).ConfigureAwait(false);
     }
 
     private async Task MonitorConnectionAsync(CancellationToken cancellationToken)

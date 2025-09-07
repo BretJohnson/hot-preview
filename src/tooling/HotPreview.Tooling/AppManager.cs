@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using HotPreview.SharedModel;
 using HotPreview.Tooling.Services;
 
@@ -99,10 +100,65 @@ public class AppManager(AppsManager appsManager, string projectPath) :
         {
             if (appConnection.PreviewsManager?.HasPreview(uiComponent.Name, preview.Name) ?? false)
             {
+                TryBringAppWindowToForeground(appConnection);
                 // Fire and forget
                 _ = appConnection.AppService?.NavigateToPreviewAsync(uiComponent.Name, preview.Name);
             }
         }
+    }
+
+    private static void TryBringAppWindowToForeground(AppConnectionManager appConnection)
+    {
+        try
+        {
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                // Minimal approach: use MainWindowHandle of the process if available.
+                // TODO: Consider implementing the more sophisticated selection algorithm proposed
+                // (filtering by visibility, not tool/owned windows, non-cloaked, ranking by size/Z-order, etc.)
+                if (appConnection.DesktopAppProcessId is long pid && pid > 0)
+                {
+                    IntPtr hwnd = IntPtr.Zero;
+                    try
+                    {
+                        using Process proc = Process.GetProcessById((int)pid);
+                        hwnd = proc.MainWindowHandle;
+                    }
+                    catch
+                    {
+                        // Ignore lookup failures
+                    }
+
+                    if (hwnd != IntPtr.Zero)
+                    {
+                        if (WindowsNativeMethods.IsIconic(hwnd))
+                        {
+                            WindowsNativeMethods.ShowWindow(hwnd, WindowsNativeMethods.SW_RESTORE);
+                        }
+                        WindowsNativeMethods.SetForegroundWindow(hwnd);
+                    }
+                }
+            }
+            // TODO: macOS support: activate app/window using NSRunningApplication and AppKit APIs
+        }
+        catch
+        {
+            // Ignore failures in bringing the window to the foreground
+        }
+    }
+
+    private static class WindowsNativeMethods
+    {
+        public const int SW_RESTORE = 9;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool IsIconic(IntPtr hWnd);
     }
 
     public async Task InvokeCommandAsync(CommandTooling command)

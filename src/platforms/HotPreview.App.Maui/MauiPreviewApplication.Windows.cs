@@ -2,11 +2,17 @@ using Microsoft.Maui;
 using Microsoft.UI.Input;
 using Windows.System;
 using Windows.UI.Core;
+using System;
 
 namespace HotPreview.App.Maui;
 
 public partial class MauiPreviewApplication
 {
+    public override long? GetDesktopAppProcessId()
+    {
+        return Environment.ProcessId;
+    }
+
     private void AddKeyboardHandling()
     {
         // Register a handler for the window
