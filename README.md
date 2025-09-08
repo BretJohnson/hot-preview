@@ -41,18 +41,28 @@ expect to encounter some issues. Please report them and share other feedback.
 
 Quickstart:
 
-- Install Hot Preview DevTools:
-    ```bash
-    dotnet tool install -g HotPreview.DevTools
-    ```
 - In your app, add a reference to the `HotPreview.App.<platform>` NuGet, e.g.:
+
     ```XML
     <PackageReference Condition="$(Configuration) == 'Debug'" Include="HotPreview.App.Maui" Version="..." />
     ```
+
+- Install Hot Preview DevTools:
+
+    ```bash
+    dotnet tool install -g HotPreview.DevTools
+    ```
+
+- Launch DevTools:
+
+    ```bash
+    hot-preview
+    ```
+
 - Build your app for Debug and run it
 
 With that, you should see this:
-- Building launches the Hot Preview DevTools app, if it's not already running
+
 - When your app starts, it connects to the DevTools app
 - DevTools shows a tree of your UI components and their previews. Initially, it will only have auto-generated previews, but you can add your own later.
 - Click on UI components/previews in the tree to navigate directly to the page/control in your app
