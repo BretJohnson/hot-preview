@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Uno.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-desktop</TargetFramework>
+    <TargetFramework>net10.0-desktop</TargetFramework>
 
     <OutputType>WinExe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>

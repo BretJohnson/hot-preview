@@ -26,7 +26,6 @@
         <!-- Local builds should embed PDBs so we never lose them when a subsequent build occurs. -->
         <DebugType Condition=" '$(CI)' != 'true' and '$(TF_BUILD)' != 'true' ">embedded</DebugType>
 
-
         <PackageProjectUrl>https://github.com/BretJohnson/ui-preview-framework</PackageProjectUrl>
         <Company>Bret Johnson</Company>
         <Authors>Bret Johnson</Authors>
@@ -36,6 +35,14 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols Condition=" '$(DebugType)' != 'embedded' ">true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+        <!-- WindowsAppSDK
+          We should keep this in sync with:
+          MAUI Community Toolkit: https://github.com/CommunityToolkit/Maui/blob/49a124115c6bc09d9ca1ddcdbcc8b425c8ff7479/Directory.Build.props#L29
+          MAUI: https://github.com/dotnet/maui/blob/8ee00e00f603cd8a420a3467daddaf3935c8c587/Directory.Build.props#L142
+          This will prevent transitive dependencies from causing conflicts when they're not aligned.
+        -->
+        <WindowsSdkPackageVersion>10.0.19041.44</WindowsSdkPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>

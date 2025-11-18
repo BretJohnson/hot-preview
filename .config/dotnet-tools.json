@@ -29,6 +29,13 @@
         "docfx"
       ],
       "rollForward": false
+    },
+    "uno.devserver": {
+      "version": "6.4.133",
+      "commands": [
+        "uno-devserver"
+      ],
+      "rollForward": false
     }
   }
 }

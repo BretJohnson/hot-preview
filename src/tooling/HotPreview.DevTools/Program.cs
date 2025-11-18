@@ -23,7 +23,7 @@ public static class Program
             }
 
             // Look for the DevToolsApp assembly in the tools/app subdirectory
-            // The CLI tool is installed in tools/net9.0/any, so we need to go up to tools and then to app
+            // The CLI tool is installed in tools/net10.0/any, so we need to go up to tools and then to app
             string? parentDirectory = Directory.GetParent(toolDirectory)?.FullName;
             string? toolsDirectory = parentDirectory is not null ? Directory.GetParent(parentDirectory)?.FullName : null;
             if (string.IsNullOrEmpty(toolsDirectory))

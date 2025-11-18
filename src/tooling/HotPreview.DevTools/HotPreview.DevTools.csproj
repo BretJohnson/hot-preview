@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>HotPreview.DevTools</RootNamespace>
@@ -19,7 +19,7 @@
 
   <!-- Include DevTools files directly in the project -->
   <ItemGroup>
-    <Content Include="../../../bin/HotPreview.DevToolsApp/$(Configuration)/net9.0-desktop/**/*"
+    <Content Include="../../../bin/HotPreview.DevToolsApp/$(Configuration)/net10.0-desktop/**/*"
              PackagePath="tools/app/%(RecursiveDir)%(Filename)%(Extension)"
              Pack="true" />
   </ItemGroup>
@@ -27,7 +27,7 @@
   <!-- Build dependency without reference - ensures DevToolsApp builds first in solution builds -->
   <ItemGroup>
     <MSBuildProjectReference Include="../HotPreview.DevToolsApp/HotPreview.DevToolsApp.csproj">
-      <AdditionalProperties>TargetFramework=net9.0-desktop</AdditionalProperties>
+      <AdditionalProperties>TargetFramework=net10.0-desktop</AdditionalProperties>
     </MSBuildProjectReference>
   </ItemGroup>
 

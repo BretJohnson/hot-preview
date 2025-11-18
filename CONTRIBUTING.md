@@ -47,7 +47,7 @@ HotPreview.SharedModel merges StreamJsonRpc into its output using ILRepack so co
 - The ILRepack step runs AfterTargets=Build and overwrites the output DLL.
 - All other StreamJsonRpc types are internalized and renamed to avoid conflicts.
 - Downstream projects should not reference StreamJsonRpc directly; they compile against the types exposed by HotPreview.SharedModel.
-- For net9.0 projects, we disable PolySharp source generator in `HotPreview.Tooling` to avoid duplicate BCL polyfill types during compile.
+- For net10.0 projects, we disable PolySharp source generator in `HotPreview.Tooling` to avoid duplicate BCL polyfill types during compile.
 
 If you encounter build issues after updating StreamJsonRpc, ensure that:
 
@@ -121,4 +121,3 @@ git checkout origin/main
 .\tools\MergeFrom-Template.ps1
 # resolve any conflicts, then commit the merge commit.
 git push origin -u HEAD
-```

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
     <Nullable>enable</Nullable>
@@ -10,8 +10,8 @@
     <!-- Don't use implicit usings, so this code can also be embedded in the VS MauiTap assembly -->
     <ImplicitUsings>disable</ImplicitUsings>
 
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
@@ -42,25 +42,25 @@
   </ItemGroup>
 
   <!-- Android -->
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-android')) != true">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net9.0-android')) != true">
     <Compile Remove="**\*.Android.cs" />
     <None Include="**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
 
   <!-- Both iOS and Mac Catalyst -->
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-ios')) != true AND $(TargetFramework.StartsWith('net8.0-maccatalyst')) != true">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net9.0-ios')) != true AND $(TargetFramework.StartsWith('net9.0-maccatalyst')) != true">
     <Compile Remove="**\*.MaciOS.cs" />
     <None Include="**\*.MaciOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
 
   <!-- iOS -->
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-ios')) != true">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net9.0-ios')) != true">
     <Compile Remove="**\*.iOS.cs" />
     <None Include="**\*.iOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
 
   <!-- Mac Catalyst -->
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-maccatalyst')) != true">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net9.0-maccatalyst')) != true">
     <Compile Remove="**\*.MacCatalyst.cs" />
     <None Include="**\*.MacCatalyst.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
