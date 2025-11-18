@@ -44,7 +44,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.10.12" />
+    
+    <!-- Override vulnerable transitive dependencies. We can probably remove these after Roslyn 5.0 goes stable and -->
+    <!-- we update Microsoft.CodeAnalysis.Workspaces.MSBuild to that version. -->
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.14.28" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>
